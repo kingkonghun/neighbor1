@@ -8,7 +8,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Post extends Used {
+public class Post {
     	private long postId;//게시글번호
         private long memberId;//작성자아이디
         private String title;//제목

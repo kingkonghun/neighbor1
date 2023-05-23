@@ -7,7 +7,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Reply extends Used {
+public class Reply {
     private long replyId; //댓글번호
     private long memberId; //멤버아이디
     private long postId; //게시글번호

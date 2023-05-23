@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface UsedRepository {
     public List<Post> postList();
-    public List<Product> productList(long postId);
+    public Product productList(long postId);
 
     public String findCategoryName(long categoryId);
 

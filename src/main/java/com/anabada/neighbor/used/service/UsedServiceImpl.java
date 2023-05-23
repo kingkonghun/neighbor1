@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -15,11 +16,19 @@ public class UsedServiceImpl implements UsedService{
     private final UsedRepository usedRepository;
     @Override
     public List<Used> list() {//글리스트
-        List<Used> list = new ArrayList<>();
+        List<Used> usedList = new ArrayList<>();
         List<Post> postList = usedRepository.postList();
+        for (int i = 0; i < postList.size(); i++) {
+            Post post = postList.get(i);
+            Product product = usedRepository.productList(post.getPostId());
+            String categoryName = usedRepository.findCategoryName(product.getCategoryId());
 
+            Used used = new Used(post.getTitle(), post.getContent(), post.getPostType(), post.getPostDate(), post.getPostUpdate(), post.getPostView(), product.getProductId(), categoryName, product.getPrice(), product.getProductStatus());
+            usedList.add(used);
+        }
 
-        return list;
+        return usedList;
+
     }
 
     @Override
