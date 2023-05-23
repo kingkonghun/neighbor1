@@ -9,6 +9,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 public class Used {
+    private long postId;
     private String title;//제목
     private String content;//내용
     private String postType;//게시글타입

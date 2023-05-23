@@ -11,15 +11,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/used")
 @RequiredArgsConstructor
 public class UsedController {
     private final UsedService usedService;
 
     @GetMapping("/list")
-    public List<Used> list(){
-        return usedService.list();
+    public String list(Model model){
+        model.addAttribute("list", usedService.list());
+        return "used/list";
+    }
+
+    @GetMapping("detail")
+    public String detail(long postId, Model model) {
+        model.addAttribute("dto", usedService.detail(postId));
+        return "used/detail";
     }
 
 }
