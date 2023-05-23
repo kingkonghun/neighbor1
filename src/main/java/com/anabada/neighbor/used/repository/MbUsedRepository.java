@@ -1,6 +1,7 @@
 package com.anabada.neighbor.used.repository;
 
 
+import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Img;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
@@ -18,6 +19,9 @@ public interface MbUsedRepository extends UsedRepository {
     public Product productList(long postId);
     @Select("select categoryName from category where categoryId = #{categoryId}")
     public String findCategoryName(long categoryId);
+
+    @Select("SELECT*FROM member WHERE memberId=#{memberId}")
+    public Member findMember(long memberId);
 
     public void insertPost(Post post);
     public void insertProduct(Product product);

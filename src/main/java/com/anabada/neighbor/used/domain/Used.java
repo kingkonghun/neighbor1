@@ -22,6 +22,13 @@ public class Used {
     private String productStatus; //판매여부
 
 
+    private long memberId; //pk id
+    private String address;
+    private String memberName;      //닉네임
+    private String profileImg;      //프로필 이미지
+    private int score;              //사용자평점
+    private char memberStatus;      //회원상태(가입,탈퇴,정지등)
+
 }
 
 

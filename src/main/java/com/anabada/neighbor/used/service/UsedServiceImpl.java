@@ -1,5 +1,6 @@
 package com.anabada.neighbor.used.service;
 
+import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.*;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +19,18 @@ public class UsedServiceImpl implements UsedService{
     public List<Used> list() {//글리스트
         List<Used> usedList = new ArrayList<>();
         List<Post> postList = usedRepository.postList();
+
         for (int i = 0; i < postList.size(); i++) {
             Post post = postList.get(i);
+            Member member = usedRepository.findMember(post.getMemberId());
             Product product = usedRepository.productList(post.getPostId());
             String categoryName = usedRepository.findCategoryName(product.getCategoryId());
 
             Used used = new Used(post.getTitle(), post.getContent(), post.getPostType(), post.getPostDate(),
                                     post.getPostUpdate(), post.getPostView(),
-                                    product.getProductId(), categoryName, product.getPrice(), product.getProductStatus());
+                                    product.getProductId(), categoryName, product.getPrice(), product.getProductStatus(),
+                                    member.getMemberId(),member.getAddress(),member.getMemberName(),member.getProfileImg(),member.getScore(),member.getMemberStatus()
+                    );
             usedList.add(used);
         }
 

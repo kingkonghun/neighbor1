@@ -1,6 +1,7 @@
 package com.anabada.neighbor.used.repository;
 
 
+import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Img;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
@@ -23,4 +24,6 @@ public interface UsedRepository {
     public void delete(long postId);
     public Used detail(long postId);
     public List<Img> images(long postId);
+
+    public Member findMember(long memberId);
 }
