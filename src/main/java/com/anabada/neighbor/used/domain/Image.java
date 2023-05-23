@@ -10,7 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Image {
-            private long imgId;//이미지번호
-            private long postId;//게시글번호
-            private String imgUrl;//이미지url
+    private long imgId;//이미지번호
+    private long postId;//게시글번호
+    private String imgUrl;//이미지url
+    asdfdasfadslfjsad;lfj;
 }
