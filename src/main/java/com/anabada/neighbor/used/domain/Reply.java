@@ -4,12 +4,10 @@ import lombok.*;
 
 import java.util.Date;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class Reply {
+@Data
+public class Reply extends Used {
     private long replyId; //댓글번호
     private long memberId; //멤버아이디
     private long postId; //게시글번호

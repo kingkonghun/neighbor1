@@ -2,12 +2,10 @@ package com.anabada.neighbor.used.domain;
 
 import lombok.*;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class Product {
+@Data
+public class Product extends Used {
     private long productId; //상품아이디
     private long postId; //게시글번호
     private long categoryId; //카테고리아이디

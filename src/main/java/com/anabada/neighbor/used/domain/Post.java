@@ -5,12 +5,10 @@ import lombok.*;
 import java.util.Date;
 
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class Post {
+@Data
+public class Post extends Used {
     	private long postId;//게시글번호
         private long memberId;//작성자아이디
         private String title;//제목
