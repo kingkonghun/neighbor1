@@ -8,11 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@Data
 public class Member {
     private long memberId; //pk id
     private String memberName;      //닉네임

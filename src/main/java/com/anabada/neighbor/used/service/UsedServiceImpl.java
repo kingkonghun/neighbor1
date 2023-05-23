@@ -23,7 +23,9 @@ public class UsedServiceImpl implements UsedService{
             Product product = usedRepository.productList(post.getPostId());
             String categoryName = usedRepository.findCategoryName(product.getCategoryId());
 
-            Used used = new Used(post.getTitle(), post.getContent(), post.getPostType(), post.getPostDate(), post.getPostUpdate(), post.getPostView(), product.getProductId(), categoryName, product.getPrice(), product.getProductStatus());
+            Used used = new Used(post.getTitle(), post.getContent(), post.getPostType(), post.getPostDate(),
+                                    post.getPostUpdate(), post.getPostView(),
+                                    product.getProductId(), categoryName, product.getPrice(), product.getProductStatus());
             usedList.add(used);
         }
 

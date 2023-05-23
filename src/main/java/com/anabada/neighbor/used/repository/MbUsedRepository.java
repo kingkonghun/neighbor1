@@ -12,7 +12,7 @@ import java.util.List;
 
 @Mapper
 public interface MbUsedRepository extends UsedRepository {
-    @Select("select * from post where postId=1")
+    @Select("select * from post")
     public List<Post> postList();
     @Select("select * from product where postId = #{postId}")
     public Product productList(long postId);
