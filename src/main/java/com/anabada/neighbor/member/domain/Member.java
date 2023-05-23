@@ -15,6 +15,7 @@ public class Member {
     private long memberId; //pk id
     private String memberName;      //닉네임
     private String memberPWD;       //pwd
+    private String memberEmail;     //이메일
     private String address;         //짧은주소
     private String addressDetail;   //전체주소
     private Date memberDate;        //가입날짜
