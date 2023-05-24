@@ -1,8 +1,10 @@
 package com.anabada.neighbor.used.domain;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -29,6 +31,8 @@ public class Used {
     private String profileImg;      //프로필 이미지
     private int score;              //사용자평점
     private char memberStatus;      //회원상태(가입,탈퇴,정지등)
+
+    private List<MultipartFile> files;
 
 }
 

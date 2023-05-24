@@ -5,6 +5,7 @@ import com.anabada.neighbor.used.domain.*;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UsedServiceImpl implements UsedService{
-
+    List<MultipartFile> files = null;
     private final UsedRepository usedRepository;
     @Override
     public List<Used> list() {//글리스트
@@ -29,11 +30,10 @@ public class UsedServiceImpl implements UsedService{
             Used used = new Used(post.getPostId(), post.getTitle(), post.getContent(), post.getPostType(), post.getPostDate(),
                                     post.getPostUpdate(), post.getPostView(),
                                     product.getProductId(), categoryName, product.getPrice(), product.getProductStatus(),
-                                    member.getMemberId(),member.getAddress(),member.getMemberName(),member.getProfileImg(),member.getScore(),member.getMemberStatus()
+                                    member.getMemberId(),member.getAddress(),member.getMemberName(),member.getProfileImg(),member.getScore(),member.getMemberStatus(), files
                     );
             usedList.add(used);
         }
-
         return usedList;
 
     }
@@ -62,7 +62,7 @@ public class UsedServiceImpl implements UsedService{
         return new Used(post.getPostId(), post.getTitle(), post.getContent(), post.getPostType(), post.getPostDate(),
                 post.getPostUpdate(), post.getPostView(),
                 product.getProductId(), categoryName, product.getPrice(), product.getProductStatus(),
-                member.getMemberId(),member.getAddress(),member.getMemberName(),member.getProfileImg(),member.getScore(),member.getMemberStatus());
+                member.getMemberId(),member.getAddress(),member.getMemberName(),member.getProfileImg(),member.getScore(),member.getMemberStatus(), files);
     }
 
     @Override

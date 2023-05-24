@@ -64,7 +64,7 @@
             </select>
         </article>
         <article class="article_2 col-12">
-            <button type="button" id="btnWrite" onclick="location.href='/write'">글쓰기</button>
+            <button type="button" id="btnWrite" onclick="location.href='/used/write'">글쓰기</button>
         </article>
         <article class="article_list col-lg-3 col-md-6 col-sm-12" th:each="row : ${list}">
             <div class="div_list" th:onclick="'location.href=\'' + @{detail(postId=${row.postId})} + '\''">

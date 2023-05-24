@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,10 +25,9 @@ public class UsedController {
         return "used/list";
     }
 
-    @GetMapping("detail")
+    @GetMapping("/detail")
     public String detail(long postId, Model model) {
         model.addAttribute("dto", usedService.detail(postId));
         return "used/detail";
     }
-
 }
