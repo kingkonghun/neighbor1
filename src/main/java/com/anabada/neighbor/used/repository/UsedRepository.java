@@ -19,8 +19,8 @@ public interface UsedRepository {
 
     public Post findPost(long postId);
 
-    public void insertPost(Post post);
-    public void insertProduct(Product product);
+    public void writePost(Used used);
+    public void writeProduct(Used used);
 
     public void update(long postId);
     public void delete(long postId);

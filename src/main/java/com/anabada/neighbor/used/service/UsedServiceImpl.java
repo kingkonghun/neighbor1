@@ -14,8 +14,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UsedServiceImpl implements UsedService{
-    List<MultipartFile> files = null;
+
     private final UsedRepository usedRepository;
+    List<MultipartFile> files= null;
     @Override
     public List<Used> list() {//글리스트
         List<Used> usedList = new ArrayList<>();
@@ -29,17 +30,20 @@ public class UsedServiceImpl implements UsedService{
 
             Used used = new Used(post.getPostId(), post.getTitle(), post.getContent(), post.getPostType(), post.getPostDate(),
                                     post.getPostUpdate(), post.getPostView(),
-                                    product.getProductId(), categoryName, product.getPrice(), product.getProductStatus(),
-                                    member.getMemberId(),member.getAddress(),member.getMemberName(),member.getProfileImg(),member.getScore(),member.getMemberStatus(), files
+                                    product.getProductId(), categoryName, product.getPrice(), product.getProductStatus(), product.getCategoryId(),
+                                    member.getMemberId(),member.getAddress(),member.getMemberName(),member.getProfileImg(),member.getScore(),member.getMemberStatus(),files
                     );
             usedList.add(used);
         }
+
         return usedList;
 
     }
 
     @Override
     public void write(Used used) {//글쓰기
+        usedRepository.writePost(used);
+        usedRepository.writeProduct(used);
 
     }
 
@@ -61,8 +65,8 @@ public class UsedServiceImpl implements UsedService{
         Member member = usedRepository.findMember(post.getMemberId());
         return new Used(post.getPostId(), post.getTitle(), post.getContent(), post.getPostType(), post.getPostDate(),
                 post.getPostUpdate(), post.getPostView(),
-                product.getProductId(), categoryName, product.getPrice(), product.getProductStatus(),
-                member.getMemberId(),member.getAddress(),member.getMemberName(),member.getProfileImg(),member.getScore(),member.getMemberStatus(), files);
+                product.getProductId(), categoryName, product.getPrice(), product.getProductStatus(), product.getCategoryId(),
+                member.getMemberId(),member.getAddress(),member.getMemberName(),member.getProfileImg(),member.getScore(),member.getMemberStatus(),files);
     }
 
     @Override

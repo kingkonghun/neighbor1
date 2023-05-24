@@ -45,39 +45,6 @@
 
     #button_div {text-align: right;}
 </style>
-<script>
-    $(function(){
-        list();
-        $("#btnWrite").click(function(){
-            var comment = $("#comment");
-            if(comment.val() == ""){
-                alert("내용을 입력하세요");
-                comment.focus();
-                return;
-            }
-            $.ajax({
-                type: "post",
-                url: "/reply/write",
-                data: {postId: [[${dto.postId}]], comment: $("#comment").val()},
-                success: function() {
-                    alert("댓글 작성을 완료했습니다");
-                    $("#comment").val("");
-                    list();
-                }
-            });
-        });
-    });
-    function list() {
-        $.ajax({
-            type: "get",
-            url: "/reply/list",
-            data: {postId: [[${dto.postId}]]},
-            success: function(result) {
-                $("#replyList").html(result);
-            }
-        });
-    }
-</script>
 </head>
 <body>
     <div class="container">
@@ -109,19 +76,12 @@
                 </div>
             </article>
             <article style="margin: 20px;">
-                <textarea rows="3" id="comment" style="width: 100%; border-radius: 30px; resize: none; padding: 20px;" placeholder="댓글 작성"></textarea>
+                <textarea rows="3" style="width: 100%; border-radius: 30px; resize: none; padding: 20px;" placeholder="댓글 작성"></textarea>
                 <div id="button_div">
-                    <button type="button" id="btnWrite">작성</button>
+                    <button id="btnWrite">작성</button>
                 </div>
             </article>
-            <article id="replyList" style="margin: 20px;">
-
-            </article>
         </section>
-
-
-
-
 
         <section id="section_2" class="row" style="margin-top: 30px;">
             <article style=" margin-bottom: 30px;">

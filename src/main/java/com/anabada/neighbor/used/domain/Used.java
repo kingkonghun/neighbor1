@@ -23,7 +23,7 @@ public class Used {
     private String categoryName; //카테고리이름
     private String price; //상품가격
     private String productStatus; //판매여부
-
+    private long categoryId;
 
     private long memberId; //pk id
     private String address;
@@ -31,9 +31,7 @@ public class Used {
     private String profileImg;      //프로필 이미지
     private int score;              //사용자평점
     private char memberStatus;      //회원상태(가입,탈퇴,정지등)
-
     private List<MultipartFile> files;
-
 }
 
 

@@ -6,14 +6,16 @@ import com.anabada.neighbor.used.domain.Img;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
 @Mapper
 public interface MbUsedRepository extends UsedRepository {
-    @Select("select * from post where postId=1")
+    @Select("select * from post")
     public List<Post> postList();
     @Select("select * from product where postId = #{postId}")
     public Product findProduct(long postId);
@@ -26,8 +28,13 @@ public interface MbUsedRepository extends UsedRepository {
     @Select("select * from post where postId = #{postId}")
     public Post findPost(long postId);
 
-    public void insertPost(Post post);
-    public void insertProduct(Product product);
+    @Insert("INSERT INTO post (memberId,title,content,postType)" +
+            "VALUES(#{memberId},#{title},#{content},'used')")
+    @Options(useGeneratedKeys = true, keyProperty = "postId")
+    public void writePost(Used used);
+
+    @Insert("insert into product (postId, categoryId, price) values (#{postId},#{categoryId},#{price})")
+    public void writeProduct(Used Used);
 
     public void update(long postId);
     public void delete(long postId);

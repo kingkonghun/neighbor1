@@ -52,7 +52,6 @@
         <h2 class="title">중고장터</h2>
     </header>
     <section class="row">
-
         <article class="article_1 col-12">
             <select id="category_select" name="category">
                 <option selected>전체상품</option>
@@ -64,8 +63,19 @@
             </select>
         </article>
         <article class="article_2 col-12">
-            <button type="button" id="btnWrite" onclick="location.href='/used/write'">글쓰기</button>
+            <button type="button" id="btnWrite">글쓰기</button>
         </article>
+        <div th:include="used/post :: section" style="display: none;" id="writeForm"></div>
+        <script th:inline="javascript">
+            $(function (){
+               $("#btnWrite").click(function (){
+                  $("#writeForm").slideDown();
+               });
+               $("#returnBtn").click(function (){
+                  $("#writeForm").slideUp();
+               });
+            });
+        </script>
         <article class="article_list col-lg-3 col-md-6 col-sm-12" th:each="row : ${list}">
             <div class="div_list" th:onclick="'location.href=\'' + @{detail(postId=${row.postId})} + '\''">
                 <div>
@@ -99,5 +109,19 @@
 
     </section>
 </div>
+<script>
+    const inputPrice = document.getElementById("inputPrice");
+
+    inputPrice.addEventListener("input", function(event) {
+        // 입력된 값에서 숫자 이외의 문자 제거
+        const formattedValue = this.value.replace(/\D/g, "");
+
+        // 3자리마다 컴마 추가
+        const numberWithCommas = formattedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // 값을 다시 설정하여 숫자 입력 필드에 반영
+        this.value = numberWithCommas;
+    });
+</script>
 </body>
 </html>

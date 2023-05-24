@@ -5,13 +5,10 @@ import com.anabada.neighbor.used.service.UsedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/used")
@@ -25,9 +22,19 @@ public class UsedController {
         return "used/list";
     }
 
-    @GetMapping("/detail")
+    @GetMapping("detail")
     public String detail(long postId, Model model) {
         model.addAttribute("dto", usedService.detail(postId));
         return "used/detail";
     }
+    @PostMapping("/post")
+    public String post(Used used, HttpSession session){
+        long memberId = (long)session.getAttribute("memberId");
+        used.setMemberId(memberId);
+        System.out.println("컨트롤러:"+used.getCategoryId());
+        usedService.write(used);
+        return "redirect:/used/list";
+    }
+
+
 }
