@@ -67,9 +67,9 @@
             <button type="button" id="btnWrite" onclick="location.href='/write'">글쓰기</button>
         </article>
         <article class="article_list col-lg-3 col-md-6 col-sm-12" th:each="row : ${list}">
-            <div class="div_list" th:onclick="'location.href=\'' + @{detail(postNum=${row.postNum})} + '\''">
+            <div class="div_list" th:onclick="'location.href=\'' + @{detail(postId=${row.postId})} + '\''">
                 <div>
-                    <img class="img" th:src="@{/img/} + ${row.productImage}"  alt="">
+<!--                    <img class="img" th:src="@{/img/} + ${row.productImage}"  alt="">-->
                 </div>
                 <div class="text_div">
                     <table>
@@ -77,13 +77,13 @@
                             <td>
                                 <span class="p_title" th:text="${row.title}"></span> <br>
                                 <span class="p_price" th:text="${row.price}"></span> <br>
-                                <span class="p_address" th:text="${row.region}"></span>
+                                <span class="p_address" th:text="${row.address}"></span>
                             </td>
                             <td style="text-align: right;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" color="red"/>
                                     </svg>
-                                <span class="count" th:text="${row.countNum}"></span>
+                                <span class="count" th:text="${row.postView}"></span>
                             </td>
                         </tr>
                     </table>

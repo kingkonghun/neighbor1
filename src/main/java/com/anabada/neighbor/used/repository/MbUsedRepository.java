@@ -13,15 +13,18 @@ import java.util.List;
 
 @Mapper
 public interface MbUsedRepository extends UsedRepository {
-    @Select("select * from post")
+    @Select("select * from post where postId=1")
     public List<Post> postList();
     @Select("select * from product where postId = #{postId}")
-    public Product productList(long postId);
+    public Product findProduct(long postId);
     @Select("select categoryName from category where categoryId = #{categoryId}")
     public String findCategoryName(long categoryId);
 
     @Select("SELECT*FROM member WHERE memberId=#{memberId}")
     public Member findMember(long memberId);
+
+    @Select("select * from post where postId = #{postId}")
+    public Post findPost(long postId);
 
     public void insertPost(Post post);
     public void insertProduct(Product product);

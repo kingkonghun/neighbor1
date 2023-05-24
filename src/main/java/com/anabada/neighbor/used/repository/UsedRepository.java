@@ -13,9 +13,11 @@ import java.util.List;
 @Repository
 public interface UsedRepository {
     public List<Post> postList();
-    public Product productList(long postId);
+    public Product findProduct(long postId);
 
     public String findCategoryName(long categoryId);
+
+    public Post findPost(long postId);
 
     public void insertPost(Post post);
     public void insertProduct(Product product);
