@@ -39,7 +39,7 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public void write(Used used) {
+    public void write(Used used) {//글쓰기
 
     }
 
