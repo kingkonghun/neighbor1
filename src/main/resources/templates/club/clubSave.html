@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -32,7 +32,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">커뮤니티</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">같이해요</a></li>
+                        <li><a class="dropdown-item" href="clubSave">같이해요</a></li>
                         <!-- <li><hr class="dropdown-divider" /></li> 줄쳐주는 코드 -->
                         <li><a class="dropdown-item" href="#!">실시간 채팅</a></li>
                         <li><a class="dropdown-item" href="#!">주변맛집</a></li>
@@ -59,8 +59,9 @@
 <!--    </div>-->
 <!--</header>-->
 <!-- 섹션 -->
+<div th:text="${result}">no</div>
 <section>
-    <form class="row g-3" action="/clubPost" method="post">
+    <form class="row g-3" action="/clubSave" method="post">
         <div class="container px-4 px-lg-5 my-5" >
             <div class="row">
                 <div class="col-md-6">
@@ -69,7 +70,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="inputHobby" class="form-label">State</label>
-                    <select id="inputHobby" class="form-select" name="hobby">
+                    <select id="inputHobby" class="form-select" name="hobbyName">
                         <option selected>취미종류</option>
                         <option>운동</option>
                         <option>공부</option>
@@ -78,7 +79,7 @@
                 </div>
                 <div class="col-md-2">
                     <label for="inputMaxMan" class="form-label">최대인원수</label>
-                    <input type="text" class="form-control" id="inputMaxMan" placeholder="2~50" name="maxMan">
+                    <input type="number" class="form-control" id="inputMaxMan" placeholder="2~50" name="maxMan" min="2" max="50">
                 </div>
                 <div class="col-md-12">
                     <label for="inputContent" class="form-label">내용</label>

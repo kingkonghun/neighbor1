@@ -2,23 +2,12 @@ package com.anabada.neighbor.club.domain;
 
 import lombok.*;
 
-import java.util.Date;
-
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
+@Builder
 public class ClubPost {
-    private long memberId;          //사용자id
-    private long postId;//게시글번호
-    private String memberName;  //닉네임
-    private String address;         //짧은주소
-    private String profileImg;      //프로필 이미지
-    private String mbti;            //mbti;
-    private int score;             //사용자점수
+    private Long memberId;
     private String title;//제목
     private String content;//내용
-    private String postType;//게시글타입
-    private Date postDate;//생성일자
-    private Date postUpdate;//수정일자
-    private long postView;//조회수
+    private String hobbyName;   //취미이름
+    private Integer maxMan;     //최대인원수
 }

@@ -1,27 +1,29 @@
 package com.anabada.neighbor.club.repository;
 
-import com.anabada.neighbor.club.domain.Club;
+import com.anabada.neighbor.club.domain.ClubPost;
+import com.anabada.neighbor.club.domain.PostSave;
+import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.used.domain.Post;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 @Mapper
 public interface MbClubRepository extends ClubRepository {
-    @Override
-    @Insert("")
-    int clubPostInsert(Post post);
 
     @Override
-    int clubInsert(Club club);
+    @Insert("insert into post(memberId, title, content, postType) " +
+            "values(#{memberId}, #{title}, #{content}, #{postType})")
+    @Options(useGeneratedKeys = true, keyProperty = "postId")//자동으로 pk값을 가져오기 위한옵션
+    int clubPostSave(PostSave postSave);
 
     @Override
-    Long hobbySelect(String hobbyName);
+    int clubSave(Club club);
 
     @Override
-    @Select("select * from post")
+    Long findByHobbyId(String hobbyName);
+
+    @Override
     List<Post> clubPostList();
 
     @Override

@@ -1,12 +1,11 @@
-package com.anabada.neighbor.club.domain;
+package com.anabada.neighbor.club.domain.entity;
 
 import lombok.*;
 
 
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
+@Builder
 public class hobby {
     private long hobbyId; //취미번호
     private String hobbyName;   //취미이름
