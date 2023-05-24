@@ -2,13 +2,10 @@ package com.anabada.neighbor.club.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
 
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Entity
+@Data
 public class Club {
     private long postId;    //게시글번호
     private long memberId;  //멤버아이디

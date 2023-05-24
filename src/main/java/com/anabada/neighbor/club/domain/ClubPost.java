@@ -4,11 +4,9 @@ import lombok.*;
 
 import java.util.Date;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@Data
 public class ClubPost {
     private long memberId;          //사용자id
     private long postId;//게시글번호
