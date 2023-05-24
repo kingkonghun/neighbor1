@@ -68,12 +68,21 @@
         <div th:include="used/post :: section" style="display: none;" id="writeForm"></div>
         <script th:inline="javascript">
             $(function (){
-               $("#btnWrite").click(function (){
-                  $("#writeForm").slideDown();
-               });
-               $("#returnBtn").click(function (){
-                  $("#writeForm").slideUp();
-               });
+                $("#btnSubmit").click(function(){
+                    var category = $("#category");
+                        if(category.val() == 0) {
+                        alert("카테고리를 선택하세요");
+                        category.focus();
+                        return;
+                    }
+                    document.writeForm.submit();
+                });
+                $("#btnWrite").click(function (){
+                    $("#writeForm").slideDown();
+                });
+                $("#returnBtn").click(function (){
+                    $("#writeForm").slideUp();
+                });
             });
         </script>
         <article class="article_list col-lg-3 col-md-6 col-sm-12" th:each="row : ${list}">

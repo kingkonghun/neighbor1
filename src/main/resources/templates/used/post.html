@@ -1,5 +1,7 @@
+
+
 <section>
-    <form class="row g-3" action="/used/post" enctype="multipart/form-data" method="post">
+    <form name="writeForm" class="row g-3" action="/used/post" enctype="multipart/form-data" method="post">
         <div class="container px-4 px-lg-5 my-5" >
             <div class="row">
                 <div class="col-md-6">
@@ -9,7 +11,7 @@
                 <div class="col-md-3">
                     <label for="category" class="form-label">카테고리</label>
                     <select id="category" class="form-select" name="categoryId">
-                        <option selected disabled>카테고리</option>
+                        <option value="0" selected>카테고리</option>
                         <option value="1">전자기기</option>
                         <option value="2">취미</option>
                         <option value="3">생활용품</option>
@@ -33,7 +35,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 my-1">
-                    <button type="submit" class="btn btn-primary">작성완료</button>
+                    <button type="button" class="btn btn-primary" id="btnSubmit">작성완료</button>
                     <button type="button" class="btn btn-primary" id="returnBtn">뒤로가기</button>
                 </div>
             </div>
