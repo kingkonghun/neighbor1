@@ -1,7 +1,10 @@
 package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.member.domain.Member;
-import com.anabada.neighbor.used.domain.*;
+import com.anabada.neighbor.used.domain.Img;
+import com.anabada.neighbor.used.domain.Post;
+import com.anabada.neighbor.used.domain.Product;
+import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,11 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -66,7 +69,7 @@ public class UsedServiceImpl implements UsedService{
                 usedRepository.writeImage(fileName, used.getPostId());
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
