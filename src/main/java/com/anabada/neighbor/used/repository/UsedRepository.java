@@ -30,5 +30,5 @@ public interface UsedRepository {
 
     public Member findMember(long memberId);
 
-    public void writeImage(String imgUrl, long postId);
+    public void writeImage(long postId,String imgUrl);
 }

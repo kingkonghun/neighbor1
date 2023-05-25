@@ -38,7 +38,7 @@ public interface MbUsedRepository extends UsedRepository {
     public void writeProduct(Used Used);
 
     @Insert("INSERT INTO img (postId,imgUrl) VALUES(#{postId},#{imgUrl})")
-    public void writeImage(String imgUrl,long postId);
+    public void writeImage(long postId,String imgUrl);
     public void update(long postId);
     public void delete(long postId);
     public Used detail(long postId);

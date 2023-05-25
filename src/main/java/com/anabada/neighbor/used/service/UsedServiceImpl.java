@@ -66,7 +66,7 @@ public class UsedServiceImpl implements UsedService{
                 String fileName = uuid + "_" + file.getOriginalFilename();
                 String filePath = uploadDir + File.separator + fileName;
                 file.transferTo(new File(filePath));
-                usedRepository.writeImage(fileName, used.getPostId());
+                usedRepository.writeImage(used.getPostId(),fileName);
             }
         } catch (Exception e) {
             e.printStackTrace();
