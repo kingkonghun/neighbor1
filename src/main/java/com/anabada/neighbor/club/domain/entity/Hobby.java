@@ -6,7 +6,7 @@ import lombok.*;
 
 @Data
 @Builder
-public class hobby {
+public class Hobby {
     private long hobbyId; //취미번호
     private String hobbyName;   //취미이름
 

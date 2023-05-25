@@ -11,5 +11,4 @@ public class Club {
     private long hobbyId;   //취미번호
     private int maxMax;     //최대인원수
     private int nowMan;     //현재인원수
-
 }
