@@ -39,5 +39,7 @@ public interface MbUsedRepository extends UsedRepository {
     public void update(long postId);
     public void delete(long postId);
     public Used detail(long postId);
-    public List<Img> images(long postId);
+    @Select("SELECT imgUrl FROM img WHERE postId=#{postId} ORDER BY imgId LIMIT 1")
+    public String images(long postId);
+
 }

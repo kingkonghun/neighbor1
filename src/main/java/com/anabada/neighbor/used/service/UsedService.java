@@ -2,7 +2,10 @@ package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.used.domain.Img;
 import com.anabada.neighbor.used.domain.Used;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -18,6 +21,8 @@ public interface UsedService {
     public void update(long postId);
     public void delete(long postId);
     public Used detail(long postId);
-    public List<Img> images(long postId);
+    public String images(long postId);//이미지 이름가져오기
 
+
+    public void downloadFiles(String filenames, HttpServletResponse response) throws IOException;
 }
