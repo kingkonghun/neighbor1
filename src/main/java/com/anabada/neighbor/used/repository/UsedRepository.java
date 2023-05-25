@@ -26,9 +26,11 @@ public interface UsedRepository {
     public void update(long postId);
     public void delete(long postId);
     public Used detail(long postId);
-    public List<Img> images(long postId);
+    public String images(long postId);
 
     public Member findMember(long memberId);
 
     public void writeImage(long postId,String imgUrl);
+
+
 }

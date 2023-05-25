@@ -1,7 +1,6 @@
 package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.member.domain.Member;
-import com.anabada.neighbor.used.domain.Img;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
@@ -11,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ import java.util.UUID;
 public class UsedServiceImpl implements UsedService{
 
     private final UsedRepository usedRepository;
+    private final ImgDownService imgDownService;
+
     List<MultipartFile> files= null;
     @Override
     public List<Used> list() {//글리스트
@@ -96,7 +99,17 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public List<Img> images(long postId) {//사진
-        return null;
+    public String images(long postId) {//사진
+        String fileName = usedRepository.images(postId);
+        return fileName;
     }
-}
+
+    @Override
+    public void downloadFiles(String filename, HttpServletResponse response) throws IOException {
+            imgDownService.imgDown(filename,response);
+        }
+
+    }
+
+
+
