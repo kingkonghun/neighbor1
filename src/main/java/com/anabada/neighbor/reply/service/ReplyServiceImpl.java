@@ -32,4 +32,14 @@ public class ReplyServiceImpl implements ReplyService {
     public void write(Reply reply) {
         replyRepository.write(reply);
     }
+
+    @Override
+    public void delete(long replyId) {
+        replyRepository.delete(replyId);
+    }
+
+    @Override
+    public void update(Reply reply) {
+        replyRepository.update(reply);
+    }
 }

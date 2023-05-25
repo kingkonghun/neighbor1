@@ -12,4 +12,8 @@ public interface ReplyRepository {
     public String findMemberName(long memberId);
 
     public void write(Reply reply);
+
+    public void delete(long replyId);
+
+    public void update(Reply reply);
 }

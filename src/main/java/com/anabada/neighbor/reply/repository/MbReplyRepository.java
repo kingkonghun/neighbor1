@@ -1,9 +1,7 @@
 package com.anabada.neighbor.reply.repository;
 
 import com.anabada.neighbor.reply.domain.Reply;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -18,4 +16,10 @@ public interface MbReplyRepository extends ReplyRepository {
 
     @Insert("insert into reply (memberId, postId, comment) values (#{memberId}, #{postId}, #{comment})")
     public void write(Reply reply);
+
+    @Delete("delete from reply where replyId = #{replyId}")
+    public void delete(long replyId);
+
+    @Update("update reply set comment = #{comment} where replyId = #{replyId}")
+    public void update(Reply reply);
 }

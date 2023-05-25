@@ -22,17 +22,31 @@ public class ReplyController {
 
     @GetMapping("/list")
     public String reply(long postId, Model model) {
-        System.out.println(postId);
         model.addAttribute("list", replyService.list(postId));
         return "/reply/list";
     }
 
 
     @ResponseBody
-    @PostMapping("write")
-    public int write(Reply reply, Model model, HttpSession session) {
+    @PostMapping("/write")
+    public int write(Reply reply, HttpSession session) {
         reply.setMemberId((Long)session.getAttribute("memberId"));
         replyService.write(reply);
         return 0;
     }
+
+    @ResponseBody
+    @PostMapping("/delete")
+    public int delete(long replyId) {
+        replyService.delete(replyId);
+        return 0;
+    }
+
+    @ResponseBody
+    @PostMapping("/update")
+    public int update(Reply reply) {
+        replyService.update(reply);
+        return 0;
+    }
+
 }

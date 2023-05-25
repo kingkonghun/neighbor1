@@ -60,7 +60,7 @@
                 url: "/reply/write",
                 data: {postId: [[${dto.postId}]], comment: $("#comment").val()},
                 success: function() {
-                    alert("댓글 작성을 완료했습니다");
+                    alert("댓글을 작성했습니다");
                     $("#comment").val("");
                     list();
                 }
@@ -74,6 +74,40 @@
             data: {postId: [[${dto.postId}]]},
             success: function(result) {
                 $("#replyList").html(result);
+            }
+        });
+    }
+    function deleteReply(replyId) {
+        if(confirm("댓글을 삭제하시겠습니까?")) {
+            $.ajax({
+                type: "post",
+                url: "/reply/delete",
+                data: {replyId: replyId},
+                success: function() {
+                    list();
+                }
+            });
+        }
+    }
+    function update(replyId) {
+        $(".comment_"+replyId).css("display", "none");
+        $(".buttonDiv_"+replyId).css("display", "none");
+        $(".commentUpdate_"+replyId).show();
+        $(".btnUpdateReply_"+replyId).show();
+    }
+    function updateReply(replyId) {
+        var comment = $(".commentUpdate_"+replyId);
+        if(comment.val() == "") {
+            alert("내용을 입력하세요");
+            comment.focus();
+            return;
+        }
+        $.ajax({
+            type: "post",
+            url: "/reply/update",
+            data: {replyId: replyId, comment: comment.val()},
+            success: function() {
+                list();
             }
         });
     }
