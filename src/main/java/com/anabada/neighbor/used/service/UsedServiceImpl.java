@@ -8,9 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -44,9 +47,27 @@ public class UsedServiceImpl implements UsedService{
     @Transactional
     @Override
     public void write(Used used) {//글쓰기
+
         usedRepository.writePost(used);
         usedRepository.writeProduct(used);
 
+        try {
+            String uploadDir = "C:\\upload_anabada";
+
+            if (!Files.exists(Paths.get(uploadDir))) {
+                Files.createDirectories(Paths.get(uploadDir));
+            }
+
+            for (MultipartFile file : used.getFiles()) {
+                String uuid = UUID.randomUUID().toString();
+                String fileName = uuid + "_" + file.getOriginalFilename();
+                String filePath = uploadDir + File.separator + fileName;
+                file.transferTo(new File(filePath));
+                usedRepository.writeImage(fileName, used.getPostId());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

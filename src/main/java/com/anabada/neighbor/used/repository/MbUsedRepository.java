@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -36,6 +37,8 @@ public interface MbUsedRepository extends UsedRepository {
     @Insert("insert into product (postId, categoryId, price) values (#{postId},#{categoryId},#{price})")
     public void writeProduct(Used Used);
 
+    @Insert("INSERT INTO img (postId,imgUrl) VALUES(#{postId},#{imgUrl})")
+    public void writeImage(String imgUrl,long postId);
     public void update(long postId);
     public void delete(long postId);
     public Used detail(long postId);

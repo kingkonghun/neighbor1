@@ -31,7 +31,6 @@ public class UsedController {
     public String post(Used used, HttpSession session){
         long memberId = (long)session.getAttribute("memberId");
         used.setMemberId(memberId);
-        System.out.println("컨트롤러:"+used.getCategoryId());
         usedService.write(used);
         return "redirect:/used/list";
     }

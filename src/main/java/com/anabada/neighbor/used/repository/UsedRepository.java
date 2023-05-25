@@ -7,6 +7,7 @@ import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -28,4 +29,6 @@ public interface UsedRepository {
     public List<Img> images(long postId);
 
     public Member findMember(long memberId);
+
+    public void writeImage(String imgUrl, long postId);
 }

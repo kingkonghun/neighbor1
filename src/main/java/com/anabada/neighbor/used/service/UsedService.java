@@ -3,6 +3,7 @@ package com.anabada.neighbor.used.service;
 import com.anabada.neighbor.used.domain.Img;
 import com.anabada.neighbor.used.domain.Used;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface UsedService {
