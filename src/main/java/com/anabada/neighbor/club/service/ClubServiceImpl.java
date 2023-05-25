@@ -17,32 +17,28 @@ public class ClubServiceImpl implements ClubService {
         this.clubRepository = clubRepository;
     }
 
-    public void clubPostList() {//나중에개발
-
-    }
-
     @Override
     public int clubSave(ClubPost clubPost) {//post,club 등록
         if (clubPostCheck(clubPost) == -1) {
             return 0; //-1이면 clubPost에 문제가있으니 0으로 반환
         }
         Club club = Club.builder().postId(clubPostSave(clubPost))//성공하면 PostId값 반환)
-                .memberId(3)
-                .hobbyId(findByHobbyId(clubPost.getHobbyName()))
-                .maxMax(clubPost.getMaxMan())
-                .nowMan(1)
+                .memberId(clubPost.getMemberId())//memberid가져오기
+                .hobbyId(findByHobbyId(clubPost.getHobbyName()))//hobbyid가져오기
+                .maxMan(clubPost.getMaxMan())//maxman가져오기
                 .build();
-
-
+        if (clubRepository.clubSave(club) == 0) {//db등록 실패시 0으로반환
+            return 0;
+        }
         return 1;
     }
 
     @Override
     public long clubPostSave(ClubPost clubPost) {//게시글이 성공적으로 등록되었으면 postId 반환 실패하였으면 -1반환
-        PostSave post = PostSave.builder().memberId(3)
+        PostSave post = PostSave.builder().memberId(clubPost.getMemberId())
                 .title(clubPost.getTitle())
                 .content(clubPost.getContent())
-                .postType("club")
+                .postType("club")//클럽타입
                 .build();
         if (clubRepository.clubPostSave(post) == 1) {
             return post.getPostId();
@@ -52,8 +48,8 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public int findByHobbyId(String hobbyName) {
-        return 0;
+    public long findByHobbyId(String hobbyName) {
+        return clubRepository.findByHobbyId(hobbyName);
     }
 
     @Override

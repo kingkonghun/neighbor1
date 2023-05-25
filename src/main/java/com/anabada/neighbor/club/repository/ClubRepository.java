@@ -14,11 +14,7 @@ public interface ClubRepository {
 
     public int clubSave(Club club);
 
-    public Long findByHobbyId(String hobbyName);
-
-    public List<Post> clubPostList();
-
-    public Club clubList(long postId);
+    public long findByHobbyId(String hobbyName);
 
     public String findHobbyName(long hobbyId);
 

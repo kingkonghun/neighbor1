@@ -18,16 +18,13 @@ public interface MbClubRepository extends ClubRepository {
     int clubPostSave(PostSave postSave);
 
     @Override
+    @Insert("insert into club(postId, memberId, hobbyId, maxMan)" +
+            "values(#{postId}, #{memberId}, #{hobbyId}, #{maxMan})")
     int clubSave(Club club);
 
     @Override
-    Long findByHobbyId(String hobbyName);
-
-    @Override
-    List<Post> clubPostList();
-
-    @Override
-    Club clubList(long postId);
+    @Select("select hobbyId from hobby where hobbyName = #{hobbyName}")
+    long findByHobbyId(String hobbyName);
 
     @Override
     String findHobbyName(long hobbyId);
