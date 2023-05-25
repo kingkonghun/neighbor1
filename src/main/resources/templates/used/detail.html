@@ -111,6 +111,27 @@
             }
         });
     }
+    function reReply(replyId) {
+        $(".buttonDiv_"+replyId).css("display", "none");
+        $(".reComment_"+replyId).show();
+        $(".btnReReply_"+replyId).show();
+    }
+    function writeReReply(replyId) {
+        var comment = $(".reComment_"+replyId);
+        if(comment.val() == "") {
+            alert("내용을 입력하세요");
+            comment.focus();
+            return;
+        }
+        $.ajax({
+            type: "post",
+            url: "/reply/writeReReply",
+            data: {replyId: replyId, comment: comment.val()},
+            success: function() {
+                list();
+            }
+        });
+    }
 </script>
 </head>
 <body>

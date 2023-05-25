@@ -30,8 +30,7 @@ public class ReplyController {
     @ResponseBody
     @PostMapping("/write")
     public int write(Reply reply, HttpSession session) {
-        reply.setMemberId((Long)session.getAttribute("memberId"));
-        replyService.write(reply);
+        replyService.write(reply, session);
         return 0;
     }
 
@@ -46,6 +45,13 @@ public class ReplyController {
     @PostMapping("/update")
     public int update(Reply reply) {
         replyService.update(reply);
+        return 0;
+    }
+
+    @ResponseBody
+    @PostMapping("/writeReReply")
+    public int writeReReply(Reply reply, HttpSession session) {
+        replyService.writeReReply(reply, session);
         return 0;
     }
 

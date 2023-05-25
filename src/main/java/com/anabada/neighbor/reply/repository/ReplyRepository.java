@@ -16,4 +16,12 @@ public interface ReplyRepository {
     public void delete(long replyId);
 
     public void update(Reply reply);
+
+    public void writeReReply(Reply reply);
+
+    public Reply findReply(long replyId);
+
+    public void updateParentId(Reply reply);
+
+    public void updateDepth(Reply reply);
 }

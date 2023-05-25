@@ -6,8 +6,8 @@ import com.anabada.neighbor.reply.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -29,8 +29,10 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void write(Reply reply) {
+    public void write(Reply reply, HttpSession session) {
+        reply.setMemberId((long)session.getAttribute("memberId"));
         replyRepository.write(reply);
+        replyRepository.updateParentId(reply);
     }
 
     @Override
@@ -41,5 +43,16 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public void update(Reply reply) {
         replyRepository.update(reply);
+    }
+
+    @Override
+    public void writeReReply(Reply reply, HttpSession session) {
+        Reply parent = replyRepository.findReply(reply.getReplyId());
+        reply.setMemberId((long)session.getAttribute("memberId"));
+        reply.setPostId(parent.getPostId());
+        reply.setParentId(parent.getParentId());
+        reply.setDepth(parent.getDepth()+1);
+        replyRepository.updateDepth(reply);
+        replyRepository.writeReReply(reply);
     }
 }
