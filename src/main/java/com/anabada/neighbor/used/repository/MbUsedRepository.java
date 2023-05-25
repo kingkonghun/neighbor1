@@ -6,10 +6,7 @@ import com.anabada.neighbor.used.domain.Img;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -38,7 +35,7 @@ public interface MbUsedRepository extends UsedRepository {
     public void writeProduct(Used Used);
 
     @Insert("INSERT INTO img (postId,imgUrl) VALUES(#{postId},#{imgUrl})")
-    public void writeImage(long postId,String imgUrl);
+    public void writeImage(@Param("postId") long postId, @Param("imgUrl") String imgUrl);
     public void update(long postId);
     public void delete(long postId);
     public Used detail(long postId);
