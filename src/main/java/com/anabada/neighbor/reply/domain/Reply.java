@@ -18,4 +18,5 @@ public class Reply {
     private Date replyUpdate; //수정일자
     private long parentId; //부모 게시글 번호
     private int depth; //댓글 깊이
+    private int reGroup; //댓글 그룹
 }

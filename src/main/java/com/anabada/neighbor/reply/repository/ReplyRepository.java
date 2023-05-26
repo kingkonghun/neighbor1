@@ -13,6 +13,8 @@ public interface ReplyRepository {
 
     public void write(Reply reply);
 
+    public void updateReGroup(Reply reply);
+
     public void delete(long replyId);
 
     public void update(Reply reply);
@@ -21,7 +23,6 @@ public interface ReplyRepository {
 
     public Reply findReply(long replyId);
 
-    public void updateParentId(Reply reply);
 
-    public void updateDepth(Reply reply);
+
 }

@@ -18,6 +18,8 @@ public class CarryReply {
     private Date replyUpdate; //수정일자
     private long parentId; //부모 게시글 번호
     private int depth; //댓글 깊이
+    private int reGroup; //댓글 그룹
 
-    private String memberName;      //닉네임
+    private String memberName; //닉네임
+    private String parentName; //부모 닉네임
 }

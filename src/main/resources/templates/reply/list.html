@@ -10,20 +10,26 @@
 <body>
 <table>
     <div th:each="row : ${list}" style="border: 1px solid gray; width: 100%; border-radius: 30px; padding: 20px; margin-bottom: 20px;">
-        <span th:each="num : ${row.depth}">&nbsp;</span>
-        <span th:text="${row.memberName}">홍길동</span>
-        <span th:text="${row.replyDate}">2020-20-02</span>
-        <p class="comment_" th:attr="class='comment_' + ${row.replyId}" th:text="${row.comment}">안녕</p>
-        <textarea rows="3" class="commentUpdate_" th:attr="class='commentUpdate_' + ${row.replyId}" style="width: 100%; border-radius: 30px; resize: none; padding: 20px; display: none;">[[${row.comment}]]</textarea>
-        <textarea rows="3" class="reComment_" th:attr="class='reComment_' + ${row.replyId}" style="width: 100%; border-radius: 30px; resize: none; padding: 20px; display: none;" placeholder="답글 작성"></textarea>
+        <div id="replyId_" th:attr="id='replyId_' + ${row.replyId}">
+            <div style="float: left;" th:text="${row.memberName}">이름</div>
+            <div style="float: right;" th:text="${row.replyDate}">작성일</div>
+            <div style="color: blue;" th:if="${row.replyDate != row.replyUpdate}">(수정된 댓글입니다)</div>
+            <div style="clear: both;"></div>
+            <p style="text-align: left;" class="comment_" th:attr="class='comment_' + ${row.replyId}">
+                <a style="color: gray;" th:href="'#replyId_' + ${row.parentId}" th:if="${row.parentName != null}" th:text="|@${row.parentName}|"></a>
+                <span th:text="${row.comment != '' ? row.comment : '삭제된 댓글입니다'}">내용</span>
+            </p>
+            <textarea rows="3" class="commentUpdate_" th:attr="class='commentUpdate_' + ${row.replyId}" style="width: 100%; border-radius: 30px; resize: none; padding: 20px; display: none;">[[${row.comment}]]</textarea>
+            <textarea rows="3" class="reComment_" th:attr="class='reComment_' + ${row.replyId}" style="width: 100%; border-radius: 30px; resize: none; padding: 20px; display: none;" placeholder="답글 작성"></textarea>
 
-        <div class="buttonDiv_" th:attr="class='buttonDiv_' + ${row.replyId}">
-            <button type="button" id="btnReReply" th:onclick="'reReply(' + ${row.replyId} + ')'" th:if="${session.memberId != null}">답글</button>
-            <button type="button" id="btnUpdate" th:onclick="'update(' + ${row.replyId} + ')'" th:if="${row.memberId == session.memberId}">수정</button>
-            <button type="button" id="btnDelete" th:onclick="'deleteReply(' + ${row.replyId} + ')'" th:if="${row.memberId == session.memberId}">삭제</button>
+            <div class="buttonDiv_" th:attr="class='buttonDiv_' + ${row.replyId}">
+                <button type="button" id="btnReReply" th:onclick="'reReply(' + ${row.replyId} + ')'" th:if="${session.memberId != null}">답글</button>
+                <button type="button" id="btnUpdate" th:onclick="'update(' + ${row.replyId} + ')'" th:if="${row.memberId == session.memberId}">수정</button>
+                <button type="button" id="btnDelete" th:onclick="'deleteReply(' + ${row.replyId} + ')'" th:if="${row.memberId == session.memberId}">삭제</button>
+            </div>
+            <button class="btnUpdateReply_" th:attr="class='btnUpdateReply_' + ${row.replyId}" th:onclick="'updateReply(' + ${row.replyId} + ')'" style="display: none;">작성</button>
+            <button class="btnReReply_" th:attr="class='btnReReply_' + ${row.replyId}" th:onclick="'writeReReply(' + ${row.replyId} + ')'" style="display: none;">작성</button>
         </div>
-        <button class="btnUpdateReply_" th:attr="class='btnUpdateReply_' + ${row.replyId}" th:onclick="'updateReply(' + ${row.replyId} + ')'" style="display: none;">작성</button>
-        <button class="btnReReply_" th:attr="class='btnReReply_' + ${row.replyId}" th:onclick="'writeReReply(' + ${row.replyId} + ')'" style="display: none;">작성</button>
     </div>
 </body>
 </html>
