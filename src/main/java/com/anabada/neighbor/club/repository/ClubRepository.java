@@ -1,8 +1,9 @@
 package com.anabada.neighbor.club.repository;
 
-import com.anabada.neighbor.club.domain.ClubPost;
 import com.anabada.neighbor.club.domain.PostSave;
 import com.anabada.neighbor.club.domain.entity.Club;
+import com.anabada.neighbor.club.domain.entity.Hobby;
+import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,11 @@ public interface ClubRepository {
 
     public String findHobbyName(long hobbyId);
 
+    public List<Post> clubPostList();
+
+    public String findByMemberName(long memberId);
+
+    public Club findByClubOne(long postId);
+
+    public Member findByMemberOne(long memberId);
 }

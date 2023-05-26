@@ -1,12 +1,19 @@
 package com.anabada.neighbor.club.service;
 
+import com.anabada.neighbor.club.domain.ClubList;
 import com.anabada.neighbor.club.domain.ClubPost;
 import com.anabada.neighbor.club.domain.PostSave;
 import com.anabada.neighbor.club.domain.entity.Club;
-import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.club.repository.ClubRepository;
+import com.anabada.neighbor.member.domain.Member;
+import com.anabada.neighbor.used.domain.Post;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 @Service
 public class ClubServiceImpl implements ClubService {
@@ -61,6 +68,31 @@ public class ClubServiceImpl implements ClubService {
             return 0;
         }
         return 1;
+    }
+    @Override
+    public List<ClubList> clubList() {
+        List<ClubList> result = new ArrayList<>(); //반환해줄 리스트생성
+        List<Post> postList = clubRepository.clubPostList(); //foreach돌릴 postlist생성
+        for (Post p : postList) {
+            Club club = clubRepository.findByClubOne(p.getPostId());//클럽객체가져오기
+//            if (club == null) {
+//                break;
+//            }
+            Member member = clubRepository.findByMemberOne(p.getMemberId());//멤버객체가져오기
+            ClubList temp = ClubList.builder()
+                    .postId(p.getPostId())
+                    .memberId(p.getMemberId())
+                    .memberName(member.getMemberName())
+                    .title(p.getTitle())
+                    .content(p.getContent())
+                    .hobbyName(clubRepository.findHobbyName(club.getHobbyId()))
+                    .score(member.getScore())
+                    .maxMan(club.getMaxMan())
+                    .nowMan(club.getNowMan())
+                    .build();
+            result.add(temp);
+        }
+        return result;
     }
 
 }

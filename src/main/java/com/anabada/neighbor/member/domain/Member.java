@@ -8,6 +8,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class Member {
     private long memberId; //pk id
     private String memberName;      //닉네임

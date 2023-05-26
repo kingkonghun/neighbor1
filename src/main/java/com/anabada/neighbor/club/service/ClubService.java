@@ -1,8 +1,9 @@
 package com.anabada.neighbor.club.service;
 
+import com.anabada.neighbor.club.domain.ClubList;
 import com.anabada.neighbor.club.domain.ClubPost;
-import com.anabada.neighbor.club.domain.entity.Hobby;
-import com.anabada.neighbor.used.domain.Post;
+
+import java.util.List;
 
 public interface ClubService {
     public int clubSave(ClubPost clubPost);//clubSave
@@ -13,4 +14,5 @@ public interface ClubService {
 
     public int clubPostCheck(ClubPost clubPost);//clubPost객체의 Null값체크
 
+    public List<ClubList> clubList();
 }

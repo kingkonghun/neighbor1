@@ -1,8 +1,8 @@
 package com.anabada.neighbor.club.repository;
 
-import com.anabada.neighbor.club.domain.ClubPost;
 import com.anabada.neighbor.club.domain.PostSave;
 import com.anabada.neighbor.club.domain.entity.Club;
+import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
 import org.apache.ibatis.annotations.*;
 
@@ -27,5 +27,22 @@ public interface MbClubRepository extends ClubRepository {
     long findByHobbyId(String hobbyName);
 
     @Override
+    @Select("select hobbyName from hobby where hobbyId = #{hobbyId}")
     String findHobbyName(long hobbyId);
+
+    @Override
+    @Select("select * from post where postType = 'club' order by postId desc limit 6")//6개리스트만가져오기
+    List<Post> clubPostList();
+
+    @Override
+    @Select("select memberName from member where memberId = #{memberId}")
+    String findByMemberName(long memberId);
+
+    @Override
+    @Select("select * from club where postId = #{postId}")
+    Club findByClubOne(long postId);
+
+    @Override
+    @Select("select * from member where memberId = #{memberId}")
+    Member findByMemberOne(long memberId);
 }

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ClubController {
@@ -16,6 +15,12 @@ public class ClubController {
     @Autowired
     public ClubController(ClubService clubService) {
         this.clubService = clubService;
+    }
+
+    @GetMapping("/club")
+    public String club(Model model){
+        model.addAttribute("clubList",clubService.clubList());
+        return "club/club";
     }
 
     @GetMapping("/clubSave")
@@ -34,8 +39,4 @@ public class ClubController {
        return "club/clubSave";
     }
 
-    @GetMapping("/clublist")
-    @ResponseBody
-    public void clubList(){
-    }
 }
