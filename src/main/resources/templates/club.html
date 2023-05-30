@@ -1,141 +1,330 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="css/clubstyle.css">
-  <script src="https://kit.fontawesome.com/e2064a471f.js" crossorigin="anonymous"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-  <!--클릭할때마다 지정하는 함수를 호출{} 엑티브 -->
-  <script>
-    $(document).ready(function () {
-      const toggleBtn = $('.navbar__toogleBtn');
-      const menu = $('.navbar__menu');
-      const icons = $('.navbar__icons');
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="오이마켓" />
+    <meta name="author" content="아나바다" />
+    <title>오이마켓</title>
+    <!-- 상단바 아이콘 나중에 괜찮은 이미 찾으면 넣기 -->
+    <!--        <link rel="icon" type="image/x-icon" href="../static/img/favicon.ico" />-->
+    <!-- Bootstrap 아이콘 가져오기-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Bootstrap -->
+    <link href="/bootstrap-5.2.3-dist/css/bootstrap.my.css" rel="stylesheet" />
+    <!-- BootStrap 추가설정 -->
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
 
-      toggleBtn.on('click', function () {
-        menu.toggleClass('active');
-        icons.toggleClass('active');
-      });
-    });
-  </script>
-  <!--스크롤 시 추가 생산되는 박스  유튜브유노코딩 바닐라 자바스크립트무한 스크롤 구현-->
-  <script>
-    var count = 4;
-    $(window).scroll(function () {
-      if ($(window).innerHeight() + $(window).scrollTop() >= $(document.body).outerHeight()) {
-        var toAdd = $('<div>').addClass('accordion');
-        toAdd.html(`
-      <input type="checkbox" id="answer${count}">
-      <label for="answer${count}"><img src="이미지_경로" alt="프로필 사진">
-      모임 제목부분<em></em></label>
-      <div><p>자세한 모임정보</p></div>
-    `);
-        $('.accordion-container').append(toAdd);
-        count++;
-      }
-    });
-  </script>
+<!--    라이브로드위한설정-->
+    <link href="../static/bootstrap-5.2.3-dist/css/bootstrap.my.css" rel="stylesheet" />
+    <link href="../static/css/style.css" rel="stylesheet" type="text/css">
 </head>
-
 <body>
+<!-- Nav바-->
 
-  <nav class="navbar">
-
-    <div class="logo2">
-      <a href="https://example.com">
-        <img src="images/logo2.png" alt="로고" class="logo2">
-      </a>
-
+<!-- 헤더-->
+<!--<header class="bg-image py-5 mainBackgroundImg">-->
+<!--    <div class="container px-4 px-lg-5 my-5">-->
+<!--        <div class="text-center text-white">-->
+<!--            <h1 class="display-4 fw-bolder">오이마켓설명</h1>-->
+<!--            <p class="lead fw-normal text-white-50 mb-0">오이마켓설명2</p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</header>-->
+<!-- 섹션 -->
+<section>
+    <form class="row g-3" action="/clubPost">
+        <div class="container px-4 px-lg-5 my-5" >
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="inputTitle" class="form-label">제목</label>
+                    <input type="text" class="form-control" id="inputTitle" name="title">
+                </div>
+                <div class="col-md-4">
+                    <label for="inputHobby" class="form-label">State</label>
+                    <select id="inputHobby" class="form-select" name="hobby">
+                        <option selected>취미종류</option>
+                        <option>운동</option>
+                        <option>공부</option>
+                        <option>술</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="inputMaxMan" class="form-label">최대인원수</label>
+                    <input type="text" class="form-control" id="inputMaxMan" placeholder="2~50" name="maxMan">
+                </div>
+                <div class="col-md-12">
+                    <label for="inputContent" class="form-label">내용</label>
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="내용" id="inputContent" style="height: 300px" name="content"></textarea>
+                        <label for="inputContent">커뮤니티 매너를 지켜주세요</label>
+                    </div>
+                </div>
+                <div class="col-md-6 my-1">
+                    <button type="submit" class="btn btn-primary">작성완료</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <div class="col mb-5">
+                <div class="card h-100">
+                    <!-- 인기 제품 뱃지-->
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                    <!-- 중고상품 이미지  450 * 300이 적절-->
+                    <img class="card-img-top" src="https://file2.nocutnews.co.kr/newsroom/image/2020/02/19/20200219114114556225_8_450_300.jpg" alt="..." />
+                    <!-- 중고상품 상세-->
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- 중고상품 이름-->
+                            <h5 class="fw-bolder">아이폰</h5>
+                            <!-- 판매자 이름 -->
+                            <h6 class="fw">중고만파는사람</h6>
+                            <!-- 판매자 평점-->
+                            <div class="d-flex justify-content-center small text-warning mb-2">
+                                <div class="bi-star-fill"></div>
+                                <div class="bi-star-fill"></div>
+                                <div class="bi-star-fill"></div>
+                                <div class="bi-star-fill"></div>
+                                <div class="bi-star-fill"></div>
+                            </div>
+                            <!-- 중고상품 가격-->
+                            1,500,000원
+                        </div>
+                    </div>
+                    <!-- 상품 구매하기-->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                    </div>
+                </div>
+            </div>                    <div class="col mb-5">
+            <div class="card h-100">
+                <!-- 인기 제품 뱃지-->
+                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                <!-- 중고상품 이미지  -->
+                <img class="card-img-top" src="https://i1.daumcdn.net/thumb/C450x300/?fname=https://t1.daumcdn.net/cfile/tistory/236CD44E572B4B330A" alt="..." />
+                <!-- 중고상품 상세-->
+                <div class="card-body p-4">
+                    <div class="text-center">
+                        <!-- 중고상품 이름-->
+                        <h5 class="fw-bolder">갤럭시</h5>
+                        <!-- 판매자 이름 -->
+                        <h6 class="fw">중고만파는사람</h6>
+                        <!-- 판매자 평점-->
+                        <div class="d-flex justify-content-center small text-warning mb-2">
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                        </div>
+                        <!-- 중고상품 가격-->
+                        500,000원
+                    </div>
+                </div>
+                <!-- 상품 구매하기-->
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                </div>
+            </div>
+        </div>                    <div class="col mb-5">
+            <div class="card h-100">
+                <!-- 인기 제품 뱃지-->
+                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                <!-- 중고상품 이미지  -->
+                <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
+                <!-- 중고상품 상세-->
+                <div class="card-body p-4">
+                    <div class="text-center">
+                        <!-- 중고상품 이름-->
+                        <h5 class="fw-bolder">아이폰</h5>
+                        <!-- 판매자 이름 -->
+                        <h6 class="fw">중고만파는사람</h6>
+                        <!-- 판매자 평점-->
+                        <div class="d-flex justify-content-center small text-warning mb-2">
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                        </div>
+                        <!-- 중고상품 가격-->
+                        500,000원
+                    </div>
+                </div>
+                <!-- 상품 구매하기-->
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                </div>
+            </div>
+        </div>                    <div class="col mb-5">
+            <div class="card h-100">
+                <!-- 인기 제품 뱃지-->
+                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                <!-- 중고상품 이미지  -->
+                <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
+                <!-- 중고상품 상세-->
+                <div class="card-body p-4">
+                    <div class="text-center">
+                        <!-- 중고상품 이름-->
+                        <h5 class="fw-bolder">아이폰</h5>
+                        <!-- 판매자 이름 -->
+                        <h6 class="fw">중고만파는사람</h6>
+                        <!-- 판매자 평점-->
+                        <div class="d-flex justify-content-center small text-warning mb-2">
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                        </div>
+                        <!-- 중고상품 가격-->
+                        500,000원
+                    </div>
+                </div>
+                <!-- 상품 구매하기-->
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                </div>
+            </div>
+        </div>                    <div class="col mb-5">
+            <div class="card h-100">
+                <!-- 인기 제품 뱃지-->
+                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                <!-- 중고상품 이미지  -->
+                <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
+                <!-- 중고상품 상세-->
+                <div class="card-body p-4">
+                    <div class="text-center">
+                        <!-- 중고상품 이름-->
+                        <h5 class="fw-bolder">아이폰</h5>
+                        <!-- 판매자 이름 -->
+                        <h6 class="fw">중고만파는사람</h6>
+                        <!-- 판매자 평점-->
+                        <div class="d-flex justify-content-center small text-warning mb-2">
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                        </div>
+                        <!-- 중고상품 가격-->
+                        500,000원
+                    </div>
+                </div>
+                <!-- 상품 구매하기-->
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                </div>
+            </div>
+        </div>                    <div class="col mb-5">
+            <div class="card h-100">
+                <!-- 인기 제품 뱃지-->
+                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                <!-- 중고상품 이미지  -->
+                <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
+                <!-- 중고상품 상세-->
+                <div class="card-body p-4">
+                    <div class="text-center">
+                        <!-- 중고상품 이름-->
+                        <h5 class="fw-bolder">아이폰</h5>
+                        <!-- 판매자 이름 -->
+                        <h6 class="fw">중고만파는사람</h6>
+                        <!-- 판매자 평점-->
+                        <div class="d-flex justify-content-center small text-warning mb-2">
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                        </div>
+                        <!-- 중고상품 가격-->
+                        500,000원
+                    </div>
+                </div>
+                <!-- 상품 구매하기-->
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                </div>
+            </div>
+        </div>                    <div class="col mb-5">
+            <div class="card h-100">
+                <!-- 인기 제품 뱃지-->
+                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                <!-- 중고상품 이미지  -->
+                <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
+                <!-- 중고상품 상세-->
+                <div class="card-body p-4">
+                    <div class="text-center">
+                        <!-- 중고상품 이름-->
+                        <h5 class="fw-bolder">아이폰</h5>
+                        <!-- 판매자 이름 -->
+                        <h6 class="fw">중고만파는사람</h6>
+                        <!-- 판매자 평점-->
+                        <div class="d-flex justify-content-center small text-warning mb-2">
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                        </div>
+                        <!-- 중고상품 가격-->
+                        500,000원
+                    </div>
+                </div>
+                <!-- 상품 구매하기-->
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                </div>
+            </div>
+        </div>                    <div class="col mb-5">
+            <div class="card h-100">
+                <!-- 인기 제품 뱃지-->
+                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                <!-- 중고상품 이미지  -->
+                <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
+                <!-- 중고상품 상세-->
+                <div class="card-body p-4">
+                    <div class="text-center">
+                        <!-- 중고상품 이름-->
+                        <h5 class="fw-bolder">아이폰</h5>
+                        <!-- 판매자 이름 -->
+                        <h6 class="fw">중고만파는사람</h6>
+                        <!-- 판매자 평점-->
+                        <div class="d-flex justify-content-center small text-warning mb-2">
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                        </div>
+                        <!-- 중고상품 가격-->
+                        500,000원
+                    </div>
+                </div>
+                <!-- 상품 구매하기-->
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                </div>
+            </div>
+        </div>
+        </div>
     </div>
+</section>
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; 아나바다 </p></div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="/js/scripts.js"></script>
 
-    <ul class="navbar__menu">
-      <li><a href="#">전체</a></li>
-      <li><a href="#">mbti</a></li>
-      <li><a href="#">푸드</a></li>
-      <li><a href="#">취미</a></li>
-      <li><a href="#">친목</a></li>
-    </ul>
+<!--라이브용-->
+<script src="../static/js/scripts.js"></script>
 
-    <ul class="navbar__icons">
-      <!--https://fontawesome.com/ 에서 다운받음-->
-      <li><i class="fa-solid fa-pen-to-square"></i></li>
-      <li><i class="fa-solid fa-magnifying-glass"></i></li>
-    </ul>
-
-    <a href="#" class="navbar__toogleBtn">
-      <i class="fa-solid fa-bars"></i>
-    </a>
-
-
-  </nav>
-
-  <article>
-    <!-- 나중에 체크박스 만들 디자인
-          <div id="content">
-          <div class="small">작은 화면에 보이는 내용</div>
-          <div class="large">큰 화면에 보이는 내용</div>
-        </div>
-        작은 상자 큰상자 디자인 
-        <div class="small">
-        <div class="e1_13">
-          <div class="e1_4"></div>
-          <div class="e1_5"></div>
-          <div class="e1_18"></div>
-          <div class="e1_12">
-            <div class="ei1_12_1_6"></div>
-            <div class="ei1_12_1_7"></div>
-            <div class="ei1_12_1_8"></div>
-          </div>
-          <div class="e1_10"></div>
-          <div class="e1_20"></div>
-          <div class="e1_11"></div>
-        </div> -->
-    <div class="accordion-container">
-      <div class="accordion">
-        <input type="checkbox" id="answer01">
-        <label for="answer01"><img src="이미지_경로" alt="프로필 사진">
-          모임 제목부분<em></em></label>
-        <div>
-          <p>자세한 모임정보</p>
-        </div>
-
-        <input type="checkbox" id="answer02">
-        <label for="answer02"><img src="이미지_경로" alt="프로필 사진">
-          모임 제목부분<em></em></label>
-        <div>
-          <p>자세한 모임정보</p>
-        </div>
-
-        <input type="checkbox" id="answer03">
-        <label for="answer03"><img src="이미지_경로" alt="프로필 사진">
-          모임 제목부분<em></em></label>
-        <div>
-          <p>자세한 모임정보</p>
-        </div>
-
-        <input type="checkbox" id="answer04">
-        <label for="answer04"><img src="이미지_경로" alt="프로필 사진">
-          모임 제목부분<em></em></label>
-        <div>
-          <p>자세한 모임정보</p>
-        </div>
-      </div>
-    </div>
-    <!-- 
-          가장 큰 페이지에 기본 생성 되는 체크 박스들 더만들기
-        -->
-
-  </article>
-  </section>
-  <section class="features container">
-
-
-    </div>
-  </section>
-  <section class="testimonial container"></section>
-  <footer></footer>
 </body>
+</html>
