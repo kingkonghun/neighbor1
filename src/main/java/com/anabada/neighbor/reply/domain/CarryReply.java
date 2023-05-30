@@ -1,6 +1,7 @@
 package com.anabada.neighbor.reply.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class CarryReply {
     private long replyId; //댓글번호
     private long memberId; //멤버아이디

@@ -28,8 +28,19 @@ public class ReplyServiceImpl implements ReplyService {
                 parentName = replyRepository.findMemberName(parent.getMemberId());
             }
             System.out.println("parentName = " + parentName);
-            CarryReply carryReply = new CarryReply(reply.getReplyId(), reply.getMemberId(), reply.getPostId(), reply.getComment(), reply.getReplyDate(),
-                    reply.getReplyUpdate(), reply.getParentId(), reply.getDepth(), reply.getReGroup(), memberName, parentName);
+            CarryReply carryReply = CarryReply.builder()
+                    .replyId(reply.getReplyId())
+                    .memberId(reply.getMemberId())
+                    .postId(reply.getPostId())
+                    .comment(reply.getComment())
+                    .replyDate(reply.getReplyDate())
+                    .replyUpdate(reply.getReplyUpdate())
+                    .parentId(reply.getParentId())
+                    .depth(reply.getDepth())
+                    .reGroup(reply.getReGroup())
+                    .memberName(memberName)
+                    .parentName(parentName)
+                    .build();
             list.add(carryReply);
         }
         return list;

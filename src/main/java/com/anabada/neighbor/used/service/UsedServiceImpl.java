@@ -26,7 +26,6 @@ public class UsedServiceImpl implements UsedService{
     private final UsedRepository usedRepository;
     private final ImgDownService imgDownService;
 
-    List<MultipartFile> files= null;
     @Override
     public List<Used> list() {//글리스트
         List<Used> usedList = new ArrayList<>();
@@ -38,11 +37,29 @@ public class UsedServiceImpl implements UsedService{
             Product product = usedRepository.findProduct(post.getPostId());
             String categoryName = usedRepository.findCategoryName(product.getCategoryId());
 
-            Used used = new Used(post.getPostId(), post.getTitle(), post.getContent(), post.getPostType(), post.getPostDate(),
-                                    post.getPostUpdate(), post.getPostView(),
-                                    product.getProductId(), categoryName, product.getPrice(), product.getProductStatus(), product.getCategoryId(),
-                                    member.getMemberId(),member.getAddress(),member.getMemberName(),member.getProfileImg(),member.getScore(),member.getMemberStatus(),files
-                    );
+            Used used = Used.builder()
+                    .postId(post.getPostId())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .postType(post.getPostType())
+                    .postDate(post.getPostDate())
+                    .postUpdate(post.getPostUpdate())
+                    .postView(post.getPostView())
+                    .productId(product.getProductId())
+                    .categoryName(categoryName)
+                    .price(product.getPrice())
+                    .productStatus(product.getProductStatus())
+                    .categoryId(product.getCategoryId())
+                    .memberId(member.getMemberId())
+                    .address(member.getAddress())
+                    .memberName(member.getMemberName())
+                    .profileImg(member.getProfileImg())
+                    .score(member.getScore())
+                    .memberStatus(member.getMemberStatus())
+                    .build();
+
+
+
             usedList.add(used);
         }
 
@@ -114,10 +131,26 @@ public class UsedServiceImpl implements UsedService{
         Product product = usedRepository.findProduct(postId);
         String categoryName = usedRepository.findCategoryName(product.getCategoryId());
         Member member = usedRepository.findMember(post.getMemberId());
-        return new Used(post.getPostId(), post.getTitle(), post.getContent(), post.getPostType(), post.getPostDate(),
-                post.getPostUpdate(), post.getPostView(),
-                product.getProductId(), categoryName, product.getPrice(), product.getProductStatus(), product.getCategoryId(),
-                member.getMemberId(),member.getAddress(),member.getMemberName(),member.getProfileImg(),member.getScore(),member.getMemberStatus(),files);
+        return Used.builder()
+                .postId(post.getPostId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .postType(post.getPostType())
+                .postDate(post.getPostDate())
+                .postUpdate(post.getPostUpdate())
+                .postView(post.getPostView())
+                .productId(product.getProductId())
+                .categoryName(categoryName)
+                .price(product.getPrice())
+                .productStatus(product.getProductStatus())
+                .categoryId(product.getCategoryId())
+                .memberId(member.getMemberId())
+                .address(member.getAddress())
+                .memberName(member.getMemberName())
+                .profileImg(member.getProfileImg())
+                .score(member.getScore())
+                .memberStatus(member.getMemberStatus())
+                .build();
     }
 
     @Override
