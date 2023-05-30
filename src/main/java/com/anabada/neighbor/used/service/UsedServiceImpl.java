@@ -77,13 +77,35 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public void update(long postId) {
+    public void update(Used used) {//게시글수정
+        usedRepository.updatePost(used);
+        usedRepository.updateProduct(used);
 
+        try {
+            String uploadDir = "C:\\upload_anabada";
+
+            if (!Files.exists(Paths.get(uploadDir))) {
+                Files.createDirectories(Paths.get(uploadDir));
+            }
+
+            for (MultipartFile file : used.getFiles()) {
+                String uuid = UUID.randomUUID().toString();
+                String fileName = uuid + "_" + file.getOriginalFilename();
+                String filePath = uploadDir + File.separator + fileName;
+                file.transferTo(new File(filePath));
+                usedRepository.updateImage(used.getPostId(),fileName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("서비스임플:"+used);
     }
 
     @Override
     public void delete(long postId) {
-
+//        usedRepository.deletePost(postId);
+//        usedRepository.deleteProdcut(postId);
+//        usedRepository.delete
     }
 
     @Override
@@ -99,8 +121,8 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public String images(long postId) {//사진
-        String fileName = usedRepository.images(postId);
+    public String findImgUrl(long postId) {//사진
+        String fileName = usedRepository.findImgUrl(postId);
         return fileName;
     }
 

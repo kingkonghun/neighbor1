@@ -18,10 +18,10 @@ public interface UsedService {
     //사진
     public List<Used> list();
     public void write(Used used);
-    public void update(long postId);
+    public void update(Used used);
     public void delete(long postId);
     public Used detail(long postId);
-    public String images(long postId);//이미지 이름가져오기
+    public String findImgUrl(long postId);//이미지 이름가져오기
 
 
     public void downloadFiles(String filenames, HttpServletResponse response) throws IOException;

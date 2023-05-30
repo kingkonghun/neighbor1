@@ -47,10 +47,27 @@ public class UsedController {
     }
     @GetMapping("/findImg")
     public void findImg(long postId, HttpServletResponse response) throws IOException{
-        String filenames = usedService.images(postId);
+        String filenames = usedService.findImgUrl(postId);
         usedService.downloadFiles(filenames,response);
 
     }
+
+    @PostMapping("/postEdit")
+    public String postEdit(Used used,HttpSession session){
+        long memberId = (long) session.getAttribute("memberId");
+        used.setMemberId(memberId);
+        System.out.println(used);
+        usedService.update(used);
+        return "redirect:/used/list";
+
+    }
+
+    @PostMapping("/postDelete")
+    public String postDelete(long postId){
+        usedService.delete(postId);
+        return "redirect:/used/list";
+    }
+
 
 
 

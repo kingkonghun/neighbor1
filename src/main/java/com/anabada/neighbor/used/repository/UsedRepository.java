@@ -22,15 +22,25 @@ public interface UsedRepository {
 
     public void writePost(Used used);
     public void writeProduct(Used used);
+    public void writeImage(long postId,String imgUrl);
 
-    public void update(long postId);
+
+    public void update(Used used);
+    public void updateProduct(Used used);
+    public void updatePost(Used used);
+    public void updateImage(long postId,String imgUrl);
+
+
+
+
+
     public void delete(long postId);
     public Used detail(long postId);
-    public String images(long postId);
+    public String findImgUrl(long postId);
 
     public Member findMember(long memberId);
 
-    public void writeImage(long postId,String imgUrl);
+
 
 
 }
