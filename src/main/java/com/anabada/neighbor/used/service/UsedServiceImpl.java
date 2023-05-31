@@ -1,7 +1,6 @@
 package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.member.domain.Member;
-import com.anabada.neighbor.used.domain.Category;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
@@ -31,17 +30,16 @@ public class UsedServiceImpl implements UsedService{
     private final ImgDownService imgDownService;
 
     @Override
-    public List<Used> list() {//글리스트
-        List<Used> usedList = new ArrayList<>();
-        List<Post> postList = usedRepository.postList();
+    public List<Used> list() {//글 리스트
+        List<Used> usedList = new ArrayList<>(); //리턴할 값
+        List<Post> postList = usedRepository.postList(); //post 테이블에서 postType이 'used'인 튜플 가져오기
 
-        for (int i = 0; i < postList.size(); i++) {
-            Post post = postList.get(i);
-            Member member = usedRepository.findMember(post.getMemberId());
-            Product product = usedRepository.findProduct(post.getPostId());
-            String categoryName = usedRepository.findCategoryName(product.getCategoryId());
+        for (Post post : postList) {
+            Member member = usedRepository.findMember(post.getMemberId()); //post 테이블의 memberId로 member 테이블에서 해당하는 튜플 가져오기
+            Product product = usedRepository.findProduct(post.getPostId()); //post 테이블의 postId로 product 테이블에서 해당하는 튜블 가져오기
+            String categoryName = usedRepository.findCategoryName(product.getCategoryId()); //product 테이블의 categoryId로 Category 테이블에서 해당하는 categoryName 가져오기
 
-            Used used = Used.builder()
+            Used used = Used.builder() //used 객체 생성
                     .postId(post.getPostId())
                     .title(post.getTitle())
                     .content(post.getContent())
@@ -61,10 +59,7 @@ public class UsedServiceImpl implements UsedService{
                     .score(member.getScore())
                     .memberStatus(member.getMemberStatus())
                     .build();
-
-
-
-            usedList.add(used);
+            usedList.add(used); //리턴할 usedList에 used객체 추가
         }
 
         return usedList;
@@ -144,30 +139,30 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public Used detail(long postId, HttpServletRequest request, HttpServletResponse response) {
-        Post post = usedRepository.findPost(postId);
-        Product product = usedRepository.findProduct(postId);
-        String categoryName = usedRepository.findCategoryName(product.getCategoryId());
-        Member member = usedRepository.findMember(post.getMemberId());
+    public Used detail(long postId, HttpServletRequest request, HttpServletResponse response) { //게시물 상세보기
+        Post post = usedRepository.findPost(postId); //파라미터로 받은 postId에 해당하는 튜플을 post 테이블에서 가져오기
+        Product product = usedRepository.findProduct(postId); //파라미터로 받은 postId에 해당하는 튜플을 product 테이블에서 가져오기
+        Member member = usedRepository.findMember(post.getMemberId()); //가져온 post의 memberId로 member 테이블에서 해당하는 튜플 가져오기
+        String categoryName = usedRepository.findCategoryName(product.getCategoryId()); //가져온 product의 categoryId로 category 테이블에서 해당하는 categoryName 가져오기
 
-        Cookie[] cookies = request.getCookies();
+        Cookie[] cookies = request.getCookies(); //쿠키 가져오기
 
-        Cookie viewCookie = null;
+        Cookie viewCookie = null; //
 
-        if (cookies != null && cookies.length > 0) {
+        if (cookies != null && cookies.length > 0) { //가져온 쿠키가 있으면
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("cookie" + postId)) {
-                   viewCookie = cookie;
+                if (cookie.getName().equals("cookie" + postId)) { //해당하는 게시물의 쿠키가 있으면
+                   viewCookie = cookie; //viewCookie에 저장
                 }
             }
         }
-        if (viewCookie == null) {
-            Cookie newCookie = new Cookie("cookie" + postId, String.valueOf(postId));
-            response.addCookie(newCookie);
-            usedRepository.updatePostView(postId);
+        if (viewCookie == null) { //쿠키가 없으면
+            Cookie newCookie = new Cookie("cookie" + postId, String.valueOf(postId)); //해당하는 게시물의 새로운 쿠키 생성
+            response.addCookie(newCookie); //쿠키 등록
+            usedRepository.updatePostView(postId); //postId로 post 테이블에서 해당하는 튜플의 조회수 증가
         }
 
-        return Used.builder()
+        return Used.builder() //게시물의 상세정보 리턴
                 .postId(post.getPostId())
                 .title(post.getTitle())
                 .content(post.getContent())
