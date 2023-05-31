@@ -45,4 +45,6 @@ public interface UsedRepository {
     void deletePost(long postId);
 
     void deleteReply(long postId);
+
+    List<Category> categoryList();
 }

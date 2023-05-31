@@ -49,7 +49,7 @@
 </style>
 </head>
 <body>
-<div th:include="nav::nav"></div>
+<div th:replace="nav::nav"></div>
 <div class="container">
     <header>
         <h2 class="title">중고장터</h2>
@@ -58,11 +58,9 @@
         <article class="article_1 col-12">
             <select id="category_select" name="categoryId">
                 <option value="0" selected>전체상품</option>
-                <option value="1">전자기기</option>
-                <option value="2">취미</option>
-                <option value="3">생활용품</option>
-                <option value="4">의류</option>
-                <option value="5">기타</option>
+                <th:block th:each="category:${category}">
+                <option th:value="${category.categoryId}" th:text="${category.categoryName}"></option>
+                </th:block>
             </select>
         </article>
         <article class="article_2 col-12">
@@ -95,7 +93,7 @@
                 </div>
 
 
-                <div class="text_div">
+                <div class="text_div" id="list">
                     <table>
                         <tr>
                             <td>
@@ -136,20 +134,7 @@
         // 값을 다시 설정하여 숫자 입력 필드에 반영
         this.value = numberWithCommas;
     });
-    $(function (){
-        $('#category_select').change(function (){
-           var selectedValue=$(this).val(); //옵션값가져오기
-           //ajax
-           $.ajax({
-               url:'used/searchSelectOption',
-               method:'GET',
-               data:{categoryId:selectedValue},
-               success: function (){
 
-               }
-           }) ;
-        });
-    });
 </script>
 </body>
 </html>

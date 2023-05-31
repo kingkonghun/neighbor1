@@ -31,12 +31,14 @@ public class UsedController {
     @GetMapping("/list")
     public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model){
         model.addAttribute("list", usedService.list());
+        model.addAttribute("category",usedService.categoryList());
         return "used/list";
     }
 
-    @GetMapping("detail")
+    @GetMapping("/detail")
     public String detail(long postId, Model model, HttpServletRequest request, HttpServletResponse response) {
         model.addAttribute("dto", usedService.detail(postId, request, response));
+        model.addAttribute("category",usedService.categoryList());
         return "used/detail";
     }
     @PostMapping("/post")

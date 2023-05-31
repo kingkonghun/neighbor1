@@ -14,6 +14,9 @@ import java.util.List;
 public interface MbUsedRepository extends UsedRepository {
     @Select("select * from post WHERE postType='used'")
     public List<Post> postList();
+
+    @Select("SELECT*FROM category")
+    List<Category> categoryList();
     @Select("select * from product where postId = #{postId}")
     public Product findProduct(long postId);
     @Select("select categoryName from category where categoryId = #{categoryId}")

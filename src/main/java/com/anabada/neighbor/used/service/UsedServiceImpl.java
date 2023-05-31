@@ -70,6 +70,12 @@ public class UsedServiceImpl implements UsedService{
         return usedList;
 
     }
+    @Override
+    public List<Category> categoryList() {//카테고리 리스트
+        List<Category> categoryList = usedRepository.categoryList();//리턴할 리스트
+
+        return categoryList;
+    }
 
     @Transactional
     @Override
@@ -194,7 +200,9 @@ public class UsedServiceImpl implements UsedService{
             imgDownService.imgDown(filename,response);
         }
 
-    }
+
+
+}
 
 
 

@@ -10,12 +10,11 @@
 
                     <label for="category" class="form-label">카테고리</label>
                     <select id="category" class="form-select" name="categoryId">
-                        <option value="0">카테고리</option>
-                        <option value="1" th:selected="${dto.categoryId eq 1}">전자기기</option>
-                        <option value="2" th:selected="${dto.categoryId eq 2}">취미</option>
-                        <option value="3" th:selected="${dto.categoryId eq 3}">생활용품</option>
-                        <option value="4" th:selected="${dto.categoryId eq 4}">의류</option>
-                        <option value="5" th:selected="${dto.categoryId eq 5}">기타</option>
+                        <th:block th:each="category:${category}">
+                            <option th:value="${category.categoryId}"
+                                    th:selected="${category.categoryId eq dto.categoryId}"
+                                    th:text="${category.categoryName}"></option>
+                        </th:block>
                     </select>
 
 
