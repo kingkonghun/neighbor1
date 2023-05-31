@@ -2,6 +2,7 @@ package com.anabada.neighbor.used.repository;
 
 
 import com.anabada.neighbor.member.domain.Member;
+import com.anabada.neighbor.used.domain.Category;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
@@ -57,4 +58,11 @@ public interface MbUsedRepository extends UsedRepository {
     @Delete("DELETE FROM reply WHERE postId=#{postId}")
     void deleteReply(long postId);
 
+    @Override
+    @Update("update post set postView = postView + 1 where postId = #{postId}")
+    void updatePostView(long postId);
+
+//    @Override
+//    @Select("select * from category")
+//    List<Category> categoryList();
 }

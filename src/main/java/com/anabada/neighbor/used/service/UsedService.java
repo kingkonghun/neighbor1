@@ -5,6 +5,7 @@ import com.anabada.neighbor.used.domain.Used;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +21,7 @@ public interface UsedService {
     public void write(Used used)throws Exception;
     public void update(Used used) throws Exception;
     public void delete(long postId);
-    public Used detail(long postId);
+    public Used detail(long postId, HttpServletRequest request, HttpServletResponse response);
     public String findImgUrl(long postId);//이미지 이름가져오기
 
 

@@ -1,6 +1,7 @@
 package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.member.domain.Member;
+import com.anabada.neighbor.used.domain.Category;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
@@ -135,11 +138,29 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public Used detail(long postId) {
+    public Used detail(long postId, HttpServletRequest request, HttpServletResponse response) {
         Post post = usedRepository.findPost(postId);
         Product product = usedRepository.findProduct(postId);
         String categoryName = usedRepository.findCategoryName(product.getCategoryId());
         Member member = usedRepository.findMember(post.getMemberId());
+
+        Cookie[] cookies = request.getCookies();
+
+        Cookie viewCookie = null;
+
+        if (cookies != null && cookies.length > 0) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("cookie" + postId)) {
+                   viewCookie = cookie;
+                }
+            }
+        }
+        if (viewCookie == null) {
+            Cookie newCookie = new Cookie("cookie" + postId, String.valueOf(postId));
+            response.addCookie(newCookie);
+            usedRepository.updatePostView(postId);
+        }
+
         return Used.builder()
                 .postId(post.getPostId())
                 .title(post.getTitle())

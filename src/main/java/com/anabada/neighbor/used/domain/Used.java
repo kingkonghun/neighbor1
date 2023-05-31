@@ -33,6 +33,7 @@ public class Used {
     private int score;              //사용자평점
     private char memberStatus;      //회원상태(가입,탈퇴,정지등)
     private List<MultipartFile> files;
+
 }
 
 

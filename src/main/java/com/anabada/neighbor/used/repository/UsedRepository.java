@@ -2,10 +2,7 @@ package com.anabada.neighbor.used.repository;
 
 
 import com.anabada.neighbor.member.domain.Member;
-import com.anabada.neighbor.used.domain.Img;
-import com.anabada.neighbor.used.domain.Post;
-import com.anabada.neighbor.used.domain.Product;
-import com.anabada.neighbor.used.domain.Used;
+import com.anabada.neighbor.used.domain.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,13 +30,14 @@ public interface UsedRepository {
 
 
 
+    public void updatePostView(long postId);
 
     public Used detail(long postId);
     public String findImgUrl(long postId);
 
     public Member findMember(long memberId);
 
-
+//    public List<Category> categoryList();
     void deleteImg(long postId);
 
     void deleteProduct(long postId);
