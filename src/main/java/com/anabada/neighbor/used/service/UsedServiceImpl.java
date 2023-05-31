@@ -1,6 +1,7 @@
 package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.member.domain.Member;
+import com.anabada.neighbor.used.domain.Category;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
