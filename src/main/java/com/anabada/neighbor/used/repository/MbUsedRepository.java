@@ -44,9 +44,17 @@ public interface MbUsedRepository extends UsedRepository {
     @Update("UPDATE img SET imgUrl=#{imgUrl} WHERE postId=#{postId}")
     public void updateImage(long postId,String imgUrl);
 
-    public void delete(long postId);
     public Used detail(long postId);
     @Select("SELECT imgUrl FROM img WHERE postId=#{postId} ORDER BY imgId LIMIT 1")
     public String findImgUrl(long postId);
+
+    @Delete("DELETE FROM img WHERE postId=#{postId}")
+    void deleteImg(long postId);
+    @Delete("DELETE FROM product WHERE postId=#{postId}")
+    void deleteProduct(long postId);
+    @Delete("DELETE FROM post WHERE postId=#{postId}")
+    void deletePost(long postId);
+    @Delete("DELETE FROM reply WHERE postId=#{postId}")
+    void deleteReply(long postId);
 
 }

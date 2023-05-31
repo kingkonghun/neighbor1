@@ -26,21 +26,25 @@ public interface UsedRepository {
 
 
     public void update(Used used);
-    public void updateProduct(Used used);
-    public void updatePost(Used used);
-    public void updateImage(long postId,String imgUrl);
+    public void updateProduct(Used used)throws Exception;
+    public void updatePost(Used used)throws Exception;
+    public void updateImage(long postId,String imgUrl)throws Exception;
 
 
 
 
 
-    public void delete(long postId);
     public Used detail(long postId);
     public String findImgUrl(long postId);
 
     public Member findMember(long memberId);
 
 
+    void deleteImg(long postId);
 
+    void deleteProduct(long postId);
 
+    void deletePost(long postId);
+
+    void deleteReply(long postId);
 }

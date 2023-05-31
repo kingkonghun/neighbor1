@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,35 +95,43 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public void update(Used used) {//게시글수정
+    public void update(Used used) throws Exception{//게시글수정
+        String formImg = used.getFiles().get(0).getOriginalFilename();
         usedRepository.updatePost(used);
         usedRepository.updateProduct(used);
-
-        try {
-            String uploadDir = "C:\\upload_anabada";
-
-            if (!Files.exists(Paths.get(uploadDir))) {
+        String uploadDir = "C:\\upload_anabada";
+        Path originImg = Path.of(uploadDir+"\\"+usedRepository.findImgUrl(used.getPostId()));//원래 이미지 url찾아오기
+            if (!Files.exists(Paths.get(uploadDir))) {//디렉토리가 없다면 디렉토리생성
                 Files.createDirectories(Paths.get(uploadDir));
             }
-
-            for (MultipartFile file : used.getFiles()) {
-                String uuid = UUID.randomUUID().toString();
-                String fileName = uuid + "_" + file.getOriginalFilename();
-                String filePath = uploadDir + File.separator + fileName;
-                file.transferTo(new File(filePath));
-                usedRepository.updateImage(used.getPostId(),fileName);
+            if(!formImg.equals("") && formImg != null ) {
+                for (MultipartFile file : used.getFiles()) {
+                    System.out.println("이프문안에:"+formImg);
+                    Files.delete(originImg);//원래 이미지 삭제
+                    String uuid = UUID.randomUUID().toString();
+                    String fileName = uuid + "_" + file.getOriginalFilename();
+                    String filePath = uploadDir + File.separator + fileName;
+                    file.transferTo(new File(filePath));
+                    usedRepository.updateImage(used.getPostId(), fileName);
+                  }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("서비스임플:"+used);
+
+
     }
 
     @Override
     public void delete(long postId) {
-//        usedRepository.deletePost(postId);
-//        usedRepository.deleteProdcut(postId);
-//        usedRepository.delete
+
+        try {
+            Path uploadDir = Path.of("C:\\upload_anabada\\"+usedRepository.findImgUrl(postId));
+            Files.delete(uploadDir);
+            usedRepository.deleteReply(postId);
+            usedRepository.deleteImg(postId);
+            usedRepository.deleteProduct(postId);
+            usedRepository.deletePost(postId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

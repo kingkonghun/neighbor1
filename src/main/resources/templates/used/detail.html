@@ -163,6 +163,7 @@
                     </tr>
                     <tr>
                         <td colspan="2"><button type="button" id="btnEdit">수정</button></td>
+                        <td colspan="2"><button type="button" id="btnDelete">삭제</button></td>
                     </tr>
 
                 </table>
@@ -306,6 +307,9 @@
             });
             $("#returnBtn").click(function (){
                 $("#editForm").slideUp();
+            });
+            $("#btnDelete").click(function (){
+                location.href="/used/postDelete?postId="+[[${dto.postId}]];
             });
         });
     </script>
