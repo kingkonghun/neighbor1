@@ -12,8 +12,6 @@ import java.util.List;
 
 @Mapper
 public interface MbUsedRepository extends UsedRepository {
-    @Select("select * from post WHERE postType='used'")
-    public List<Post> postList();
 
     @Select("SELECT*FROM category")
     List<Category> categoryList();
@@ -65,7 +63,11 @@ public interface MbUsedRepository extends UsedRepository {
     @Update("update post set postView = postView + 1 where postId = #{postId}")
     void updatePostView(long postId);
 
-//    @Override
-//    @Select("select * from category")
-//    List<Category> categoryList();
+    @Override
+    @Select("select * from product")
+    List<Product> productList();
+
+    @Override
+    @Select("select * from product where categoryId = #{categoryId}")
+    List<Product> productCategoryList(long categoryId);
 }

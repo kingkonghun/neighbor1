@@ -56,10 +56,10 @@
     </header>
     <section class="row">
         <article class="article_1 col-12">
-            <select id="category_select" name="categoryId">
-                <option value="0" selected>전체상품</option>
+            <select id="category_select" name="categoryId" onchange="location.href='/used/list?categoryId='+$('#category_select').val()">
+                <option value="0">전체상품</option>
                 <th:block th:each="category:${category}">
-                <option th:value="${category.categoryId}" th:text="${category.categoryName}"></option>
+                <option th:value="${category.categoryId}" th:text="${category.categoryName}" th:selected="${category.categoryId eq categoryId}"></option>
                 </th:block>
             </select>
         </article>

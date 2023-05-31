@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 public interface UsedRepository {
-    public List<Post> postList();
     public Product findProduct(long postId);
 
     public String findCategoryName(long categoryId);
@@ -47,4 +46,8 @@ public interface UsedRepository {
     void deleteReply(long postId);
 
     List<Category> categoryList();
+
+    List<Product> productList();
+
+    List<Product> productCategoryList(long categoryId);
 }

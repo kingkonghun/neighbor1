@@ -31,15 +31,18 @@ public class UsedServiceImpl implements UsedService{
     private final ImgDownService imgDownService;
 
     @Override
-    public List<Used> list() {//글 리스트
+    public List<Used> list(long categoryId) {//글 리스트
         List<Used> usedList = new ArrayList<>(); //리턴할 값
-        List<Post> postList = usedRepository.postList(); //post 테이블에서 postType이 'used'인 튜플 가져오기
-
-        for (Post post : postList) {
+        List<Product> productList = null;
+        if (categoryId != 0) { //파라미터로 받은 categoryId가 0이 아니면
+            productList = usedRepository.productCategoryList(categoryId); //product 테이블에서 categoryId가 파라미터로 받은 categoryId랑 같은 튜플 가져오기
+        }else { //파라미터로 받은 categoryId가 0이면
+            productList = usedRepository.productList(); //product 리스트 가져오기
+        }
+        for (Product product : productList) {
+            Post post = usedRepository.findPost(product.getPostId()); //product 테이블의 postId로 post 테이블에서 해당하는 튜플 가져오기
             Member member = usedRepository.findMember(post.getMemberId()); //post 테이블의 memberId로 member 테이블에서 해당하는 튜플 가져오기
-            Product product = usedRepository.findProduct(post.getPostId()); //post 테이블의 postId로 product 테이블에서 해당하는 튜블 가져오기
             String categoryName = usedRepository.findCategoryName(product.getCategoryId()); //product 테이블의 categoryId로 Category 테이블에서 해당하는 categoryName 가져오기
-
             Used used = Used.builder() //used 객체 생성
                     .postId(post.getPostId())
                     .title(post.getTitle())
@@ -62,7 +65,6 @@ public class UsedServiceImpl implements UsedService{
                     .build();
             usedList.add(used); //리턴할 usedList에 used객체 추가
         }
-
         return usedList;
 
     }
