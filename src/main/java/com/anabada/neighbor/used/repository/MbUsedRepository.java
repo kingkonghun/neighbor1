@@ -12,7 +12,7 @@ import java.util.List;
 
 @Mapper
 public interface MbUsedRepository extends UsedRepository {
-    @Select("select * from post")
+    @Select("select * from post WHERE postType='used'")
     public List<Post> postList();
     @Select("select * from product where postId = #{postId}")
     public Product findProduct(long postId);
@@ -49,14 +49,14 @@ public interface MbUsedRepository extends UsedRepository {
     @Select("SELECT imgUrl FROM img WHERE postId=#{postId} ORDER BY imgId LIMIT 1")
     public String findImgUrl(long postId);
 
+    @Delete("DELETE FROM reply WHERE postId=#{postId}")
+    void deleteReply(long postId);
     @Delete("DELETE FROM img WHERE postId=#{postId}")
     void deleteImg(long postId);
     @Delete("DELETE FROM product WHERE postId=#{postId}")
     void deleteProduct(long postId);
     @Delete("DELETE FROM post WHERE postId=#{postId}")
     void deletePost(long postId);
-    @Delete("DELETE FROM reply WHERE postId=#{postId}")
-    void deleteReply(long postId);
 
     @Override
     @Update("update post set postView = postView + 1 where postId = #{postId}")
