@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-<script th:src="@{/js/jquery-3.6.3.min.js}" type="text/javascript"></script>
-<style>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script th:src="@{/js/jquery-3.6.3.min.js}" type="text/javascript"></script>
+    <style>
     .container {padding-top: 50px; text-align: center; width: 100%;}
 
     #section_1 {width: 800px; margin: auto; border: 1px solid black; border-radius: 32px; box-shadow: 1px 1px 5px gray;}
@@ -45,151 +45,286 @@
 
     #button_div {text-align: right;}
 </style>
+    <script>
+    $(function(){
+        list();
+        $("#btnWrite").click(function(){
+            var comment = $("#comment");
+            if(comment.val() == ""){
+                alert("내용을 입력하세요");
+                comment.focus();
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: "/reply/write",
+                data: {postId: [[${dto.postId}]], comment: $("#comment").val()},
+                success: function() {
+                    alert("댓글을 작성했습니다");
+                    $("#comment").val("");
+                    list();
+                }
+            });
+        });
+    });
+    function list() {
+        $.ajax({
+            type: "get",
+            url: "/reply/list",
+            data: {postId: [[${dto.postId}]]},
+            success: function(result) {
+                $("#replyList").html(result);
+            }
+        });
+    }
+    function deleteReply(replyId) {
+        if(confirm("댓글을 삭제하시겠습니까?")) {
+            $.ajax({
+                type: "post",
+                url: "/reply/delete",
+                data: {replyId: replyId},
+                success: function() {
+                    list();
+                }
+            });
+        }
+    }
+    function update(replyId) {
+        $(".comment_"+replyId).css("display", "none");
+        $(".buttonDiv_"+replyId).css("display", "none");
+        $(".commentUpdate_"+replyId).show();
+        $(".btnUpdateReply_"+replyId).show();
+    }
+    function updateReply(replyId) {
+        var comment = $(".commentUpdate_"+replyId);
+        if(comment.val() == "") {
+            alert("내용을 입력하세요");
+            comment.focus();
+            return;
+        }
+        $.ajax({
+            type: "post",
+            url: "/reply/update",
+            data: {replyId: replyId, comment: comment.val()},
+            success: function() {
+                list();
+            }
+        });
+    }
+    function reReply(replyId) {
+        $(".buttonDiv_"+replyId).css("display", "none");
+        $(".reComment_"+replyId).show();
+        $(".btnReReply_"+replyId).show();
+    }
+    function writeReReply(replyId) {
+        var comment = $(".reComment_"+replyId);
+        if(comment.val() == "") {
+            alert("내용을 입력하세요");
+            comment.focus();
+            return;
+        }
+        $.ajax({
+            type: "post",
+            url: "/reply/writeReReply",
+            data: {replyId: replyId, comment: comment.val()},
+            success: function() {
+                list();
+            }
+        });
+    }
+
+
+</script>
 </head>
 <body>
-    <div class="container">
-        <section id="section_1">
-            <article>
+<div class="container">
+    <section id="section_1">
+        <article>
+            <div>
+                <!--                    <img id="img_1" th:src="@{/img/} + ${dto.productImage}" alt="">-->
+            </div>
+            <div class="text_div_1">
+                <table>
+                    <tr>
+                        <td style="text-align: left;">
+                            <h4 th:text="${dto.title}"></h4>
+                            <span th:text="${dto.categoryName}"></span> <br>
+                            <span class="p_price_1" th:text="${dto.price}"></span>
+                        </td>
+                        <td style="text-align: right;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" color="red"/>
+                            </svg>
+                            <span class="count_1" th:text="${dto.postView}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: left;"><p th:text="${dto.content}"></p></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><button type="button" id="btnEdit">수정</button></td>
+                    </tr>
+
+                </table>
+                <hr>
+            </div>
+        </article>
+        <article style="margin: 20px;">
+            <textarea rows="3" id="comment" style="width: 100%; border-radius: 30px; resize: none; padding: 20px;" placeholder="댓글 작성"></textarea>
+            <div id="button_div">
+                <button type="button" id="btnWrite">작성</button>
+            </div>
+        </article>
+        <article id="replyList" style="margin: 20px;">
+
+        </article>
+    </section>
+
+    <div th:include="used/edit :: section" style="display: none;" id="editForm"></div>
+
+
+
+
+    <section id="section_2" class="row" style="margin-top: 30px;">
+        <article style=" margin-bottom: 30px;">
+            <span style="font-weight: bold; font-size: 30px;">비슷한 상품</span>
+        </article>
+        <article class="article_list col-lg-6 col-md-6 col-sm-12">
+            <div class="div_list">
                 <div>
-                    <img id="img_1" th:src="@{/img/} + ${dto.productImage}" alt="">
+                    <img class="img_2" src="https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_960_720.jpg" alt="">
                 </div>
-                <div class="text_div_1">
+                <div class="text_div">
                     <table>
                         <tr>
                             <td style="text-align: left;">
-                                <h4 th:text="${dto.title}"></h4>
-                                <span th:text="${dto.categoryName}"></span> <br>
-                                <span class="p_price_1" th:text="${dto.price}"></span>
+                                <span class="p_title">스마트폰 팝니다</span> <br>
+                                <span class="p_price">10000원</span> <br>
+                                <span class="p_address">서울특별시 성북구</span>
                             </td>
                             <td style="text-align: right;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" color="red"/>
                                 </svg>
-                                <span class="count_1" th:text="${dto.countNum}"></span>
+                                <span class="count">32</span>
                             </td>
                         </tr>
+                    </table>
+                </div>
+            </div>
+        </article>
+        <article class="article_list col-lg-6 col-md-6 col-sm-12">
+            <div class="div_list">
+                <div>
+                    <img class="img_2" src="https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_960_720.jpg" alt="">
+                </div>
+                <div class="text_div">
+                    <table>
                         <tr>
-                            <td colspan="2" style="text-align: left;"><p th:text="${dto.content}"></p></td>
+                            <td style="text-align: left;">
+                                <span class="p_title">스마트폰 팝니다</span> <br>
+                                <span class="p_price">10000원</span> <br>
+                                <span class="p_address">서울특별시 성북구</span>
+                            </td>
+                            <td style="text-align: right;">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" color="red"/>
+                                </svg>
+                                <span class="count">32</span>
+                            </td>
                         </tr>
                     </table>
-                    <hr>
                 </div>
-            </article>
-            <article style="margin: 20px;">
-                <textarea rows="3" style="width: 100%; border-radius: 30px; resize: none; padding: 20px;" placeholder="댓글 작성"></textarea>
-                <div id="button_div">
-                    <button id="btnWrite">작성</button>
+            </div>
+        </article>
+        <article class="article_list col-lg-6 col-md-6 col-sm-12">
+            <div class="div_list">
+                <div>
+                    <img class="img_2" src="https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_960_720.jpg" alt="">
                 </div>
-            </article>
-        </section>
+                <div class="text_div">
+                    <table>
+                        <tr>
+                            <td style="text-align: left;">
+                                <span class="p_title">스마트폰 팝니다</span> <br>
+                                <span class="p_price">10000원</span> <br>
+                                <span class="p_address">서울특별시 성북구</span>
+                            </td>
+                            <td style="text-align: right;">
 
-        <section id="section_2" class="row" style="margin-top: 30px;">
-            <article style=" margin-bottom: 30px;">
-                <span style="font-weight: bold; font-size: 30px;">비슷한 상품</span>
-            </article>
-            <article class="article_list col-lg-6 col-md-6 col-sm-12">
-                <div class="div_list">
-                    <div>
-                        <img class="img_2" src="https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_960_720.jpg" alt="">
-                    </div>
-                    <div class="text_div">
-                        <table>
-                            <tr>
-                                <td style="text-align: left;">
-                                    <span class="p_title">스마트폰 팝니다</span> <br>
-                                    <span class="p_price">10000원</span> <br>
-                                    <span class="p_address">서울특별시 성북구</span>
-                                </td>
-                                <td style="text-align: right;">
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" color="red"/>
-                                    </svg>
-                                    <span class="count">32</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" color="red"/>
+                                </svg>
+                                <span class="count">32</span>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-            </article>
-            <article class="article_list col-lg-6 col-md-6 col-sm-12">
-                <div class="div_list">
-                    <div>
-                        <img class="img_2" src="https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_960_720.jpg" alt="">
-                    </div>
-                    <div class="text_div">
-                        <table>
-                            <tr>
-                                <td style="text-align: left;">
-                                    <span class="p_title">스마트폰 팝니다</span> <br>
-                                    <span class="p_price">10000원</span> <br>
-                                    <span class="p_address">서울특별시 성북구</span>
-                                </td>
-                                <td style="text-align: right;">
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" color="red"/>
-                                    </svg>
-                                    <span class="count">32</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+            </div>
+        </article>
+        <article class="article_list col-lg-6 col-md-6 col-sm-12">
+            <div class="div_list">
+                <div>
+                    <img class="img_2" src="https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_960_720.jpg" alt="">
                 </div>
-            </article>
-            <article class="article_list col-lg-6 col-md-6 col-sm-12">
-                <div class="div_list">
-                    <div>
-                        <img class="img_2" src="https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_960_720.jpg" alt="">
-                    </div>
-                    <div class="text_div">
-                        <table>
-                            <tr>
-                                <td style="text-align: left;">
-                                    <span class="p_title">스마트폰 팝니다</span> <br>
-                                    <span class="p_price">10000원</span> <br>
-                                    <span class="p_address">서울특별시 성북구</span>
-                                </td>
-                                <td style="text-align: right;">
+                <div class="text_div">
+                    <table>
+                        <tr>
+                            <td style="text-align: left;">
+                                <span class="p_title">스마트폰 팝니다</span> <br>
+                                <span class="p_price">10000원</span> <br>
+                                <span class="p_address">서울특별시 성북구</span>
+                            </td>
+                            <td style="text-align: right;">
 
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" color="red"/>
-                                    </svg>
-                                    <span class="count">32</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" color="red"/>
+                                </svg>
+                                <span class="count">32</span>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-            </article>
-            <article class="article_list col-lg-6 col-md-6 col-sm-12">
-                <div class="div_list">
-                    <div>
-                        <img class="img_2" src="https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_960_720.jpg" alt="">
-                    </div>
-                    <div class="text_div">
-                        <table>
-                            <tr>
-                                <td style="text-align: left;">
-                                    <span class="p_title">스마트폰 팝니다</span> <br>
-                                    <span class="p_price">10000원</span> <br>
-                                    <span class="p_address">서울특별시 성북구</span>
-                                </td>
-                                <td style="text-align: right;">
+            </div>
+        </article>
+    </section>
+    <script th:inline="javascript">
+        $(function (){
+            $("#btnSubmit").click(function(){
+                var category = $("#category");
+                if(category.val() == 0) {
+                    alert("카테고리를 선택하세요");
+                    category.focus();
+                    return;
+                }
+                document.writeForm.submit();
+            });
+            $("#btnEdit").click(function (){
+                $("#editForm").slideDown();
+            });
+            $("#returnBtn").click(function (){
+                $("#editForm").slideUp();
+            });
+        });
+    </script>
 
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" color="red"/>
-                                    </svg>
-                                    <span class="count">32</span>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </article>
-        </section>
+    <script>
+        const inputPrice = document.getElementById("inputPrice");
 
+        inputPrice.addEventListener("input", function(event) {
+            // 입력된 값에서 숫자 이외의 문자 제거
+            const formattedValue = this.value.replace(/\D/g, "");
 
+            // 3자리마다 컴마 추가
+            const numberWithCommas = formattedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
+            // 값을 다시 설정하여 숫자 입력 필드에 반영
+            this.value = numberWithCommas;
+        });
+    </script>
+
+</div>
 </body>
 </html>
