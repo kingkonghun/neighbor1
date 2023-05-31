@@ -136,6 +136,20 @@
         // 값을 다시 설정하여 숫자 입력 필드에 반영
         this.value = numberWithCommas;
     });
+    $(function (){
+        $('#category_select').change(function (){
+           var selectedValue=$(this).val(); //옵션값가져오기
+           //ajax
+           $.ajax({
+               url:'used/searchSelectOption',
+               method:'GET',
+               data:{categoryId:selectedValue},
+               success: function (){
+
+               }
+           }) ;
+        });
+    });
 </script>
 </body>
 </html>
