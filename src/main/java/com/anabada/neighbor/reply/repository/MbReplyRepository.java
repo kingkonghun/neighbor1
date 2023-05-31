@@ -2,8 +2,6 @@ package com.anabada.neighbor.reply.repository;
 
 import com.anabada.neighbor.reply.domain.Reply;
 import org.apache.ibatis.annotations.*;
-import org.springframework.data.web.PageableDefault;
-
 import java.util.List;
 
 @Mapper
