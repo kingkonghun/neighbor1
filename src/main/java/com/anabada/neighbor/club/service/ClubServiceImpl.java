@@ -72,12 +72,12 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public List<ClubList> clubList() {
         List<ClubList> result = new ArrayList<>(); //반환해줄 리스트생성
-        List<Post> postList = clubRepository.clubPostList(); //foreach돌릴 postlist생성
+        List<Post> postList = clubRepository.clubPostList(); //foreach돌릴 postlist생성j
         for (Post p : postList) {
             Club club = clubRepository.findByClubOne(p.getPostId());//클럽객체가져오기
-//            if (club == null) {
-//                break;
-//            }
+            if (club == null) { //클럽 널체크
+                continue;
+            }
             Member member = clubRepository.findByMemberOne(p.getMemberId());//멤버객체가져오기
             ClubList temp = ClubList.builder()
                     .postId(p.getPostId())

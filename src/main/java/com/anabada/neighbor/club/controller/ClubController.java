@@ -30,7 +30,7 @@ public class ClubController {
 
     @PostMapping("/clubSave")
     public String clubSave(ClubPost clubPost, Model model) {
-        clubPost.setMemberId(3L);
+        clubPost.setMemberId(1L);
         if(clubService.clubSave(clubPost) == 1){
             model.addAttribute("result","글 등록성공!");
         }else{
