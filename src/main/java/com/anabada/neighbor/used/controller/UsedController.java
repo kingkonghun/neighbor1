@@ -31,8 +31,10 @@ public class UsedController {
 
     @GetMapping("/detail") //게시물 상세보기
     public String detail(long postId, Model model, HttpServletRequest request, HttpServletResponse response) {
-        model.addAttribute("dto", usedService.detail(postId, request, response));
+        Used dto = usedService.detail(postId, request, response);
+        model.addAttribute("dto", dto);
         model.addAttribute("category",usedService.categoryList());
+//        model.addAttribute("similarList", usedService.similarList(dto.getCategoryId()));
         return "used/detail";
     }
     @PostMapping("/post") //게시물 작성

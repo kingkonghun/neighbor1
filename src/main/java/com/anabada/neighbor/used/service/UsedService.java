@@ -1,10 +1,7 @@
 package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.used.domain.Category;
-import com.anabada.neighbor.used.domain.Img;
 import com.anabada.neighbor.used.domain.Used;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,5 +25,7 @@ public interface UsedService {
 
     public void downloadFiles(String filenames, HttpServletResponse response) throws IOException;
 
-    List<Category> categoryList();
+    public List<Category> categoryList();
+
+//    public List<Used> similarList(long categoryId);
 }

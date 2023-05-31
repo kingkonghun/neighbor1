@@ -37,17 +37,19 @@ public interface UsedRepository {
     public Member findMember(long memberId);
 
 //    public List<Category> categoryList();
-    void deleteImg(long postId);
+    public void deleteImg(long postId);
 
-    void deleteProduct(long postId);
+    public void deleteProduct(long postId);
 
-    void deletePost(long postId);
+    public void deletePost(long postId);
 
-    void deleteReply(long postId);
+    public void deleteReply(long postId);
 
-    List<Category> categoryList();
+    public List<Category> categoryList();
 
-    List<Product> productList();
+    public List<Product> productList();
 
-    List<Product> productCategoryList(long categoryId);
+    public List<Product> productCategoryList(long categoryId);
+
+//    public List<Product> productSimilarList(long categoryId);
 }

@@ -51,23 +51,27 @@ public interface MbUsedRepository extends UsedRepository {
     public String findImgUrl(long postId);
 
     @Delete("DELETE FROM reply WHERE postId=#{postId}")
-    void deleteReply(long postId);
+    public void deleteReply(long postId);
     @Delete("DELETE FROM img WHERE postId=#{postId}")
-    void deleteImg(long postId);
+    public void deleteImg(long postId);
     @Delete("DELETE FROM product WHERE postId=#{postId}")
-    void deleteProduct(long postId);
+    public void deleteProduct(long postId);
     @Delete("DELETE FROM post WHERE postId=#{postId}")
-    void deletePost(long postId);
+    public void deletePost(long postId);
 
     @Override
     @Update("update post set postView = postView + 1 where postId = #{postId}")
-    void updatePostView(long postId);
+    public void updatePostView(long postId);
 
     @Override
     @Select("select * from product")
-    List<Product> productList();
+    public List<Product> productList();
 
     @Override
     @Select("select * from product where categoryId = #{categoryId}")
-    List<Product> productCategoryList(long categoryId);
+    public List<Product> productCategoryList(long categoryId);
+
+//    @Override
+//    @Select("select * from product where categoryId = #{categoryId}")
+//    public List<Product> productSimilarList(long categoryId);
 }
