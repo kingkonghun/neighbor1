@@ -15,7 +15,7 @@ public interface UsedService {
     //글리스트
     //상세보기
     //사진
-    public List<Used> list(long categoryId);
+    public List<Used> list(long categoryId, String listType);
     public void write(Used used)throws Exception;
     public void update(Used used) throws Exception;
     public void delete(long postId);
@@ -26,6 +26,4 @@ public interface UsedService {
     public void downloadFiles(String filenames, HttpServletResponse response) throws IOException;
 
     public List<Category> categoryList();
-
-//    public List<Used> similarList(long categoryId);
 }

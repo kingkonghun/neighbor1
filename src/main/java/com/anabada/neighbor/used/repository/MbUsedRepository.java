@@ -70,8 +70,4 @@ public interface MbUsedRepository extends UsedRepository {
     @Override
     @Select("select * from product where categoryId = #{categoryId}")
     public List<Product> productCategoryList(long categoryId);
-
-//    @Override
-//    @Select("select * from product where categoryId = #{categoryId}")
-//    public List<Product> productSimilarList(long categoryId);
 }

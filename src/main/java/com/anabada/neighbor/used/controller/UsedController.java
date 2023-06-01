@@ -23,7 +23,7 @@ public class UsedController {
 
     @GetMapping("/list") //게시물 리스트
     public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model){
-        model.addAttribute("list", usedService.list(categoryId));
+        model.addAttribute("list", usedService.list(categoryId, "list"));
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("categoryId", categoryId);
         return "used/list";
@@ -34,7 +34,7 @@ public class UsedController {
         Used dto = usedService.detail(postId, request, response);
         model.addAttribute("dto", dto);
         model.addAttribute("category",usedService.categoryList());
-//        model.addAttribute("similarList", usedService.similarList(dto.getCategoryId()));
+        model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList"));
         return "used/detail";
     }
     @PostMapping("/post") //게시물 작성

@@ -29,7 +29,7 @@ public class UsedServiceImpl implements UsedService{
     private final ImgDownService imgDownService;
 
     @Override
-    public List<Used> list(long categoryId) {//글 리스트
+    public List<Used> list(long categoryId, String listType) {//글 리스트
         List<Used> usedList = new ArrayList<>(); //리턴할 값
         List<Product> productList = null;
         if (categoryId != 0) { //파라미터로 받은 categoryId가 0이 아니면
@@ -68,6 +68,11 @@ public class UsedServiceImpl implements UsedService{
                 use1.getPostUpdate().getTime())
                 .compareTo(use2.getPostUpdate().getTime());
         Collections.sort(usedList, comparator.reversed());
+
+        if (listType.equals("similarList")) { //listType이 similarList라면
+            return usedList.subList(0, Math.min(usedList.size(), 4)); //usedList에서 앞에 4개만 리턴
+        }
+
         return usedList;
 
     }
@@ -200,40 +205,6 @@ public class UsedServiceImpl implements UsedService{
     public void downloadFiles(String filename, HttpServletResponse response) throws IOException {
         imgDownService.imgDown(filename,response);
     }
-
-//    @Override
-//    public List<Used> similarList(long categoryId) {
-//        List<Used> usedList = new ArrayList<>(); //리턴할 값
-//        List<Product> productList = usedRepository.productSimilarList(categoryId);
-//
-//        for (Product product : productList) {
-//            Post post = usedRepository.findPost(product.getPostId()); //product 테이블의 postId로 post 테이블에서 해당하는 튜플 가져오기
-//            Member member = usedRepository.findMember(post.getMemberId()); //post 테이블의 memberId로 member 테이블에서 해당하는 튜플 가져오기
-//            String categoryName = usedRepository.findCategoryName(product.getCategoryId()); //product 테이블의 categoryId로 Category 테이블에서 해당하는 categoryName 가져오기
-//            Used used = Used.builder() //used 객체 생성
-//                    .postId(post.getPostId())
-//                    .title(post.getTitle())
-//                    .content(post.getContent())
-//                    .postType(post.getPostType())
-//                    .postDate(post.getPostDate())
-//                    .postUpdate(post.getPostUpdate())
-//                    .postView(post.getPostView())
-//                    .productId(product.getProductId())
-//                    .categoryName(categoryName)
-//                    .price(product.getPrice())
-//                    .productStatus(product.getProductStatus())
-//                    .categoryId(product.getCategoryId())
-//                    .memberId(member.getMemberId())
-//                    .address(member.getAddress())
-//                    .memberName(member.getMemberName())
-//                    .profileImg(member.getProfileImg())
-//                    .score(member.getScore())
-//                    .memberStatus(member.getMemberStatus())
-//                    .build();
-//            usedList.add(used); //리턴할 usedList에 used객체 추가
-//        }
-//        return usedList;
-//    }
 }
 
 
