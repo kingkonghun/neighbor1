@@ -24,7 +24,7 @@ public class ClubServiceImpl implements ClubService {
         this.clubRepository = clubRepository;
     }
 
-    @Override
+    @Override/*클럽세이브*/
     public int clubSave(ClubPost clubPost) {//post,club 등록
         if (clubPostCheck(clubPost) == -1) {
             return 0; //-1이면 clubPost에 문제가있으니 0으로 반환

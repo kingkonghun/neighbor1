@@ -19,9 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -63,8 +61,13 @@ public class UsedServiceImpl implements UsedService{
                     .score(member.getScore())
                     .memberStatus(member.getMemberStatus())
                     .build();
-            usedList.add(used); //리턴할 usedList에 used객체 추가
+            usedList.add(used);//리턴할 usedList에 used객체 추가
         }
+        //리스트를 postupdate로 내림차순 정렬
+        Comparator<Used> comparator = (use1, use2) -> Long.valueOf(
+                use1.getPostUpdate().getTime())
+                .compareTo(use2.getPostUpdate().getTime());
+        Collections.sort(usedList, comparator.reversed());
         return usedList;
 
     }
