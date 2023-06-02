@@ -1,6 +1,7 @@
 package com.anabada.neighbor.member.controller;
 
 import com.anabada.neighbor.member.domain.Member;
+import com.anabada.neighbor.member.service.EmailService;
 import com.anabada.neighbor.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.lang.model.SourceVersion;
 import javax.servlet.http.HttpSession;
 
 @RequestMapping("/member")
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpSession;
 public class MemberController {
 
     private final MemberService memberService;
+    private final EmailService emailService;
     @GetMapping("/login")
     public String login(){
         return "/member/login";
@@ -42,13 +45,26 @@ public class MemberController {
         String getMbti = m+b+t+i;
         member.setMbti(getMbti);
         memberService.join(member);
-        return "index";
+        return "redirect:/";
     }
     @GetMapping("/logout")//로그아웃
     public String logout(HttpSession session){
         memberService.logout(session);
         return "index";
     }
+
+    @GetMapping("/profile")//내정보
+    public String profile(HttpSession session,Model model){
+        model.addAttribute("profile",memberService.profile(session));
+        return "member/profile";
+    }
+
+    @GetMapping("/emailConfirm")
+    public String emailConfirm()throws Exception{
+        String confirm = emailService.sendSimpleMessage("wbg030281@gmail.com");
+        return confirm;
+    }
+
 
 
 }

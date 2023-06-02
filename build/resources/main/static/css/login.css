@@ -26,8 +26,9 @@ body::before{content:"";position: fixed; z-index: 1; top:0; right:0; bottom:0; l
     50%{transform: translateX(-8px);}
     75%{transform: translateX(8px);}
 }
+
 .int-area input:focus + label,
-.int-area input:valid + label {
+.int-area input:valid + label{
     top:-2px; font-size:13px; color:#669900;
 }
 

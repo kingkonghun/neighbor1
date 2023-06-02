@@ -13,6 +13,13 @@ import java.util.List;
 @Mapper
 public interface MbUsedRepository extends UsedRepository {
 
+    @Override
+    @Select("SELECT *" +
+            "FROM post" +
+            "WHERE postUpdate >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 week)" +
+            "ORDER BY postView desc")
+    List<Post> postList();
+
     @Select("SELECT*FROM category")
     List<Category> categoryList();
     @Select("select * from product where postId = #{postId}")

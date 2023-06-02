@@ -1,7 +1,9 @@
 package com.anabada.neighbor.member.domain;
 
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -9,7 +11,11 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Builder
-public class Member {
+public class Profile {
+    private char m;
+    private char b;
+    private char t;
+    private char i;
     private long memberId; //pk id
     private String memberName;      //닉네임
     private String memberPWD;       //pwd
@@ -21,5 +27,4 @@ public class Member {
     private String mbti;            //mbti;
     private int score;              //사용자평점
     private char memberStatus;      //회원상태(가입,탈퇴,정지등)
-
 }

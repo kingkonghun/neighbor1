@@ -50,4 +50,6 @@ public interface UsedRepository {
     public List<Product> productList();
 
     public List<Product> productCategoryList(long categoryId);
+
+    List<Post> postList();
 }

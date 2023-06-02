@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface MbMemberRepository extends MemberRepository{
 
@@ -14,4 +16,8 @@ public interface MbMemberRepository extends MemberRepository{
     @Insert("INSERT INTO member(memberName,memberPWD,memberEmail,address,addressDetail,mbti)" +
             "VALUES(#{memberName},#{memberPWD},#{memberEmail},#{address},#{addressDetail},#{mbti})")
     void join(Member member);
+
+    @Override
+    @Select("SELECT * FROM member WHERE memberId = #{memberId}")
+    Member profile(long memberId);
 }

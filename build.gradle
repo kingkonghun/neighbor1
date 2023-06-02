@@ -32,6 +32,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'//롬복
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'//테스트라이브러리
 //	testImplementation 'org.springframework.security:spring-security-test'//보안테스트라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-mail' //이메일인증
+	implementation 'org.springframework.boot:spring-boot-starter-websocket' //웹소켓
 }
 
 tasks.named('test') {

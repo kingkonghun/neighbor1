@@ -15,4 +15,5 @@ public interface ClubService {
     public int clubPostCheck(ClubPost clubPost);//clubPost객체의 Null값체크
 
     public List<ClubList> clubList();
+
 }

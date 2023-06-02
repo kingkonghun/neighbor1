@@ -27,6 +27,39 @@ public class UsedServiceImpl implements UsedService{
 
     private final UsedRepository usedRepository;
     private final ImgDownService imgDownService;
+    @Override
+    public List<Used> mainList() {
+        List<Post> postList = usedRepository.postList();
+        List<Used> usedList = new ArrayList<>();
+        for (Post post: postList){
+            Product product = usedRepository.findProduct(post.getPostId());
+            Member member = usedRepository.findMember(post.getMemberId());
+            String categoryName = usedRepository.findCategoryName(product.getCategoryId());
+            Used used = Used.builder() //used 객체 생성
+                    .postId(post.getPostId())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .postType(post.getPostType())
+                    .postDate(post.getPostDate())
+                    .postUpdate(post.getPostUpdate())
+                    .postView(post.getPostView())
+                    .productId(product.getProductId())
+                    .categoryName(categoryName)
+                    .price(product.getPrice())
+                    .productStatus(product.getProductStatus())
+                    .categoryId(product.getCategoryId())
+                    .memberId(member.getMemberId())
+                    .address(member.getAddress())
+                    .memberName(member.getMemberName())
+                    .profileImg(member.getProfileImg())
+                    .score(member.getScore())
+                    .memberStatus(member.getMemberStatus())
+                    .build();
+            usedList.add(used);//리턴할 usedList에 used객체 추가
+        }
+
+        return usedList.subList(0, Math.min(usedList.size(), 8)); //usedList에서 앞에 4개만 리턴;
+    }
 
     @Override
     public List<Used> list(long categoryId, String listType) {//글 리스트
@@ -82,6 +115,8 @@ public class UsedServiceImpl implements UsedService{
 
         return categoryList;
     }
+
+
 
     @Transactional
     @Override
