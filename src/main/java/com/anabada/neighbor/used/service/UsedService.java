@@ -5,6 +5,7 @@ import com.anabada.neighbor.used.domain.Img;
 import com.anabada.neighbor.used.domain.Used;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.lang.Nullable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +19,7 @@ public interface UsedService {
     //글리스트
     //상세보기
     //사진
-    public List<Used> list(long categoryId, String listType);
+    public List<Used> list(long categoryId, String listType, int num);
     public void write(Used used)throws Exception;
     public void update(Used used) throws Exception;
     public void delete(long postId);
@@ -31,4 +32,6 @@ public interface UsedService {
     List<Category> categoryList();
 
     List<Used> mainList();
+
+    List<Used> pageList(int num);
 }

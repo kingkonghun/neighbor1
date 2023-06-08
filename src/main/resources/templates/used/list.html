@@ -64,6 +64,7 @@
             </select>
 
         </article>
+        <div id="plus" class="row">
         <article class="article_2 col-12">
             <button type="button" id="btnWrite">글쓰기</button>
         </article>
@@ -87,14 +88,14 @@
                 });
             });
         </script>
-        <article class="article_list col-lg-3 col-md-6 col-sm-12" th:each="row : ${list}">
+           <article  class="article_list col-lg-3 col-md-6 col-sm-12" th:each="row : ${list}">
             <div class="div_list" th:onclick="'location.href=\'' + @{detail(postId=${row.postId})} + '\''">
                 <div>
-                    <img class="img" th:src="@{/used/findImg(postId=${row.postId})}"  alt="실패">
+                    <img class="img"  th:src="@{/used/findImg(postId=${row.postId})}"  alt="실패">
                 </div>
 
 
-                <div class="text_div" id="list">
+                <div class="text_div list" >
                     <table>
                         <tr>
                             <td>
@@ -113,8 +114,9 @@
                 </div>
             </div>
         </article>
+           </div>
 
-        
+
         <article class=" article_3 col-12">
             <button type="button" id="btnPlus">더보기</button>
         </article>
@@ -135,6 +137,23 @@
         // 값을 다시 설정하여 숫자 입력 필드에 반영
         this.value = numberWithCommas;
     });
+$(function (){
+    let num = 0;
+   $("#btnPlus").click(function (){
+       num+=8;
+
+       $.ajax({
+           type: "get",
+           url: "/used/list",
+           data: {num:num},
+           success: function(data) {
+               $("#plus").append(data);
+           }
+       });
+   });
+
+});
+
 
 </script>
 </body>

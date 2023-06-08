@@ -7,6 +7,7 @@ import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
 
