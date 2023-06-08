@@ -27,9 +27,7 @@ public class UsedController {
 
     @GetMapping("/list") //게시물 리스트
     public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model,@RequestParam(value="num",defaultValue = "0")int num){
-
-        List<Used> list = usedService.list(categoryId, "list",num);
-        model.addAttribute("list", list);
+        model.addAttribute("list", usedService.list(categoryId, "list",num));
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("categoryId", categoryId);
 

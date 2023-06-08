@@ -4,49 +4,23 @@ import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.domain.Profile;
 import com.anabada.neighbor.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public void join(Member member) {
-        memberRepository.join(member);
-    }
-
-    @Override
-    public int login(Member member, HttpSession session) {
-        int result = 0;
-        Member member2 = memberRepository.login(member);
-        if(member2 != null){
-            session.setAttribute("memberId",member2.getMemberId());
-            session.setAttribute("memberName",member2.getMemberName());
-            result=1;
-        }
-        return result;
-    }
-
-    @Override
-    public void logout(HttpSession session) {
-        session.invalidate();
-    }
-
-    @Override
-    public boolean passCheck(String memberEmail, String memberPassword) {
-        return false;
-    }
-
-    @Override
-    public void memberOut(HttpSession session) {
-
+    public void save(Member member) {
+        member.setMemberPWD(bCryptPasswordEncoder.encode(member.getMemberPWD()));
+        member.setRole("ROLE_USER");
+        memberRepository.save(member);
     }
 
     @Override
@@ -70,9 +44,4 @@ public class MemberServiceImpl implements MemberService{
                 .t(member.getMbti().charAt(2))
                 .i(member.getMbti().charAt(3)).build();
     }
-
-
-
-
-
 }

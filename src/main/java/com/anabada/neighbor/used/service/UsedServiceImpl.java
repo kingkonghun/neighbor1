@@ -7,7 +7,6 @@ import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,12 +68,8 @@ public class UsedServiceImpl implements UsedService{
 
     @Override
     public List<Used> list(long categoryId, String listType, int num) {//글 리스트
-
         List<Used> usedList = new ArrayList<>(); //리턴할 값
         List<Product> productList = null;
-
-
-
         if (categoryId != 0) { //파라미터로 받은 categoryId가 0이 아니면
             productList = usedRepository.productCategoryList(categoryId); //product 테이블에서 categoryId가 파라미터로 받은 categoryId랑 같은 튜플 가져오기
         }else { //파라미터로 받은 categoryId가 0이면
@@ -127,8 +122,6 @@ public class UsedServiceImpl implements UsedService{
 
         return categoryList;
     }
-
-
 
     @Transactional
     @Override
@@ -251,33 +244,6 @@ public class UsedServiceImpl implements UsedService{
     @Override
     public void downloadFiles(String filename, HttpServletResponse response) throws IOException {
         imgDownService.imgDown(filename,response);
-    }
-
-    public Used usedBuilder(Post post,Product product,Member member,String categoryName) {
-        Used used = new Used();
-        Used.builder() //used 객체 생성
-                .postId(post.getPostId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .postType(post.getPostType())
-                .postDate(post.getPostDate())
-                .postUpdate(post.getPostUpdate())
-                .postView(post.getPostView())
-                .productId(product.getProductId())
-                .categoryName(categoryName)
-                .price(product.getPrice())
-                .productStatus(product.getProductStatus())
-                .categoryId(product.getCategoryId())
-                .memberId(member.getMemberId())
-                .address(member.getAddress())
-                .memberName(member.getMemberName())
-                .profileImg(member.getProfileImg())
-                .score(member.getScore())
-                .memberStatus(member.getMemberStatus())
-                .build();
-
-
-        return used;
     }
 }
 

@@ -21,7 +21,7 @@ repositories {//라이브러리를 가져오는곳
 dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'//jpa
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'//jdbc
-//	implementation 'org.springframework.boot:spring-boot-starter-security'//서버보안
+	implementation 'org.springframework.boot:spring-boot-starter-security'//서버보안
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'//타임리프
 	implementation 'org.springframework.boot:spring-boot-starter-web'//웹
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.1'//마이바티스
@@ -31,7 +31,15 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'//mysql
 	annotationProcessor 'org.projectlombok:lombok'//롬복
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'//테스트라이브러리
-//	testImplementation 'org.springframework.security:spring-security-test'//보안테스트라이브러리
+	testImplementation 'org.springframework.security:spring-security-test'//보안테스트라이브러리
+
+
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	implementation group: 'com.auth0', name: 'java-jwt', version: '3.10.2'
+
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
 	implementation 'org.springframework.boot:spring-boot-starter-mail' //이메일인증
 	implementation 'org.springframework.boot:spring-boot-starter-websocket' //웹소켓
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'//채팅 json으로 보내기 위한

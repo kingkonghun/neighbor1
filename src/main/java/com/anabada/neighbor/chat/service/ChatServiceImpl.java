@@ -38,8 +38,10 @@ public class ChatServiceImpl  implements ChatService {
 
     @Override
     public void createRoom(HttpSession session) {//채팅방생성
-        long memberId = (long)session.getAttribute("memberId");
-        String memberName = (String) session.getAttribute("memberName");
+        long memberId = 1L;
+//        long memberId = (long)session.getAttribute("memberId");
+        String memberName = "붕어빵";
+//        String memberName = (String) session.getAttribute("memberName");
         String roomNumber = UUID.randomUUID().toString();
         Map<String, Object> map = new HashMap<>();
         map.put("memberId", memberId);
@@ -51,7 +53,8 @@ public class ChatServiceImpl  implements ChatService {
 
     @Override
     public List<ChatRoom> findRoomNumber(HttpSession session) {
-        long memberId = (long)session.getAttribute("memberId");
+        long memberId = 1L;
+//        long memberId = (long)session.getAttribute("memberId");
         List<ChatRoom> roomNumber = chatRepository.findRoomNumber(memberId);
 
         return roomNumber;
