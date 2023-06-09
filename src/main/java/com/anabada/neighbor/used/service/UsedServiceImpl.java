@@ -8,7 +8,6 @@ import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +28,8 @@ public class UsedServiceImpl implements UsedService{
 
     private final UsedRepository usedRepository;
     private final ImgDownService imgDownService;
+    String uploadDir = "C:\\upload_anabada\\";
+
     @Override
     public List<Used> mainList() {
         List<Post> postList = usedRepository.postList();
@@ -133,7 +134,7 @@ public class UsedServiceImpl implements UsedService{
         usedRepository.writeProduct(used);
 
         try {
-            String uploadDir = "C:\\users\\upload_anabada\\";
+
 
             if (!Files.exists(Paths.get(uploadDir))) {
                 Files.createDirectories(Paths.get(uploadDir));
@@ -157,7 +158,7 @@ public class UsedServiceImpl implements UsedService{
         String formImg = used.getFiles().get(0).getOriginalFilename();
         usedRepository.updatePost(used);
         usedRepository.updateProduct(used);
-        String uploadDir = "C:\\upload_anabada";
+
         Path originImg = Path.of(uploadDir+"\\"+usedRepository.findImgUrl(used.getPostId()));//원래 이미지 url찾아오기
             if (!Files.exists(Paths.get(uploadDir))) {//디렉토리가 없다면 디렉토리생성
                 Files.createDirectories(Paths.get(uploadDir));
@@ -181,8 +182,8 @@ public class UsedServiceImpl implements UsedService{
     public void delete(long postId) {
 
         try {
-            Path uploadDir = Path.of("C:\\upload_anabada\\"+usedRepository.findImgUrl(postId));
-            Files.delete(uploadDir);
+            Path uploadDirPath = Path.of(uploadDir+usedRepository.findImgUrl(postId));
+            Files.delete(uploadDirPath);
             usedRepository.deleteReply(postId);
             usedRepository.deleteImg(postId);
             usedRepository.deleteProduct(postId);
