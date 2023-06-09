@@ -24,6 +24,7 @@
     #section_2 {width: 800px; margin: auto;}
 
     .article_list {padding-bottom: 30px;}
+    .div_list:hover{ cursor: pointer;}
 
     .div_list {margin: 0 auto; width: 305px; border: 2px solid gray; border-radius: 32px; box-shadow: 1px 1px 5px gray;}
 
@@ -40,6 +41,7 @@
     .count {font-weight: bold;}
 
     .article_2 {text-align: center;}
+    .btnList {margin-bottom: 5em;}
 
     #btnWrite {border-radius: 10px; background-color: white; font-weight: bold; width: 60px; height: 40px; box-shadow: 1px 1px 5px gray;}
 
@@ -137,7 +139,9 @@
 </script>
 </head>
 <body>
-<div th:replace="nav::nav"></div>
+<!-- Nav바-->
+<div th:replace="nav :: nav"></div>
+
 <div class="container">
     <section id="section_1">
         <article>
@@ -213,8 +217,11 @@
                 </div>
             </div>
         </article>
-
+        <div class="btnUsed" style="text-align: center;">
+            <button class="btn btn-outline-secondary btnList" th:onclick="|location.href='@{/used/list}'|">중고상품 목록보기</button>
+        </div>
     </section>
+
     <script th:inline="javascript">
         $(function (){
             $("#btnSubmit").click(function(){
@@ -256,5 +263,6 @@
     </script>
 
 </div>
+<div th:replace="footer :: footer"></div>
 </body>
 </html>

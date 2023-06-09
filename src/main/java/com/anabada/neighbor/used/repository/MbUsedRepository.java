@@ -7,7 +7,6 @@ import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
 import org.apache.ibatis.annotations.*;
-import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
 
@@ -16,9 +15,10 @@ public interface MbUsedRepository extends UsedRepository {
 
     @Override
     @Select("SELECT *" +
-            "FROM post" +
-            "WHERE postUpdate >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 week)" +
-            "ORDER BY postView desc")
+            " FROM post" +
+            " WHERE postUpdate >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 week)" +
+            " ORDER BY postView desc" +
+            " LIMIT 8")
     List<Post> postList();
 
     @Select("SELECT*FROM category")

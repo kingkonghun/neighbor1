@@ -25,5 +25,5 @@ public interface UsedService {
     public void downloadFiles(String filenames, HttpServletResponse response) throws IOException;
     List<Category> categoryList();
     List<Used> mainList();
-    List<Used> pageList(int num);
+
 }

@@ -9,6 +9,7 @@
 <link th:href="@{../css/style.css}" rel="stylesheet" type="text/css">
 
 <style>
+
     body {background-color: rgb(#dbe1f1);}
 
     header {text-align: center;}
@@ -39,7 +40,7 @@
 
     .article_2 {text-align: right;}
 
-    .article_3 {text-align: center;}
+    .plus {text-align: center; margin-bottom: 5em;}
 
     #btnPlus {margin-top: 20px; border-radius: 10px; background-color: white; font-weight: bold; width: 80px; height: 40px;}
 
@@ -72,10 +73,28 @@
         <script th:inline="javascript">
             $(function (){
                 $("#btnSubmit").click(function(){
-                    var category = $("#category");
-                        if(category.val() == 0) {
+                    let category = $("#category");
+                    let price = $("#inputPrice");
+                    let content = $("#inputContent");
+                    let files = $("#files");
+                    if(category.val() == 0) {
                         alert("카테고리를 선택하세요");
                         category.focus();
+                        return;
+                    }
+                    if(price.val() == ''){
+                        alert("가격을 입력하세요");
+                        price.focus();
+                        return;
+                    }
+                    if (content.val() == "") {
+                        alert("내용을 입력하세요");
+                        content.focus();
+                        return;
+                    }
+                    if (files.val() == "") {
+                        alert("사진을 올려주세요");
+                        files.focus();
                         return;
                     }
                     document.writeForm.submit();
@@ -95,7 +114,7 @@
                 </div>
 
 
-                <div class="text_div list" >
+                <div class="text_div list">
                     <table>
                         <tr>
                             <td>
@@ -117,9 +136,9 @@
            </div>
 
 
-        <article class=" article_3 col-12">
-            <button type="button" id="btnPlus">더보기</button>
-        </article>
+        <div class="plus">
+            <input class="btn btn-outline-secondary" type="button" id="btnPlus" value="더보기">
+        </div>
 
 
     </section>
@@ -156,5 +175,7 @@ $(function (){
 
 
 </script>
+<!-- Footer-->
+<div th:replace="footer :: footer"></div>
 </body>
 </html>

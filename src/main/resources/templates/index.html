@@ -14,6 +14,20 @@
         <link href="/bootstrap-5.2.3-dist/css/bootstrap.my.css" rel="stylesheet" />
         <!-- BootStrap 추가설정 -->
         <link href="/css/style.css" rel="stylesheet" type="text/css">
+        <style>
+            @font-face {
+                font-family: 'GangwonEduPowerExtraBoldA';
+                src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEduPowerExtraBoldA.woff') format('woff');
+                font-weight: normal;
+                font-style: normal;
+            }
+            .usedTitle{font-family: 'GangwonEduPowerExtraBoldA'; }
+            .usedTitle{text-align: center;}
+            .section1{background-color: rgb(255, 255, 230);}
+            .container .title ,.subtitle{text-align: right;}
+            .container .title{font-size: xxx-large; margin-bottom: 1em;}
+            .container .subtitle{font-size: x-large;}
+        </style>
     </head>
     <body>
         <!-- Nav바-->
@@ -23,15 +37,62 @@
      </div>
         <!-- 헤더-->
         <header class="bg-image py-5 mainBackgroundImg">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">오이마켓설명</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">오이마켓설명2</p>
+            <div class="container px-4 px-lg-5 my-5" style="height: 500px;">
+                <div class="container" >
+                    <h1 class="title">아-나-바-다</h1>
+                    <p class="subtitle">중고거래, 동호회 등 내 주변에서 동네 친구찾자</p>
                 </div>
             </div>
         </header>
         <!-- 섹션 -->
-        <section class="py-5">
+        <section class="py-5 section1">
+            <div class="usedTitle" >
+                <h2>아껴쓰고 나눠써요</h2>
+                <p>같은제품 더 저렴하게 중고거래</p>
+            </div>
+            <div class="container px-4 px-lg-5 mt-5" >
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" >
+                    <div class="col mb-5" th:each="list:${starList}">
+                        <div class="card h-100" >
+                            <!-- 인기 제품 뱃지-->
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                            <!-- 중고상품 이미지  450 * 300이 적절-->
+                                <img style="width: 268px; height: 180px;" class="card-img-top"  th:src="@{/used/findImg(postId=${list.postId})}"  alt="실패">
+                            <!-- 중고상품 상세-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- 중고상품 이름-->
+                                    <h5 class="fw-bolder" th:text="${list.title}"></h5>
+                                    <!-- 판매자 이름 -->
+                                    <h6 class="fw" th:text="${list.memberName}"></h6>
+                                    <!-- 판매자 평점-->
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>                                
+                                    <!-- 중고상품 가격-->
+                                    <p th:text="${list.price}"></p>
+                                </div>
+                            </div>
+                            <!-- 상품 구매하기-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" th:onclick="|location.href='@{/used/detail(postId=${list.postId})}'|">자세히 보기</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="btnUsed" style="text-align: center;"><button class="btn btn-outline-secondary" th:onclick="|location.href='@{/used/list}'|">더 많은 상품 보기</button></div>
+     </section>
+
+        <section class="py-5 section2">
+            <div class="usedTitle">
+                <h3>아껴쓰고 나눠써요</h3>
+                <p>같은제품 더 저렴하게 중고거래</p>
+            </div>
             <div class="container px-4 px-lg-5 mt-5">
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                     <div class="col mb-5">
@@ -54,7 +115,7 @@
                                         <div class="bi-star-fill"></div>
                                         <div class="bi-star-fill"></div>
                                         <div class="bi-star-fill"></div>
-                                    </div>                                
+                                    </div>
                                     <!-- 중고상품 가격-->
                                     1,500,000원
                                 </div>
@@ -65,218 +126,219 @@
                             </div>
                         </div>
                     </div>                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- 인기 제품 뱃지-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
-                            <!-- 중고상품 이미지  -->
-                            <img class="card-img-top" src="https://i1.daumcdn.net/thumb/C450x300/?fname=https://t1.daumcdn.net/cfile/tistory/236CD44E572B4B330A" alt="..." />
-                            <!-- 중고상품 상세-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- 중고상품 이름-->
-                                    <h5 class="fw-bolder">갤럭시</h5>
-                                    <!-- 판매자 이름 -->
-                                    <h6 class="fw">중고만파는사람</h6>
-                                    <!-- 판매자 평점-->
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                    </div>                                
-                                    <!-- 중고상품 가격-->
-                                    500,000원
+                    <div class="card h-100">
+                        <!-- 인기 제품 뱃지-->
+                        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                        <!-- 중고상품 이미지  -->
+                        <img class="card-img-top" src="https://i1.daumcdn.net/thumb/C450x300/?fname=https://t1.daumcdn.net/cfile/tistory/236CD44E572B4B330A" alt="..." />
+                        <!-- 중고상품 상세-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- 중고상품 이름-->
+                                <h5 class="fw-bolder">갤럭시</h5>
+                                <!-- 판매자 이름 -->
+                                <h6 class="fw">중고만파는사람</h6>
+                                <!-- 판매자 평점-->
+                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
                                 </div>
-                            </div>
-                            <!-- 상품 구매하기-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                                <!-- 중고상품 가격-->
+                                500,000원
                             </div>
                         </div>
-                    </div>                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- 인기 제품 뱃지-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
-                            <!-- 중고상품 이미지  -->
-                            <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
-                            <!-- 중고상품 상세-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- 중고상품 이름-->
-                                    <h5 class="fw-bolder">아이폰</h5>
-                                    <!-- 판매자 이름 -->
-                                    <h6 class="fw">중고만파는사람</h6>
-                                    <!-- 판매자 평점-->
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                    </div>                                
-                                    <!-- 중고상품 가격-->
-                                    500,000원
+                        <!-- 상품 구매하기-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                        </div>
+                    </div>
+                </div>                    <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- 인기 제품 뱃지-->
+                        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                        <!-- 중고상품 이미지  -->
+                        <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
+                        <!-- 중고상품 상세-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- 중고상품 이름-->
+                                <h5 class="fw-bolder">아이폰</h5>
+                                <!-- 판매자 이름 -->
+                                <h6 class="fw">중고만파는사람</h6>
+                                <!-- 판매자 평점-->
+                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
                                 </div>
-                            </div>
-                            <!-- 상품 구매하기-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                                <!-- 중고상품 가격-->
+                                500,000원
                             </div>
                         </div>
-                    </div>                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- 인기 제품 뱃지-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
-                            <!-- 중고상품 이미지  -->
-                            <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
-                            <!-- 중고상품 상세-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- 중고상품 이름-->
-                                    <h5 class="fw-bolder">아이폰</h5>
-                                    <!-- 판매자 이름 -->
-                                    <h6 class="fw">중고만파는사람</h6>
-                                    <!-- 판매자 평점-->
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                    </div>                                
-                                    <!-- 중고상품 가격-->
-                                    500,000원
+                        <!-- 상품 구매하기-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                        </div>
+                    </div>
+                </div>                    <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- 인기 제품 뱃지-->
+                        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                        <!-- 중고상품 이미지  -->
+                        <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
+                        <!-- 중고상품 상세-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- 중고상품 이름-->
+                                <h5 class="fw-bolder">아이폰</h5>
+                                <!-- 판매자 이름 -->
+                                <h6 class="fw">중고만파는사람</h6>
+                                <!-- 판매자 평점-->
+                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
                                 </div>
-                            </div>
-                            <!-- 상품 구매하기-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                                <!-- 중고상품 가격-->
+                                500,000원
                             </div>
                         </div>
-                    </div>                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- 인기 제품 뱃지-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
-                            <!-- 중고상품 이미지  -->
-                            <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
-                            <!-- 중고상품 상세-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- 중고상품 이름-->
-                                    <h5 class="fw-bolder">아이폰</h5>
-                                    <!-- 판매자 이름 -->
-                                    <h6 class="fw">중고만파는사람</h6>
-                                    <!-- 판매자 평점-->
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                    </div>                                
-                                    <!-- 중고상품 가격-->
-                                    500,000원
+                        <!-- 상품 구매하기-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                        </div>
+                    </div>
+                </div>                    <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- 인기 제품 뱃지-->
+                        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                        <!-- 중고상품 이미지  -->
+                        <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
+                        <!-- 중고상품 상세-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- 중고상품 이름-->
+                                <h5 class="fw-bolder">아이폰</h5>
+                                <!-- 판매자 이름 -->
+                                <h6 class="fw">중고만파는사람</h6>
+                                <!-- 판매자 평점-->
+                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
                                 </div>
-                            </div>
-                            <!-- 상품 구매하기-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                                <!-- 중고상품 가격-->
+                                500,000원
                             </div>
                         </div>
-                    </div>                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- 인기 제품 뱃지-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
-                            <!-- 중고상품 이미지  -->
-                            <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
-                            <!-- 중고상품 상세-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- 중고상품 이름-->
-                                    <h5 class="fw-bolder">아이폰</h5>
-                                    <!-- 판매자 이름 -->
-                                    <h6 class="fw">중고만파는사람</h6>
-                                    <!-- 판매자 평점-->
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                    </div>                                
-                                    <!-- 중고상품 가격-->
-                                    500,000원
+                        <!-- 상품 구매하기-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                        </div>
+                    </div>
+                </div>                    <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- 인기 제품 뱃지-->
+                        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                        <!-- 중고상품 이미지  -->
+                        <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
+                        <!-- 중고상품 상세-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- 중고상품 이름-->
+                                <h5 class="fw-bolder">아이폰</h5>
+                                <!-- 판매자 이름 -->
+                                <h6 class="fw">중고만파는사람</h6>
+                                <!-- 판매자 평점-->
+                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
                                 </div>
-                            </div>
-                            <!-- 상품 구매하기-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                                <!-- 중고상품 가격-->
+                                500,000원
                             </div>
                         </div>
-                    </div>                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- 인기 제품 뱃지-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
-                            <!-- 중고상품 이미지  -->
-                            <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
-                            <!-- 중고상품 상세-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- 중고상품 이름-->
-                                    <h5 class="fw-bolder">아이폰</h5>
-                                    <!-- 판매자 이름 -->
-                                    <h6 class="fw">중고만파는사람</h6>
-                                    <!-- 판매자 평점-->
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                    </div>                                
-                                    <!-- 중고상품 가격-->
-                                    500,000원
+                        <!-- 상품 구매하기-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                        </div>
+                    </div>
+                </div>                    <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- 인기 제품 뱃지-->
+                        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                        <!-- 중고상품 이미지  -->
+                        <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
+                        <!-- 중고상품 상세-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- 중고상품 이름-->
+                                <h5 class="fw-bolder">아이폰</h5>
+                                <!-- 판매자 이름 -->
+                                <h6 class="fw">중고만파는사람</h6>
+                                <!-- 판매자 평점-->
+                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
                                 </div>
-                            </div>
-                            <!-- 상품 구매하기-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                                <!-- 중고상품 가격-->
+                                500,000원
                             </div>
                         </div>
-                    </div>                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- 인기 제품 뱃지-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
-                            <!-- 중고상품 이미지  -->
-                            <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
-                            <!-- 중고상품 상세-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- 중고상품 이름-->
-                                    <h5 class="fw-bolder">아이폰</h5>
-                                    <!-- 판매자 이름 -->
-                                    <h6 class="fw">중고만파는사람</h6>
-                                    <!-- 판매자 평점-->
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                    </div>                                
-                                    <!-- 중고상품 가격-->
-                                    500,000원
+                        <!-- 상품 구매하기-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
+                        </div>
+                    </div>
+                </div>                    <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- 인기 제품 뱃지-->
+                        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
+                        <!-- 중고상품 이미지  -->
+                        <img class="card-img-top" src="https://us.123rf.com/450wm/gospix/gospix1406/gospix140600053/29417979-신선한-오이-절반.jpg" alt="..." />
+                        <!-- 중고상품 상세-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- 중고상품 이름-->
+                                <h5 class="fw-bolder">아이폰</h5>
+                                <!-- 판매자 이름 -->
+                                <h6 class="fw">중고만파는사람</h6>
+                                <!-- 판매자 평점-->
+                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
                                 </div>
+                                <!-- 중고상품 가격-->
+                                500,000원
                             </div>
-                            <!-- 상품 구매하기-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
-                            </div>
+                        </div>
+                        <!-- 상품 구매하기-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
+            <div class="btnUsed" style="text-align: center;"><button>더 많은 상품 보기</button></div>
         </section>
         <!-- Footer-->
         <div th:replace="footer :: footer"></div>

@@ -31,9 +31,9 @@ public class UsedServiceImpl implements UsedService{
     @Override
     public List<Used> mainList() {
         List<Post> postList = usedRepository.postList();
-        List<Used> usedList = new ArrayList<>();
+        List<Used> usedList = new ArrayList<>();//리스트 담는곳
         for (Post post: postList){
-            Product product = usedRepository.findProduct(post.getPostId());
+            Product product = usedRepository.findProduct(post.getPostId());//인기있는 제품
             Member member = usedRepository.findMember(post.getMemberId());
             String categoryName = usedRepository.findCategoryName(product.getCategoryId());
             Used used = Used.builder() //used 객체 생성
@@ -59,13 +59,10 @@ public class UsedServiceImpl implements UsedService{
             usedList.add(used);//리턴할 usedList에 used객체 추가
         }
 
-        return usedList.subList(0, Math.min(usedList.size(), 4)); //usedList에서 앞에 4개만 리턴;
+        return usedList; //usedList 리턴
     }
 
-    @Override
-    public List<Used> pageList(int num) {
-        return null;
-    }
+
 
     @Override
     public List<Used> list(long categoryId, String listType, int num) {//글 리스트

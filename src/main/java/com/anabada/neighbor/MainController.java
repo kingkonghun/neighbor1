@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MainController {
@@ -17,11 +16,11 @@ public class MainController {
         this.usedService = usedService;
         this.clubService = clubService;
     }
-//    @GetMapping("/")
-//    public String main(Model model){
-//        model.addAttribute("used", usedService.mainList());
+    @GetMapping("/")
+    public String main(Model model){
+        model.addAttribute("starList", usedService.mainList());
 //        model.addAttribute("club", clubService.mainList());
-//        return "index";
-//    }
+        return "index";
+    }
 
 }
