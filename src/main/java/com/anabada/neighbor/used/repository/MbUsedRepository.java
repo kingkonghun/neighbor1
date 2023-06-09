@@ -28,6 +28,8 @@ public interface MbUsedRepository extends UsedRepository {
     @Select("select categoryName from category where categoryId = #{categoryId}")
     public String findCategoryName(long categoryId);
 
+
+
     @Select("SELECT*FROM member WHERE memberId=#{memberId}")
     public Member findMember(long memberId);
 
