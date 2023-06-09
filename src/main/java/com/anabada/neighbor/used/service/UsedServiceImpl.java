@@ -1,5 +1,6 @@
 package com.anabada.neighbor.used.service;
 
+import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Category;
 import com.anabada.neighbor.used.domain.Post;
@@ -125,8 +126,11 @@ public class UsedServiceImpl implements UsedService{
 
     @Transactional
     @Override
-    public void write(Used used) {//글쓰기
+    public void write(Used used, PrincipalDetails principalDetails) {//글쓰기
 
+        System.out.println("principalDetails = " + principalDetails.getMember().getMemberId());
+
+        used.setMemberId(principalDetails.getMember().getMemberId());
         usedRepository.writePost(used);
         usedRepository.writeProduct(used);
 
@@ -150,7 +154,8 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public void update(Used used) throws Exception{//게시글수정
+    public void update(Used used, PrincipalDetails principalDetails) throws Exception{//게시글수정
+        used.setMemberId(principalDetails.getMember().getMemberId());
         String formImg = used.getFiles().get(0).getOriginalFilename();
         usedRepository.updatePost(used);
         usedRepository.updateProduct(used);

@@ -2,10 +2,12 @@ package com.anabada.neighbor.chat.controller;
 
 import com.anabada.neighbor.chat.domain.ChatRoom;
 import com.anabada.neighbor.chat.service.ChatService;
+import com.anabada.neighbor.config.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +28,9 @@ public class ChatController {
     }
 
     @GetMapping("/createRoom")
-    public String createRoom(Model model, HttpSession session) {
-        chatService.createRoom(session);
-        List<ChatRoom> roomNumber= chatService.findRoomNumber(session);
+    public String createRoom(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        chatService.createRoom(principalDetails);
+        List<ChatRoom> roomNumber= chatService.findRoomNumber(principalDetails);
         model.addAttribute("roomNumber", roomNumber);
         return "test";
     }

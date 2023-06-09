@@ -2,6 +2,7 @@ package com.anabada.neighbor.chat.service;
 
 import com.anabada.neighbor.chat.domain.ChatRoom;
 import com.anabada.neighbor.chat.domain.ChatSession;
+import com.anabada.neighbor.config.auth.PrincipalDetails;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -11,13 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface ChatService {
-    public void createRoom(HttpSession session);
+    public void createRoom(PrincipalDetails principalDetails);
 
-    List<ChatRoom> findRoomNumber(HttpSession session);
-
+    List<ChatRoom> findRoomNumber(PrincipalDetails principalDetails);
 
     List<ChatSession> getSessionIds(String rN);
-
 
     void removeSessionInfo(String sessionId);
 

@@ -4,6 +4,7 @@ import com.anabada.neighbor.chat.config.SocketHandler;
 import com.anabada.neighbor.chat.domain.ChatRoom;
 import com.anabada.neighbor.chat.domain.ChatSession;
 import com.anabada.neighbor.chat.repository.ChatRepository;
+import com.anabada.neighbor.config.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,7 +23,6 @@ import java.util.*;
 @Service
 public class ChatServiceImpl  implements ChatService {
 
-
     private final ChatRepository chatRepository;
 
     private static JSONObject jsonToObjectParser(String jsonStr) {
@@ -37,26 +37,28 @@ public class ChatServiceImpl  implements ChatService {
     }
 
     @Override
-    public void createRoom(HttpSession session) {//채팅방생성
-        long memberId = 1L;
-//        long memberId = (long)session.getAttribute("memberId");
-        String memberName = "붕어빵";
-//        String memberName = (String) session.getAttribute("memberName");
-        String roomNumber = UUID.randomUUID().toString();
-        Map<String, Object> map = new HashMap<>();
-        map.put("memberId", memberId);
-        map.put("roomName", memberName);
-        map.put("roomNumber", roomNumber);
-        System.out.println("map = " + map);
-        chatRepository.createRoom(map);
+    public void createRoom(PrincipalDetails principalDetails) {//채팅방생성
+
+        ChatRoom chatRoom = ChatRoom.builder()
+                .memberId(principalDetails.getMember().getMemberId())
+                .roomName(principalDetails.getMember().getMemberName()) // 방번호 임시로 memberName 넣어둠
+                .roomNumber(UUID.randomUUID().toString())
+                .build();
+
+//        long memberId = principalDetails.getMember().getMemberId();
+//        String memberName = principalDetails.getMember().getMemberName();
+//        String roomNumber = UUID.randomUUID().toString();
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("memberId", memberId);
+//        map.put("roomName", memberName);
+//        map.put("roomNumber", roomNumber);
+//        System.out.println("map = " + map);
+        chatRepository.createRoom(chatRoom);
     }
 
     @Override
-    public List<ChatRoom> findRoomNumber(HttpSession session) {
-        long memberId = 1L;
-//        long memberId = (long)session.getAttribute("memberId");
-        List<ChatRoom> roomNumber = chatRepository.findRoomNumber(memberId);
-
+    public List<ChatRoom> findRoomNumber(PrincipalDetails principalDetails) {
+        List<ChatRoom> roomNumber = chatRepository.findRoomNumber(principalDetails.getMember().getMemberId());
         return roomNumber;
     }
 
@@ -71,8 +73,6 @@ public class ChatServiceImpl  implements ChatService {
         }
         return sessionIds;
     }
-
-
 
     @Override
     public void removeSessionInfo(String sessionId) {
@@ -100,8 +100,4 @@ public class ChatServiceImpl  implements ChatService {
         WebSocketSession wss = chatRepository.getWebSocketSession(sessionID);
         return wss;
     }
-
-
-
-
 }

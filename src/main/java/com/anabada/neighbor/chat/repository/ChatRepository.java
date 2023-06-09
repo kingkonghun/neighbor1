@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ChatRepository {
-    public void createRoom(Map<String,Object> map);
+    public void createRoom(ChatRoom chatRoom);
 
     List<ChatRoom> findRoomNumber(long memberId);
 

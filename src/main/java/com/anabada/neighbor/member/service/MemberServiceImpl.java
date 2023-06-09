@@ -19,6 +19,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public void save(Member member) {
         member.setMemberPWD(bCryptPasswordEncoder.encode(member.getMemberPWD()));
+        member.setProviderId(member.getMemberEmail());
         member.setRole("ROLE_USER");
         memberRepository.save(member);
     }

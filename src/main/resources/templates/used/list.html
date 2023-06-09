@@ -145,7 +145,7 @@ $(function (){
        $.ajax({
            type: "get",
            url: "/used/list",
-           data: {num:num},
+           data: {num:num, categoryId:$("#category_select").val()},
            success: function(data) {
                $("#plus").append(data);
            }

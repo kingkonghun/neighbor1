@@ -42,7 +42,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
         }
 
-        Member member = memberRepository.findByMemberEmail(oAuth2UserInfo.getEmail());
+        Member member = memberRepository.findByProviderId(oAuth2UserInfo.getProviderId());
         if (member == null) {
             member = Member.builder()
                     .memberEmail(oAuth2UserInfo.getEmail())

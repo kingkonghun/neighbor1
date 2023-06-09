@@ -1,8 +1,10 @@
 package com.anabada.neighbor.reply.controller;
 
+import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.reply.domain.Reply;
 import com.anabada.neighbor.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,11 +27,10 @@ public class ReplyController {
         return "/reply/list";
     }
 
-
     @ResponseBody
     @PostMapping("/write") //댓글 작성
-    public int write(Reply reply, HttpSession session) {
-        replyService.write(reply, session);
+    public int write(Reply reply, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        replyService.write(reply, principalDetails);
         return 0;
     }
 
@@ -49,9 +50,8 @@ public class ReplyController {
 
     @ResponseBody
     @PostMapping("/writeReReply") //대댓글 작성
-    public int writeReReply(Reply reply, HttpSession session) {
-        replyService.writeReReply(reply, session);
+    public int writeReReply(Reply reply, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        replyService.writeReReply(reply, principalDetails);
         return 0;
     }
-
 }

@@ -21,7 +21,7 @@ public class Member {
     private String mbti; // mbit
     private int score; // 사용자점수
     private char memberStatus; // 회원상태
-    private String providerId; // OAuth 로그인 정ㅇ보
+    private String providerId; // 로그인 정보
     private String role; // 권한
 
 }

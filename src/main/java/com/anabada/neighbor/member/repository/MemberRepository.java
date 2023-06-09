@@ -10,8 +10,9 @@ public interface MemberRepository {
 
     void saveOAuth(Member member);
 
-    Member findByMemberEmail(String memberEmail);
+    Member findByProviderId(String providerId);
 
     Member profile(long memberId);//개인정보
 
+    long findMemberId(String providerId);
 }

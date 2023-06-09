@@ -24,7 +24,6 @@ public class MemberController {
     private final MemberService memberService;
     private final EmailService emailService;
 
-
     @GetMapping("/joinForm")
     public String joinForm(){ // 회원가입 폼으로 이동
         return "member/joinForm";
@@ -51,8 +50,8 @@ public class MemberController {
     @ResponseBody
     @GetMapping("/test")
     @Secured("ROLE_USER")
-    public String test(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return "유저 권한 테스트";
+    public Member test(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return principalDetails.getMember();
     }
 
     @ResponseBody
@@ -73,5 +72,4 @@ public class MemberController {
         String confirm = emailService.sendSimpleMessage("wbg030281@gmail.com");
         return confirm;
     }
-
 }

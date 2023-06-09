@@ -13,7 +13,7 @@ import java.util.Map;
 public interface MbChatRepository extends ChatRepository{
     @Override
     @Insert("INSERT INTO chatroom (memberId,roomNumber,roomName) values(#{memberId},#{roomNumber},#{roomName})")
-    void createRoom(Map<String, Object> map);
+    void createRoom(ChatRoom chatRoom);
 
     @Override
     @Select("SELECT roomNumber FROM chatRoom WHERE memberId=#{memberId}")
@@ -23,11 +23,8 @@ public interface MbChatRepository extends ChatRepository{
     @Select("SELECT * FROM chatSession WHERE roomNumber=#{roomNumber}")
     List<ChatSession> getSessionIds(String roomNumber);
 
-
-
     @Insert("INSERT INTO chatSession (roomNumber, sessionId) VALUES (#{roomNumber}, #{sessionId})")
     void saveSessionInfo(Map<String, String> map);
-
 
     @Override
     @Delete("DELETE FROM chatSession WHERE sessionId=#{sessionId}")
