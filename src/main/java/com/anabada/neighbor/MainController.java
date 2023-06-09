@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.lang.model.SourceVersion;
+
 @Controller
 public class MainController {
     private final UsedService usedService;
@@ -17,11 +19,11 @@ public class MainController {
         this.usedService = usedService;
         this.clubService = clubService;
     }
-//    @GetMapping("/")
-//    public String main(Model model){
-//        model.addAttribute("used", usedService.mainList());
+    @GetMapping("/")
+    public String main(Model model){
+        model.addAttribute("starList", usedService.mainList());
 //        model.addAttribute("club", clubService.mainList());
-//        return "index";
-//    }
+        return "index";
+    }
 
 }

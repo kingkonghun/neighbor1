@@ -33,5 +33,5 @@ public interface UsedService {
 
     List<Used> mainList();
 
-    List<Used> pageList(int num);
+
 }

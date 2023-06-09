@@ -16,9 +16,10 @@ public interface MbUsedRepository extends UsedRepository {
 
     @Override
     @Select("SELECT *" +
-            "FROM post" +
-            "WHERE postUpdate >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 week)" +
-            "ORDER BY postView desc")
+            " FROM post" +
+            " WHERE postUpdate >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 week)" +
+            " ORDER BY postView desc" +
+            " LIMIT 8")
     List<Post> postList();
 
     @Select("SELECT*FROM category")
@@ -27,6 +28,8 @@ public interface MbUsedRepository extends UsedRepository {
     public Product findProduct(long postId);
     @Select("select categoryName from category where categoryId = #{categoryId}")
     public String findCategoryName(long categoryId);
+
+
 
     @Select("SELECT*FROM member WHERE memberId=#{memberId}")
     public Member findMember(long memberId);
