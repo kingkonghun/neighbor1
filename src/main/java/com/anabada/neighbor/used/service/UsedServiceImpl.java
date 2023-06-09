@@ -8,6 +8,7 @@ import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -132,7 +133,7 @@ public class UsedServiceImpl implements UsedService{
         usedRepository.writeProduct(used);
 
         try {
-            String uploadDir = "C:\\upload_anabada";
+            String uploadDir = "C:\\users\\upload_anabada\\";
 
             if (!Files.exists(Paths.get(uploadDir))) {
                 Files.createDirectories(Paths.get(uploadDir));
