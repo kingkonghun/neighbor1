@@ -1,6 +1,7 @@
 package com.anabada.neighbor.config.handler;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,8 @@ import java.io.IOException;
 @Component
 public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+    private final String SECRET = "뭘봐";
+
     private RequestCache requestCache = new HttpSessionRequestCache();
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
@@ -31,10 +34,10 @@ public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
     }
 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-
-        principalDetails.getMember().setMemberId(memberRepository.findMemberId(principalDetails.getMember().getProviderId()));
+        Member member = ((PrincipalDetails) authentication.getPrincipal()).getMember();
+        member.setMemberId(memberRepository.findMemberId(member.getProviderId()));
+        member.setMemberPWD(SECRET);
+        member.setProviderId(SECRET);
 
         setDefaultTargetUrl("/");
         SavedRequest savedRequest = requestCache.getRequest(request, response);

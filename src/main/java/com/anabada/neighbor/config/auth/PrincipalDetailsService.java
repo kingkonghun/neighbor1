@@ -15,7 +15,7 @@ public class PrincipalDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String memberEmail) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String memberEmail) throws UsernameNotFoundException { // 일반 로그인
         Member member = memberRepository.findByProviderId(memberEmail);
         if (member == null) {
             throw new UsernameNotFoundException("NOTHING");

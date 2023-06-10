@@ -22,7 +22,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
         if (principalDetails.getMember().getRole().equals("ROLE_GUEST")) {
-            response.sendRedirect("addInfoForm");
+            response.sendRedirect("/addInfoForm");
         } else if (principalDetails.getMember().getRole().equals("ROLE_USER")) {
             response.sendRedirect("/noAdmin");
         }

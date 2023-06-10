@@ -23,15 +23,12 @@ import java.util.UUID;
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
-
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
-
-        System.out.println(oAuth2User.getAttributes());
 
         OAuth2UserInfo oAuth2UserInfo = null;
         if (userRequest.getClientRegistration().getRegistrationId().equals("google")) {

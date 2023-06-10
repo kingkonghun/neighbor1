@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="UTF-8" />
   <title>login</title>
@@ -30,9 +30,9 @@
     <a href="#">Forgot Password?</a>
   </div>
   <div>
-    <a href="/oauth2/authorization/google">구글 로그인</a> <br>
-    <a href="/oauth2/authorization/naver">네이버 로그인</a> <br>
-    <a href="/oauth2/authorization/kakao">카카오 로그인</a> <br>
+    <a href="/oauth2/authorization/google"><img th:src="@{/img/google.png}" style="width: 400px;"></a> <br>
+    <a href="/oauth2/authorization/kakao"><img th:src="@{/img/kakao.png}" style="width: 400px;"></a> <br>
+    <a href="/oauth2/authorization/naver"><img th:src="@{/img/naver.png}" style="width: 400px;"></a> <br>
   </div>
 </section>
 

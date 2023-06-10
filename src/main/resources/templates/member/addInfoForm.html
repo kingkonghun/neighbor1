@@ -13,7 +13,8 @@
   <h1>JOIN</h1>
   <form action="/member/addInfo" method="post">
     <div class="int-area">
-      <input type="email" name="memberEmail" id="memberEmail" autocomplete="off" th:value="${#authentication.principal.member.memberEmail}" required>
+<!--      th:value="${#authentication.principal.member.memberEmail}"-->
+      <input type="email" name="memberEmail" id="memberEmail" autocomplete="off" required>
       <label for="memberEmail">MEMBER E-MAIL</label>
     </div>
     <div class="int-area">

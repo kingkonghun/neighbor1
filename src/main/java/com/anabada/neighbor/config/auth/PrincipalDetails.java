@@ -44,7 +44,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return member.getMemberEmail();
+        return member.getProviderId();
     }
 
     @Override
@@ -66,7 +66,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     public boolean isEnabled() {
         return true;
     }
-
 
     @Override
     public Map<String, Object> getAttributes() {
