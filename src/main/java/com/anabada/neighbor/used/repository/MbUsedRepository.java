@@ -80,4 +80,8 @@ public interface MbUsedRepository extends UsedRepository {
     @Override
     @Select("select * from product where categoryId = #{categoryId}")
     public List<Product> productCategoryList(long categoryId);
+
+    @Override
+    @Select("select count(*) from reply where postId = #{postId}")
+    int findReplyCount(long postId);
 }

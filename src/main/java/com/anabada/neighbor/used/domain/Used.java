@@ -34,6 +34,8 @@ public class Used {
     private char memberStatus;      //회원상태(가입,탈퇴,정지등)
     private List<MultipartFile> files;
 
+    private int replyCount;
+
 }
 
 
