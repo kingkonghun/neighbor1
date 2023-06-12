@@ -36,7 +36,6 @@ public interface UsedRepository {
 
     public Member findMember(long memberId);
 
-//    public List<Category> categoryList();
     public void deleteImg(long postId);
 
     public void deleteProduct(long postId);

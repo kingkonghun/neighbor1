@@ -4,17 +4,17 @@ import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.service.EmailService;
 import com.anabada.neighbor.member.service.MemberService;
+import com.anabada.neighbor.page.Criteria;
+import com.anabada.neighbor.page.PageDTO;
 import com.anabada.neighbor.used.domain.Used;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RequestMapping("/member")
@@ -69,16 +69,27 @@ public class MemberController {
         return confirm;
     }
 
-    @GetMapping("/myInfo")
-    public String myInfo(@AuthenticationPrincipal PrincipalDetails principalDetails,Model model){
-
+    @GetMapping("/myPage")
+    public String myInfo() {
         return "member/myPage";
     }
 
     @GetMapping("/myWrite")//내가 작성한 글
-    public String myWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
-        List<Used> used = memberService.myWrite(principalDetails);
-        model.addAttribute("writeList",used);
+    public String myWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria) {
+        List<Used> used = memberService.myWrite(principalDetails, criteria);
+        int total = memberService.getTotal(principalDetails);
+        model.addAttribute("writeList", used);
+        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
         return "member/myWrite";
+    }
+
+    @GetMapping("/myInfo")//내 개인정보
+    public String myInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, HttpServletResponse response) throws Exception {
+        Member member = memberService.myInfo(principalDetails);
+        String profileImg = memberService.findProfileImg(member.getMemberId());
+        memberService.downProfileImg(response, profileImg);
+
+        model.addAttribute("list", member);
+        return "member/myInfo";
     }
 }

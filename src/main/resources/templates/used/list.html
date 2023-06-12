@@ -97,7 +97,8 @@
                         files.focus();
                         return;
                     }
-                    document.writeForm.submit();
+                        document.writeForm.submit();
+
                 });
                 $("#btnWrite").click(function (){
                     $("#writeForm").slideDown();
@@ -108,7 +109,7 @@
             });
         </script>
            <article  class="article_list col-lg-3 col-md-6 col-sm-12" th:each="row : ${list}">
-            <div class="div_list" th:onclick="'location.href=\'' + @{detail(postId=${row.postId})} + '\''">
+            <div class="div_list" th:onclick="|location.href='@{detail(postId=${row.postId})}'|">
                 <div>
                     <img class="img"  th:src="@{/used/findImg(postId=${row.postId})}"  alt="실패">
                 </div>

@@ -126,20 +126,13 @@ public class UsedServiceImpl implements UsedService{
     @Transactional
     @Override
     public void write(Used used, PrincipalDetails principalDetails) {//글쓰기
-
-        System.out.println("principalDetails = " + principalDetails.getMember().getMemberId());
-
         used.setMemberId(principalDetails.getMember().getMemberId());
         usedRepository.writePost(used);
         usedRepository.writeProduct(used);
-
         try {
-
-
             if (!Files.exists(Paths.get(uploadDir))) {
                 Files.createDirectories(Paths.get(uploadDir));
             }
-
             for (MultipartFile file : used.getFiles()) {
                 String uuid = UUID.randomUUID().toString();
                 String fileName = uuid + "_" + file.getOriginalFilename();
