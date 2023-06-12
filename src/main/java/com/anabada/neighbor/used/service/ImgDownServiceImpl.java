@@ -36,7 +36,7 @@ public class ImgDownServiceImpl implements ImgDownService{
         String defaultDir = "static/img/";
         String uploadDir = "C:\\upload_anabada\\";
         String path = "";
-        if (profileImg.equals("defaultImg.png")) {
+        if (profileImg.equals("defaultImg.png")) {//프로필이미지가 default면 static에서 이미지
             path=defaultDir+profileImg;
         }else{path = uploadDir+profileImg;}
 
