@@ -24,7 +24,7 @@ public interface MbMemberRepository extends MemberRepository{
     void saveOAuth(Member member);
 
     @Override
-    @Select("select memberPWD, providerId, role from member where providerId = #{providerId}")
+    @Select("select memberName, memberPWD, providerId, role from member where providerId = #{providerId}")
     Member findByProviderId(String providerId);
 
 
