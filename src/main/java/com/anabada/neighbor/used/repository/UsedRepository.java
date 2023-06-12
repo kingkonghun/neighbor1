@@ -53,4 +53,5 @@ public interface UsedRepository {
 
     List<Post> postList();
 
+    int findReplyCount(long postId);
 }

@@ -2,6 +2,7 @@ package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
+import com.anabada.neighbor.reply.domain.Reply;
 import com.anabada.neighbor.used.domain.Category;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
@@ -79,6 +80,7 @@ public class UsedServiceImpl implements UsedService{
             Post post = usedRepository.findPost(product.getPostId()); //product 테이블의 postId로 post 테이블에서 해당하는 튜플 가져오기
             Member member = usedRepository.findMember(post.getMemberId()); //post 테이블의 memberId로 member 테이블에서 해당하는 튜플 가져오기
             String categoryName = usedRepository.findCategoryName(product.getCategoryId()); //product 테이블의 categoryId로 Category 테이블에서 해당하는 categoryName 가져오기
+            int replyCount = usedRepository.findReplyCount(post.getPostId());
             Used used = Used.builder() //used 객체 생성
                     .postId(post.getPostId())
                     .title(post.getTitle())
@@ -98,6 +100,7 @@ public class UsedServiceImpl implements UsedService{
                     .profileImg(member.getProfileImg())
                     .score(member.getScore())
                     .memberStatus(member.getMemberStatus())
+                    .replyCount(replyCount)
                     .build();
             usedList.add(used);//리턴할 usedList에 used객체 추가
         }
