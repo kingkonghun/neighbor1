@@ -1,7 +1,10 @@
 package com.anabada.neighbor.member.repository;
 
 import com.anabada.neighbor.member.domain.Member;
+import com.anabada.neighbor.used.domain.Post;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface MemberRepository {
@@ -12,7 +15,8 @@ public interface MemberRepository {
 
     Member findByProviderId(String providerId);
 
-    Member profile(long memberId);//개인정보
 
     long findMemberId(String providerId);
+
+    List<Post> findMyPost(long memberId);
 }

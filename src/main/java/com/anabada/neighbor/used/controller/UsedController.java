@@ -51,6 +51,7 @@ public class UsedController {
     @GetMapping("/findImg") //이미지 찾기
     public void findImg(long postId, HttpServletResponse response) throws IOException{
         String filenames = usedService.findImgUrl(postId);
+//        System.out.println("filenames = " + filenames);
         usedService.downloadFiles(filenames,response);
 
     }

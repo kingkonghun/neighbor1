@@ -72,4 +72,9 @@ public class ReplyServiceImpl implements ReplyService {
         replyRepository.writeReReply(reply); //대댓글 작성
 
     }
+
+    @Override
+    public CarryReply findMyReply(long memberId) {//내가 쓴 댓글목록
+        return replyRepository.findMyReply(memberId);
+    }
 }

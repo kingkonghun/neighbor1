@@ -27,4 +27,30 @@ public class Profile {
     private String mbti;            //mbti;
     private int score;              //사용자평점
     private char memberStatus;      //회원상태(가입,탈퇴,정지등)
+
+    //내가 쓴 글을 위한..
+    private long postId;
+    private String title;//제목
+    private String content;//내용
+    private String postType;//게시글타입
+    private Date postDate;//생성일자
+    private Date postUpdate;//수정일자
+    private long postView;//조회수
+
+    private long productId; //상품아이디
+    private String categoryName; //카테고리이름
+    private String price; //상품가격
+    private String productStatus; //판매여부
+    private long categoryId;
+
+    //내가 쓴 댓글을 위한..
+    private long replyId; //댓글번호
+    private String comment; //댓글
+    private Date replyDate; //작성일자
+    private Date replyUpdate; //수정일자
+    private long parentId; //부모 게시글 번호
+    private int depth; //댓글 깊이
+    private int reGroup; //댓글 그룹
+
+
 }

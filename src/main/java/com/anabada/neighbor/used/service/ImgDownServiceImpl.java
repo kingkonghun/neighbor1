@@ -13,7 +13,6 @@ public class ImgDownServiceImpl implements ImgDownService{
     public void imgDown(String filename, HttpServletResponse response)throws IOException {
         String uploadDir = "C:\\upload_anabada\\";
         String path = uploadDir+filename;
-
         FileInputStream fis = new FileInputStream(path);
         OutputStream out = response.getOutputStream();
 
