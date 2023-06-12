@@ -10,8 +10,9 @@
     <!-- BootStrap 추가설정 -->
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <style>
-        h2 {text-align: center;}
-       .item ul {list-style: none; display: flex; justify-content: space-evenly;}
+        h2 {text-align: center; margin-top: 1.5em;}
+        .item{margin-top: 1.5em;margin-bottom: 3em;}
+        .item ul {list-style: none; display: flex; justify-content: space-evenly;}
         a {text-decoration: none;}
     </style>
 </head>
@@ -23,33 +24,17 @@
     <diV class="item">
         <ul>
             <li></li>
-            <li><a id="liWrite" href="#" >내가 쓴 글</a></li>
-            <li><a id="liInfo" href="#">개인 정보</a></li>
-            <li><a id="liEditInfo" href="#">정보 변경</a></li>
+            <li><a id="liWrite" th:href="@{/member/myWrite}" >내가 쓴 글</a></li>
+            <li><a id="liInfo" th:href="@{/member/myInfo}">개인 정보</a></li>
+            <li><a id="liEditInfo" th:href="@{/member/editInfo}">정보 변경</a></li>
             <li></li>
         </ul>
     </diV>
 </section>
 
-<div id="writeS"></div>
-<section id="infoS"></section>
-<section id="editInfoS"></section>
+
 
 <div th:replace="footer :: footer"></div>
-<script th:inline="javascript">
-      $(function () {
-         $("#liWrite").on("click",function (e){
-             e.preventDefault();
-             $.ajax({
-                 type: "GET",
-                 url: "/member/myWrite",
-                 success: function (data){
-                     $("#writeS").html(data);
-                 }
-             });
-         }) ;
-      });
 
-</script>
 </body>
 </html>
