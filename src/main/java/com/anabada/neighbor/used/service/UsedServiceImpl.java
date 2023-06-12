@@ -113,7 +113,7 @@ public class UsedServiceImpl implements UsedService{
 
         if(num>=usedList.size()){//시작하는값이 usedList보다 크면 아무것도안함
             return null;
-        } return usedList.subList(num,Math.min(usedList.size(),num+8));
+        } return usedList.subList(num,Math.min(usedList.size(),num+9));
 
     }
     @Override
