@@ -23,5 +23,10 @@ public class Member {
     private char memberStatus; // 회원상태
     private String providerId; // 로그인 정보
     private String role; // 권한
+    private long myWrite;//내가 작성한 글
+    private char m;
+    private char b;
+    private char t;
+    private char i;
 
 }

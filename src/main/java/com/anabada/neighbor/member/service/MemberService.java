@@ -22,4 +22,6 @@ public interface MemberService {
     String findProfileImg(long memberId);//프로필사진
 
     void downProfileImg(HttpServletResponse response, String profileImg) throws IOException;
+
+    List<Used> myWriteFive(long memberId);//내가 작성한 글(중고게시글) 5개만
 }

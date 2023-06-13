@@ -3,6 +3,7 @@ package com.anabada.neighbor.member.repository;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.used.domain.Post;
+import com.anabada.neighbor.used.domain.Used;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -28,4 +29,8 @@ public interface MemberRepository {
     Member findMyInfo(long memberId);//내 정보
 
     String findProfileImg(long memberId);//프로필사진url찾기
+
+    long countMyWrite(long memberId);
+
+    List<Post> findMyPostFive(long memberId);//내가작성한글5개만
 }

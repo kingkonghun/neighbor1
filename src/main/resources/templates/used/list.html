@@ -14,31 +14,31 @@
     }
 </style>
 <script th:inline="javascript">
-    $(function (){
+    $(function () {
         let num = 0;
-        $("#btnPlus").click(function (){
-            num+=9;
+        $("#btnPlus").click(function () {
+            num += 9;
             $.ajax({
                 type: "get",
                 url: "/used/list",
-                data: {num:num, categoryId:$("#category_select").val()},
-                success: function(data) {
+                data: {num: num, categoryId: $("#category_select").val()},
+                success: function (data) {
                     $("#list").append(data);
                 }
             });
         });
 
-        $("#btnSubmit").click(function(){
+        $("#btnSubmit").click(function () {
             let category = $("#category");
             let price = $("#inputPrice");
             let content = $("#inputContent");
             let files = $("#files");
-            if(category.val() == 0) {
+            if (category.val() == 0) {
                 alert("카테고리를 선택하세요");
                 category.focus();
                 return;
             }
-            if(price.val() == ''){
+            if (price.val() == '') {
                 alert("가격을 입력하세요");
                 price.focus();
                 return;
@@ -55,26 +55,28 @@
             }
             document.writeForm.submit();
         });
-        $("#btnWrite").click(function (){
+        $("#btnWrite").click(function () {
             $("#writeForm").slideDown();
         });
-        $("#returnBtn").click(function (){
+        $("#returnBtn").click(function () {
             $("#writeForm").slideUp();
+        });
+        const inputPrice = document.getElementById("inputPrice");
+
+        inputPrice.addEventListener("input", function (event) {
+            // 입력된 값에서 숫자 이외의 문자 제거
+            const formattedValue = this.value.replace(/\D/g, "");
+
+            // 3자리마다 컴마 추가
+            const numberWithCommas = formattedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            // 값을 다시 설정하여 숫자 입력 필드에 반영
+            this.value = numberWithCommas;
         });
     });
 
-    const inputPrice = document.getElementById("inputPrice");
 
-    inputPrice.addEventListener("input", function(event) {
-        // 입력된 값에서 숫자 이외의 문자 제거
-        const formattedValue = this.value.replace(/\D/g, "");
 
-        // 3자리마다 컴마 추가
-        const numberWithCommas = formattedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-        // 값을 다시 설정하여 숫자 입력 필드에 반영
-        this.value = numberWithCommas;
-    });
 </script>
 </head>
 <body>

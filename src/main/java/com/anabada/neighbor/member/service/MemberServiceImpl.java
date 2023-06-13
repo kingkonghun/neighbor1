@@ -72,8 +72,13 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public Member myInfo(PrincipalDetails principalDetails) {//내정보
+        Member member = null;
         long memberId = principalDetails.getMember().getMemberId();
-        return memberRepository.findMyInfo(memberId);
+        member = memberRepository.findMyInfo(memberId);
+        member.setMyWrite(memberRepository.countMyWrite(memberId));
+
+
+        return  member;
     }
 
     @Override
@@ -85,6 +90,27 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public void downProfileImg(HttpServletResponse response, String profileImg) throws IOException {//프사다운
             imgDownService.downProfileImg(profileImg,response) ;
+    }
 
+    @Override
+    public List<Used> myWriteFive(long memberId) {//내가 작성한 중고게시글5개만
+        List<Used> used = new ArrayList<>();
+        List<Post> postList = memberRepository.findMyPostFive(memberId);//내가 작성한 post가져오기
+        for (Post post : postList) {
+            Product product = usedRepository.findProduct(post.getPostId());//postId로 product 가져오기
+            String categoryName = usedRepository.findCategoryName(product.getCategoryId());//product로 가져온 카테고리id로 category이름가져오기
+            Used used1 = Used.builder()
+                    .postId(post.getPostId())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .postType(post.getPostType())
+                    .postDate(post.getPostDate())
+                    .postUpdate(post.getPostUpdate())
+                    .postView(post.getPostView())//작성한 글
+                    .categoryName(categoryName)//카테고리
+                    .build();
+            used.add(used1);
+        }
+        return used;
     }
 }

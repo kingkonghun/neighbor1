@@ -2,6 +2,7 @@ package com.anabada.neighbor.member.repository;
 
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
+import com.anabada.neighbor.used.domain.Used;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -47,5 +48,13 @@ public interface MbMemberRepository extends MemberRepository{
     @Override
     @Select("SELECT profileImg FROM member WHERE memberId=#{memberId}")
     String findProfileImg(long memberId);
+
+    @Override
+    @Select("SELECT count(*) FROM post WHERE memberId=#{memberId}")
+    long countMyWrite(long memberId);
+
+    @Override
+    @Select("SELECT * FROM post WHERE memberId=#{memberId} ORDER BY postUpdate DESC  LIMIT 5")
+    List<Post> findMyPostFive(long memberId);
 }
 

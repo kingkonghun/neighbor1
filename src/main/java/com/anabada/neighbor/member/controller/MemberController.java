@@ -83,13 +83,30 @@ public class MemberController {
         return "member/myWrite";
     }
 
-    @GetMapping("/myInfo")//내 개인정보
-    public String myInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, HttpServletResponse response) throws Exception {
-        Member member = memberService.myInfo(principalDetails);
-        String profileImg = memberService.findProfileImg(member.getMemberId());
-        memberService.downProfileImg(response, profileImg);
+    @GetMapping("/myWriteFive")//내가 작성한 글 5개만
+    public String myWriteFive(long memberId,Model model) {
+        List<Used> used = memberService.myWriteFive(memberId);
+        model.addAttribute("list",used);
+        return "member/myWriteFive";
+    }
 
+    @GetMapping("/myInfo")//내 개인정보
+    public String myInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
+        Member member = memberService.myInfo(principalDetails);
         model.addAttribute("list", member);
         return "member/myInfo";
+    }
+
+    @GetMapping("/findProfileImg")
+    public void findProfileImg(long memberId, HttpServletResponse response) throws Exception {
+        String profileImg = memberService.findProfileImg(memberId);//사진이름가져오기
+        memberService.downProfileImg(response, profileImg);//사진다운
+    }
+    @GetMapping("/editInfo")
+    public String editInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
+        Member member = memberService.myInfo(principalDetails);
+        System.out.println("member = " + member);
+        model.addAttribute("list", member);
+        return "member/editInfo";
     }
 }

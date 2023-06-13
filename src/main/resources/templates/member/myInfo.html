@@ -10,36 +10,127 @@
     <!-- BootStrap 추가설정 -->
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <style>
-        h2 {text-align: center; margin-top: 1.5em;}
+        @font-face {
+            font-family: 'GangwonEduPowerExtraBoldA';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEduPowerExtraBoldA.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        .myInfomation{display: flex; justify-content: space-evenly;}
+        .myPage, .myInfo{font-family: 'GangwonEduPowerExtraBoldA'; }
         .item{margin-top: 1.5em;margin-bottom: 3em;}
-        .item ul {list-style: none; display: flex; justify-content: space-evenly;}
+        .item ul {list-style: none; display: flex;}
+        .navList{padding-right: 2em;}
         a {text-decoration: none;}
+        .myInfo{padding-left: 10em;}
+        .titleBox{width: 200px; height: auto; text-align: left; padding-left: 2em; padding-bottom: 1.5em;}
+        .profileImg{width: 100%;height: 100%;}
+        .profile, .infoAddress, .infoWrite,.infoScore{display: flex;}
+        /*슬라이드효과*/
+        .slide-in {position: relative; left: 100%; transition: left 1s;}
+        .slide-in.show {left: 0;}
+        .slide-out {position: relative; left: 0; transition: left 1s;}
+        .slide-out.hide {left: -100%;}
     </style>
 </head>
 <body>
 <div th:replace="nav :: nav"></div>
-<section class="list">
-    <h2>개인정보페이지</h2>
+<nav class="container myPage">
     <diV class="item">
         <ul>
-            <li></li>
-            <li><a id="liWrite" th:href="@{/member/myWrite}" >내가 쓴 글</a></li>
-            <li><a id="liInfo" th:href="@{/member/myInfo}">개인 정보</a></li>
-            <li><a id="liEditInfo" th:href="@{/member/editInfo}">정보 변경</a></li>
-            <li></li>
+            <li class="navList"><a id="liWrite" th:href="@{/member/myWrite}" >내가 쓴 글</a></li>
+            <li class="navList"><a id="liInfo" th:href="@{/member/myInfo}">개인 정보</a></li>
+            <li class="navList"><a id="liEditInfo" th:href="@{/member/editInfo}">정보 변경</a></li>
+
         </ul>
     </diV>
-</section>
+</nav>
 
+<div class="myInfomation">
 <section class="myInfo">
-    <div class="infomation">
+    <div class="container">
+
+        <div class="profile">
+            <div class="titleBox">
+                <img class="profileImg" th:src="@{/member/findProfileImg(memberId=${list.memberId})}" src="/static/img/defaultImg.png">
+            </div>
+            <div class="name_mail content">
+                <p class="name" th:text="${list.memberName}">우병걸</p>
+                <p class="name" th:text="${list.memberEmail}">wbg030281@gmail.com</p>
+            </div>
+        </div>
+
+        <div class="infoAddress">
+            <div class="titleBox">
+                <p class="title">활동 지역</p>
+            </div>
+
+            <div class="address content">
+                <p class="city" th:text="${list.address}">서울 강남구</p>
+                <p class="addressDetail" th:text="${list.addressDetail}">테헤란로 어쩌고 저쩌고 샬라</p>
+            </div>
+        </div>
+
+        <div class="infoWrite">
+            <div class="titleBox">
+                <p class="title">내가 작성한 글</p>
+            </div>
+            <div class="write content">
+                <a href="#" th:onclick="'writeList('+${list.memberId}+')'">
+                    <p class="myWrite" th:text="${list.myWrite}">10</p>
+                </a>
+            </div>
+        </div>
+
+
+
+        <div class="infoScore">
+            <div class="titleBox">
+                <p class="title">사용자 점수</p>
+            </div>
+            <div class="score content">
+                <p class="myScore" th:text="${list.score}">50</p>
+            </div>
+        </div>
 
     </div>
 </section>
-
-
+<section class="myWriteFive slide-in" id="myWriteFive"></section>
+</div>
 
 <div th:replace="footer :: footer"></div>
 
+<script th:inline="javascript">
+    function writeList(memberId) {
+        $.ajax({
+            type: "get",
+            data: { "memberId": memberId },
+            url: "/member/myWriteFive",
+            success: function (data) {
+                const myWriteFive = $("#myWriteFive");
+                myWriteFive.html(data);
+
+                if (myWriteFive.hasClass("slide-out")) {
+                    myWriteFive.removeClass("slide-out hide");
+                    setTimeout(function () {
+                        myWriteFive.addClass("slide-in show");
+                    }, 0);
+                } else {
+                    myWriteFive.addClass("slide-in show");
+                }
+            }
+        });
+    }
+
+    function removeHTML() {
+        const myWriteFive = $("#myWriteFive");
+        myWriteFive.removeClass("slide-in show");
+        myWriteFive.addClass("slide-out hide");
+
+        myWriteFive.on("transitionend", function () {
+            myWriteFive.empty();
+        });
+    }
+</script>
 </body>
 </html>

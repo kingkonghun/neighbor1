@@ -3,8 +3,116 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Title</title>
+    <script th:src="@{/js/jquery-3.6.3.min.js}" type="text/javascript"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Bootstrap -->
+    <link href="/bootstrap-5.2.3-dist/css/bootstrap.my.css" rel="stylesheet" />
+    <!-- BootStrap 추가설정 -->
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
+    <style>
+        @font-face {
+            font-family: 'GangwonEduPowerExtraBoldA';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEduPowerExtraBoldA.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        .myInfomation{display: flex; justify-content: space-evenly;}
+        .myPage, .myInfo{font-family: 'GangwonEduPowerExtraBoldA'; }
+        .item{margin-top: 1.5em;margin-bottom: 3em;}
+        .item ul {list-style: none; display: flex;}
+        .navList{padding-right: 2em;}
+        a {text-decoration: none;}
+        .myInfo{padding-left: 10em;}
+        .titleBox{width: 200px; height: auto; text-align: left; padding-left: 2em; padding-bottom: 1.5em;}
+        .profileImg{width: 100%;height: 100%;}
+        .profile, .infoAddress, .infoWrite,.infoScore, .passwd{display: flex;padding-bottom: 1.5em;}
+
+    </style>
 </head>
 <body>
+<div th:replace="nav :: nav"></div>
+<nav class="container myPage">
+    <diV class="item">
+        <ul>
+            <li class="navList"><a id="liWrite" th:href="@{/member/myWrite}" >내가 쓴 글</a></li>
+            <li class="navList"><a id="liInfo" th:href="@{/member/myInfo}">개인 정보</a></li>
+            <li class="navList"><a id="liEditInfo" th:href="@{/member/editInfo}">정보 변경</a></li>
+
+        </ul>
+    </diV>
+</nav>
+
+<div class="myInfomation">
+    <section class="myInfo">
+        <div class="container">
+            <form action="#" class="form1" id="form1">
+                <div class="profile">
+                    <div class="titleBox">
+                        <img class="profileImg" th:src="@{/member/findProfileImg(memberId=${list.memberId})}" src="/static/img/defaultImg.png">
+                    </div>
+                    <div class="name_mail content">
+                        <input type="text" class="name" th:value="${list.memberName}" name="memberName"><br>
+                        <input type="text" class="name" th:value="${list.memberEmail}" readonly name="memberEmail">
+                    </div>
+                </div>
+
+                <div class="passwd" th:unless="${list.providerId.startsWith('google') or list.providerId.startsWith('naver') or list.providerId.startsWith('kakao')} ">
+                    <div class="titleBox">
+                        <p class="title">비밀번호</p>
+                    </div>
+                    <div class="content">
+                        <input type="password" class="pwd" id="pwd" name="memberPWD">
+                        <br>
+                        <input type="password" class="pwd" id="pwdCheck">
+                    </div>
+                </div>
+
+                <div class="infoAddress">
+                    <div class="titleBox">
+                        <p class="title">활동 지역</p>
+                    </div>
+
+                    <div class="address content">
+                        <input id="address" class="city" th:value="${list.address}" readonly name="address">
+                        <button type="button" onclick="zipcode()" id="btnSearch">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search-heart-fill" viewBox="0 0 16 16" color="#669900">
+                                <path d="M6.5 13a6.474 6.474 0 0 0 3.845-1.258h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.008 1.008 0 0 0-.115-.1A6.471 6.471 0 0 0 13 6.5 6.502 6.502 0 0 0 6.5 0a6.5 6.5 0 1 0 0 13Zm0-8.518c1.664-1.673 5.825 1.254 0 5.018-5.825-3.764-1.664-6.69 0-5.018Z"/>
+                            </svg>
+                        </button>
+                        <br>
+                        <input id="addressDetail" class="addressDetail" th:value="${list.addressDetail}" name="addressDetail">
+                    </div>
+                </div>
+
+                <div class="infoWrite">
+                    <div class="titleBox">
+                        <p class="title">내가 작성한 글</p>
+                    </div>
+                    <div class="write content">
+                        <a href="#" th:onclick="'writeList('+${list.memberId}+')'">
+                            <p class="myWrite" th:text="${list.myWrite}">10</p>
+                        </a>
+                    </div>
+                </div>
+
+
+                <div class="infoScore">
+                    <div class="titleBox">
+                        <p class="title">사용자 점수</p>
+                    </div>
+                    <div class="score content">
+                        <p class="myScore" th:text="${list.score}">50</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <section class="myWriteFive slide-in" id="myWriteFive"></section>
+</div>
+
+<div th:replace="footer :: footer"></div>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script th:src="@{/js/address.js}" type="text/javascript"></script>
 
 </body>
 </html>

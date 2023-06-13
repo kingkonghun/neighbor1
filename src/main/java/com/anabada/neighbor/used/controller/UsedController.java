@@ -60,7 +60,6 @@ public class UsedController {
     public String postEdit(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails)throws Exception{
         usedService.update(used, principalDetails);
         return "redirect:/used/list";
-
     }
 
     @GetMapping("/postDelete") //게시물 삭제

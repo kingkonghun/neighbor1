@@ -8,9 +8,9 @@
     <script th:src="@{/js/jquery-3.6.3.min.js}" type="text/javascript"></script>
     <style>
         .img {width: 50px; height: 50px;}
-        h2 {text-align: center; margin-top: 1.5em;}
         .item{margin-top: 1.5em;margin-bottom: 3em;}
-        .item ul {list-style: none; display: flex; justify-content: space-evenly;}
+        .item ul {list-style: none; display: flex;}
+        .item ul li{padding-right: 2em;}
         a {text-decoration: none;}
         .pagination {margin-top: 3em; margin-bottom: 5em;}
         .pagination .pageNum{list-style: none; display: flex;}
@@ -20,19 +20,16 @@
 <!-- Nav바-->
 <div th:replace="nav :: nav"></div>
 
-<section class="list">
-    <h2>개인정보페이지</h2>
-
+<nav class="container">
     <diV class="item">
         <ul>
-            <li></li>
             <li><a id="liWrite" th:href="@{/member/myWrite}" >내가 쓴 글</a></li>
             <li><a id="liInfo" th:href="@{/member/myInfo}">개인 정보</a></li>
             <li><a id="liEditInfo" th:href="@{/member/editInfo}">정보 변경</a></li>
-            <li></li>
+
         </ul>
     </diV>
-</section>
+</nav>
 <div class="myWrite">
     <table  style="width: 100%;" class="table table-hover">
         <thead>
