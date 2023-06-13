@@ -35,7 +35,7 @@ public class Used {
     private List<MultipartFile> files;
 
     private int replyCount;
-
+    private int likesCount;
 }
 
 

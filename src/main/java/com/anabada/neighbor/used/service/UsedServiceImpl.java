@@ -3,10 +3,7 @@ package com.anabada.neighbor.used.service;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.reply.domain.Reply;
-import com.anabada.neighbor.used.domain.Category;
-import com.anabada.neighbor.used.domain.Post;
-import com.anabada.neighbor.used.domain.Product;
-import com.anabada.neighbor.used.domain.Used;
+import com.anabada.neighbor.used.domain.*;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -65,6 +62,17 @@ public class UsedServiceImpl implements UsedService{
         return usedList; //usedList 리턴
     }
 
+    @Override
+    public int likesUp(long postId, PrincipalDetails principalDetails) {
+        Likes likes = Likes.builder()
+                .postId(postId)
+                .memberId(principalDetails.getMember().getMemberId())
+                .build();
+        if (usedRepository.likesCheck(likes) <= 0) {
+            usedRepository.likesUp(likes);
+        }
+        return usedRepository.findLikesCount(postId);
+    }
 
 
     @Override
@@ -81,6 +89,7 @@ public class UsedServiceImpl implements UsedService{
             Member member = usedRepository.findMember(post.getMemberId()); //post 테이블의 memberId로 member 테이블에서 해당하는 튜플 가져오기
             String categoryName = usedRepository.findCategoryName(product.getCategoryId()); //product 테이블의 categoryId로 Category 테이블에서 해당하는 categoryName 가져오기
             int replyCount = usedRepository.findReplyCount(post.getPostId());
+            int likesCount = usedRepository.findLikesCount(post.getPostId());
             Used used = Used.builder() //used 객체 생성
                     .postId(post.getPostId())
                     .title(post.getTitle())
@@ -101,6 +110,7 @@ public class UsedServiceImpl implements UsedService{
                     .score(member.getScore())
                     .memberStatus(member.getMemberStatus())
                     .replyCount(replyCount)
+                    .likesCount(likesCount)
                     .build();
             usedList.add(used);//리턴할 usedList에 used객체 추가
         }
@@ -195,7 +205,8 @@ public class UsedServiceImpl implements UsedService{
         Product product = usedRepository.findProduct(postId); //파라미터로 받은 postId에 해당하는 튜플을 product 테이블에서 가져오기
         Member member = usedRepository.findMember(post.getMemberId()); //가져온 post의 memberId로 member 테이블에서 해당하는 튜플 가져오기
         String categoryName = usedRepository.findCategoryName(product.getCategoryId()); //가져온 product의 categoryId로 category 테이블에서 해당하는 categoryName 가져오기
-
+        int replyCount = usedRepository.findReplyCount(post.getPostId());
+        int likesCount = usedRepository.findLikesCount(post.getPostId());
         Cookie[] cookies = request.getCookies(); //쿠키 가져오기
 
         Cookie viewCookie = null; //
@@ -232,6 +243,8 @@ public class UsedServiceImpl implements UsedService{
                 .profileImg(member.getProfileImg())
                 .score(member.getScore())
                 .memberStatus(member.getMemberStatus())
+                .replyCount(replyCount)
+                .likesCount(likesCount)
                 .build();
     }
 
@@ -245,6 +258,8 @@ public class UsedServiceImpl implements UsedService{
     public void downloadFiles(String filename, HttpServletResponse response) throws IOException {
         imgDownService.imgDown(filename,response);
     }
+
+
 }
 
 

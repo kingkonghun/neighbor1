@@ -2,10 +2,7 @@ package com.anabada.neighbor.used.repository;
 
 
 import com.anabada.neighbor.member.domain.Member;
-import com.anabada.neighbor.used.domain.Category;
-import com.anabada.neighbor.used.domain.Post;
-import com.anabada.neighbor.used.domain.Product;
-import com.anabada.neighbor.used.domain.Used;
+import com.anabada.neighbor.used.domain.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -84,4 +81,16 @@ public interface MbUsedRepository extends UsedRepository {
     @Override
     @Select("select count(*) from reply where postId = #{postId}")
     int findReplyCount(long postId);
+
+    @Override
+    @Select("select count(*) from likes where postId = #{postId}")
+    int findLikesCount(long postId);
+
+    @Override
+    @Select("select count(*) from likes where postId = #{postId} and memberId = #{memberId}")
+    int likesCheck(Likes likes);
+
+    @Override
+    @Insert("insert into likes (postId, memberId) values (#{postId}, #{memberId})")
+    void likesUp(Likes likes);
 }

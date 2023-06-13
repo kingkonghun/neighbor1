@@ -92,4 +92,10 @@ public class MemberController {
         model.addAttribute("list", member);
         return "member/myInfo";
     }
+
+    @ResponseBody
+    @GetMapping("/isAuthenticated")
+    public boolean isAuthenticated(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return principalDetails != null;
+    }
 }

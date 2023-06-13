@@ -53,4 +53,10 @@ public interface UsedRepository {
     List<Post> postList();
 
     int findReplyCount(long postId);
+
+    int findLikesCount(long postId);
+
+    void likesUp(Likes likes);
+
+    int likesCheck(Likes likes);
 }

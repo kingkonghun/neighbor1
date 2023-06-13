@@ -4,13 +4,12 @@ import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.service.UsedService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +38,7 @@ public class UsedController {
         model.addAttribute("dto", dto);
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0));
-        return "used/detail";
+        return "used/detailEx";
     }
 
     @PostMapping("/post") //게시물 작성
@@ -67,5 +66,12 @@ public class UsedController {
     public String postDelete(long postId){
         usedService.delete(postId);
         return "redirect:/used/list";
+    }
+
+    @PostMapping("/likesUp")
+    @ResponseBody
+    public int up(long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        int likesCount = usedService.likesUp(postId, principalDetails);
+        return likesCount;
     }
 }
