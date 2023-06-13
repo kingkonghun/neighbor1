@@ -97,6 +97,12 @@ public class MemberController {
         return "member/myInfo";
     }
 
+    @ResponseBody
+    @GetMapping("/isAuthenticated")
+    public boolean isAuthenticated(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return principalDetails != null;
+    }
+
     @GetMapping("/findProfileImg")
     public void findProfileImg(long memberId, HttpServletResponse response) throws Exception {
         String profileImg = memberService.findProfileImg(memberId);//사진이름가져오기

@@ -26,4 +26,5 @@ public interface UsedService {
     List<Category> categoryList();
     List<Used> mainList();
 
+    int likesUp(long postId, PrincipalDetails principalDetails);
 }
