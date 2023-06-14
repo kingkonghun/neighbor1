@@ -1,25 +1,19 @@
 package com.anabada.neighbor.used.controller;
 
-import com.anabada.neighbor.used.domain.Img;
 import com.anabada.neighbor.used.domain.Used;
-import com.anabada.neighbor.used.repository.UsedRepository;
 import com.anabada.neighbor.used.service.UsedService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
 
 @Controller
 @RequestMapping("/used")
@@ -27,42 +21,47 @@ import java.util.List;
 public class UsedController {
     private final UsedService usedService;
 
-    @GetMapping("/list")
-    public String list(Model model){
-        model.addAttribute("list", usedService.list());
+    @GetMapping("/list") //게시물 리스트
+    public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model){
+        model.addAttribute("list", usedService.list(categoryId, "list"));
+        model.addAttribute("category",usedService.categoryList());
+        model.addAttribute("categoryId", categoryId);
         return "used/list";
     }
 
-    @GetMapping("detail")
-    public String detail(long postId, Model model) {
-        model.addAttribute("dto", usedService.detail(postId));
+    @GetMapping("/detail") //게시물 상세보기
+    public String detail(long postId, Model model, HttpServletRequest request, HttpServletResponse response) {
+        Used dto = usedService.detail(postId, request, response);
+        model.addAttribute("dto", dto);
+        model.addAttribute("category",usedService.categoryList());
+        model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList"));
         return "used/detail";
     }
-    @PostMapping("/post")
-    public String post(Used used, HttpSession session){
+    @PostMapping("/post") //게시물 작성
+    public String post(Used used, HttpSession session)throws Exception{
         long memberId = (long)session.getAttribute("memberId");
         used.setMemberId(memberId);
         usedService.write(used);
         return "redirect:/used/list";
     }
-    @GetMapping("/findImg")
+
+    @GetMapping("/findImg") //이미지 찾기
     public void findImg(long postId, HttpServletResponse response) throws IOException{
         String filenames = usedService.findImgUrl(postId);
         usedService.downloadFiles(filenames,response);
 
     }
 
-    @PostMapping("/postEdit")
-    public String postEdit(Used used,HttpSession session){
+    @PostMapping("/postEdit") //게시물 수정
+    public String postEdit(Used used,HttpSession session)throws Exception{
         long memberId = (long) session.getAttribute("memberId");
         used.setMemberId(memberId);
-        System.out.println(used);
         usedService.update(used);
         return "redirect:/used/list";
 
     }
 
-    @PostMapping("/postDelete")
+    @GetMapping("/postDelete") //게시물 삭제
     public String postDelete(long postId){
         usedService.delete(postId);
         return "redirect:/used/list";

@@ -137,6 +137,7 @@
 </script>
 </head>
 <body>
+<div th:replace="nav::nav"></div>
 <div class="container">
     <section id="section_1">
         <article>
@@ -163,6 +164,7 @@
                     </tr>
                     <tr>
                         <td colspan="2"><button type="button" id="btnEdit">수정</button></td>
+                        <td colspan="2"><button type="button" id="btnDelete">삭제</button></td>
                     </tr>
 
                 </table>
@@ -182,113 +184,37 @@
 
     <div th:include="used/edit :: section" style="display: none;" id="editForm"></div>
 
-
-
-
     <section id="section_2" class="row" style="margin-top: 30px;">
         <article style=" margin-bottom: 30px;">
             <span style="font-weight: bold; font-size: 30px;">비슷한 상품</span>
         </article>
-        <article class="article_list col-lg-6 col-md-6 col-sm-12">
-            <div class="div_list">
+
+        <article class="article_list col-lg-6 col-md-6 col-sm-12" th:each="row : ${similarList}">
+            <div class="div_list" th:onclick="'location.href=\'' + @{detail(postId=${row.postId})} + '\''">
                 <div>
-                    <img class="img_2" src="https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_960_720.jpg" alt="">
+                    <img class="img_2" th:src="@{/used/findImg(postId=${row.postId})}"  alt="실패">
                 </div>
                 <div class="text_div">
                     <table>
                         <tr>
                             <td style="text-align: left;">
-                                <span class="p_title">스마트폰 팝니다</span> <br>
-                                <span class="p_price">10000원</span> <br>
-                                <span class="p_address">서울특별시 성북구</span>
+                                <span class="p_title" th:text="${row.title}"></span> <br>
+                                <span class="p_price" th:text="${row.price}"></span> <br>
+                                <span class="p_address" th:text="${row.address}"></span>
                             </td>
                             <td style="text-align: right;">
 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" color="red"/>
                                 </svg>
-                                <span class="count">32</span>
+                                <span class="count" th:text="${row.postView}"></span>
                             </td>
                         </tr>
                     </table>
                 </div>
             </div>
         </article>
-        <article class="article_list col-lg-6 col-md-6 col-sm-12">
-            <div class="div_list">
-                <div>
-                    <img class="img_2" src="https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_960_720.jpg" alt="">
-                </div>
-                <div class="text_div">
-                    <table>
-                        <tr>
-                            <td style="text-align: left;">
-                                <span class="p_title">스마트폰 팝니다</span> <br>
-                                <span class="p_price">10000원</span> <br>
-                                <span class="p_address">서울특별시 성북구</span>
-                            </td>
-                            <td style="text-align: right;">
 
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" color="red"/>
-                                </svg>
-                                <span class="count">32</span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </article>
-        <article class="article_list col-lg-6 col-md-6 col-sm-12">
-            <div class="div_list">
-                <div>
-                    <img class="img_2" src="https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_960_720.jpg" alt="">
-                </div>
-                <div class="text_div">
-                    <table>
-                        <tr>
-                            <td style="text-align: left;">
-                                <span class="p_title">스마트폰 팝니다</span> <br>
-                                <span class="p_price">10000원</span> <br>
-                                <span class="p_address">서울특별시 성북구</span>
-                            </td>
-                            <td style="text-align: right;">
-
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" color="red"/>
-                                </svg>
-                                <span class="count">32</span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </article>
-        <article class="article_list col-lg-6 col-md-6 col-sm-12">
-            <div class="div_list">
-                <div>
-                    <img class="img_2" src="https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_960_720.jpg" alt="">
-                </div>
-                <div class="text_div">
-                    <table>
-                        <tr>
-                            <td style="text-align: left;">
-                                <span class="p_title">스마트폰 팝니다</span> <br>
-                                <span class="p_price">10000원</span> <br>
-                                <span class="p_address">서울특별시 성북구</span>
-                            </td>
-                            <td style="text-align: right;">
-
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" color="red"/>
-                                </svg>
-                                <span class="count">32</span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </article>
     </section>
     <script th:inline="javascript">
         $(function (){
@@ -306,6 +232,11 @@
             });
             $("#returnBtn").click(function (){
                 $("#editForm").slideUp();
+            });
+            $("#btnDelete").click(function (){
+                if(confirm("삭제하시겠습니까?")){
+                location.href="/used/postDelete?postId="+[[${dto.postId}]];
+                }
             });
         });
     </script>
