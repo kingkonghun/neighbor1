@@ -9,6 +9,7 @@ import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class ClubServiceImpl implements ClubService {
         this.clubRepository = clubRepository;
     }
 
+    @Transactional
     @Override/*클럽세이브*/
     public int saveClub(Club club) {//post,club 등록
         if (clubRepository.insertClub(club) == 1) {//db등록 실패시 0으로반환
@@ -30,16 +32,15 @@ public class ClubServiceImpl implements ClubService {
         }
         return 0;
     }
-
+    @Transactional
     @Override
     public long savePost(Post post) {
         if (clubRepository.insertPost(post) == 1){
             return post.getPostId();
-        }
-        //게시글이 성공적으로 등록되었으면 postId 반환 실패하였으면 -1반환
+        }//게시글이 성공적으로 등록되었으면 postId 반환 실패하였으면 -1반환
         return -1;
     }
-
+    @Transactional
     @Override
     public int saveImages(Long postId, List<ImageRequest> images) {
         if (CollectionUtils.isEmpty(images)) {//리스트의 길이가 0이면 0으로 리턴
@@ -53,11 +54,40 @@ public class ClubServiceImpl implements ClubService {
     }
     @Override
     public ClubResponse findClub(long postId) {
-        ClubResponse response;
         Post post = clubRepository.selectPost(postId);
+        Member member = clubRepository.selectMember(post.getMemberId());
         Club club = clubRepository.selectClub(postId);
+        return ClubResponse.builder()
+                .postId(post.getPostId())
+                .memberId(member.getMemberId())
+                .memberName(member.getMemberName())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .hobbyName(clubRepository.selectHobbyName(club.getHobbyId()))
+                .score(member.getScore())
+                .maxMan(club.getMaxMan())
+                .nowMan(club.getNowMan())
+                .build();
+    }
 
-        return null;
+    @Transactional
+    @Override
+    public long updatePost(Post post) {
+        clubRepository.updatePost(post);
+        return post.getPostId();
+    }
+
+    @Transactional
+    @Override
+    public long updateClub(Club club) {
+        clubRepository.updateClub(club);
+        return club.getPostId();
+    }
+
+    @Override
+    public long deletePost(long postId) {
+        clubRepository.deletePost(postId);
+        return postId;
     }
 
     @Override

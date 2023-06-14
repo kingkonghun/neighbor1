@@ -3,6 +3,7 @@ package com.anabada.neighbor.club.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class ClubResponse {
     private long postId; //게시글 번호

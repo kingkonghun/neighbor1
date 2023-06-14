@@ -9,5 +9,7 @@
 </head>
 <body>
 <div th:text="${postId}"></div>
+<a th:href="@{/clubSave(postId=${postId})}">업데이트</a>
+<a th:href="@{/clubRemove(postId=${postId})}">삭제</a>
 </body>
 </html>

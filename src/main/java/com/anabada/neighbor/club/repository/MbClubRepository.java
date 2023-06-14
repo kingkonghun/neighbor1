@@ -30,6 +30,23 @@ public interface MbClubRepository extends ClubRepository {
     void insertImage(ImageRequest imageRequest);
 
     @Override
+    @Update("update post" +
+            " set title = #{title}, content=#{content}, postUpdate= now()" +
+            " where postId = #{postId}")
+    void updatePost(Post post);
+
+    @Override
+    @Update("update club" +
+            " set hobbyId = #{hobbyId}, maxMan = #{maxMan}")
+    void updateClub(Club club);
+
+    @Override
+    @Delete("update post" +
+            " set postType = 'del' " +
+            "where postId = #{postId}")
+    void deletePost(long postId);
+
+    @Override
     @Select("select * from post where postId = #{postId}")
     Post selectPost(long postId);
 
@@ -42,7 +59,7 @@ public interface MbClubRepository extends ClubRepository {
     Member selectMember(long memberId);
 
     @Override
-    @Select("select * from post where postType = 'club' order by postId desc limit 6")//6개리스트만가져오기
+    @Select("select * from post where postType = 'club' order by postId desc")//6개리스트만가져오기
     List<Post> selectPostList();
 
     @Override
@@ -57,4 +74,6 @@ public interface MbClubRepository extends ClubRepository {
     @Select("select memberName from member where memberId = #{memberId}")
     String selectMemberName(long memberId);
 
+    @Override
+    int count();
 }

@@ -25,6 +25,16 @@ public interface ClubRepository {
      */
     public void insertImage(ImageRequest imageRequest);
 
+    /**
+     * 업데이트 포스트
+     * @param post 업데이트한 포스트
+     */
+    public void updatePost(Post post);
+
+    public void updateClub(Club club);
+
+    public void deletePost(long postId);
+
     public Post selectPost(long postId);
 
     public Club selectClub(long postId);
@@ -52,5 +62,11 @@ public interface ClubRepository {
      * @return memberName
      */
     public String selectMemberName(long memberId);
+
+    /**
+     * 전체 게시글 수를 조회하는 select 쿼리 페이징기능에 사용
+     * @return 전체 게시글 수
+     */
+    int count();
 
 }

@@ -27,7 +27,7 @@
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-2 justify-content-center">
             <div th:each="club : ${clubList}">
-                <a th:href="@{/club/detail(postId=${club.postId})}">
+                <a th:href="@{/clubDetail(postId=${club.postId})}">
                     <div class="col mb-5" >
                         <div class="card h-100">
                             <!-- 인기 제품 뱃지-->
