@@ -33,4 +33,10 @@ public interface MemberRepository {
     long countMyWrite(long memberId);
 
     List<Post> findMyPostFive(long memberId);//내가작성한글5개만
+
+    void editInfo(Member member);//비밀번호가 들어왔을경우
+
+    void editInfoNotPwd(Member member);//비밀번호 안들어왔을때
+
+    void editProfileImg(Map<String, Object> map);
 }

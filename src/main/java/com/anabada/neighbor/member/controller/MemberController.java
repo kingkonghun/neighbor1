@@ -63,16 +63,13 @@ public class MemberController {
     }
 
 
-    @GetMapping("/emailConfirm")
+    @GetMapping("/emailConfirm")//이메일인증
     public String emailConfirm() throws Exception {
         String confirm = emailService.sendSimpleMessage("wbg030281@gmail.com");
         return confirm;
     }
 
-    @GetMapping("/myPage")
-    public String myInfo() {
-        return "member/myPage";
-    }
+
 
     @GetMapping("/myWrite")//내가 작성한 글
     public String myWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria) {
@@ -98,21 +95,25 @@ public class MemberController {
     }
 
     @ResponseBody
-    @GetMapping("/isAuthenticated")
+    @GetMapping("/isAuthenticated")//로그인인증
     public boolean isAuthenticated(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         return principalDetails != null;
     }
 
-    @GetMapping("/findProfileImg")
+    @GetMapping("/findProfileImg")//프사다운
     public void findProfileImg(long memberId, HttpServletResponse response) throws Exception {
         String profileImg = memberService.findProfileImg(memberId);//사진이름가져오기
         memberService.downProfileImg(response, profileImg);//사진다운
     }
-    @GetMapping("/editInfo")
+    @GetMapping("/editInfo")//수정페이지로 이동
     public String editInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         Member member = memberService.myInfo(principalDetails);
-        System.out.println("member = " + member);
         model.addAttribute("list", member);
         return "member/editInfo";
+    }
+    @PostMapping("/myEdit")//진짜수정
+    public String myEdit(Member member){
+        memberService.editInfo(member);
+        return "index";
     }
 }

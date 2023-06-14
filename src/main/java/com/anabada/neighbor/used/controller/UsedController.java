@@ -45,6 +45,7 @@ public class UsedController {
     @PostMapping("/post") //게시물 작성
     public String post(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails)throws Exception{
         usedService.write(used, principalDetails);
+        System.out.println("used="+used);
         return "redirect:/used/list";
     }
 

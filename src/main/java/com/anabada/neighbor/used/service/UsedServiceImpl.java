@@ -2,6 +2,7 @@ package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
+import com.anabada.neighbor.reply.domain.Reply;
 import com.anabada.neighbor.used.domain.*;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +52,7 @@ public class UsedServiceImpl implements UsedService{
                     .memberId(member.getMemberId())
                     .address(member.getAddress())
                     .memberName(member.getMemberName())
-                    .profileImg(member.getProfileImg())
+//                    .profileImg(member.getProfileImg().getOriginalFilename())
                     .score(member.getScore())
                     .memberStatus(member.getMemberStatus())
                     .build();
@@ -60,6 +61,8 @@ public class UsedServiceImpl implements UsedService{
 
         return usedList; //usedList 리턴
     }
+
+
 
 
     @Override
@@ -93,7 +96,7 @@ public class UsedServiceImpl implements UsedService{
                     .memberId(member.getMemberId())
                     .address(member.getAddress())
                     .memberName(member.getMemberName())
-                    .profileImg(member.getProfileImg())
+//                    .profileImg(member.getProfileImg().getOriginalFilename())
                     .score(member.getScore())
                     .memberStatus(member.getMemberStatus())
                     .replyCount(replyCount)
@@ -235,7 +238,7 @@ public class UsedServiceImpl implements UsedService{
                 .memberId(member.getMemberId())
                 .address(member.getAddress())
                 .memberName(member.getMemberName())
-                .profileImg(member.getProfileImg())
+//                .profileImg(member.getProfileImg().getOriginalFilename())
                 .score(member.getScore())
                 .memberStatus(member.getMemberStatus())
                 .replyCount(replyCount)

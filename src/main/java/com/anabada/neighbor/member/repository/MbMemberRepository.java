@@ -2,10 +2,10 @@ package com.anabada.neighbor.member.repository;
 
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
-import com.anabada.neighbor.used.domain.Used;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
@@ -41,6 +41,8 @@ public interface MbMemberRepository extends MemberRepository{
     @Select("select memberId from member where providerId = #{providerId}")
     long findMemberId(String providerId);
 
+
+
     @Override
     @Select("SELECT * FROM member WHERE memberId=#{memberId}")
     Member findMyInfo(long memberId);//내정보
@@ -56,5 +58,17 @@ public interface MbMemberRepository extends MemberRepository{
     @Override
     @Select("SELECT * FROM post WHERE memberId=#{memberId} ORDER BY postUpdate DESC  LIMIT 5")
     List<Post> findMyPostFive(long memberId);
+
+    @Override
+    @Update("UPDATE member SET memberName=#{memberName},memberPWD=#{memberPWD},address=#{address}, addressDetail=#{addressDetail} WHERE memberId=#{memberId}")
+    void editInfo(Member member);
+
+    @Override
+    @Update("UPDATE member SET memberName=#{memberName},address=#{address}, addressDetail=#{addressDetail} WHERE memberId=#{memberId}")
+    void editInfoNotPwd(Member member);
+
+    @Override
+    @Update("UPDATE member SET profileImg=#{profileImg} WHERE memberId=#{memberId}")
+    void editProfileImg(Map<String, Object> map);
 }
 

@@ -31,7 +31,7 @@ public class ImgDownServiceImpl implements ImgDownService{
     @Override
     public void downProfileImg(String profileImg, HttpServletResponse response) throws IOException {
         String defaultDir = "static/img/";
-        String uploadDir = "C:\\upload_anabada\\";
+        String uploadDir = "C:\\upload_anabada\\profile\\";
         String path = "";
         OutputStream out = response.getOutputStream();
         if (profileImg.equals("defaultImg.png")) {//프로필이미지가 default면 static에서 이미지
