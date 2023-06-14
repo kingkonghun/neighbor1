@@ -23,7 +23,7 @@ public class UsedController {
     private final UsedService usedService;
 
     @GetMapping("/list") //게시물 리스트
-    public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model,@RequestParam(value = "num", defaultValue = "0") int num){
+    public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model, @RequestParam(value = "num", defaultValue = "0") int num){
         model.addAttribute("list", usedService.list(categoryId, "list",num));
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("categoryId", categoryId);
@@ -33,11 +33,12 @@ public class UsedController {
     }
 
     @GetMapping("/detail") //게시물 상세보기
-    public String detail(long postId, Model model, HttpServletRequest request, HttpServletResponse response) {
-        Used dto = usedService.detail(postId, request, response);
+    public String detail(long postId, Model model, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Used dto = usedService.detail(postId, request, response, principalDetails);
         model.addAttribute("dto", dto);
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0));
+
         return "used/detailEx";
     }
 
@@ -67,10 +68,9 @@ public class UsedController {
         return "redirect:/used/list";
     }
 
-    @PostMapping("/likesUp")
+    @PostMapping("/likes")
     @ResponseBody
-    public int up(long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        int likesCount = usedService.likesUp(postId, principalDetails);
-        return likesCount;
+    public Used likes(long postId, int likesCheck, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return usedService.likes(postId, principalDetails, likesCheck);
     }
 }

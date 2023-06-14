@@ -43,6 +43,8 @@
 </style>
 <script>
     $(function(){
+        let likesCheck = [[${dto.likesCheck}]];
+        heartClass(likesCheck);
         $("#heart").click(function(){
             let isAuthenticated;
             $.ajax({
@@ -56,10 +58,12 @@
             if(isAuthenticated){
                 $.ajax({
                     type: "post",
-                    url: "/used/likesUp",
-                    data: {postId: [[${dto.postId}]]},
-                    success: function(result){
-                        $(".likeCount").html(result);
+                    url: "/used/likes",
+                    data: {postId: [[${dto.postId}]], likesCheck: likesCheck},
+                    success: function(likes){
+                        likesCheck = likes.likesCheck;
+                        heartClass(likesCheck);
+                        $(".likesCount").text(likes.likesCount);
                     }
                 });
             }else{
@@ -69,6 +73,13 @@
             }
         });
     });
+    function heartClass(likesCheck){
+        if (likesCheck == 0) {
+            $("#heart").removeClass("bi-heart-fill").addClass("bi-suit-heart");
+        } else {
+            $("#heart").removeClass("bi-suit-heart").addClass("bi-heart-fill");
+        }
+    }
 </script>
 </head>
 <body>
@@ -82,8 +93,9 @@
                     <div>
                         1<i class="bi bi-caret-up-fill"></i>
                     </div>
-                    <div>
-                        <span class="likeCount" th:text="${dto.likesCount}"></span><i id="heart" class="bi bi-heart-fill" style="color: red"></i>
+                    <div id="likes">
+                        <span class="likesCount">[[${dto.likesCount}]]</span>
+                        <i id="heart" style="color: red"></i>
                     </div>
                 </div>
             </div>

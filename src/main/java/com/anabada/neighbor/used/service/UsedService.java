@@ -20,11 +20,10 @@ public interface UsedService {
     public void write(Used used, PrincipalDetails principalDetails)throws Exception;
     public void update(Used used, PrincipalDetails principalDetails) throws Exception;
     public void delete(long postId);
-    public Used detail(long postId, HttpServletRequest request, HttpServletResponse response);
+    public Used detail(long postId, HttpServletRequest request, HttpServletResponse response, PrincipalDetails principalDetails);
     public String findImgUrl(long postId);//이미지 이름가져오기
     public void downloadFiles(String filenames, HttpServletResponse response) throws IOException;
     List<Category> categoryList();
     List<Used> mainList();
-
-    int likesUp(long postId, PrincipalDetails principalDetails);
+    Used likes(long postId, PrincipalDetails principalDetails, int likesCheck);
 }

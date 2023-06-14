@@ -59,4 +59,6 @@ public interface UsedRepository {
     void likesUp(Likes likes);
 
     int likesCheck(Likes likes);
+
+    void likesDown(Likes likes);
 }

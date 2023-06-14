@@ -36,6 +36,7 @@ public class Used {
 
     private int replyCount;
     private int likesCount;
+    private int likesCheck;
 }
 
 

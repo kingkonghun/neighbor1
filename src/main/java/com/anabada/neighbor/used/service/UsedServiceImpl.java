@@ -2,7 +2,6 @@ package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
-import com.anabada.neighbor.reply.domain.Reply;
 import com.anabada.neighbor.used.domain.*;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
@@ -60,18 +59,6 @@ public class UsedServiceImpl implements UsedService{
         }
 
         return usedList; //usedList 리턴
-    }
-
-    @Override
-    public int likesUp(long postId, PrincipalDetails principalDetails) {
-        Likes likes = Likes.builder()
-                .postId(postId)
-                .memberId(principalDetails.getMember().getMemberId())
-                .build();
-        if (usedRepository.likesCheck(likes) <= 0) {
-            usedRepository.likesUp(likes);
-        }
-        return usedRepository.findLikesCount(postId);
     }
 
 
@@ -200,13 +187,21 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public Used detail(long postId, HttpServletRequest request, HttpServletResponse response) { //게시물 상세보기
+    public Used detail(long postId, HttpServletRequest request, HttpServletResponse response, PrincipalDetails principalDetails) { //게시물 상세보기
         Post post = usedRepository.findPost(postId); //파라미터로 받은 postId에 해당하는 튜플을 post 테이블에서 가져오기
         Product product = usedRepository.findProduct(postId); //파라미터로 받은 postId에 해당하는 튜플을 product 테이블에서 가져오기
         Member member = usedRepository.findMember(post.getMemberId()); //가져온 post의 memberId로 member 테이블에서 해당하는 튜플 가져오기
         String categoryName = usedRepository.findCategoryName(product.getCategoryId()); //가져온 product의 categoryId로 category 테이블에서 해당하는 categoryName 가져오기
         int replyCount = usedRepository.findReplyCount(post.getPostId());
         int likesCount = usedRepository.findLikesCount(post.getPostId());
+        int likesCheck = 0;
+        if (principalDetails != null) {
+            likesCheck = usedRepository.likesCheck(Likes.builder()
+                    .postId(postId)
+                    .memberId(principalDetails.getMember().getMemberId())
+                    .build());
+        }
+
         Cookie[] cookies = request.getCookies(); //쿠키 가져오기
 
         Cookie viewCookie = null; //
@@ -245,6 +240,7 @@ public class UsedServiceImpl implements UsedService{
                 .memberStatus(member.getMemberStatus())
                 .replyCount(replyCount)
                 .likesCount(likesCount)
+                .likesCheck(likesCheck)
                 .build();
     }
 
@@ -258,6 +254,28 @@ public class UsedServiceImpl implements UsedService{
     public void downloadFiles(String filename, HttpServletResponse response) throws IOException {
         imgDownService.imgDown(filename,response);
     }
+
+    @Override
+    public Used likes(long postId, PrincipalDetails principalDetails, int likesCheck) {
+        if (likesCheck == 0) {
+            usedRepository.likesUp(Likes.builder()
+                    .postId(postId)
+                    .memberId(principalDetails.getMember().getMemberId())
+                    .build());
+            likesCheck = 1;
+        }else {
+            usedRepository.likesDown(Likes.builder()
+                    .postId(postId)
+                    .memberId(principalDetails.getMember().getMemberId())
+                    .build());
+            likesCheck = 0;
+        }
+        return Used.builder()
+                .likesCount(usedRepository.findLikesCount(postId))
+                .likesCheck(likesCheck)
+                .build();
+    }
+
 
 
 }

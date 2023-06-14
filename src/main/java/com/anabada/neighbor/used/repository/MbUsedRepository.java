@@ -93,4 +93,8 @@ public interface MbUsedRepository extends UsedRepository {
     @Override
     @Insert("insert into likes (postId, memberId) values (#{postId}, #{memberId})")
     void likesUp(Likes likes);
+
+    @Override
+    @Delete("delete from likes where postId = #{postId} and memberId = #{memberId}")
+    void likesDown(Likes likes);
 }

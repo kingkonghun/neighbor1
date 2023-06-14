@@ -16,7 +16,7 @@
 
 <body>
 <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${list}">
-    <div class="item p-3">
+    <div class="item p-3" th:onclick="|location.href='@{detail(postId=${row.postId})}'|">
         <img class="list_img" th:src="@{/used/findImg(postId=${row.postId})}">
         <div class="div_2 mt-3">
             <h5 th:text="${row.title}"></h5>
@@ -30,14 +30,14 @@
                 [[${row.price}]] 원
             </span>
             <span th:inline="text">
-                20
+                [[${row.likesCount}]]
                 <i class="bi bi-heart-fill" style="color: red"></i>
             </span>
         </div>
         <div class="div_4">
             <p th:text="${row.content}"></p>
             <span th:inline="text">
-                30
+                [[${row.replyCount}]]
                 <i class="bi bi-chat-dots-fill"></i>
             </span>
         </div>
