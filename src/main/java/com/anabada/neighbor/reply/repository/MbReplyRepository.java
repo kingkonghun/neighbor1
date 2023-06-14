@@ -1,11 +1,18 @@
 package com.anabada.neighbor.reply.repository;
 
+import com.anabada.neighbor.reply.domain.CarryReply;
 import com.anabada.neighbor.reply.domain.Reply;
 import org.apache.ibatis.annotations.*;
+
 import java.util.List;
 
 @Mapper
 public interface MbReplyRepository extends ReplyRepository {
+
+
+    @Override
+    @Select("SELECT*FROM reply WHERE memberId = #{memberId}")//내가 작성한 댓글목록
+    CarryReply findMyReply(long memberId);
 
     @Select("select * from reply where postId = #{postId} order by reGroup, replyId")
     public List<Reply> list(long postId);

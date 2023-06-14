@@ -2,10 +2,7 @@ package com.anabada.neighbor.used.repository;
 
 
 import com.anabada.neighbor.member.domain.Member;
-import com.anabada.neighbor.used.domain.Category;
-import com.anabada.neighbor.used.domain.Post;
-import com.anabada.neighbor.used.domain.Product;
-import com.anabada.neighbor.used.domain.Used;
+import com.anabada.neighbor.used.domain.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -13,12 +10,22 @@ import java.util.List;
 @Mapper
 public interface MbUsedRepository extends UsedRepository {
 
+    @Override
+    @Select("SELECT *" +
+            " FROM post" +
+            " WHERE postUpdate >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 week)" +
+            " ORDER BY postView desc" +
+            " LIMIT 8")
+    List<Post> postList();
+
     @Select("SELECT*FROM category")
     List<Category> categoryList();
     @Select("select * from product where postId = #{postId}")
     public Product findProduct(long postId);
     @Select("select categoryName from category where categoryId = #{categoryId}")
     public String findCategoryName(long categoryId);
+
+
 
     @Select("SELECT*FROM member WHERE memberId=#{memberId}")
     public Member findMember(long memberId);
@@ -70,4 +77,24 @@ public interface MbUsedRepository extends UsedRepository {
     @Override
     @Select("select * from product where categoryId = #{categoryId}")
     public List<Product> productCategoryList(long categoryId);
+
+    @Override
+    @Select("select count(*) from reply where postId = #{postId}")
+    int findReplyCount(long postId);
+
+    @Override
+    @Select("select count(*) from likes where postId = #{postId}")
+    int findLikesCount(long postId);
+
+    @Override
+    @Select("select count(*) from likes where postId = #{postId} and memberId = #{memberId}")
+    int likesCheck(Likes likes);
+
+    @Override
+    @Insert("insert into likes (postId, memberId) values (#{postId}, #{memberId})")
+    void likesUp(Likes likes);
+
+    @Override
+    @Delete("delete from likes where postId = #{postId} and memberId = #{memberId}")
+    void likesDown(Likes likes);
 }

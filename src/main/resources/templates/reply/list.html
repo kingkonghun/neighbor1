@@ -23,9 +23,11 @@
             <textarea rows="3" class="reComment_" th:attr="class='reComment_' + ${row.replyId}" style="width: 100%; border-radius: 30px; resize: none; padding: 20px; display: none;" placeholder="답글 작성"></textarea>
 
             <div class="buttonDiv_" th:attr="class='buttonDiv_' + ${row.replyId}">
-                <button type="button" id="btnReReply" th:onclick="'reReply(' + ${row.replyId} + ')'" th:if="${session.memberId != null}">답글</button>
-                <button type="button" id="btnUpdate" th:onclick="'update(' + ${row.replyId} + ')'" th:if="${row.memberId == session.memberId}">수정</button>
-                <button type="button" id="btnDelete" th:onclick="'deleteReply(' + ${row.replyId} + ')'" th:if="${row.memberId == session.memberId}">삭제</button>
+                <th:block sec:authorize="isAuthenticated()">
+                    <button type="button" id="btnReReply" th:onclick="'reReply(' + ${row.replyId} + ')'">답글</button>
+                    <button type="button" id="btnUpdate" th:onclick="'update(' + ${row.replyId} + ')'" th:if="${row.memberId == #authentication.principal.member.memberId}">수정</button>
+                    <button type="button" id="btnDelete" th:onclick="'deleteReply(' + ${row.replyId} + ')'" th:if="${row.memberId == #authentication.principal.member.memberId}">삭제</button>
+                </th:block>
             </div>
             <button class="btnUpdateReply_" th:attr="class='btnUpdateReply_' + ${row.replyId}" th:onclick="'updateReply(' + ${row.replyId} + ')'" style="display: none;">작성</button>
             <button class="btnReReply_" th:attr="class='btnReReply_' + ${row.replyId}" th:onclick="'writeReReply(' + ${row.replyId} + ')'" style="display: none;">작성</button>

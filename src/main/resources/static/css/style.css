@@ -1,5 +1,7 @@
 .mainBackgroundImg{
-	background-image: url('https://image.newsis.com/2022/08/12/NISI20220812_0001062580_web.jpg');
+	background-image: url("../img/해변.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 a, a:hover{
   text-decoration: none;
