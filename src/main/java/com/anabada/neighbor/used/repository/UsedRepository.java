@@ -61,4 +61,8 @@ public interface UsedRepository {
     int likesCheck(Likes likes);
 
     void likesDown(Likes likes);
+
+    List<ReportType> findAllReportType();
+
+    void report(Report report);
 }

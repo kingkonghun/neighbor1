@@ -97,4 +97,12 @@ public interface MbUsedRepository extends UsedRepository {
     @Override
     @Delete("delete from likes where postId = #{postId} and memberId = #{memberId}")
     void likesDown(Likes likes);
+
+    @Override
+    @Select("select * from reportType")
+    List<ReportType> findAllReportType();
+
+    @Override
+    @Insert("insert into report (postId, reporterId, content, reportTypeId) values (#{postId}, #{reporterId}, #{content}, #{reportTypeId})")
+    void report(Report report);
 }
