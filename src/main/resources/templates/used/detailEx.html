@@ -145,18 +145,6 @@ select, textarea {
             $("#heart").removeClass("bi-suit-heart").addClass("bi-heart-fill");
         }
     }
-    function checkIsAuthenticated() {
-        let isAuthenticated;
-        $.ajax({
-            type: "get",
-            url: "/member/isAuthenticated",
-            async: false,
-            success: function (result) {
-            isAuthenticated = result;
-            }
-        });
-        return isAuthenticated;
-    }
 </script>
 </head>
 <body>
