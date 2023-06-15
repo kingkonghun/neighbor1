@@ -1,6 +1,9 @@
 package com.anabada.neighbor.used.service;
 
+import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.used.domain.Category;
+import com.anabada.neighbor.used.domain.Report;
+import com.anabada.neighbor.used.domain.ReportType;
 import com.anabada.neighbor.used.domain.Used;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,15 +18,18 @@ public interface UsedService {
     //글리스트
     //상세보기
     //사진
-    public List<Used> list(long categoryId, String listType);
-    public void write(Used used)throws Exception;
-    public void update(Used used) throws Exception;
+    public List<Used> list(long categoryId, String listType, int num);
+    public void write(Used used, PrincipalDetails principalDetails)throws Exception;
+    public void update(Used used, PrincipalDetails principalDetails) throws Exception;
     public void delete(long postId);
-    public Used detail(long postId, HttpServletRequest request, HttpServletResponse response);
+    public Used detail(long postId, HttpServletRequest request, HttpServletResponse response, PrincipalDetails principalDetails);
     public String findImgUrl(long postId);//이미지 이름가져오기
-
-
     public void downloadFiles(String filenames, HttpServletResponse response) throws IOException;
+    List<Category> categoryList();
+    List<Used> mainList();
+    Used likes(long postId, PrincipalDetails principalDetails, int likesCheck);
 
-    public List<Category> categoryList();
+    List<ReportType> reportType();
+
+    void report(Report report, PrincipalDetails principalDetails);
 }

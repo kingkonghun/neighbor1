@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>중고거래</title>
+    <th:block th:insert="/common/common :: fragment-header"></th:block>
+<style>
+    @font-face {
+        font-family: 'GangwonEduPowerExtraBoldA';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEduPowerExtraBoldA.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+    body {
+        background-color: #E6E6E6;
+    }
+    section {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    article {
+        background-color: #FFFFFF;
+        width: 880px;
+        height: 100vh;
+        font-family: GangwonEduPowerExtraBoldA;
+    }
+    img {
+        width: 100%;
+        border-radius: 12px;
+    }
+    .div_1 {
+        display: flex;
+        justify-content: space-between;
+    }
+    .div_1 > div {
+        display: flex;
+        gap: 12px;
+    }
+
+
+
+#modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none;
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    border: 1px solid #888;
+    width: 500px;
+    border-radius: 12px;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+select, textarea {
+    width: 100%;
+}
+</style>
+<script>
+    $(function(){
+        const modal = $("#modal");
+        let likesCheck = [[${dto.likesCheck}]];
+        heartClass(likesCheck);
+        $("#heart").click(function(){
+            if(checkIsAuthenticated()){
+                $.ajax({
+                    type: "post",
+                    url: "/used/likes",
+                    data: {postId: [[${dto.postId}]], likesCheck: likesCheck},
+                    success: function(likes){
+                        likesCheck = likes.likesCheck;
+                        heartClass(likesCheck);
+                        $(".likesCount").text(likes.likesCount);
+                    }
+                });
+            }else{
+                if(confirm("좋아요는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
+                    location.href="/member/loginForm";
+                }
+            }
+        });
+        $("#open-modal").click(function(){
+            if(checkIsAuthenticated()){
+                modal.css("display", "block");
+                $("body").css("overflow", "hidden");
+            }else{
+                if(confirm("신고는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
+                    location.href="/member/loginForm";
+                }
+            }
+        });
+        $("#close-modal").click(function(){
+            modal.css("display", "none");
+            $("body").css("overflow", "auto");
+        });
+        $("#btnReport").click(function(){
+            const reportTypeId = $("#reportType_select");
+            const content = $("#content");
+            if(reportTypeId.val() == 0){
+                alert("신고유형을 선택하세요");
+                reportTypeId.focus();
+                return;
+            }
+            if(content.val() == ""){
+                alert("신고내용을 입력하세요");
+                content.focus();
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: "/used/report",
+                data: {"postId": [[${dto.postId}]], "content": content.val(), "reportTypeId": reportTypeId.val()},
+                success: function(){
+                    alert("신고완료");
+                    modal.css("display", "none");
+                    $("body").css("overflow", "auto");
+                    reportTypeId.val(0);
+                    content.val("");
+                }
+            });
+        });
+    });
+    function heartClass(likesCheck){
+        if (likesCheck == 0) {
+            $("#heart").removeClass("bi-heart-fill").addClass("bi-suit-heart");
+        } else {
+            $("#heart").removeClass("bi-suit-heart").addClass("bi-heart-fill");
+        }
+    }
+    function checkIsAuthenticated() {
+        let isAuthenticated;
+        $.ajax({
+            type: "get",
+            url: "/member/isAuthenticated",
+            async: false,
+            success: function (result) {
+            isAuthenticated = result;
+            }
+        });
+        return isAuthenticated;
+    }
+</script>
+</head>
+<body>
+    <section>
+        <article class="p-3">
+            <img src="https://cdn.pixabay.com/photo/2015/01/20/12/51/mobile-605422_1280.jpg">
+            <h2 class="pt-3">핸드폰 팝니다 핸드폰 팝니다 핸드폰 팝니다 핸드폰 팝니다 핸드폰 팝니다</h2>
+            <div class="div_1">
+                <span>1,000,000 원</span>
+                <div>
+                    <div>
+                        1<i class="bi bi-caret-up-fill"></i>
+                    </div>
+                    <div id="likes">
+                        <span class="likesCount">[[${dto.likesCount}]]</span>
+                        <i id="heart" style="color: red"></i>
+                    </div>
+                </div>
+            </div>
+            <p class="pt-1">잠깐 꺼내서 똥 한번 닦고 포장했읍니다. 환불안돼요~</p>
+            <a href="#">댓글 보기(5)</a> <br>
+            <button id="open-modal">시발</button>
+        </article>
+    </section>
+
+
+
+
+
+    <!--신고모달-->
+    <div id="modal">
+        <div class="modal-content p-4">
+            <h2>신고하기</h2>
+            <select id="reportType_select" name="reportTypeId">
+                <option value="0">신고유형</option>
+                <th:block th:each="reportType:${reportType}">
+                    <option th:value="${reportType.reportTypeId}" th:text="${reportType.reportTypeName}"></option>
+                </th:block>
+            </select> <br>
+            <label for="content">내용</label> <br>
+            <textarea id="content" name="content"></textarea>
+            <button type="button" id="btnReport">신고</button>
+            <button id="close-modal">닫기</button>
+        </div>
+    </div>
+    <script>
+
+    </script>
+</body>
+</html>

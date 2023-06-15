@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8" />
     <title>join</title>
-    <script th:src="@{/js/jquery-3.6.3.min.js}" type="text/javascript"></script>
+    <th:block th:insert="/common/common :: fragment-header"></th:block>
     <link th:href="@{/css/login.css}" rel="stylesheet" type="text/css">
 
 </head>
 <body>
 <section class="login-form">
     <h1>JOIN</h1>
-    <form action="/member/joinMember.do" method="post">
+    <form action="/member/join" method="post">
         <div class="int-area">
             <input type="email" name="memberEmail" id="memberEmail" autocomplete="off" required>
             <label for="memberEmail">MEMBER E-MAIL</label>

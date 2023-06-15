@@ -1,5 +1,6 @@
 package com.anabada.neighbor.reply.service;
 
+import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.reply.domain.CarryReply;
 import com.anabada.neighbor.reply.domain.Reply;
 import com.anabada.neighbor.reply.repository.ReplyRepository;
@@ -45,8 +46,8 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void write(Reply reply, HttpSession session) { //댓글 작성
-        reply.setMemberId((long)session.getAttribute("memberId")); //session에 있는 memberId 가져와서 reply에 넣기
+    public void write(Reply reply, PrincipalDetails principalDetails) { //댓글 작성
+        reply.setMemberId(principalDetails.getMember().getMemberId()); //session에 있는 memberId 가져와서 reply에 넣기
         replyRepository.write(reply); //댓글 작성
         replyRepository.updateReGroup(reply); //댓글 작성 후 해당하는 튜플의 reGroup 컬럼 업데이트
     }
@@ -62,13 +63,18 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void writeReReply(Reply reply, HttpSession session) { //대댓글 작성
+    public void writeReReply(Reply reply, PrincipalDetails principalDetails) { //대댓글 작성
         Reply parent = replyRepository.findReply(reply.getReplyId()); //reply에 담아온 부모의 replyId로 reply 테이블에서 해당하는 튜플 가져오기
-        reply.setMemberId((long)session.getAttribute("memberId")); //session에서 현재 로그인 중인 memberId를 reply에 저장 
+        reply.setMemberId(principalDetails.getMember().getMemberId()); //session에서 현재 로그인 중인 memberId를 reply에 저장
         reply.setPostId(parent.getPostId()); //부모 튜플의 postId를 reply에 저장
         reply.setReGroup(parent.getReGroup()); //부모 튜플의 reGroup을 reply에 저장해서 같은 그룹으로 묶기
         reply.setParentId(parent.getReplyId()); //부모 튜플의 replyId를 reply의 parentId에 저장
         replyRepository.writeReReply(reply); //대댓글 작성
 
+    }
+
+    @Override
+    public CarryReply findMyReply(long memberId) {//내가 쓴 댓글목록
+        return replyRepository.findMyReply(memberId);
     }
 }

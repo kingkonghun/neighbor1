@@ -1,5 +1,6 @@
 package com.anabada.neighbor.reply.repository;
 
+import com.anabada.neighbor.reply.domain.CarryReply;
 import com.anabada.neighbor.reply.domain.Reply;
 import org.springframework.stereotype.Repository;
 
@@ -24,5 +25,5 @@ public interface ReplyRepository {
     public Reply findReply(long replyId);
 
 
-
+    CarryReply findMyReply(long memberId);
 }

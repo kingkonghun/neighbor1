@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+  <script>
+
+  </script>
+</head>
+<body>
+<p>채팅창 만들기 성공</p>
+<p>채팅방들어가기</p>
+
+<div th:each="test:${roomNumber}">
+   <p th:text="'방번호'+${test.roomNumber}"></p>
+    <a th:href="@{chat(roomNumber=${test.roomNumber})}">입장~</a>
+</div>
+</body>
+</html>

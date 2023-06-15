@@ -36,7 +36,6 @@ public interface UsedRepository {
 
     public Member findMember(long memberId);
 
-//    public List<Category> categoryList();
     public void deleteImg(long postId);
 
     public void deleteProduct(long postId);
@@ -50,4 +49,20 @@ public interface UsedRepository {
     public List<Product> productList();
 
     public List<Product> productCategoryList(long categoryId);
+
+    List<Post> postList();
+
+    int findReplyCount(long postId);
+
+    int findLikesCount(long postId);
+
+    void likesUp(Likes likes);
+
+    int likesCheck(Likes likes);
+
+    void likesDown(Likes likes);
+
+    List<ReportType> findAllReportType();
+
+    void report(Report report);
 }
