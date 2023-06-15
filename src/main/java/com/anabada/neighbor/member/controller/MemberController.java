@@ -13,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -43,7 +44,6 @@ public class MemberController {
 
     @PostMapping("/join")
     public String join(Member member, String m, String b, String t, String i) { // 회원가입
-        member.setMbti(m + b + t + i);
         memberService.save(member);
         return "redirect:/member/loginForm";
     }
@@ -57,9 +57,13 @@ public class MemberController {
 
     @ResponseBody
     @GetMapping("/admin")
-    @Secured("ROLE_admin")
-    public String admin() {
-        return "어드민 권한 테스트";
+    @Secured("ROLE_ADMIN")
+    public ModelAndView admin(ModelAndView mav,Criteria criteria) {
+        List<Member> member = memberService.findAllMember();//멤버리스트
+        mav.addObject("member",member);
+        mav.addObject("pageMaker", new PageDTO(member.size(), 10, criteria));
+        mav.setViewName("/admin/admin");
+        return mav;
     }
 
 
@@ -74,7 +78,7 @@ public class MemberController {
     @GetMapping("/myWrite")//내가 작성한 글
     public String myWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria) {
         List<Used> used = memberService.myWrite(principalDetails, criteria);
-        int total = memberService.getTotal(principalDetails);
+        int total = memberService.getTotal(principalDetails.getMember().getMemberId());
         model.addAttribute("writeList", used);
         model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
         return "member/myWrite";

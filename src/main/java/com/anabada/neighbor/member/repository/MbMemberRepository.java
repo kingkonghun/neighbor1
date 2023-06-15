@@ -70,5 +70,9 @@ public interface MbMemberRepository extends MemberRepository{
     @Override
     @Update("UPDATE member SET profileImg=#{profileImg} WHERE memberId=#{memberId}")
     void editProfileImg(Map<String, Object> map);
+
+    @Override
+    @Select("SELECT * FROM member")
+    List<Member> findAllMember();//관리자 모든 멤버 가져오기
 }
 

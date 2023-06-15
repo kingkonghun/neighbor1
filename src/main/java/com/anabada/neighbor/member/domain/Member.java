@@ -19,12 +19,11 @@ public class Member {
     private String addressDetail; // 상세주소
     private Date memberDate; // 가입날짜
     private MultipartFile profileImg; // 프로필이미지
-    private String mbti; // mbit
     private int score; // 사용자점수
     private char memberStatus; // 회원상태
     private String providerId; // 로그인 정보
     private String role; // 권한
-    private long myWrite;//내가 작성한 글
+    private long myWrite;//내가 작성한 글 숫자
 
 
 }

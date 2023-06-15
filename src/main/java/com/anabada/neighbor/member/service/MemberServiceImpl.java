@@ -4,7 +4,6 @@ import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.repository.MemberRepository;
 import com.anabada.neighbor.page.Criteria;
-import com.anabada.neighbor.reply.service.ReplyService;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
@@ -69,8 +68,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public int getTotal(PrincipalDetails principalDetails) {//페이징
-        long memberId=principalDetails.getMember().getMemberId();
+    public int getTotal(long memberId) {//페이징
         return memberRepository.getTotal(memberId);
     }
 
@@ -152,5 +150,15 @@ public class MemberServiceImpl implements MemberService{
             }
 
         }
+    }
+
+    @Override
+    public List<Member> findAllMember() {//관리자 모든 멤버 가져오기
+        List<Member> member = memberRepository.findAllMember();
+        for (Member member1 : member) {
+            long total = getTotal(member1.getMemberId());
+            member1.setMyWrite(total);//사용자가 작성한 글의 숫자 가져오기
+        }
+        return member;
     }
 }
