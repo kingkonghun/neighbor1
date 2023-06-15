@@ -6,12 +6,9 @@
       <li class="navList nav-item"><a class="tagA" id="liEditInfo" th:href="@{/member/editInfo}">정보 변경</a></li>
 
 
-<!--      <li class="navList"><a class="tagA dropdown-item" id="listMember" th:href="@{/member/admin}" >유저 목록</a></li>-->
-<!--      <li class="navList"><a class="tagA dropdown-item" id="listReport" th:href="@{/member/myInfo}" >신고 게시글</a></li>-->
-<!--      <li class="navList"><a class="tagA dropdown-item" id="reportPro" th:href="@{/member/editInfo}">신고 처리</a></li>-->
 
       <!--관리자-->
-      <li class="navList nav-item dropdown">
+      <li class="navList nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
         <a class="nav-link dropdown-toggle" id="adminT" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">관리자</a>
         <ul class=" dropdown-menu" aria-labelledby="navbarDropdown">
           <li><a class="dropdown-item" th:href="@{/member/admin}">사용자 목록</a></li>
