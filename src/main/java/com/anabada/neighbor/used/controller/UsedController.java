@@ -1,11 +1,13 @@
 package com.anabada.neighbor.used.controller;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.used.domain.Report;
 import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.service.UsedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +40,7 @@ public class UsedController {
         model.addAttribute("dto", dto);
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0));
-
+        model.addAttribute("reportType", usedService.reportType());
         return "used/detailEx";
     }
 
@@ -73,5 +75,12 @@ public class UsedController {
     @ResponseBody
     public Used likes(long postId, int likesCheck, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return usedService.likes(postId, principalDetails, likesCheck);
+    }
+
+    @PostMapping("/report")
+    public ResponseEntity<Void> report(Report report, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        usedService.report(report, principalDetails);
+        System.out.println("report = " + report);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

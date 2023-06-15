@@ -9,6 +9,7 @@ import com.anabada.neighbor.page.PageDTO;
 import com.anabada.neighbor.used.domain.Used;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,14 +51,14 @@ public class MemberController {
 
     @ResponseBody
     @GetMapping("/test")
-    @Secured("ROLE_USER")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public Member test(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         return principalDetails.getMember();
     }
 
     @ResponseBody
     @GetMapping("/admin")
-    @Secured("ROLE_admin")
+    @Secured("ROLE_ADMIN")
     public String admin() {
         return "어드민 권한 테스트";
     }

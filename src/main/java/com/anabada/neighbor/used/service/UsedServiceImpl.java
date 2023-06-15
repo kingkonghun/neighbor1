@@ -279,6 +279,16 @@ public class UsedServiceImpl implements UsedService{
                 .build();
     }
 
+    @Override
+    public List<ReportType> reportType() {
+        return usedRepository.findAllReportType();
+    }
+
+    @Override
+    public void report(Report report, PrincipalDetails principalDetails) {
+        report.setReporterId(principalDetails.getMember().getMemberId());
+        usedRepository.report(report);
+    }
 
 
 }

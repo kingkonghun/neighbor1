@@ -2,6 +2,8 @@ package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.used.domain.Category;
+import com.anabada.neighbor.used.domain.Report;
+import com.anabada.neighbor.used.domain.ReportType;
 import com.anabada.neighbor.used.domain.Used;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,4 +28,8 @@ public interface UsedService {
     List<Category> categoryList();
     List<Used> mainList();
     Used likes(long postId, PrincipalDetails principalDetails, int likesCheck);
+
+    List<ReportType> reportType();
+
+    void report(Report report, PrincipalDetails principalDetails);
 }
