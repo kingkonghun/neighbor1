@@ -1,44 +1,38 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>Title</title>
     <th:block th:insert="/common/common :: fragment-header"></th:block>
-    <style>
-        #liWrite{color:red;}
-
-        .table{font-family: 'GangwonEduPowerExtraBoldA';}
-
-        .img {width: 50px; height: 50px;}
-        .pagination {margin-top: 3em; margin-bottom: 5em;}
-        .pagination .pageNum{list-style: none; display: flex;}
-    </style>
     <link rel="stylesheet" th:href="@{/css/myPage.css}">
+    <style>
+        #adminT, #listMember {color: red;}
+        .reportList{font-family: 'GangwonEduPowerExtraBoldA';}
+    </style>
+
 </head>
 <body>
-<!-- Nav바-->
 <div th:replace="nav :: nav"></div>
 <div th:replace="member/myPageNav :: nav"></div>
-
-<div class="myWrite">
+<div class="reportList">
     <table  style="width: 100%;" class="table table-hover">
         <thead>
-            <th>글번호</th>
-            <th>카테고리</th>
-            <th>사진</th>
-            <th>제목</th>
-            <th>등록일</th>
-            <th>조회수</th>
+            <th>신고 번호</th>
+            <th>신고자</th>
+            <th>나쁜놈</th>
+            <th>분류</th>
+            <th>신고 게시글 제목</th>
+            <th>신고 내용</th>
         </thead>
-        <tbody th:each="list : ${writeList}">
-            <tr th:onclick="'detail('+${list.postId}+')'" >
-                <td th:text="${list.postId}"></td>
-                <td th:text="${list.categoryName}"></td>
-                <td> <img class="img"  th:src="@{/used/findImg(postId=${list.postId})}"  alt="실패"></td>
-                <td th:text="${list.title}"></td>
-                <td th:text="${#dates.format(list.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></td>
-                <td th:text="${list.postView}"></td>
-            </tr>
+        <tbody th:each="report : ${list}">
+        <tr>
+            <td th:text="${report.reportId}"></td>
+            <td th:text="${report.reporterName}"></td>
+            <td th:text="${report.reportedName}"></td>
+            <td th:text="${report.reportTypeName}"></td>
+            <td><a href="#" th:onclick="|location.href='@{detail(postId=${report.postId})}'|" th:text="${report.title}"></a></td>
+            <td th:text="${report.content}"></td>
+        </tr>
         </tbody>
     </table>
 
@@ -70,7 +64,7 @@
             <li class="page-item" th:classappend="${pageMaker.next ? '' : 'disabled'}" th:if="${pageMaker.endPage < pageMaker.realEnd}">
                 <a class="page-link" th:href="|?pageNum=${pageMaker.endPage + 1}|">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                       <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
                     </svg>
                 </a>
             </li>
@@ -86,15 +80,9 @@
         </ul>
     </div>
 </div>
+<div class="reportDetail"></div>
 
-    <script th:inline="javascript">
-        function detail(postId) {
-            if (confirm("작성한 게시글로 가시겠습니까?")) {
-                location.href="/used/detail?postId="+postId;
-            }
-        }
-    </script>
-<!-- Footer-->
+
 <div th:replace="footer :: footer"></div>
 </body>
 </html>

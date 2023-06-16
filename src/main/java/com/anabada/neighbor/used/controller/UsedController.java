@@ -1,7 +1,11 @@
 package com.anabada.neighbor.used.controller;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.page.Criteria;
+import com.anabada.neighbor.page.PageDTO;
+import com.anabada.neighbor.used.domain.PostReport;
 import com.anabada.neighbor.used.domain.Report;
+import com.anabada.neighbor.used.domain.ReportType;
 import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.service.UsedService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/used")
@@ -23,6 +28,7 @@ import java.io.IOException;
 public class UsedController {
 
     private final UsedService usedService;
+
 
     @GetMapping("/list") //게시물 리스트
     public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model, @RequestParam(value = "num", defaultValue = "0") int num){
@@ -80,7 +86,15 @@ public class UsedController {
     @PostMapping("/report")
     public ResponseEntity<Void> report(Report report, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         usedService.report(report, principalDetails);
-        System.out.println("report = " + report);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @GetMapping("/reportList")//신고게시글
+    public String report(Model model, Criteria criteria) {
+        List<PostReport> reportList = usedService.findAllReport();
+
+        System.out.println("reportList = " + reportList);
+        model.addAttribute("list", reportList);
+        model.addAttribute("pageMaker", new PageDTO(reportList.size(), 10, criteria));
+        return "admin/reportList";
     }
 }

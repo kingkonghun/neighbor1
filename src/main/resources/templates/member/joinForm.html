@@ -10,10 +10,19 @@
 <body>
 <section class="login-form">
     <h1>JOIN</h1>
-    <form action="/member/join" method="post">
+    <form action="/member/join" method="post" name="form1" id="form1">
         <div class="int-area">
-            <input type="email" name="memberEmail" id="memberEmail" autocomplete="off" required>
-            <label for="memberEmail">MEMBER E-MAIL</label>
+            <div class="email">
+                <input type="email" name="memberEmail" id="memberEmail" autocomplete="off" required>
+                <label for="memberEmail">MEMBER E-MAIL</label>
+                <button type="button" id="btnAuthentication">
+                    <i class="bi bi-bookmark-check"></i>
+                </button>
+            </div>
+        </div>
+        <div class="int-area">
+            <input style="display: none;" type="text" name="random" id="random" required placeholder="메일에 전송된 문자 열을 입력 해 주세요.">
+            <input type="hidden" name="random" id="authentication" required>
         </div>
         <div class="int-area">
             <input name="memberName" id="memberName" autocomplete="off" required>
@@ -46,30 +55,8 @@
             <label for="addressDetail">ADDRESS</label>
         </div>
 
-        <div class="int-area">
-                <fieldset class="mbti" name="mbti">
-                    <legend class="mbti-title">MBTI</legend>
-                        <select name="m" class="select-box">
-                            <option value="e">E</option>
-                            <option value="i">I</option>
-                        </select>
-                        <select name="b" class="select-box">
-                            <option value="s">S</option>
-                            <option value="n">N</option>
-                        </select>
-                        <select name="t" class="select-box">
-                            <option value="t">T</option>
-                            <option value="f">F</option>
-                        </select>
-                        <select name="i" class="select-box">
-                            <option value="j">J</option>
-                            <option value="p">P</option>
-                        </select>
-                </fieldset>
-        </div>
-
         <div class="btn-area">
-            <button id="btn">JOIN</button>
+            <button id="btnJoin" type="button">JOIN</button>
         </div>
     </form>
     <div class="caption">
@@ -86,48 +73,90 @@
     let passCheck = $('#passCheck');
     let address = $('#address');
     let addressDetail = $('#addressDetail');
-    let btn = $('#btn');
+    let btnJoin = $('#btnJoin');
+    let btnAuthentication = $('#btnAuthentication');
+    let authentication = $('#authentication');
+    let random = $('#random');
 
-    $(btn).on('click', function (){
+    memberEmail.on('change', function () {
+        memberEmail.removeClass('confirm');
+        alert("이메일 인증 버튼을 눌러 주세요");
+        memberEmail.focus();
+    });
+
+
+    $(btnAuthentication).on('click', function () {
+        if(memberEmail.val() != '') {
+            $.ajax({
+                type: "post",
+                url: "/member/emailConfirm",
+                data: {memberEmail: memberEmail.val()},
+                success: function (data) {
+                    alert('메일이 전송 되었습니다.\n 메일을 확인해 주세요');
+                    random.css({
+                        'display': 'block'
+                    });
+                    authentication.val(data);
+                    random.focus();
+                    memberEmail.addClass('confirm');//이메일 인증완료 클래스
+                }
+            });
+        }else alert('이메일을 입력해 주세요');
+    });
+
+
+
+
+
+    $(btnJoin).on('click', function (){
         if($(memberEmail).val() == ""){
             $(memberEmail).next('label').addClass('warning');
             setTimeout(function (){
                 $('label').removeClass('warning');
             },1500);
-        }
-        else if($(memberName).val() == ""){
+        }else if (!document.getElementsByClassName('confirm')) {
+            alert('이메일 인증 버튼을 눌러주세요');
+            memberEmail.focus();
+            return;
+        } else if (random.val() == '' || random.val() !== authentication.val()) {
+            alert("이메일 인증 코드를 확인해 주세요.");
+            random.focus();
+            return;
+        } else if ($(memberName).val() == "") {
             $(memberName).next('label').addClass('warning');
-            setTimeout(function (){
+            setTimeout(function () {
                 $('label').removeClass('warning');
-            },1500);
-        }else if($(memberPWD).val() == ""){
+            }, 1500);
+        } else if ($(memberPWD).val() == "") {
             $(memberPWD).next('label').addClass('warning');
-            setTimeout(function (){
+            setTimeout(function () {
                 $('label').removeClass('warning');
-            },1500);
-        }else if($(passCheck).val() == ""){
+            }, 1500);
+        } else if ($(passCheck).val() == "") {
             $(passCheck).next('label').addClass('warning');
-            setTimeout(function (){
+            setTimeout(function () {
                 $('label').removeClass('warning');
-            },1500);
-        }else if($(passCheck).val() != $(memberPWD).val()){
+            }, 1500);
+        } else if ($(passCheck).val() != $(memberPWD).val()) {
             $(passCheck).next('label').addClass('warning');
             passCheck.val('');
             alert("비밀번호가 일치하지 않습니다.");
-            setTimeout(function (){
+            setTimeout(function () {
                 $('label').removeClass('warning');
-            },1500);
-        }else if($(address).val() == "") {
+            }, 1500);
+        } else if ($(address).val() == "") {
             $(address).next('label').addClass('warning');
             setTimeout(function () {
                 $('label').removeClass('warning');
             }, 1500);
-        }else if($(addressDetail).val() == "") {
+        } else if ($(addressDetail).val() == "") {
             $(addressDetail).next('label').addClass('warning');
             setTimeout(function () {
                 $('label').removeClass('warning');
             }, 1500);
         }
+        $('#form1').submit();
+
     });
 
 

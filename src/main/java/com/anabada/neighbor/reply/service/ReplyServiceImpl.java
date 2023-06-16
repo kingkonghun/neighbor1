@@ -4,6 +4,8 @@ import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.reply.domain.CarryReply;
 import com.anabada.neighbor.reply.domain.Reply;
 import com.anabada.neighbor.reply.repository.ReplyRepository;
+import com.anabada.neighbor.used.domain.Post;
+import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.List;
 public class ReplyServiceImpl implements ReplyService {
 
     private final ReplyRepository replyRepository;
+    private final UsedRepository usedRepository;
 
     @Override
     public List<CarryReply> list(long postId) { //댓글 목록
@@ -74,7 +77,21 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public CarryReply findMyReply(long memberId) {//내가 쓴 댓글목록
-        return replyRepository.findMyReply(memberId);
+    public List<CarryReply> findMyReply(long memberId) {//내가 쓴 댓글목록
+        List<CarryReply> carryReplyList = new ArrayList<>();//리턴그릇
+        List<Reply> replyList=replyRepository.findMyReply(memberId);//댓글목록 긁어오기
+        for (Reply reply : replyList) {
+            long postId = reply.getPostId();
+            Post post = usedRepository.findPost(postId);
+            CarryReply carryReply = CarryReply.builder()
+                    .postId(postId)
+                    .title(post.getTitle())//게시글 제목
+                    .replyUpdate(reply.getReplyUpdate())//작성,수정 날짜
+                    .comment(reply.getComment())//댓글 내용
+                    .postType(post.getPostType())//게시글 유형
+                    .build();
+            carryReplyList.add(carryReply);
+        }
+        return carryReplyList;
     }
 }

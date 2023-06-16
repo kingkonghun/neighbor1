@@ -41,4 +41,8 @@ public interface MemberRepository {
     void editProfileImg(Map<String, Object> map);
 
     List<Member> findAllMember();
+
+    String findMemberName(long memberId);
+
+    Post findReportedMember(long postId);
 }

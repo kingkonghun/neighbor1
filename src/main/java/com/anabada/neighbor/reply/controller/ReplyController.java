@@ -54,4 +54,10 @@ public class ReplyController {
         replyService.writeReReply(reply, principalDetails);
         return 0;
     }
+    @GetMapping("/myReply")
+    public String myReply(long memberId,Model model){
+        model.addAttribute("list",replyService.findMyReply(memberId));
+        System.out.println("replyList = " + replyService.findMyReply(memberId));
+        return "reply/myReply";
+    }
 }

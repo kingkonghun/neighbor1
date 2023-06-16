@@ -4,6 +4,7 @@ import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.repository.MemberRepository;
 import com.anabada.neighbor.page.Criteria;
+import com.anabada.neighbor.reply.repository.ReplyRepository;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.domain.Used;
@@ -29,6 +30,7 @@ public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ImgDownService imgDownService;
+    private final ReplyRepository replyRepository;
     private final String uploadDir = "C:\\upload_anabada\\profile\\";
     @Override
     public void save(Member member) {
@@ -78,6 +80,7 @@ public class MemberServiceImpl implements MemberService{
         long memberId = principalDetails.getMember().getMemberId();
         member = memberRepository.findMyInfo(memberId);
         member.setMyWrite(memberRepository.countMyWrite(memberId));
+        member.setMyReply(replyRepository.findMyReply(memberId).size());
 
 
         return  member;
