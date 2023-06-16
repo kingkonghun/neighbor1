@@ -1,17 +1,12 @@
 $(function(){
-    $(".searchIcon").click(function(){
-        $(".border").css("display", "none");
-        $(".search").css("width", "180px");
-        $(".searchSelect").fadeIn();
-        $(".searchInput").fadeIn();
-        $(".searchInput").focus();
+    $(".open-search").click(function(){
+        $("#searchForm_2").css("top", "0px");
     });
-    $('html').click(function(e) {
-        if($(e.target).parents('.searchForm').length < 1){
-            $(".border").css("display", "block");
-            $(".search").css("width", "44px");
-            $(".searchInput").css("display", "none");
-            $(".searchSelect").css("display", "none");
+    $("html").click(function(e) {
+        if ($(e.target).parents("#searchForm_2").length < 1 && e.target.id !== "searchForm_2" && $(e.target).parents(".open-search").length < 1) {
+            $("#searchForm_2").css("top", "-64px");
         }
     });
 });
+
+

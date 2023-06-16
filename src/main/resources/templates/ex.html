@@ -1,7 +1,7 @@
 <nav class="top_nav">
     <div class="container nav_container">
         <div class="nav_div">
-            <h1 class="nav_title">아나바다</h1>
+            <h1 class="nav_title"><a href="/">아나바다</a></h1>
             <ul class="nav_menu_1">
                 <li><a href="/used/list">중고거래</a></li>
                 <li><a href="/club">동네모임</a></li>
@@ -9,18 +9,34 @@
             </ul>
         </div>
         <div class="nav_div">
-            <form class="searchForm">
+            <form id="searchForm_1" class="searchForm">
                 <select class="searchSelect">
                     <option>중고물품</option>
                     <option>동네모임</option>
                 </select>
-                <div class="search">
+                <div class="search_1">
                     <input class="searchInput" type="search" placeholder="검색어 입력">
-                    <div class="border"></div>
-                    <img class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+                    <img class="searchIcon btnSubmit" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
                 </div>
             </form>
-        
+
+            <form id="searchForm_2" class="searchForm">
+                <select class="searchSelect">
+                    <option>중고물품</option>
+                    <option>동네모임</option>
+                </select>
+                <div class="search_1">
+                    <input class="searchInput" type="search" placeholder="검색어 입력">
+                    <img class="searchIcon btnSubmit" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+                </div>
+            </form>
+
+            <div class="open-search">
+                <div class="border">
+                    <img class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+                </div>
+            </div>
+
             <input type="checkbox" id="menuicon">
             <label for="menuicon">
                 <span></span>
@@ -32,6 +48,9 @@
                     <div class="login_div">
                         <button type="button" id="btnLogin" onclick="location.href='/member/loginForm'" sec:authorize="isAnonymous()">로그인</button>
                         <button type="button" id="btnLogout" onclick="location.href='/logout'" sec:authorize="isAuthenticated()">로그아웃</button>
+                    </div>
+                    <div style="background-color: #FFCCCC;">
+                        <a href="/member/myInfo" sec:authorize="isAuthenticated()">내정보</a>
                     </div>
                     <div class="nav_menu_2" style="">
                         <div style="background-color: #FFFFCC;">
@@ -49,3 +68,5 @@
         </div>
     </div>
 </nav>
+
+

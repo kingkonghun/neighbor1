@@ -1,10 +1,16 @@
 a {
     text-decoration: none;
-    color: black;
+    color: #000;
 }
-.search {
+.search_1 {
+    position: relative;
+    width: 240px;
+}
+.open-search {
+    display: none;
     position: relative;
     width: 44px;
+    cursor: pointer;
 }
 .searchInput{
     width: 100%;
@@ -12,7 +18,6 @@ a {
     border-radius: 0px 8px 8px 0px;
     padding: 10px 12px;
     font-size: 14px;
-    display: none;
 }
 .searchIcon{
     position: absolute;
@@ -29,18 +34,22 @@ a {
 }
 .searchForm {
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .searchSelect{
-    display: none;
     border: 1px solid #bbb;
     border-radius: 8px 0px 0px 8px;
     padding: 10px 4px;
     font-size: 14px;
 }
 .nav_title {
-
+    font-family: GangwonEduPowerExtraBoldA;
     margin: 0px;
-    padding-top: 12px;
+    padding-top: 16px;
+    color: #FF3366;
+}
+.nav_title a {
     color: #FF3366;
 }
 .nav_container {
@@ -48,10 +57,11 @@ a {
     justify-content: space-between;
     align-items: center;
     height: 100%;
+    gap: 12px;
 }
 .top_nav {
+    position: relative;
     background-color: #fff;
-    font-family: GangwonEduPowerExtraBoldA;
     height: 64px;
 }
 .nav_menu_1 {
@@ -60,7 +70,8 @@ a {
     gap: 20px;
     align-items: center;
     margin: 0px;
-    padding-top: 4px;
+    padding-top: 8px;
+    font-family: GangwonEduPowerExtraBoldA;
 }
 .nav_menu_1 li {
     font-size: 20px;
@@ -105,9 +116,12 @@ a {
 @media screen and (max-width: 992px) {
     .nav_menu_1 {display: none;}
     .nav_menu_2 {display: block;}
-    .nav_div {
-        gap: 4px;
-    }
+}
+
+@media screen and (max-width: 768px) {
+    #searchForm_1 {display: none;}
+    .open-search {display: block;}
+    .nav_div {gap: 12px;}
 }
 
 input[id="menuicon"] {
@@ -115,8 +129,8 @@ input[id="menuicon"] {
 }
 input[id="menuicon"] + label {
     display:block;
-    width:40px;
-    height:30px;
+    width:36px;
+    height:26px;
     position:relative;
     cursor:pointer;
 }
@@ -124,7 +138,7 @@ input[id="menuicon"] + label span {
     display:block;
     position:absolute;
     width:100%;
-    height:5px;
+    height:4px;
     border-radius:30px;
     background:#000;
     transition:all .35s;
@@ -158,16 +172,27 @@ input[id="menuicon"]:checked + label span:nth-child(3) {
     transform:translateY(50%) rotate(-45deg);
 }
 div[class="sidebar"] {
-    width: 400px;
+    width: 360px;
     height: 100%;
     background: #FFF;
     position: fixed;
     top: 0;
-    right: -400px;
+    right: -360px;
     z-index: 1;
     transition:all .35s;
     border: 1px solid gray;
 }
 input[id="menuicon"]:checked + label + div {
     right: 0;
+}
+
+#searchForm_2 {
+    position: absolute;
+    top: -64px;
+    left: 0px;
+    width: 100%;
+    height: 64px;
+    background-color: #FFF;
+    transition:all .35s;
+    z-index: 1;
 }
