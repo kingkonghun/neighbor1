@@ -25,5 +25,5 @@ public interface ReplyRepository {
     public Reply findReply(long replyId);
 
 
-    CarryReply findMyReply(long memberId);
+    List<Reply> findMyReply(long memberId);
 }

@@ -2,7 +2,8 @@ package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
-import com.anabada.neighbor.reply.domain.Reply;
+import com.anabada.neighbor.member.repository.MemberRepository;
+import com.anabada.neighbor.member.service.MemberService;
 import com.anabada.neighbor.used.domain.*;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class UsedServiceImpl implements UsedService{
 
     private final UsedRepository usedRepository;
     private final ImgDownService imgDownService;
+    private final MemberRepository memberRepository;
     String uploadDir = "C:\\upload_anabada\\";
 
     @Override
@@ -289,6 +291,34 @@ public class UsedServiceImpl implements UsedService{
         report.setReporterId(principalDetails.getMember().getMemberId());
         usedRepository.report(report);
     }
+
+    @Override
+    public List<PostReport> findAllReport() {
+        List<PostReport> postReports = new ArrayList<>();//리턴 그릇
+        List<Report> reportList = usedRepository.findAllReport();//신고 테이블 다 긁어옴
+        for (Report report : reportList) {
+            String reportTypeName = usedRepository.findReportTypeName(report.getReportTypeId());
+
+            long postId=report.getPostId();//요놈으로 포스트갔다가 멤버갔다가 포스트제목과 신고당한사람 이름 가져옴
+            Post post=memberRepository.findReportedMember(postId);
+            String reportedName = memberRepository.findMemberName(post.getMemberId());
+
+            PostReport postReport = PostReport.builder()
+                    .postId(report.getPostId())//신고 당한 게시글
+                    .reportTypeName(reportTypeName)//신고 타입..
+                    .reporterId(report.getReporterId())//신고자
+                    .reporterName(memberRepository.findMemberName(report.getReporterId()))//신고자 이름
+                    .reportedName(reportedName)
+                    .content(report.getContent())//신고 내용
+                    .reportId(report.getReportId())//신고 번호
+                    .title(post.getTitle())//신고 당한 게시글 제목
+                    .build();
+            postReports.add(postReport);
+
+          }
+        return postReports;
+    }
+
 
 
 }

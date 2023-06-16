@@ -6,6 +6,7 @@ import com.anabada.neighbor.member.service.EmailService;
 import com.anabada.neighbor.member.service.MemberService;
 import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.page.PageDTO;
+import com.anabada.neighbor.used.domain.Report;
 import com.anabada.neighbor.used.domain.Used;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
@@ -49,7 +50,7 @@ public class MemberController {
     }
 
     @PostMapping("/join")
-    public String join(Member member, String m, String b, String t, String i) { // 회원가입
+    public String join(Member member) { // 회원가입
         memberService.save(member);
         return "redirect:/member/loginForm";
     }
@@ -73,10 +74,11 @@ public class MemberController {
     }
 
 
-    @GetMapping("/emailConfirm")//이메일인증
-    public String emailConfirm() throws Exception {
-        String confirm = emailService.sendSimpleMessage("wbg030281@gmail.com");
-        return confirm;
+    @ResponseBody
+    @PostMapping("/emailConfirm")//이메일인증
+    public String emailConfirm(String memberEmail) throws Exception {
+//        String confirm = emailService.sendSimpleMessage(memberEmail);
+        return "confirm";
     }
 
 
@@ -126,4 +128,6 @@ public class MemberController {
         memberService.editInfo(member);
         return "index";
     }
+
+
 }

@@ -4,7 +4,6 @@ package com.anabada.neighbor.used.repository;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.*;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -65,4 +64,9 @@ public interface UsedRepository {
     List<ReportType> findAllReportType();
 
     void report(Report report);
+
+    List<Report> findAllReport();
+
+    String findReportTypeName(long reportTypeId);
+
 }

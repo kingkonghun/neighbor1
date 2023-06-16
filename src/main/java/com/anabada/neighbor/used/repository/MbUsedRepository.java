@@ -105,4 +105,14 @@ public interface MbUsedRepository extends UsedRepository {
     @Override
     @Insert("insert into report (postId, reporterId, content, reportTypeId) values (#{postId}, #{reporterId}, #{content}, #{reportTypeId})")
     void report(Report report);
+
+    @Override
+    @Select("SELECT * FROM report")
+    List<Report> findAllReport();
+
+    @Override
+    @Select("SELECT reportTypeName FROM reportType WHERE reportTypeId=#{reportTypeId}")
+    String findReportTypeName(long reportTypeId);
+
+
 }

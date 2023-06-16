@@ -24,6 +24,7 @@ public class Member {
     private String providerId; // 로그인 정보
     private String role; // 권한
     private long myWrite;//내가 작성한 글 숫자
+    private long myReply;//내가 작성한 댓글 숫자
 
 
 }

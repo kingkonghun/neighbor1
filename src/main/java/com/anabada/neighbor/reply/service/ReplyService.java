@@ -18,5 +18,5 @@ public interface ReplyService {
 
     public void writeReReply(Reply reply, PrincipalDetails principalDetails);
 
-    CarryReply findMyReply(long memberId);
+    List<CarryReply> findMyReply(long memberId);
 }

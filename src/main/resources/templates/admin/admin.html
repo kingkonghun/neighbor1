@@ -4,33 +4,18 @@
     <meta charset="UTF-8"/>
     <title>Title</title>
     <style>
-        #adminT, #listMember {color: red;}
-
-        @font-face {
-            font-family: 'GangwonEduPowerExtraBoldA';
-            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEduPowerExtraBoldA.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        .myPage, .adminNav, .admin {font-family: 'GangwonEduPowerExtraBoldA';}
-
-        .tagA {text-decoration: none;}
-
-        .item {margin-top: 1.5em;}
-
-        .adminNav {margin-top: 1.5em;margin-bottom: 3em;}
-
-        .item ul {list-style: none;}
-        .navList {padding-right: 2em;}
-        /*여기까지가 mypage nav 속성*/
+        #adminT {color: red;}
+        .myPage, .admin{font-family: 'GangwonEduPowerExtraBoldA';}
         .img {width: 50px;height: 50px;}
+        .pagination {margin-top: 3em; margin-bottom: 5em;}
+        .pagination .pageNum{list-style: none; display: flex;}
     </style>
+    <link rel="stylesheet" th:href="@{/css/myPage.css}">
 
     <th:block th:insert="/common/common :: fragment-header"></th:block>
 </head>
 <body>
-<div th:replace="nav :: nav"></div>
+        <div th:replace="nav :: nav"></div>
 <div th:replace="member/myPageNav :: nav"></div>
 <nav class="adminNav container">
     <diV class="item">

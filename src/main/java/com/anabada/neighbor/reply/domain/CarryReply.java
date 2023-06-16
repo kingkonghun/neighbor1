@@ -24,4 +24,7 @@ public class CarryReply {
 
     private String memberName; //닉네임
     private String parentName; //부모 닉네임
+
+    private String title;//게시글 제목
+    private String postType;//게시글 유형
 }

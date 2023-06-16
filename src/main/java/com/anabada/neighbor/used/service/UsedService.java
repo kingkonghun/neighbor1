@@ -1,10 +1,7 @@
 package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
-import com.anabada.neighbor.used.domain.Category;
-import com.anabada.neighbor.used.domain.Report;
-import com.anabada.neighbor.used.domain.ReportType;
-import com.anabada.neighbor.used.domain.Used;
+import com.anabada.neighbor.used.domain.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,4 +29,7 @@ public interface UsedService {
     List<ReportType> reportType();
 
     void report(Report report, PrincipalDetails principalDetails);
+
+    List<PostReport> findAllReport();
+
 }
