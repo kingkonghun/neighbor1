@@ -1,0 +1,51 @@
+<nav class="top_nav">
+    <div class="container nav_container">
+        <div class="nav_div">
+            <h1 class="nav_title">아나바다</h1>
+            <ul class="nav_menu_1">
+                <li><a href="/used/list">중고거래</a></li>
+                <li><a href="/club">동네모임</a></li>
+                <li><a href="#">주변맛집</a></li>
+            </ul>
+        </div>
+        <div class="nav_div">
+            <form class="searchForm">
+                <select class="searchSelect">
+                    <option>중고물품</option>
+                    <option>동네모임</option>
+                </select>
+                <div class="search">
+                    <input class="searchInput" type="search" placeholder="검색어 입력">
+                    <div class="border"></div>
+                    <img class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+                </div>
+            </form>
+        
+            <input type="checkbox" id="menuicon">
+            <label for="menuicon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <div class="sidebar">
+                <div class="menu">
+                    <div class="login_div">
+                        <button type="button" id="btnLogin" onclick="location.href='/member/loginForm'" sec:authorize="isAnonymous()">로그인</button>
+                        <button type="button" id="btnLogout" onclick="location.href='/logout'" sec:authorize="isAuthenticated()">로그아웃</button>
+                    </div>
+                    <div class="nav_menu_2" style="">
+                        <div style="background-color: #FFFFCC;">
+                            <a href="/used/list">중고거래</a>
+                        </div>
+                        <div style="background-color: #FFCCFF;">
+                            <a href="/club">동네모임</a>
+                        </div>
+                        <div style="background-color: #FFCCCC;">
+                            <a href="#">주변맛집</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

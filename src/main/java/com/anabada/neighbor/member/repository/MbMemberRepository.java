@@ -25,7 +25,7 @@ public interface MbMemberRepository extends MemberRepository{
     int getTotal(long memberId);
 
     @Override
-    @Insert("insert into member (memberEmail, memberName, memberPWD, address, addressDetail, mbti, providerId, role) values (#{memberEmail}, #{memberName}, #{memberPWD}, #{address}, #{addressDetail}, #{mbti}, #{providerId}, #{role})")
+    @Insert("insert into member (memberEmail, memberName, memberPWD, address, addressDetail, providerId, role) values (#{memberEmail}, #{memberName}, #{memberPWD}, #{address}, #{addressDetail}, #{providerId}, #{role})")
     void save(Member member);
 
     @Override

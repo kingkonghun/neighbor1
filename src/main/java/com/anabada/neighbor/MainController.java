@@ -25,4 +25,9 @@ public class MainController {
         return "index";
     }
 
+    @GetMapping("/ex")
+    public String ex() {
+        return "/ex";
+    }
+
 }

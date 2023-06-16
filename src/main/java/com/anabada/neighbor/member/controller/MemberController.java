@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -33,7 +34,11 @@ public class MemberController {
     }
 
     @GetMapping("/loginForm")
-    public String loginForm(Model model, String errorMessage) { // 로그인 폼으로 이동
+    public String loginForm(Model model, String errorMessage, HttpServletRequest request) { // 로그인 폼으로 이동
+        String uri = request.getHeader("Referer");
+        if (uri != null && !uri.contains("/login")) {
+            request.getSession().setAttribute("prevPage", uri);
+        }
         model.addAttribute("errorMessage", errorMessage); // 로그인 실패 시 에러메시지
         return "/member/loginForm";
     }
