@@ -1,8 +1,7 @@
 package com.anabada.neighbor.club;
 
-import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.repository.ClubRepository;
-import com.anabada.neighbor.used.domain.Post;
+import com.anabada.neighbor.member.used.domain.Post;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
