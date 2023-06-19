@@ -5,13 +5,11 @@ import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.page.PageDTO;
 import com.anabada.neighbor.used.domain.PostReport;
 import com.anabada.neighbor.used.domain.Report;
-import com.anabada.neighbor.used.domain.ReportType;
 import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.service.UsedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,10 +29,12 @@ public class UsedController {
 
 
     @GetMapping("/list") //게시물 리스트
-    public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model, @RequestParam(value = "num", defaultValue = "0") int num) {
-        model.addAttribute("list", usedService.list(categoryId, "list", num));
-        model.addAttribute("category", usedService.categoryList());
+    public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model, @RequestParam(value = "num", defaultValue = "0") int num, @RequestParam(value = "search", defaultValue = "") String search){
+        model.addAttribute("list", usedService.list(categoryId, "list", num, search));
+        model.addAttribute("category",usedService.categoryList());
         model.addAttribute("categoryId", categoryId);
+        model.addAttribute("search", search);
+        System.out.println("search = " + search);
         System.out.println(categoryId);
 
         return num <= 0 ? "used/list" : "used/listPlus";
@@ -44,8 +44,8 @@ public class UsedController {
     public String detail(long postId, Model model, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Used dto = usedService.detail(postId, request, response, principalDetails);
         model.addAttribute("dto", dto);
-        model.addAttribute("category", usedService.categoryList());
-        model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList", 0));
+        model.addAttribute("category",usedService.categoryList());
+        model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0, ""));
         model.addAttribute("reportType", usedService.reportType());
         return "used/detail";
     }

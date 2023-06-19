@@ -66,7 +66,7 @@ public class UsedServiceImpl implements UsedService{
 
 
     @Override
-    public List<Used> list(long categoryId, String listType, int num) {//글 리스트
+    public List<Used> list(long categoryId, String listType, int num, String search) {//글 리스트
         List<Used> usedList = new ArrayList<>(); //리턴할 값
         List<Product> productList = null;
         if (categoryId != 0) { //파라미터로 받은 categoryId가 0이 아니면
@@ -102,7 +102,9 @@ public class UsedServiceImpl implements UsedService{
                     .replyCount(replyCount)
                     .likesCount(likesCount)
                     .build();
-            usedList.add(used);//리턴할 usedList에 used객체 추가
+            if (used.getTitle().indexOf(search) != -1 || used.getContent().indexOf(search) != -1) {
+                usedList.add(used);//리턴할 usedList에 used객체 추가
+            }
         }
         //리스트를 postupdate로 내림차순 정렬
         Comparator<Used> comparator = (use1, use2) -> Long.valueOf(

@@ -15,7 +15,7 @@ public interface UsedService {
     //글리스트
     //상세보기
     //사진
-    public List<Used> list(long categoryId, String listType, int num);
+    public List<Used> list(long categoryId, String listType, int num, String search);
     public void write(Used used, PrincipalDetails principalDetails)throws Exception;
     public void update(Used used, PrincipalDetails principalDetails) throws Exception;
     public void delete(long postId);

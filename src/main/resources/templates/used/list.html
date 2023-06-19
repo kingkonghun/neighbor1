@@ -73,6 +73,13 @@
         $("#returnBtn").click(function (){
             $("#writeForm").slideUp();
         });
+        $("#category_select").change(function(){
+            let categoryId = $("#category_select").val();
+            let search = [[${search}]];
+
+            location.href="/used/list?categoryId=" + categoryId + "&search=" + search;
+        });
+
         const inputPrice = document.getElementById("inputPrice");
 
         inputPrice.addEventListener("input", function(event) {
@@ -101,7 +108,7 @@
             <button type="button" class="mb-3" id="btnWrite">글쓰기</button>
         </article>
         <article class="category">
-            <select id="category_select" name="categoryId" onchange="location.href='/used/list?categoryId='+$('#category_select').val()">
+            <select id="category_select" name="categoryId">
                 <option value="0">전체상품</option>
                 <th:block th:each="category:${category}">
                     <option th:value="${category.categoryId}" th:text="${category.categoryName}" th:selected="${category.categoryId eq categoryId}"></option>
