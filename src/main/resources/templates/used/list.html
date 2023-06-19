@@ -18,7 +18,7 @@
             $.ajax({
                 type: "get",
                 url: "/used/list",
-                data: {num:num, categoryId:$("#category_select").val()},
+                data: {num:num, categoryId:$("#category_select").val(), search:[[${search}]]},
                 success: function(data) {
                     $("#list").append(data);
                 }
