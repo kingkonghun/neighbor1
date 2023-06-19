@@ -6,6 +6,7 @@ import com.anabada.neighbor.used.domain.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface MbUsedRepository extends UsedRepository {
@@ -111,8 +112,8 @@ public interface MbUsedRepository extends UsedRepository {
     void report(Report report);
 
     @Override
-    @Select("SELECT * FROM report")
-    List<Report> findAllReport();
+    @Select("SELECT * FROM report ORDER BY reportId desc LIMIT #{criteria.amount} OFFSET #{criteria.offset} ")
+    List<Report> findAllReport(Map<String, Object> map);
 
     @Override
     @Select("SELECT reportTypeName FROM reportType WHERE reportTypeId=#{reportTypeId}")

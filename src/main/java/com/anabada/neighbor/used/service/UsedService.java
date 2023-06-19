@@ -1,6 +1,7 @@
 package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.used.domain.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +31,7 @@ public interface UsedService {
 
     void report(Report report, PrincipalDetails principalDetails);
 
-    List<PostReport> findAllReport();
+    List<PostReport> findAllReport(Criteria criteria);
 
     List<Used> likePost(long memberId);
 }

@@ -1,7 +1,6 @@
 package com.anabada.neighbor.member.repository;
 
 import com.anabada.neighbor.member.domain.Member;
-import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.used.domain.Post;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -86,6 +85,6 @@ public interface MbMemberRepository extends MemberRepository{
 
     @Override
     @Select("SELECT count(*) FROM likes WHERE memberId=#{memberId}")
-    long countMyLikes(long memberId);
+    long countMyLikes(long memberId);//좋아요 누른 게시글 양 확인
 }
 
