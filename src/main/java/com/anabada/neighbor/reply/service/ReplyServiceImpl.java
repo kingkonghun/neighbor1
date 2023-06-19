@@ -29,6 +29,8 @@ public class ReplyServiceImpl implements ReplyService {
             if(reply.getParentId() != 0) { //reply 테이블의 parentId가 0이 아니라면(대댓글이라면)
                 Reply parent = replyRepository.findReply(reply.getParentId()); //reply 테이블의 parentId로 reply 테이블에서 부모 튜플 가져오기
                 parentName = replyRepository.findMemberName(parent.getMemberId()); //가져온 parent의 memberId로 member 테이블에서 해당하는 memberName 가져오기
+            }else {
+                parentName = null;
             }
             CarryReply carryReply = CarryReply.builder() //carryReply 객체 생성 
                     .replyId(reply.getReplyId())
@@ -43,6 +45,7 @@ public class ReplyServiceImpl implements ReplyService {
                     .memberName(memberName)
                     .parentName(parentName)
                     .build();
+            System.out.println("parentName = " + parentName);
             list.add(carryReply); //리턴할 list에 carryReply 추가
         }
         return list;
