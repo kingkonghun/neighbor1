@@ -81,7 +81,7 @@ public class MemberServiceImpl implements MemberService{
         member = memberRepository.findMyInfo(memberId);
         member.setMyWrite(memberRepository.countMyWrite(memberId));
         member.setMyReply(replyRepository.findMyReply(memberId).size());
-
+        member.setMyLikesCount(memberRepository.countMyLikes(memberId));
 
         return  member;
     }
@@ -156,8 +156,10 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public List<Member> findAllMember() {//관리자 모든 멤버 가져오기
-        List<Member> member = memberRepository.findAllMember();
+    public List<Member> findAllMember(Criteria criteria) {//관리자 모든 멤버 가져오기
+        Map<String, Object> map = new HashMap<>();
+        map.put("criteria", criteria);
+        List<Member> member = memberRepository.findAllMember(map);
         for (Member member1 : member) {
             long total = getTotal(member1.getMemberId());
             member1.setMyWrite(total);//사용자가 작성한 글의 숫자 가져오기

@@ -25,6 +25,6 @@ public class Member {
     private String role; // 권한
     private long myWrite;//내가 작성한 글 숫자
     private long myReply;//내가 작성한 댓글 숫자
-
+    private long myLikesCount;//내가 좋아요 누른 글
 
 }

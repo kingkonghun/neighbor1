@@ -78,12 +78,11 @@
     let authentication = $('#authentication');
     let random = $('#random');
 
-    memberEmail.on('change', function () {
-        memberEmail.removeClass('confirm');
+    memberEmail.on("change",function (){
+        $('.confirm').removeClass('confirm');
         alert("이메일 인증 버튼을 눌러 주세요");
         memberEmail.focus();
     });
-
 
     $(btnAuthentication).on('click', function () {
         if(memberEmail.val() != '') {
@@ -103,10 +102,6 @@
             });
         }else alert('이메일을 입력해 주세요');
     });
-
-
-
-
 
     $(btnJoin).on('click', function (){
         if($(memberEmail).val() == ""){

@@ -15,15 +15,9 @@
     <th:block th:insert="/common/common :: fragment-header"></th:block>
 </head>
 <body>
-        <div th:replace="nav :: nav"></div>
+        <div th:replace="ex :: nav"></div>
 <div th:replace="member/myPageNav :: nav"></div>
-<nav class="adminNav container">
-    <diV class="item">
-        <ul>
 
-        </ul>
-    </diV>
-</nav>
 <section class="admin">
     <div class="member">
         <table  style="width: 100%;" class="table table-hover">
@@ -52,6 +46,8 @@
                 </tr>
             </tbody>
         </table>
+
+        <!--페이지네비게이션-->
         <div class="pagination justify-content-center">
             <ul class="pageNum">
 

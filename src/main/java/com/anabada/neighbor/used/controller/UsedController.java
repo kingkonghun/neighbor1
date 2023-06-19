@@ -31,9 +31,9 @@ public class UsedController {
 
 
     @GetMapping("/list") //게시물 리스트
-    public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model, @RequestParam(value = "num", defaultValue = "0") int num){
-        model.addAttribute("list", usedService.list(categoryId, "list",num));
-        model.addAttribute("category",usedService.categoryList());
+    public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model, @RequestParam(value = "num", defaultValue = "0") int num) {
+        model.addAttribute("list", usedService.list(categoryId, "list", num));
+        model.addAttribute("category", usedService.categoryList());
         model.addAttribute("categoryId", categoryId);
         System.out.println(categoryId);
 
@@ -44,35 +44,35 @@ public class UsedController {
     public String detail(long postId, Model model, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Used dto = usedService.detail(postId, request, response, principalDetails);
         model.addAttribute("dto", dto);
-        model.addAttribute("category",usedService.categoryList());
-        model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0));
+        model.addAttribute("category", usedService.categoryList());
+        model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList", 0));
         model.addAttribute("reportType", usedService.reportType());
-        return "used/detailEx";
+        return "used/detail";
     }
 
     @PostMapping("/post") //게시물 작성
-    public String post(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails)throws Exception{
+    public String post(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception {
         usedService.write(used, principalDetails);
-        System.out.println("used="+used);
+        System.out.println("used=" + used);
         return "redirect:/used/list";
     }
 
     @GetMapping("/findImg") //이미지 찾기
-    public void findImg(long postId, HttpServletResponse response) throws IOException{
+    public void findImg(long postId, HttpServletResponse response) throws IOException {
         String filenames = usedService.findImgUrl(postId);
 //        System.out.println("filenames = " + filenames);
-        usedService.downloadFiles(filenames,response);
+        usedService.downloadFiles(filenames, response);
 
     }
 
     @PostMapping("/postEdit") //게시물 수정
-    public String postEdit(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails)throws Exception{
+    public String postEdit(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception {
         usedService.update(used, principalDetails);
         return "redirect:/used/list";
     }
 
     @GetMapping("/postDelete") //게시물 삭제
-    public String postDelete(long postId){
+    public String postDelete(long postId) {
         usedService.delete(postId);
         return "redirect:/used/list";
     }
@@ -88,6 +88,7 @@ public class UsedController {
         usedService.report(report, principalDetails);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
     @GetMapping("/reportList")//신고게시글
     public String report(Model model, Criteria criteria) {
         List<PostReport> reportList = usedService.findAllReport();
@@ -96,5 +97,12 @@ public class UsedController {
         model.addAttribute("list", reportList);
         model.addAttribute("pageMaker", new PageDTO(reportList.size(), 10, criteria));
         return "admin/reportList";
+    }
+
+    @GetMapping("/likePost")//좋아요 누른 게시글
+    public String likePost(Model model, long memberId) {
+      List<Used> usedList=usedService.likePost(memberId);
+      model.addAttribute("list",usedList);
+        return "member/myLikes";
     }
 }

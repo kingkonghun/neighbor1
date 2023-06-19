@@ -18,7 +18,7 @@
     <link rel="stylesheet" th:href="@{/css/myPage.css}">
 </head>
 <body>
-<div th:replace="nav :: nav"></div>
+<div th:replace="ex :: nav"></div>
 <div th:replace="member/myPageNav :: nav"></div>
 
 <div class="myInfomation container">
@@ -72,7 +72,9 @@
                     <p class="title" >관심있는 게시글</p>
                 </div>
                 <div class="like content">
-                    <a href="#" class="like" th:onclick="'likePost('+${list.memberId}+')'">12</a>
+                    <a href="#" class="like" th:onclick="'likePost('+${list.memberId}+')'">
+                        <p class="myLikes" th:text="${list.myLikesCount}"></p>
+                    </a>
                 </div>
             </div>
 
@@ -81,7 +83,9 @@
                     <p class="title">내가 적은 댓글</p>
                 </div>
                 <div class="reply content">
-                    <a href="#" class="like" th:text="${list.myReply}" th:onclick="'myReply('+${list.memberId}+')'"></a>
+                    <a href="#" class="like"  th:onclick="'myReply('+${list.memberId}+')'">
+                        <p class="myReply" th:text="${list.myReply}"></p>
+                    </a>
                 </div>
             </div>
 
@@ -96,9 +100,10 @@
     function myReply(memberId) {
         $.ajax({
             type: "get",
-            url: "reply/myReply",
+            url: "/reply/myReply",
             data: {"memberId":memberId },
             success: function (data) {
+
                 $("#myWriteFive").html(data);
             }
         });
@@ -116,8 +121,8 @@
     function writeList(memberId) {//내가올린게시글
         $.ajax({
             type: "get",
-            data: { "memberId": memberId },
             url: "/member/myWriteFive",
+            data: { "memberId": memberId },
             success: function (data) {
                 $("#myWriteFive").html(data);
             }

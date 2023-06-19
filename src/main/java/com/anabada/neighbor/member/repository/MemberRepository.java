@@ -40,9 +40,11 @@ public interface MemberRepository {
 
     void editProfileImg(Map<String, Object> map);
 
-    List<Member> findAllMember();
+    List<Member> findAllMember(Map<String,Object> map);
 
     String findMemberName(long memberId);
 
     Post findReportedMember(long postId);
+
+    long countMyLikes(long memberId);
 }

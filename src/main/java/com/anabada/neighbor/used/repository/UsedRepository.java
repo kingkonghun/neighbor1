@@ -69,4 +69,5 @@ public interface UsedRepository {
 
     String findReportTypeName(long reportTypeId);
 
+    List<Likes> findLikePosts(long memberId);
 }
