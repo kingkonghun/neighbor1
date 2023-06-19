@@ -91,7 +91,7 @@ public class UsedController {
 
     @GetMapping("/reportList")//신고게시글
     public String report(Model model, Criteria criteria) {
-        List<PostReport> reportList = usedService.findAllReport();
+        List<PostReport> reportList = usedService.findAllReport(criteria);
 
         System.out.println("reportList = " + reportList);
         model.addAttribute("list", reportList);

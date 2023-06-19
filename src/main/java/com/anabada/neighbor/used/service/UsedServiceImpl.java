@@ -3,6 +3,7 @@ package com.anabada.neighbor.used.service;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.repository.MemberRepository;
+import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.used.domain.*;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
@@ -293,9 +294,11 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public List<PostReport> findAllReport() {
+    public List<PostReport> findAllReport(Criteria criteria) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("criteria",criteria);
         List<PostReport> postReports = new ArrayList<>();//리턴 그릇
-        List<Report> reportList = usedRepository.findAllReport();//신고 테이블 다 긁어옴
+        List<Report> reportList = usedRepository.findAllReport(map);//신고 테이블 다 긁어옴
         for (Report report : reportList) {
             String reportTypeName = usedRepository.findReportTypeName(report.getReportTypeId());
 

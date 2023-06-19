@@ -6,6 +6,7 @@ import com.anabada.neighbor.used.domain.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface UsedRepository {
@@ -65,7 +66,7 @@ public interface UsedRepository {
 
     void report(Report report);
 
-    List<Report> findAllReport();
+    List<Report> findAllReport(Map<String, Object> map);
 
     String findReportTypeName(long reportTypeId);
 

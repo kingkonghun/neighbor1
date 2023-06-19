@@ -8,8 +8,12 @@
     <style>
         #adminT, #listMember {color: red;}
         .reportList{font-family: 'GangwonEduPowerExtraBoldA';}
+        .reportTitle{color:#FF3366;}
+        .reportContent{color:#FF3366;}
     </style>
+    <script>
 
+    </script>
 </head>
 <body>
 <div th:replace="ex :: nav"></div>
@@ -30,8 +34,8 @@
             <td th:text="${report.reporterName}"></td>
             <td th:text="${report.reportedName}"></td>
             <td th:text="${report.reportTypeName}"></td>
-            <td><a href="#" th:onclick="|location.href='@{detail(postId=${report.postId})}'|" th:text="${report.title}"></a></td>
-            <td th:text="${report.content}"></td>
+            <td><a class="reportTitle" href="#" th:onclick="|location.href='@{detail(postId=${report.postId})}'|" th:text="${report.title}"></a></td>
+            <td id="open-modal" class="reportContent" th:text="${report.content}"></td>
         </tr>
         </tbody>
     </table>
@@ -80,7 +84,25 @@
         </ul>
     </div>
 </div>
-<div class="reportDetail"></div>
+
+<!--신고모달-->
+<div id="modal">
+    <div class="modal-content p-4">
+        <div class="modal-header">
+            <h2>사용자 점수</h2>
+            <i id="close-modal" class="bi bi-x-lg" style="font-size: 32px;"></i>
+        </div>
+        <select id="reportType_select" name="reportTypeId">
+            <option value="0">신고유형</option>
+            <th:block th:each="reportType:${reportType}">
+                <option th:value="${reportType.reportTypeId}" th:text="${reportType.reportTypeName}"></option>
+            </th:block>
+        </select>
+        <label for="content">내용</label>
+        <textarea id="content" name="content"></textarea>
+        <button type="button" id="btnReport">신고</button>
+    </div>
+</div>
 
 
 <div th:replace="footer :: footer"></div>
