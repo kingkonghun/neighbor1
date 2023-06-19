@@ -32,4 +32,5 @@ public interface UsedService {
 
     List<PostReport> findAllReport();
 
+    List<Used> likePost(long memberId);
 }

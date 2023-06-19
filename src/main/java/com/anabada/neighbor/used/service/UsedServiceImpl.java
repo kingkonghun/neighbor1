@@ -3,7 +3,6 @@ package com.anabada.neighbor.used.service;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.repository.MemberRepository;
-import com.anabada.neighbor.member.service.MemberService;
 import com.anabada.neighbor.used.domain.*;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +65,6 @@ public class UsedServiceImpl implements UsedService{
 
 
 
-
     @Override
     public List<Used> list(long categoryId, String listType, int num, String search) {//글 리스트
         List<Used> usedList = new ArrayList<>(); //리턴할 값
@@ -93,7 +91,7 @@ public class UsedServiceImpl implements UsedService{
                     .productId(product.getProductId())
                     .categoryName(categoryName)
                     .price(product.getPrice())
-                    .productStatus(product.getProductStatus())
+                    .productStatus(product.getProductStatus().equals("y") ? "판매중" : "판매 완료")
                     .categoryId(product.getCategoryId())
                     .memberId(member.getMemberId())
                     .address(member.getAddress())
@@ -321,6 +319,25 @@ public class UsedServiceImpl implements UsedService{
         return postReports;
     }
 
+    @Override
+    public List<Used> likePost(long memberId) {
+        List<Used> usedList = new ArrayList<>();//리턴그릇
+        List<Likes> likesList = usedRepository.findLikePosts(memberId);//좋아요 누른 게시글 긁어오기
+        for (Likes likes : likesList) {//좋아요누른 게시글만큼 반복
+            long postId = likes.getPostId();//좋아요 누른 게시글id
+            Post post = usedRepository.findPost(postId);
+            Used used = Used.builder()
+                    .postId(postId)
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .postView(post.getPostView())
+                    .likesCount(usedRepository.findLikesCount(postId))
+                    .build();
+            /*제목, 내용, 조회수,좋아요 수*/
+            usedList.add(used);
+        }
+        return usedList;
+    }
 
 
 }

@@ -1,6 +1,7 @@
 package com.anabada.neighbor.member.repository;
 
 import com.anabada.neighbor.member.domain.Member;
+import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.used.domain.Post;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -72,8 +73,8 @@ public interface MbMemberRepository extends MemberRepository{
     void editProfileImg(Map<String, Object> map);
 
     @Override
-    @Select("SELECT * FROM member")
-    List<Member> findAllMember();//관리자 모든 멤버 가져오기
+    @Select("SELECT * FROM member ORDER BY memberId desc LIMIT #{criteria.amount} OFFSET #{criteria.offset} ")
+    List<Member> findAllMember(Map<String,Object> map);//관리자 모든 멤버 가져오기
 
     @Override
     @Select("SELECT memberName FROM member WHERE memberId=#{memberId}")
@@ -82,5 +83,9 @@ public interface MbMemberRepository extends MemberRepository{
     @Override
     @Select("SELECT memberId,title FROM post WHERE postId=#{postId}")
     Post findReportedMember(long postId);
+
+    @Override
+    @Select("SELECT count(*) FROM likes WHERE memberId=#{memberId}")
+    long countMyLikes(long memberId);
 }
 

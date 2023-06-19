@@ -27,6 +27,6 @@ public interface MemberService {
 
    public void editInfo(Member member);//개인정보 수정
 
-    List<Member> findAllMember();//관리자 모든멤버 가져오기
+    List<Member> findAllMember(Criteria criteria);//관리자 모든멤버 가져오기
 
 }

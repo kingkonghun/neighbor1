@@ -66,10 +66,10 @@ public class MemberController {
     @GetMapping("/admin")
     @Secured("ROLE_ADMIN")
     public ModelAndView admin(ModelAndView mav,Criteria criteria) {
-        List<Member> member = memberService.findAllMember();//멤버리스트
+        List<Member> member = memberService.findAllMember(criteria);//멤버리스트
         mav.addObject("member",member);
         mav.addObject("pageMaker", new PageDTO(member.size(), 10, criteria));
-        mav.setViewName("/admin/admin");
+        mav.setViewName("admin/memberList");
         return mav;
     }
 
