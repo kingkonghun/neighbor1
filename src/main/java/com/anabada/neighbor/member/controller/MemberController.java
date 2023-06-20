@@ -106,9 +106,10 @@ public class MemberController {
         memberService.downProfileImg(response, profileImg);//사진다운
     }
     @GetMapping("/editInfo")//수정페이지로 이동
-    public String editInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
+    public String editInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model,String message) {
         Member member = memberService.myInfo(principalDetails);
         model.addAttribute("list", member);
+        model.addAttribute("message",message);
         return "member/editInfo";
     }
     @PostMapping("/myEdit")//진짜수정
