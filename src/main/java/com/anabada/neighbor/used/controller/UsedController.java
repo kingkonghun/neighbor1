@@ -91,10 +91,9 @@ public class UsedController {
     @GetMapping("/reportList") //신고게시물 리스트
     public String report(Model model, Criteria criteria) {
         List<PostReport> reportList = usedService.findAllReport(criteria);
-
-        System.out.println("reportList = " + reportList);
+        int total = usedService.countReport();
         model.addAttribute("list", reportList);
-        model.addAttribute("pageMaker", new PageDTO(reportList.size(), 10, criteria));
+        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
         return "admin/reportList";
     }
 

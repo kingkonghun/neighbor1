@@ -71,4 +71,9 @@ public interface UsedService {
      * memberId 로 좋아요 누른 게시물
      */
     List<Used> likePost(long memberId);
+
+    /**
+     * 페이징을 위한 신고된 게시글의 총 수
+     * */
+    int countReport();
 }

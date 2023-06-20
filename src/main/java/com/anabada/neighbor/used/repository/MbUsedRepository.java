@@ -118,5 +118,7 @@ public interface MbUsedRepository extends UsedRepository {
     @Select("SELECT reportTypeName FROM reportType WHERE reportTypeId=#{reportTypeId}")
     String findReportTypeName(long reportTypeId);
 
-
+    @Override
+    @Select("SELECT count(*) FROM report")
+    int countReport();
 }

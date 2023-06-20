@@ -53,19 +53,13 @@ public class MemberController {
     }
 
     @ResponseBody
-    @GetMapping("/test")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public Member test(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return principalDetails.getMember();
-    }
-
-    @ResponseBody
     @GetMapping("/admin")
     @Secured("ROLE_ADMIN")
     public ModelAndView admin(ModelAndView mav,Criteria criteria) {
+        int total = memberService.countMember();//멤버의 총 수
         List<Member> member = memberService.findAllMember(criteria);//멤버리스트
         mav.addObject("member",member);
-        mav.addObject("pageMaker", new PageDTO(member.size(), 10, criteria));
+        mav.addObject("pageMaker", new PageDTO(total, 10, criteria));
         mav.setViewName("admin/memberList");
         return mav;
     }
