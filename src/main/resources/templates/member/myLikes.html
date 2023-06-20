@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <th:block th:insert="/common/common :: fragment-header"></th:block>
+    <style>
+        .myReply_div{overflow: auto;}
+        .h2{text-align: center; padding-bottom: 1.5em;font-family: 'GangwonEduPowerExtraBoldA';}
+        .tableBox{overflow: auto; height: 400px;}
+        .btnList{text-align: right; padding-top: 1.5em; padding-bottom: 1.5em;}
+    </style>
+    <script>
+        function detail(postId){
+            if (confirm("게시글 확인하러 가시겠습니까?")) {
+                location.href="/used/detail?postId="+postId;
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="myReply_div">
+    <h2 class="h2">관심 있는 게시글</h2>
+    <div class="tableBox">
+        <table  style="width: 100%;" class="table table-hover">
+            <thead>
+            <th>제목</th>
+            <th>내용</th>
+            <th>조회수</th>
+            <th>좋아요</th>
+            </thead>
+            <tbody th:each="likes : ${list}">
+            <tr th:onclick="'detail('+${likes.postId}+')'">
+                <td th:text="${likes.title}"></td>
+                <td th:text="${likes.content}"></td>
+                <td th:text="${likes.postView}"></td>
+                <td th:text="${likes.likesCount}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="btnList">
+        <button class="btn btn-outline-danger" type="button" id="btnBack" onclick="removeHTML()">뒤로가기</button>
+    </div>
+</div>
+</body>
+</html>
