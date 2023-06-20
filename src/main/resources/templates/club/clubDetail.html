@@ -6,10 +6,16 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <th:block th:insert="/common/common :: fragment-header"></th:block>
 </head>
 <body>
+<!-- Nav바-->
+<div th:replace="nav :: nav"></div>
+
 <div th:text="${postId}"></div>
 <a th:href="@{/clubSave(postId=${postId})}">업데이트</a>
 <a th:href="@{/clubRemove(postId=${postId})}">삭제</a>
+
+<div th:replace="footer :: footer"></div>
 </body>
 </html>

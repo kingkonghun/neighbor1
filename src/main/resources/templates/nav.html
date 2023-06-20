@@ -1,29 +1,74 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light" xmlns:sec="http://www.w3.org/1999/xhtml">
-  <div class="container px-4 px-lg-5">
-    <a class="navbar-brand" href="/">오이 마켓</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-        <li class="nav-item"><a class="nav-link active" aria-current="page" href="/used/list">중고거래</a></li>
-        <li class="nav-item"><a class="nav-link" href="/member/myInfo">내정보</a></li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">커뮤니티</a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="/clubList">같이해요</a></li>
-            <!-- <li><hr class="dropdown-divider" /></li> 줄쳐주는 코드 -->
-            <li><a class="dropdown-item" href="#!">실시간 채팅</a></li>
-            <li><a class="dropdown-item" href="#!">주변맛집</a></li>
-          </ul>
-        </li>
-      </ul>
-      <form class="d-flex" action="/member/loginForm" method="get">
-        <button class="btn btn-outline-dark" type="submit">
-          <i class="me-1"></i>
-          <span sec:authorize="isAnonymous()">로그인</span>
-          <span sec:authorize="isAuthenticated()"><a href="/logout">로그아웃</a></span>
-          <!-- <span class="badge bg-dark text-white ms-1 rounded-pill">0</span> 상품개수 확인해주는 코드 -->
-        </button>
-      </form>
+<nav class="top_nav">
+    <div class="container nav_container">
+        <div class="nav_div">
+            <h1 class="nav_title"><a href="/">아나바다</a></h1>
+            <ul class="nav_menu_1">
+                <li><a href="/used/list">중고거래</a></li>
+                <li><a href="/club">동네모임</a></li>
+                <li><a href="#">주변맛집</a></li>
+            </ul>
+        </div>
+        <div class="nav_div">
+            <form id="searchForm_1" class="searchForm" method="get">
+                <select class="searchSelect" name="searchOption">
+                    <option value="used">중고물품</option>
+                    <option value="club">동네모임</option>
+                </select>
+                <div class="search_1">
+                    <input name="search" class="searchInput" type="search" placeholder="검색어 입력" onkeyup="search()">
+                    <input type="hidden">
+                    <img id="btnSearch_1" class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+                </div>
+            </form>
+
+            <form id="searchForm_2" class="searchForm" method="get">
+                <select class="searchSelect" name="searchOption">
+                    <option value="used">중고물품</option>
+                    <option value="club">동네모임</option>
+                </select>
+                <div class="search_1">
+                    <input name="search" class="searchInput" type="search" placeholder="검색어 입력">
+                    <input type="hidden">
+                    <img id="btnSearch_2" class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+                </div>
+            </form>
+
+            <div class="open-search">
+                <div class="border">
+                    <img class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+                </div>
+            </div>
+
+            <input type="checkbox" id="menuicon">
+            <label for="menuicon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <div class="sidebar">
+                <div class="menu">
+                    <div class="login_div">
+                        <button type="button" id="btnLogin" onclick="location.href='/member/loginForm'" sec:authorize="isAnonymous()">로그인</button>
+                        <button type="button" id="btnLogout" onclick="location.href='/logout'" sec:authorize="isAuthenticated()">로그아웃</button>
+                    </div>
+                    <div style="background-color: #FFCCCC;">
+                        <a href="/member/myInfo" sec:authorize="isAuthenticated()">내정보</a>
+                    </div>
+                    <div class="nav_menu_2" style="">
+                        <div style="background-color: #FFFFCC;">
+                            <a href="/used/list">중고거래</a>
+                        </div>
+                        <div style="background-color: #FFCCFF;">
+                            <a href="/club">동네모임</a>
+                        </div>
+                        <div style="background-color: #FFCCCC;">
+                            <a href="#">주변맛집</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </nav>
+
+
