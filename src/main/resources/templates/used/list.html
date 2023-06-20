@@ -56,9 +56,25 @@
             }
             document.writeForm.submit();
         });
+        // $("#btnWrite").click(function (){
+        //     if(checkIsAuthorization()){
+        //         if(checkIsAuthenticated()){
+        //             $("#writeForm").slideDown();
+        //         }else{
+        //             if(confirm("글쓰기는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
+        //                 location.href="/member/loginForm";
+        //             }
+        //         }
+        //     }else{
+
+        //     }
         $("#btnWrite").click(function (){
             if(checkIsAuthenticated()){
-                $("#writeForm").slideDown();
+                if(checkIsAuthorization()){
+                    location.href="/member/editInfo?message='추가 정보를 입력한 뒤에 사용하세요'";
+                }else{
+                    $("#writeForm").slideDown();
+                }
             }else{
                 if(confirm("글쓰기는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
                     location.href="/member/loginForm";
