@@ -19,4 +19,6 @@ public class PostReport {
     private String reportTypeName; // 신고타입
     private String reporterName;//신고자닉네임
     private String title;
+    private int reportedMemberScore;
+    private long reportedId;
 }

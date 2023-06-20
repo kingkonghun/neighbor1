@@ -47,7 +47,7 @@ public class UsedController {
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0, ""));
         model.addAttribute("reportType", usedService.reportType());
-        return "used/detail";
+        return "used/detailEx";
     }
 
     @PostMapping("/post") //게시물 작성

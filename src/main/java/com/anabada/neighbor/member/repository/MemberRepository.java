@@ -47,4 +47,6 @@ public interface MemberRepository {
     Post findReportedMember(long postId);
 
     long countMyLikes(long memberId);
+
+    Member findByMemberId(long reporterId);
 }
