@@ -15,7 +15,7 @@ public interface MbMemberRepository extends MemberRepository{
 
     @Override
     @Select("SELECT * FROM post" +
-            " WHERE memberId=#{memberId}" +
+            " WHERE memberId=#{memberId} and postType='used' " +
             " ORDER BY postId desc" +
             " LIMIT #{criteria.amount} OFFSET #{criteria.offset}")
     List<Post> findMyPost(Map<String,Object> map);
@@ -50,12 +50,12 @@ public interface MbMemberRepository extends MemberRepository{
 
 
     @Override
-    @Select("SELECT count(*) FROM post WHERE memberId=#{memberId}")
+    @Select("SELECT count(*) FROM post WHERE memberId=#{memberId} and postType='used' ")
     int countMyWrite(long memberId);
 
 
     @Override
-    @Select("SELECT * FROM post WHERE memberId=#{memberId} ORDER BY postUpdate DESC  LIMIT 5")
+    @Select("SELECT * FROM post WHERE memberId=#{memberId} and postType='used' ORDER BY postUpdate DESC  LIMIT 5")
     List<Post> findMyPostFive(long memberId);
 
     @Override
@@ -89,5 +89,9 @@ public interface MbMemberRepository extends MemberRepository{
     @Override
     @Select("select * from member where memberId = #{memberId}")
     Member findByMemberId(long reporterId);
+
+    @Override
+    @Select("SELECT count(*) FROM member")
+    int countMember();
 }
 

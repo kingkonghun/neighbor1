@@ -54,4 +54,9 @@ public interface MemberService {
      */
     List<Member> findAllMember(Criteria criteria);//관리자 모든멤버 가져오기
 
+    /**
+     * 페이징을 위한 멤버의 총 수 가져오기
+     * @return 멤버테이블의 count
+     */
+    int countMember();
 }

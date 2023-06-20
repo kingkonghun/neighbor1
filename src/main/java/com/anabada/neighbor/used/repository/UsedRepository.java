@@ -71,4 +71,9 @@ public interface UsedRepository {
     String findReportTypeName(long reportTypeId);
 
     List<Likes> findLikePosts(long memberId);
+
+    /**
+     * 페이징을 위한 신고된 게시글의 총 수
+     * */
+    int countReport();
 }

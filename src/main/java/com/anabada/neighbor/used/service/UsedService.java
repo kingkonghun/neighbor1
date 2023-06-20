@@ -34,4 +34,9 @@ public interface UsedService {
     List<PostReport> findAllReport(Criteria criteria);
 
     List<Used> likePost(long memberId);
+
+    /**
+     * 페이징을 위한 신고된 게시글의 총 수
+     * */
+    int countReport();
 }

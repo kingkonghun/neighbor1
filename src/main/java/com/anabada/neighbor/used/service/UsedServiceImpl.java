@@ -346,6 +346,14 @@ public class UsedServiceImpl implements UsedService{
         return usedList;
     }
 
+    /**
+     * 페이징을 위한 신고된 게시글의 총 수
+     * */
+    @Override
+    public int countReport() {
+        return usedRepository.countReport();
+    }
+
 
 }
 

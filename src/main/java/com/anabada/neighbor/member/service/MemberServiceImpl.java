@@ -187,4 +187,13 @@ public class MemberServiceImpl implements MemberService{
         }
         return member;
     }
+
+    /**
+     * 페이징을 위한 멤버의 총 수 가져오기
+     * @return 멤버테이블의 count
+     */
+    @Override
+    public int countMember() {
+        return memberRepository.countMember();
+    }
 }

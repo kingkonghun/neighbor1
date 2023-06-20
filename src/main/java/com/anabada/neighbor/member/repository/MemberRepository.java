@@ -100,4 +100,10 @@ public interface MemberRepository {
      *  정보를 가져옴
      */
     Member findByMemberId(long reporterId);
+
+    /**
+     * 페이징을 위한 멤버의 총 수 가져오기
+     * @return 멤버테이블의 count
+     */
+    int countMember();
 }
