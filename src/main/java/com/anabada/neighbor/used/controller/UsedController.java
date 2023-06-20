@@ -27,7 +27,6 @@ public class UsedController {
 
     private final UsedService usedService;
 
-
     @GetMapping("/list") //게시물 리스트
     public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model, @RequestParam(value = "num", defaultValue = "0") int num, @RequestParam(value = "search", defaultValue = "") String search){
         model.addAttribute("list", usedService.list(categoryId, "list", num, search));
@@ -77,19 +76,19 @@ public class UsedController {
         return "redirect:/used/list";
     }
 
-    @PostMapping("/likes")
+    @PostMapping("/likes") //게시물 좋아요
     @ResponseBody
     public Used likes(long postId, int likesCheck, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return usedService.likes(postId, principalDetails, likesCheck);
     }
 
-    @PostMapping("/report")
+    @PostMapping("/report") //게시물 신고
     public ResponseEntity<Void> report(Report report, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         usedService.report(report, principalDetails);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/reportList")//신고게시글
+    @GetMapping("/reportList") //신고게시물 리스트
     public String report(Model model, Criteria criteria) {
         List<PostReport> reportList = usedService.findAllReport(criteria);
         int total = usedService.countReport();
@@ -98,10 +97,11 @@ public class UsedController {
         return "admin/reportList";
     }
 
-    @GetMapping("/likePost")//좋아요 누른 게시글
+    @GetMapping("/likePost") //좋아요 누른 게시글
     public String likePost(Model model, long memberId) {
       List<Used> usedList=usedService.likePost(memberId);
       model.addAttribute("list",usedList);
         return "member/myLikes";
     }
+
 }

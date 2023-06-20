@@ -23,7 +23,7 @@ import java.io.IOException;
 @Component
 public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final String SECRET = "뭘봐";
+    private final String SECRET = "쉿 비밀이야!";
 
     private RequestCache requestCache = new HttpSessionRequestCache();
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();

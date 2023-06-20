@@ -28,8 +28,11 @@ public class UsedServiceImpl implements UsedService{
     private final UsedRepository usedRepository;
     private final ImgDownService imgDownService;
     private final MemberRepository memberRepository;
-    String uploadDir = "C:\\upload_anabada\\";
+    final String UPLOAD_DIR = "C:\\upload_anabada\\";
 
+    /**
+     * 메인페이지 중고상품 리스트
+     */
     @Override
     public List<Used> mainList() {
         List<Post> postList = usedRepository.postList();
@@ -64,10 +67,11 @@ public class UsedServiceImpl implements UsedService{
         return usedList; //usedList 리턴
     }
 
-
-
+    /**
+     * 게시물 타입이 used 인 list 조회
+     * */
     @Override
-    public List<Used> list(long categoryId, String listType, int num, String search) {//글 리스트
+    public List<Used> list(long categoryId, String listType, int num, String search) {
         List<Used> usedList = new ArrayList<>(); //리턴할 값
         List<Product> productList = null;
         if (categoryId != 0) { //파라미터로 받은 categoryId가 0이 아니면
@@ -119,48 +123,56 @@ public class UsedServiceImpl implements UsedService{
 
         if(num>=usedList.size()){//시작하는값이 usedList보다 크면 아무것도안함
             return null;
-        } return usedList.subList(num,Math.min(usedList.size(),num+9));
+        }
+        return usedList.subList(num,Math.min(usedList.size(),num+9)); // 더보기를 누를 때마다 9개씩 가져감
 
     }
+    /**
+     * 카테고리 리스트
+     */
     @Override
-    public List<Category> categoryList() {//카테고리 리스트
-        List<Category> categoryList = usedRepository.categoryList();//리턴할 리스트
-
-        return categoryList;
+    public List<Category> categoryList() {
+        return usedRepository.categoryList();
     }
 
+    /**
+     * 게시물 작성
+     * */
     @Transactional
     @Override
     public void write(Used used, PrincipalDetails principalDetails) {//글쓰기
-        used.setMemberId(principalDetails.getMember().getMemberId());
-        usedRepository.writePost(used);
-        usedRepository.writeProduct(used);
-        try {
-            if (!Files.exists(Paths.get(uploadDir))) {
-                Files.createDirectories(Paths.get(uploadDir));
+        used.setMemberId(principalDetails.getMember().getMemberId()); // security 에 있는 memberId를 used에 넣음
+        usedRepository.writePost(used); // post 테이블에 insert
+        usedRepository.writeProduct(used); //product 테이블에 insert
+        try { // 이미지 업로드 관련
+            if (!Files.exists(Paths.get(UPLOAD_DIR))) {
+                Files.createDirectories(Paths.get(UPLOAD_DIR));
             }
             for (MultipartFile file : used.getFiles()) {
                 String uuid = UUID.randomUUID().toString();
                 String fileName = uuid + "_" + file.getOriginalFilename();
-                String filePath = uploadDir + File.separator + fileName;
+                String filePath = UPLOAD_DIR + File.separator + fileName;
                 file.transferTo(new File(filePath));
-                usedRepository.writeImage(used.getPostId(),fileName);
+                usedRepository.writeImage(used.getPostId(),fileName); // img 테이블에 insert
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * 게시물 업데이트
+     * */
     @Override
     public void update(Used used, PrincipalDetails principalDetails) throws Exception{//게시글수정
-        used.setMemberId(principalDetails.getMember().getMemberId());
+        used.setMemberId(principalDetails.getMember().getMemberId()); // security 에 있는 memberId를 used 에 넣음
         String formImg = used.getFiles().get(0).getOriginalFilename();
-        usedRepository.updatePost(used);
-        usedRepository.updateProduct(used);
+        usedRepository.updatePost(used); // post 테이블 update
+        usedRepository.updateProduct(used); // product 테이블 update
 
-        Path originImg = Path.of(uploadDir+"\\"+usedRepository.findImgUrl(used.getPostId()));//원래 이미지 url찾아오기
-            if (!Files.exists(Paths.get(uploadDir))) {//디렉토리가 없다면 디렉토리생성
-                Files.createDirectories(Paths.get(uploadDir));
+        Path originImg = Path.of(UPLOAD_DIR+"\\"+usedRepository.findImgUrl(used.getPostId()));//원래 이미지 url찾아오기
+            if (!Files.exists(Paths.get(UPLOAD_DIR))) {//디렉토리가 없다면 디렉토리생성
+                Files.createDirectories(Paths.get(UPLOAD_DIR));
             }
             if(!formImg.equals("") && formImg != null ) {
                 for (MultipartFile file : used.getFiles()) {
@@ -168,20 +180,21 @@ public class UsedServiceImpl implements UsedService{
                     Files.delete(originImg);//원래 이미지 삭제
                     String uuid = UUID.randomUUID().toString();
                     String fileName = uuid + "_" + file.getOriginalFilename();
-                    String filePath = uploadDir + File.separator + fileName;
+                    String filePath = UPLOAD_DIR + File.separator + fileName;
                     file.transferTo(new File(filePath));
-                    usedRepository.updateImage(used.getPostId(), fileName);
+                    usedRepository.updateImage(used.getPostId(), fileName); // img 테이블 update
                   }
             }
 
 
     }
-
+    /**
+     * 게시물 삭제
+     * */
     @Override
-    public void delete(long postId) {
-
+    public void delete(long postId) { // 추후에 변경예정
         try {
-            Path uploadDirPath = Path.of(uploadDir+usedRepository.findImgUrl(postId));
+            Path uploadDirPath = Path.of(UPLOAD_DIR+usedRepository.findImgUrl(postId));
             Files.delete(uploadDirPath);
             usedRepository.deleteReply(postId);
             usedRepository.deleteImg(postId);
@@ -191,18 +204,20 @@ public class UsedServiceImpl implements UsedService{
             e.printStackTrace();
         }
     }
-
+    /**
+     * 게시물 상세보기
+     * */
     @Override
     public Used detail(long postId, HttpServletRequest request, HttpServletResponse response, PrincipalDetails principalDetails) { //게시물 상세보기
         Post post = usedRepository.findPost(postId); //파라미터로 받은 postId에 해당하는 튜플을 post 테이블에서 가져오기
         Product product = usedRepository.findProduct(postId); //파라미터로 받은 postId에 해당하는 튜플을 product 테이블에서 가져오기
         Member member = usedRepository.findMember(post.getMemberId()); //가져온 post의 memberId로 member 테이블에서 해당하는 튜플 가져오기
         String categoryName = usedRepository.findCategoryName(product.getCategoryId()); //가져온 product의 categoryId로 category 테이블에서 해당하는 categoryName 가져오기
-        int replyCount = usedRepository.findReplyCount(post.getPostId());
-        int likesCount = usedRepository.findLikesCount(post.getPostId());
-        int likesCheck = 0;
-        if (principalDetails != null) {
-            likesCheck = usedRepository.likesCheck(Likes.builder()
+        int replyCount = usedRepository.findReplyCount(post.getPostId()); // postId 로 댓글 갯수 가져오기
+        int likesCount = usedRepository.findLikesCount(post.getPostId()); // postId 로 좋아요 갯수 가져오기
+        int likesCheck = 0; // 초기화
+        if (principalDetails != null) { // 현재 로그인한 상태라면
+            likesCheck = usedRepository.likesCheck(Likes.builder() // 좋아요를 누른 게시물인지 확인
                     .postId(postId)
                     .memberId(principalDetails.getMember().getMemberId())
                     .build());
@@ -210,7 +225,7 @@ public class UsedServiceImpl implements UsedService{
 
         Cookie[] cookies = request.getCookies(); //쿠키 가져오기
 
-        Cookie viewCookie = null; //
+        Cookie viewCookie = null;
 
         if (cookies != null && cookies.length > 0) { //가져온 쿠키가 있으면
             for (Cookie cookie : cookies) {
@@ -251,48 +266,60 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public String findImgUrl(long postId) {//사진
+    public String findImgUrl(long postId) { // 삭제 예정(?)
         String fileName = usedRepository.findImgUrl(postId);
         return fileName;
     }
 
     @Override
-    public void downloadFiles(String filename, HttpServletResponse response) throws IOException {
+    public void downloadFiles(String filename, HttpServletResponse response) throws IOException { // 삭제 예정(?)
         imgDownService.imgDown(filename,response);
     }
 
+    /**
+     * 게시물 좋아요 업, 다운
+     */
     @Override
     public Used likes(long postId, PrincipalDetails principalDetails, int likesCheck) {
-        if (likesCheck == 0) {
-            usedRepository.likesUp(Likes.builder()
+        if (likesCheck == 0) { // 좋아요를 누르지 않은 상태라면
+            usedRepository.likesUp(Likes.builder() // likes 테이블에 insert 후
                     .postId(postId)
                     .memberId(principalDetails.getMember().getMemberId())
                     .build());
-            likesCheck = 1;
-        }else {
-            usedRepository.likesDown(Likes.builder()
+            likesCheck = 1; // 좋아요를 누른 상태로 변경
+        }else { // 좋아요를 누른 상태라면
+            usedRepository.likesDown(Likes.builder() // likes 테이블에 delete 후
                     .postId(postId)
                     .memberId(principalDetails.getMember().getMemberId())
                     .build());
-            likesCheck = 0;
+            likesCheck = 0; // 좋아요를 누르지 않은 상태로 변경
         }
         return Used.builder()
-                .likesCount(usedRepository.findLikesCount(postId))
-                .likesCheck(likesCheck)
+                .likesCount(usedRepository.findLikesCount(postId)) // 게시물의 좋아요 갯수와
+                .likesCheck(likesCheck) // 좋아요 상태를 리턴
                 .build();
     }
 
+    /**
+     * 신고타입 리스트
+     */
     @Override
     public List<ReportType> reportType() {
-        return usedRepository.findAllReportType();
+        return usedRepository.findAllReportType(); // 신고 타입 번호랑, 신고 타입 이름을 리턴
     }
 
+    /**
+     * 게시물 신고
+     */
     @Override
     public void report(Report report, PrincipalDetails principalDetails) {
-        report.setReporterId(principalDetails.getMember().getMemberId());
+        report.setReporterId(principalDetails.getMember().getMemberId()); // report 테이블에 insert
         usedRepository.report(report);
     }
 
+    /**
+     * 신고내역 리스트
+     */
     @Override
     public List<PostReport> findAllReport(Criteria criteria) {
         Map<String, Object> map = new HashMap<>();
@@ -325,7 +352,9 @@ public class UsedServiceImpl implements UsedService{
           }
         return postReports;
     }
-
+    /**
+     * 좋아요 누른 게시물
+     */
     @Override
     public List<Used> likePost(long memberId) {
         List<Used> usedList = new ArrayList<>();//리턴그릇
