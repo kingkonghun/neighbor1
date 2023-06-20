@@ -72,6 +72,7 @@ public class MemberController {
     }
 
     @GetMapping("/myWrite")//내가 작성한 글
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String myWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria) {
         List<Used> used = memberService.myWrite(principalDetails, criteria);
         int total = memberService.getTotal(principalDetails.getMember().getMemberId());
@@ -81,6 +82,7 @@ public class MemberController {
     }
 
     @GetMapping("/myWriteFive")//내가 작성한 글 5개만
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String myWriteFive(long memberId,Model model) {
         List<Used> used = memberService.myWriteFive(memberId);
         model.addAttribute("list",used);
@@ -88,6 +90,7 @@ public class MemberController {
     }
 
     @GetMapping("/myInfo")//내 개인정보
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String myInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         Member member = memberService.myInfo(principalDetails);
         model.addAttribute("list", member);
@@ -100,21 +103,34 @@ public class MemberController {
         return principalDetails != null;
     }
 
+    @ResponseBody
+    @GetMapping("/isAuthorization")//권한인증
+    public boolean isAuthorization(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return principalDetails.getMember().getRole().equals("ROLE_GUEST");
+    }
+
     @GetMapping("/findProfileImg")//프사다운
     public void findProfileImg(long memberId, HttpServletResponse response) throws Exception {
         String profileImg = memberService.findProfileImg(memberId);//사진이름가져오기
         memberService.downProfileImg(response, profileImg);//사진다운
     }
     @GetMapping("/editInfo")//수정페이지로 이동
+    @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String editInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         Member member = memberService.myInfo(principalDetails);
         model.addAttribute("list", member);
         return "member/editInfo";
     }
     @PostMapping("/myEdit")//진짜수정
+    @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String myEdit(Member member){
         memberService.editInfo(member);
         return "index";
     }
 
+    @ResponseBody
+    @GetMapping("/noAdmin")
+    public String noAdmin() {
+        return "권한이 없습니다. 꺼지세요";
+    }
 }
