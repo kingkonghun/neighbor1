@@ -1,6 +1,7 @@
 package com.anabada.neighbor.club.repository;
 
 import com.anabada.neighbor.club.domain.ImageRequest;
+import com.anabada.neighbor.club.domain.ImageResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
@@ -61,6 +62,21 @@ public interface MbClubRepository extends ClubRepository {
     @Override
     @Select("select * from post where postType = 'club' order by postId desc")//6개리스트만가져오기
     List<Post> selectPostList();
+
+    @Override
+    @Select("select * from file where deleteYn = 0 and postId = #{postId}" +
+            " order by imgId")
+    List<ImageResponse> selectImagesByPostId(Long postId);
+
+    @Override
+    @Select("select * from file" +
+            " where deleteYn = 0 and imgId IN (#{imgId}) order by imgId")
+    ImageResponse selectImageByImgId(Long imgId);
+
+    @Override
+    @Delete("update file set deleteYn = 1, deleDate = NOW()" +
+            " where imgId IN (#{imgId})")
+    void deleteImageByImgId(Long imgId);
 
     @Override
     @Select("select hobbyId from hobby where hobbyName = #{hobbyName}")

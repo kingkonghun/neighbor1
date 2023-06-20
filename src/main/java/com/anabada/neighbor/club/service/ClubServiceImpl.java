@@ -3,6 +3,7 @@ package com.anabada.neighbor.club.service;
 import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ImageRequest;
+import com.anabada.neighbor.club.domain.ImageResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.member.domain.Member;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -52,6 +54,51 @@ public class ClubServiceImpl implements ClubService {
         }
         return 1;
     }
+
+    /**
+     * 이미지 리스트 조회
+     * @param postId 게시글 번호 FK
+     * @return 이미지 리스트
+     */
+    @Override
+    public List<ImageResponse> findAllImageByPostId(Long postId) {
+        return clubRepository.selectImagesByPostId(postId);
+    }
+
+    /**
+     * 이미지 조회
+     *
+     * @param imgIds PK
+     * @return 이미지
+     */
+    @Override
+    public List<ImageResponse> findAllImageByImgIds(List<Long> imgIds) {
+        if (CollectionUtils.isEmpty(imgIds)){
+            return Collections.emptyList();//비어있는 리스트 반환
+        }
+        List<ImageResponse> result = new ArrayList<>();
+        for(Long imgId : imgIds) {
+            result.add(clubRepository.selectImageByImgId(imgId));
+        }
+        return result;
+    }
+
+    /**
+     * 이미지 삭제(from DataBase)
+     *
+     * @param imgIds PK
+     */
+    @Transactional
+    @Override
+    public void deleteAllImageByImgIds(List<Long> imgIds) {
+        if (CollectionUtils.isEmpty(imgIds)) {
+            return;
+        }
+        for (Long imgId : imgIds) {
+            clubRepository.deleteImageByImgId(imgId);
+        }
+    }
+
     @Override
     public ClubResponse findClub(long postId) {
         Post post = clubRepository.selectPost(postId);

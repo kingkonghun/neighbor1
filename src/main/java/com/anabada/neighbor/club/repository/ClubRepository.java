@@ -1,6 +1,7 @@
 package com.anabada.neighbor.club.repository;
 
 import com.anabada.neighbor.club.domain.ImageRequest;
+import com.anabada.neighbor.club.domain.ImageResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
@@ -42,6 +43,27 @@ public interface ClubRepository {
     public Member selectMember(long memberId);
 
     public List<Post> selectPostList();
+
+    /**
+     * 이미지 리스트 조회
+     * @param postId 게시글 번호 FK
+     * @return 이미지 리스트
+     */
+    public List<ImageResponse> selectImagesByPostId(Long postId);
+
+    /**
+     * 이미지 리스트 조회
+     * @param imgId PK
+     * @return 이미지 정보
+     */
+    public ImageResponse selectImageByImgId(Long imgId);
+
+    /**
+     * 이미지 삭제
+     * @param imgId PK
+     */
+    public void deleteImageByImgId(Long imgId);
+
     /**
      *
      * @param hobbyName 취미이름

@@ -3,6 +3,7 @@ package com.anabada.neighbor.club.service;
 import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ImageRequest;
+import com.anabada.neighbor.club.domain.ImageResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.used.domain.Post;
 
@@ -31,6 +32,28 @@ public interface ClubService {
      * @return 성공하면 1, 실패 or 이미지가없으면 0 리턴
      */
     public int saveImages(final Long postId, final List<ImageRequest> images);//이미지저장
+
+    /**
+     * 이미지 리스트 조회
+     * @param postId 게시글 번호 FK
+     * @return 파일 리스트
+     */
+    public List<ImageResponse> findAllImageByPostId(Long postId);
+
+    /**
+     * 이미지 리스트 조회
+     *
+     * @param imgIds PK 리스트
+     * @return 이미지 리스트
+     */
+    public List<ImageResponse> findAllImageByImgIds(List<Long> imgIds);
+
+    /**
+     * 이미지 삭제 (from DateBase)
+     *
+     * @param imgIds PK 리스트
+     */
+    public void deleteAllImageByImgIds(List<Long> imgIds);
 
     /**
      * 게시글 상세정보 조회
