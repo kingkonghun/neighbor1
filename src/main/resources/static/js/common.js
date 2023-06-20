@@ -6,7 +6,7 @@ function checkIsAuthenticated() {
         url: "/member/isAuthenticated",
         async: false,
         success: function (result) {
-        isAuthenticated = result;
+            isAuthenticated = result;
         }
     });
     return isAuthenticated;
@@ -20,7 +20,7 @@ function checkIsAuthorization() {
         url: "/member/isAuthorization",
         async: false,
         success: function (result) {
-        isAuthorization = result;
+            isAuthorization = result;
         }
     });
     return isAuthorization;
