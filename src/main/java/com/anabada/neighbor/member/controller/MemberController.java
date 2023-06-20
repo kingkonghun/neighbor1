@@ -116,9 +116,10 @@ public class MemberController {
     }
     @GetMapping("/editInfo")//수정페이지로 이동
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String editInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
+    public String editInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model,String message) {
         Member member = memberService.myInfo(principalDetails);
         model.addAttribute("list", member);
+        model.addAttribute("message",message);
         return "member/editInfo";
     }
     @PostMapping("/myEdit")//진짜수정

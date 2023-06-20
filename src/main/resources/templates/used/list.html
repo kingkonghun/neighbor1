@@ -10,7 +10,11 @@
         background-color: #E6E6E6;
     }
 </style>
-<script th:inline="javascript">
+<script type="text/javascript">
+    function reload(){
+        location.href="/used/list";
+    }
+
     $(function (){
         let num = 0;
         $("#btnPlus").click(function (){
@@ -106,7 +110,7 @@
 <div th:replace="nav::nav"></div>
 
 <header class="mt-5">
-    <h1>중고거래</h1>
+    <h1><a href="#" onclick="reload()">중고거래</a></h1>
 </header>
 
 <section class="container mt-2">
