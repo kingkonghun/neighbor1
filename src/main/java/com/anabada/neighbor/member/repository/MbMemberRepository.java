@@ -86,5 +86,9 @@ public interface MbMemberRepository extends MemberRepository{
     @Override
     @Select("SELECT count(*) FROM likes WHERE memberId=#{memberId}")
     long countMyLikes(long memberId);//좋아요 누른 게시글 양 확인
+
+    @Override
+    @Select("select * from member where memberId = #{memberId}")
+    Member findByMemberId(long reporterId);
 }
 
