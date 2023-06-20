@@ -6,6 +6,7 @@ import com.anabada.neighbor.used.domain.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface MbUsedRepository extends UsedRepository {
@@ -83,6 +84,10 @@ public interface MbUsedRepository extends UsedRepository {
     int findReplyCount(long postId);
 
     @Override
+    @Select("SELECT * FROM likes WHERE memberId=#{memberId}")
+    List<Likes> findLikePosts(long memberId);
+
+    @Override
     @Select("select count(*) from likes where postId = #{postId}")
     int findLikesCount(long postId);
 
@@ -97,4 +102,22 @@ public interface MbUsedRepository extends UsedRepository {
     @Override
     @Delete("delete from likes where postId = #{postId} and memberId = #{memberId}")
     void likesDown(Likes likes);
+
+    @Override
+    @Select("select * from reportType")
+    List<ReportType> findAllReportType();
+
+    @Override
+    @Insert("insert into report (postId, reporterId, content, reportTypeId) values (#{postId}, #{reporterId}, #{content}, #{reportTypeId})")
+    void report(Report report);
+
+    @Override
+    @Select("SELECT * FROM report ORDER BY reportId desc LIMIT #{criteria.amount} OFFSET #{criteria.offset} ")
+    List<Report> findAllReport(Map<String, Object> map);
+
+    @Override
+    @Select("SELECT reportTypeName FROM reportType WHERE reportTypeId=#{reportTypeId}")
+    String findReportTypeName(long reportTypeId);
+
+
 }

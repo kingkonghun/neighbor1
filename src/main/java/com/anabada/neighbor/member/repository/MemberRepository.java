@@ -39,4 +39,14 @@ public interface MemberRepository {
     void editInfoNotPwd(Member member);//비밀번호 안들어왔을때
 
     void editProfileImg(Map<String, Object> map);
+
+    List<Member> findAllMember(Map<String,Object> map);
+
+    String findMemberName(long memberId);
+
+    Post findReportedMember(long postId);
+
+    long countMyLikes(long memberId);
+
+    Member findByMemberId(long reporterId);
 }

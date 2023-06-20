@@ -15,7 +15,7 @@ public interface MemberService {
 
 
    public List<Used> myWrite(PrincipalDetails principalDetails, Criteria criteria);//내가 쓴 글
-    public int getTotal(PrincipalDetails principalDetails);//페이징
+    public int getTotal(long principalDetails);//페이징
 
    public Member myInfo(PrincipalDetails principalDetails);//내정보
 
@@ -26,4 +26,7 @@ public interface MemberService {
    public List<Used> myWriteFive(long memberId);//내가 작성한 글(중고게시글) 5개만
 
    public void editInfo(Member member);//개인정보 수정
+
+    List<Member> findAllMember(Criteria criteria);//관리자 모든멤버 가져오기
+
 }

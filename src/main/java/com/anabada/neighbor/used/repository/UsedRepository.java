@@ -4,9 +4,9 @@ package com.anabada.neighbor.used.repository;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.*;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface UsedRepository {
@@ -61,4 +61,14 @@ public interface UsedRepository {
     int likesCheck(Likes likes);
 
     void likesDown(Likes likes);
+
+    List<ReportType> findAllReportType();
+
+    void report(Report report);
+
+    List<Report> findAllReport(Map<String, Object> map);
+
+    String findReportTypeName(long reportTypeId);
+
+    List<Likes> findLikePosts(long memberId);
 }

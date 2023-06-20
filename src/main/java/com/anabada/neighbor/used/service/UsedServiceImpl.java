@@ -2,7 +2,8 @@ package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
-import com.anabada.neighbor.reply.domain.Reply;
+import com.anabada.neighbor.member.repository.MemberRepository;
+import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.used.domain.*;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class UsedServiceImpl implements UsedService{
 
     private final UsedRepository usedRepository;
     private final ImgDownService imgDownService;
+    private final MemberRepository memberRepository;
     String uploadDir = "C:\\upload_anabada\\";
 
     @Override
@@ -64,9 +66,8 @@ public class UsedServiceImpl implements UsedService{
 
 
 
-
     @Override
-    public List<Used> list(long categoryId, String listType, int num) {//글 리스트
+    public List<Used> list(long categoryId, String listType, int num, String search) {//글 리스트
         List<Used> usedList = new ArrayList<>(); //리턴할 값
         List<Product> productList = null;
         if (categoryId != 0) { //파라미터로 받은 categoryId가 0이 아니면
@@ -91,7 +92,7 @@ public class UsedServiceImpl implements UsedService{
                     .productId(product.getProductId())
                     .categoryName(categoryName)
                     .price(product.getPrice())
-                    .productStatus(product.getProductStatus())
+                    .productStatus(product.getProductStatus().equals("y") ? "판매중" : "판매 완료")
                     .categoryId(product.getCategoryId())
                     .memberId(member.getMemberId())
                     .address(member.getAddress())
@@ -102,7 +103,9 @@ public class UsedServiceImpl implements UsedService{
                     .replyCount(replyCount)
                     .likesCount(likesCount)
                     .build();
-            usedList.add(used);//리턴할 usedList에 used객체 추가
+            if (used.getTitle().indexOf(search) != -1 || used.getContent().indexOf(search) != -1) {
+                usedList.add(used);//리턴할 usedList에 used객체 추가
+            }
         }
         //리스트를 postupdate로 내림차순 정렬
         Comparator<Used> comparator = (use1, use2) -> Long.valueOf(
@@ -279,6 +282,69 @@ public class UsedServiceImpl implements UsedService{
                 .build();
     }
 
+    @Override
+    public List<ReportType> reportType() {
+        return usedRepository.findAllReportType();
+    }
+
+    @Override
+    public void report(Report report, PrincipalDetails principalDetails) {
+        report.setReporterId(principalDetails.getMember().getMemberId());
+        usedRepository.report(report);
+    }
+
+    @Override
+    public List<PostReport> findAllReport(Criteria criteria) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("criteria",criteria);
+        List<PostReport> postReports = new ArrayList<>();//리턴 그릇
+        List<Report> reportList = usedRepository.findAllReport(map);//신고 테이블 다 긁어옴
+        for (Report report : reportList) {
+            String reportTypeName = usedRepository.findReportTypeName(report.getReportTypeId());
+
+            long postId=report.getPostId();//요놈으로 포스트갔다가 멤버갔다가 포스트제목과 신고당한사람 이름 가져옴
+            Post post=memberRepository.findReportedMember(postId);
+//            String reportedName = memberRepository.findMemberName(post.getMemberId());
+
+            Member reportedMember = memberRepository.findByMemberId(post.getMemberId());
+
+            PostReport postReport = PostReport.builder()
+                    .postId(report.getPostId())//신고 당한 게시글
+                    .reportTypeName(reportTypeName)//신고 타입..
+                    .reporterId(report.getReporterId())//신고자
+                    .reporterName(memberRepository.findMemberName(report.getReporterId()))//신고자 이름
+                    .reportedName(reportedMember.getMemberName())
+                    .content(report.getContent())//신고 내용
+                    .reportId(report.getReportId())//신고 번호
+                    .title(post.getTitle())//신고 당한 게시글 제목
+                    .reportedMemberScore(reportedMember.getScore())
+                    .reportedId(reportedMember.getMemberId())
+                    .build();
+            postReports.add(postReport);
+
+          }
+        return postReports;
+    }
+
+    @Override
+    public List<Used> likePost(long memberId) {
+        List<Used> usedList = new ArrayList<>();//리턴그릇
+        List<Likes> likesList = usedRepository.findLikePosts(memberId);//좋아요 누른 게시글 긁어오기
+        for (Likes likes : likesList) {//좋아요누른 게시글만큼 반복
+            long postId = likes.getPostId();//좋아요 누른 게시글id
+            Post post = usedRepository.findPost(postId);
+            Used used = Used.builder()
+                    .postId(postId)
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .postView(post.getPostView())
+                    .likesCount(usedRepository.findLikesCount(postId))
+                    .build();
+            /*제목, 내용, 조회수,좋아요 수*/
+            usedList.add(used);
+        }
+        return usedList;
+    }
 
 
 }

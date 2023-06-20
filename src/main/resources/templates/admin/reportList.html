@@ -1,44 +1,91 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>Title</title>
     <th:block th:insert="/common/common :: fragment-header"></th:block>
-    <style>
-        #liWrite{color:red;}
-
-        .table{font-family: 'GangwonEduPowerExtraBoldA';}
-
-        .img {width: 50px; height: 50px;}
-        .pagination {margin-top: 3em; margin-bottom: 5em;}
-        .pagination .pageNum{list-style: none; display: flex;}
-    </style>
     <link rel="stylesheet" th:href="@{/css/myPage.css}">
+    <style>
+        #adminT, #listMember {color: red;}
+        .reportList{font-family: 'GangwonEduPowerExtraBoldA';}
+        .reportTitle{color:#FF3366;}
+        .reportContent{color:#FF3366;}
+
+    #modal {
+        position: fixed;
+        z-index: 3;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        display: none;
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        border: 1px solid #888;
+        width: 500px;
+        border-radius: 12px;
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    #close-modal {
+        cursor: pointer;
+    }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+<script>
+    $(function(){
+        const modal = $("#modal");
+        $("#close-modal").click(function(){
+            modal.css("display", "none");
+            $("body").css("overflow", "auto");
+        });
+    });
+    function openModal(reportId, score, rrName, rdName, rdId){
+        const modal = $("#modal");
+        modal.css("display", "block");
+        $("body").css("overflow", "hidden");
+        $("#rrName").append(rrName);
+        $("#rdName").append(rdName);
+        $("#memberScore").val(score);
+        $("#reportedId").val(rdId);
+        $("#reportId").val(reportId);
+    }
+</script>
 </head>
 <body>
-<!-- Nav바-->
 <div th:replace="ex :: nav"></div>
 <div th:replace="member/myPageNav :: nav"></div>
-
-<div class="myWrite">
+<div class="reportList">
     <table  style="width: 100%;" class="table table-hover">
         <thead>
-            <th>글번호</th>
-            <th>카테고리</th>
-            <th>사진</th>
-            <th>제목</th>
-            <th>등록일</th>
-            <th>조회수</th>
+            <th>신고 번호</th>
+            <th>신고자</th>
+            <th>나쁜놈</th>
+            <th>분류</th>
+            <th>신고 게시글 제목</th>
+            <th>신고 내용</th>
         </thead>
-        <tbody th:each="list : ${writeList}">
-            <tr th:onclick="'detail('+${list.postId}+')'" >
-                <td th:text="${list.postId}"></td>
-                <td th:text="${list.categoryName}"></td>
-                <td> <img class="img"  th:src="@{/used/findImg(postId=${list.postId})}"  alt="실패"></td>
-                <td th:text="${list.title}"></td>
-                <td th:text="${#dates.format(list.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></td>
-                <td th:text="${list.postView}"></td>
-            </tr>
+        <tbody th:each="report : ${list}">
+        <tr>
+            <td th:text="${report.reportId}"></td>
+            <td th:text="${report.reporterName}"></td>
+            <td th:text="${report.reportedName}"></td>
+            <td th:text="${report.reportTypeName}"></td>
+            <td><a class="reportTitle" href="#" th:onclick="|location.href='@{detail(postId=${report.postId})}'|" th:text="${report.title}"></a></td>
+            <td id="open-modal" class="reportContent" th:onclick="openModal([[${report.reportId}]], [[${report.reportedMemberScore}]], [[${report.reporterName}]], [[${report.reportedName}]], [[${report.reportedId}]])" th:text="${report.content}"></td>
+        </tr>
         </tbody>
     </table>
 
@@ -70,7 +117,7 @@
             <li class="page-item" th:classappend="${pageMaker.next ? '' : 'disabled'}" th:if="${pageMaker.endPage < pageMaker.realEnd}">
                 <a class="page-link" th:href="|?pageNum=${pageMaker.endPage + 1}|">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                       <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
                     </svg>
                 </a>
             </li>
@@ -87,14 +134,26 @@
     </div>
 </div>
 
-    <script th:inline="javascript">
-        function detail(postId) {
-            if (confirm("작성한 게시글로 가시겠습니까?")) {
-                location.href="/used/detail?postId="+postId;
-            }
-        }
-    </script>
-<!-- Footer-->
+<!--신고모달-->
+<div id="modal">
+    <div class="modal-content p-4">
+        <div class="modal-header">
+            <h2>신고접수</h2>
+            <i id="close-modal" class="bi bi-x-lg" style="font-size: 32px;"></i>
+        </div>
+        <div>
+            <span id="rrName">신고한 사람 : </span> <br>
+            <h5>점수차감</h5>
+            <span id="rdName">나쁜놈 : </span>
+            <input id="reportId">
+            <input id="reportedId">
+            <input id="memberScore" type="number">
+        </div>
+        <button type="button" id="btnOk">확인</button>
+    </div>
+</div>
+
+
 <div th:replace="footer :: footer"></div>
 </body>
 </html>

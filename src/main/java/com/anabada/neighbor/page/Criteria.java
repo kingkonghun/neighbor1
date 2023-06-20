@@ -1,11 +1,14 @@
 package com.anabada.neighbor.page;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Data
 @Component
+
 public class Criteria {
     private int pageNum; //현재 페이지 번호
     private int amount;//한 페이지당 보여줄 게시글의 갯수

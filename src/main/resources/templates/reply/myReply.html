@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <th:block th:insert="/common/common :: fragment-header"></th:block>
+  <style>
+    .myReply_div{overflow: auto;}
+    .h2{text-align: center; padding-bottom: 1.5em;font-family: 'GangwonEduPowerExtraBoldA';}
+    .tableBox{overflow: auto; height: 400px;}
+    .btnList{text-align: right; padding-top: 1.5em; padding-bottom: 1.5em;}
+  </style>
+</head>
+<body>
+<div class="myReply_div">
+  <h2 class="h2">내가 작성한 댓글</h2>
+  <div class="tableBox">
+    <table  style="width: 100%;" class="table table-hover">
+      <thead>
+        <th>제목</th>
+        <th>게시글 유형</th>
+        <th>댓글</th>
+        <th>작성 날짜</th>
+      </thead>
+      <tbody th:each="reply : ${list}">
+      <tr>
+        <td th:text="${reply.title}"></td>
+        <td th:text="${reply.postType}"></td>
+        <td th:text="${reply.comment}"></td>
+        <td th:text="${#dates.format(reply.replyUpdate,'yyyy년 MM월 dd일 HH시')}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="btnList">
+    <button class="btn btn-outline-danger" type="button" id="btnBack" onclick="removeHTML()">뒤로가기</button>
+  </div>
+</div>
+</body>
+</html>

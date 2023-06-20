@@ -4,6 +4,8 @@ import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.reply.domain.CarryReply;
 import com.anabada.neighbor.reply.domain.Reply;
 import com.anabada.neighbor.reply.repository.ReplyRepository;
+import com.anabada.neighbor.used.domain.Post;
+import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.List;
 public class ReplyServiceImpl implements ReplyService {
 
     private final ReplyRepository replyRepository;
+    private final UsedRepository usedRepository;
 
     @Override
     public List<CarryReply> list(long postId) { //댓글 목록
@@ -26,6 +29,8 @@ public class ReplyServiceImpl implements ReplyService {
             if(reply.getParentId() != 0) { //reply 테이블의 parentId가 0이 아니라면(대댓글이라면)
                 Reply parent = replyRepository.findReply(reply.getParentId()); //reply 테이블의 parentId로 reply 테이블에서 부모 튜플 가져오기
                 parentName = replyRepository.findMemberName(parent.getMemberId()); //가져온 parent의 memberId로 member 테이블에서 해당하는 memberName 가져오기
+            }else {
+                parentName = null;
             }
             CarryReply carryReply = CarryReply.builder() //carryReply 객체 생성 
                     .replyId(reply.getReplyId())
@@ -40,6 +45,7 @@ public class ReplyServiceImpl implements ReplyService {
                     .memberName(memberName)
                     .parentName(parentName)
                     .build();
+            System.out.println("parentName = " + parentName);
             list.add(carryReply); //리턴할 list에 carryReply 추가
         }
         return list;
@@ -74,7 +80,21 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public CarryReply findMyReply(long memberId) {//내가 쓴 댓글목록
-        return replyRepository.findMyReply(memberId);
+    public List<CarryReply> findMyReply(long memberId) {//내가 쓴 댓글목록
+        List<CarryReply> carryReplyList = new ArrayList<>();//리턴그릇
+        List<Reply> replyList=replyRepository.findMyReply(memberId);//댓글목록 긁어오기
+        for (Reply reply : replyList) {
+            long postId = reply.getPostId();
+            Post post = usedRepository.findPost(postId);
+            CarryReply carryReply = CarryReply.builder()
+                    .postId(postId)
+                    .title(post.getTitle())//게시글 제목
+                    .replyUpdate(reply.getReplyUpdate())//작성,수정 날짜
+                    .comment(reply.getComment())//댓글 내용
+                    .postType(post.getPostType().equals("used")  ? "중고 상품" : "클럽 게시글")//게시글 유형
+                    .build();
+            carryReplyList.add(carryReply);
+        }
+        return carryReplyList;
     }
 }

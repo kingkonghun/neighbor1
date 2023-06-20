@@ -12,7 +12,7 @@ public interface MbReplyRepository extends ReplyRepository {
 
     @Override
     @Select("SELECT*FROM reply WHERE memberId = #{memberId}")//내가 작성한 댓글목록
-    CarryReply findMyReply(long memberId);
+    List<Reply> findMyReply(long memberId);
 
     @Select("select * from reply where postId = #{postId} order by reGroup, replyId")
     public List<Reply> list(long postId);

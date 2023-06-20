@@ -25,7 +25,7 @@ public interface MbMemberRepository extends MemberRepository{
     int getTotal(long memberId);
 
     @Override
-    @Insert("insert into member (memberEmail, memberName, memberPWD, address, addressDetail, mbti, providerId, role) values (#{memberEmail}, #{memberName}, #{memberPWD}, #{address}, #{addressDetail}, #{mbti}, #{providerId}, #{role})")
+    @Insert("insert into member (memberEmail, memberName, memberPWD, address, addressDetail, providerId, role) values (#{memberEmail}, #{memberName}, #{memberPWD}, #{address}, #{addressDetail}, #{providerId}, #{role})")
     void save(Member member);
 
     @Override
@@ -70,5 +70,25 @@ public interface MbMemberRepository extends MemberRepository{
     @Override
     @Update("UPDATE member SET profileImg=#{profileImg} WHERE memberId=#{memberId}")
     void editProfileImg(Map<String, Object> map);
+
+    @Override
+    @Select("SELECT * FROM member ORDER BY memberId desc LIMIT #{criteria.amount} OFFSET #{criteria.offset} ")
+    List<Member> findAllMember(Map<String,Object> map);//관리자 모든 멤버 가져오기
+
+    @Override
+    @Select("SELECT memberName FROM member WHERE memberId=#{memberId}")
+    String findMemberName(long memberId);//신고당한사람,신고자 이름가져오기
+
+    @Override
+    @Select("SELECT memberId,title FROM post WHERE postId=#{postId}")
+    Post findReportedMember(long postId);
+
+    @Override
+    @Select("SELECT count(*) FROM likes WHERE memberId=#{memberId}")
+    long countMyLikes(long memberId);//좋아요 누른 게시글 양 확인
+
+    @Override
+    @Select("select * from member where memberId = #{memberId}")
+    Member findByMemberId(long reporterId);
 }
 

@@ -6,14 +6,18 @@ import com.anabada.neighbor.member.service.EmailService;
 import com.anabada.neighbor.member.service.MemberService;
 import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.page.PageDTO;
+import com.anabada.neighbor.used.domain.Report;
 import com.anabada.neighbor.used.domain.Used;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -31,7 +35,11 @@ public class MemberController {
     }
 
     @GetMapping("/loginForm")
-    public String loginForm(Model model, String errorMessage) { // 로그인 폼으로 이동
+    public String loginForm(Model model, String errorMessage, HttpServletRequest request) { // 로그인 폼으로 이동
+        String uri = request.getHeader("Referer");
+        if (uri != null && !uri.contains("/login")) {
+            request.getSession().setAttribute("prevPage", uri);
+        }
         model.addAttribute("errorMessage", errorMessage); // 로그인 실패 시 에러메시지
         return "/member/loginForm";
     }
@@ -42,31 +50,35 @@ public class MemberController {
     }
 
     @PostMapping("/join")
-    public String join(Member member, String m, String b, String t, String i) { // 회원가입
-        member.setMbti(m + b + t + i);
+    public String join(Member member) { // 회원가입
         memberService.save(member);
         return "redirect:/member/loginForm";
     }
 
     @ResponseBody
     @GetMapping("/test")
-    @Secured("ROLE_USER")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public Member test(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         return principalDetails.getMember();
     }
 
     @ResponseBody
     @GetMapping("/admin")
-    @Secured("ROLE_admin")
-    public String admin() {
-        return "어드민 권한 테스트";
+    @Secured("ROLE_ADMIN")
+    public ModelAndView admin(ModelAndView mav,Criteria criteria) {
+        List<Member> member = memberService.findAllMember(criteria);//멤버리스트
+        mav.addObject("member",member);
+        mav.addObject("pageMaker", new PageDTO(member.size(), 10, criteria));
+        mav.setViewName("admin/memberList");
+        return mav;
     }
 
 
-    @GetMapping("/emailConfirm")//이메일인증
-    public String emailConfirm() throws Exception {
-        String confirm = emailService.sendSimpleMessage("wbg030281@gmail.com");
-        return confirm;
+    @ResponseBody
+    @PostMapping("/emailConfirm")//이메일인증
+    public String emailConfirm(String memberEmail) throws Exception {
+//        String confirm = emailService.sendSimpleMessage(memberEmail);
+        return "confirm";
     }
 
 
@@ -74,7 +86,7 @@ public class MemberController {
     @GetMapping("/myWrite")//내가 작성한 글
     public String myWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria) {
         List<Used> used = memberService.myWrite(principalDetails, criteria);
-        int total = memberService.getTotal(principalDetails);
+        int total = memberService.getTotal(principalDetails.getMember().getMemberId());
         model.addAttribute("writeList", used);
         model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
         return "member/myWrite";
@@ -116,4 +128,6 @@ public class MemberController {
         memberService.editInfo(member);
         return "index";
     }
+
+
 }

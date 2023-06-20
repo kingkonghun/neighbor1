@@ -1,8 +1,8 @@
 package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
-import com.anabada.neighbor.used.domain.Category;
-import com.anabada.neighbor.used.domain.Used;
+import com.anabada.neighbor.page.Criteria;
+import com.anabada.neighbor.used.domain.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +16,7 @@ public interface UsedService {
     //글리스트
     //상세보기
     //사진
-    public List<Used> list(long categoryId, String listType, int num);
+    public List<Used> list(long categoryId, String listType, int num, String search);
     public void write(Used used, PrincipalDetails principalDetails)throws Exception;
     public void update(Used used, PrincipalDetails principalDetails) throws Exception;
     public void delete(long postId);
@@ -26,4 +26,12 @@ public interface UsedService {
     List<Category> categoryList();
     List<Used> mainList();
     Used likes(long postId, PrincipalDetails principalDetails, int likesCheck);
+
+    List<ReportType> reportType();
+
+    void report(Report report, PrincipalDetails principalDetails);
+
+    List<PostReport> findAllReport(Criteria criteria);
+
+    List<Used> likePost(long memberId);
 }
