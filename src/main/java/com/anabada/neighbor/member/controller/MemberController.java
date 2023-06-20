@@ -56,13 +56,6 @@ public class MemberController {
     }
 
     @ResponseBody
-    @GetMapping("/test")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public Member test(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return principalDetails.getMember();
-    }
-
-    @ResponseBody
     @GetMapping("/admin")
     @Secured("ROLE_ADMIN")
     public ModelAndView admin(ModelAndView mav,Criteria criteria) {

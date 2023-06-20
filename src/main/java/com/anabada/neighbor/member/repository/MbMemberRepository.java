@@ -20,9 +20,6 @@ public interface MbMemberRepository extends MemberRepository{
             " LIMIT #{criteria.amount} OFFSET #{criteria.offset}")
     List<Post> findMyPost(Map<String,Object> map);
 
-    @Override
-    @Select("SELECT count(*) FROM post WHERE memberId=#{memberId}")
-    int getTotal(long memberId);
 
     @Override
     @Insert("insert into member (memberEmail, memberName, memberPWD, address, addressDetail, providerId, role) values (#{memberEmail}, #{memberName}, #{memberPWD}, #{address}, #{addressDetail}, #{providerId}, #{role})")
@@ -51,9 +48,11 @@ public interface MbMemberRepository extends MemberRepository{
     @Select("SELECT profileImg FROM member WHERE memberId=#{memberId}")
     String findProfileImg(long memberId);
 
+
     @Override
     @Select("SELECT count(*) FROM post WHERE memberId=#{memberId}")
-    long countMyWrite(long memberId);
+    int countMyWrite(long memberId);
+
 
     @Override
     @Select("SELECT * FROM post WHERE memberId=#{memberId} ORDER BY postUpdate DESC  LIMIT 5")

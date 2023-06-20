@@ -31,7 +31,11 @@ public class MemberServiceImpl implements MemberService{
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ImgDownService imgDownService;
     private final ReplyRepository replyRepository;
-    private final String uploadDir = "C:\\upload_anabada\\profile\\";
+    final String uploadDir = "C:\\upload_anabada\\profile\\";
+
+    /**
+     * 회원 가입
+     */
     @Override
     public void save(Member member) {
         member.setMemberPWD(bCryptPasswordEncoder.encode(member.getMemberPWD()));
@@ -40,6 +44,9 @@ public class MemberServiceImpl implements MemberService{
         memberRepository.save(member);
     }
 
+    /**
+     *내가 작성한 게시글 리스트 (Criteria 로 페이징)
+     */
     @Override
     public List<Used> myWrite(PrincipalDetails principalDetails, Criteria criteria) {
         List<Used> used = new ArrayList<>();
@@ -69,11 +76,17 @@ public class MemberServiceImpl implements MemberService{
         return used;
     }
 
+    /**
+     *페이징을 위한 내가 쓴 글 총 갯수 가져오기
+     */
     @Override
     public int getTotal(long memberId) {//페이징
-        return memberRepository.getTotal(memberId);
+        return memberRepository.countMyWrite(memberId);
     }
 
+    /**
+     * member 테이블에서 정보 가져오기
+     */
     @Override
     public Member myInfo(PrincipalDetails principalDetails) {//내정보
         Member member = null;
@@ -97,6 +110,10 @@ public class MemberServiceImpl implements MemberService{
             imgDownService.downProfileImg(profileImg,response) ;
     }
 
+
+    /**
+     * 내가 작성한 중고게시글 5개 .. 나중에 클럽도 포함 해야 할듯 함
+     */
     @Override
     public List<Used> myWriteFive(long memberId) {//내가 작성한 중고게시글5개만
         List<Used> used = new ArrayList<>();
@@ -119,6 +136,10 @@ public class MemberServiceImpl implements MemberService{
         return used;
     }
 
+    /**
+     * member테이블
+     * 개인정보 수정
+     */
     @Override
     public void editInfo(Member member) {
         if(member.getMemberPWD()!=null){//비밀번호가 들어온 경우
@@ -127,10 +148,7 @@ public class MemberServiceImpl implements MemberService{
         }else{//안 들어온 경우
             memberRepository.editInfoNotPwd(member);
         }
-        String a = member.getProfileImg().getOriginalFilename();
-        System.out.println("a = " + a);
-        boolean b = !member.getProfileImg().getOriginalFilename().equals("") && member.getProfileImg().getOriginalFilename() != null;
-        System.out.println("b = " + b);
+
         if(!member.getProfileImg().getOriginalFilename().equals("") && member.getProfileImg().getOriginalFilename()!=null){//사진 input 했을 때만
             
             try {
@@ -155,6 +173,9 @@ public class MemberServiceImpl implements MemberService{
         }
     }
 
+    /**
+     *관리자페이지에서 모든 member 가져오기
+     */
     @Override
     public List<Member> findAllMember(Criteria criteria) {//관리자 모든 멤버 가져오기
         Map<String, Object> map = new HashMap<>();
