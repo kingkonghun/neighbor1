@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <th:block th:insert="/common/common :: fragment-header"></th:block>
+    <link rel="stylesheet" th:href="@{/css/myPage.css}">
+    <style>
+        #adminT, #listMember {color: red;}
+        .reportList{font-family: 'GangwonEduPowerExtraBoldA';}
+        .reportTitle{color:#FF3366;}
+        .reportContent{color:#FF3366;}
+
+    #modal {
+        position: fixed;
+        z-index: 3;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        display: none;
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        border: 1px solid #888;
+        width: 500px;
+        border-radius: 12px;
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    #close-modal {
+        cursor: pointer;
+    }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+<script>
+    $(function(){
+        const modal = $("#modal");
+        $("#close-modal").click(function(){
+            modal.css("display", "none");
+            $("body").css("overflow", "auto");
+        });
+    });
+    function openModal(reportId, score, rrName, rdName, rdId){
+        const modal = $("#modal");
+        modal.css("display", "block");
+        $("body").css("overflow", "hidden");
+        $("#rrName").append(rrName);
+        $("#rdName").append(rdName);
+        $("#memberScore").val(score);
+        $("#reportedId").val(rdId);
+        $("#reportId").val(reportId);
+    }
+</script>
+</head>
+<body>
+<div th:replace="nav :: nav"></div>
+<div th:replace="member/myPageNav :: nav"></div>
+<div class="reportList">
+    <table  style="width: 100%;" class="table table-hover">
+        <thead>
+            <th>신고 번호</th>
+            <th>신고자</th>
+            <th>나쁜놈</th>
+            <th>분류</th>
+            <th>신고 게시글 제목</th>
+            <th>신고 내용</th>
+        </thead>
+        <tbody th:each="report : ${list}">
+        <tr>
+            <td th:text="${report.reportId}"></td>
+            <td th:text="${report.reporterName}"></td>
+            <td th:text="${report.reportedName}"></td>
+            <td th:text="${report.reportTypeName}"></td>
+            <td><a class="reportTitle" href="#" th:onclick="|location.href='@{detail(postId=${report.postId})}'|" th:text="${report.title}"></a></td>
+            <td id="open-modal" class="reportContent" th:onclick="openModal([[${report.reportId}]], [[${report.reportedMemberScore}]], [[${report.reporterName}]], [[${report.reportedName}]], [[${report.reportedId}]])" th:text="${report.content}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!--페이지네비게이션-->
+    <div class="pagination justify-content-center">
+        <ul class="pageNum">
+
+            <!--맨앞번호-->
+            <li class="page-item" th:if="${pageMaker.startPage > 1}">
+                <a class="page-link" th:href="|?pageNum=${1}|">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5ZM10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5Z"/>
+                    </svg>
+                </a>
+            </li>
+
+            <li class="page-item" th:classappend="${pageMaker.prev ? '' : 'disabled'}" th:if="${pageMaker.startPage > 1}">
+                <a class="page-link" th:href="|?pageNum=${pageMaker.startPage - 1}|">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                    </svg>
+                </a>
+            </li>
+            <th:block th:each="num : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                <li class="page-item" th:classappend="${pageMaker.criteria.pageNum == num ? 'active' : ''}">
+                    <a class="page-link" th:href="|?pageNum=${num}|"><span th:text="${num}"></span></a>
+                </li>
+            </th:block>
+            <li class="page-item" th:classappend="${pageMaker.next ? '' : 'disabled'}" th:if="${pageMaker.endPage < pageMaker.realEnd}">
+                <a class="page-link" th:href="|?pageNum=${pageMaker.endPage + 1}|">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                    </svg>
+                </a>
+            </li>
+
+            <!--맨끝번호-->
+            <li class="page-item" th:if="${pageMaker.endPage < pageMaker.realEnd}">
+                <a class="page-link" th:href="|?pageNum=${pageMaker.realEnd}|">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!--신고모달-->
+<div id="modal">
+    <div class="modal-content p-4">
+        <div class="modal-header">
+            <h2>신고접수</h2>
+            <i id="close-modal" class="bi bi-x-lg" style="font-size: 32px;"></i>
+        </div>
+        <div>
+            <span id="rrName">신고한 사람 : </span> <br>
+            <h5>점수차감</h5>
+            <span id="rdName">나쁜놈 : </span>
+            <input id="reportId">
+            <input id="reportedId">
+            <input id="memberScore" type="number">
+        </div>
+        <button type="button" id="btnOk">확인</button>
+    </div>
+</div>
+
+
+<div th:replace="footer :: footer"></div>
+</body>
+</html>
