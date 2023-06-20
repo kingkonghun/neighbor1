@@ -72,7 +72,7 @@ public interface MbMemberRepository extends MemberRepository{
     void editProfileImg(Map<String, Object> map);
 
     @Override
-    @Select("SELECT * FROM member ORDER BY memberId desc LIMIT #{criteria.amount} OFFSET #{criteria.offset} ")
+    @Select("SELECT * FROM member ORDER BY memberId desc LIMIT #{criteria.amount} OFFSET #{criteria.offset}")
     List<Member> findAllMember(Map<String,Object> map);//관리자 모든 멤버 가져오기
 
     @Override

@@ -6,7 +6,6 @@ import com.anabada.neighbor.member.service.EmailService;
 import com.anabada.neighbor.member.service.MemberService;
 import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.page.PageDTO;
-import com.anabada.neighbor.used.domain.Report;
 import com.anabada.neighbor.used.domain.Used;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
@@ -14,7 +13,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,11 +46,6 @@ public class MemberController {
         return "/member/loginForm";
     }
 
-    @GetMapping("/addInfoForm")
-    public String addInfoForm() { // OAuth 로그인 추가 정보 입력 폼으로 이동
-        return "/member/addInfoForm";
-    }
-
     @PostMapping("/join")
     public String join(Member member) { // 회원가입
         memberService.save(member);
@@ -73,15 +70,12 @@ public class MemberController {
         return mav;
     }
 
-
     @ResponseBody
     @PostMapping("/emailConfirm")//이메일인증
     public String emailConfirm(String memberEmail) throws Exception {
 //        String confirm = emailService.sendSimpleMessage(memberEmail);
         return "confirm";
     }
-
-
 
     @GetMapping("/myWrite")//내가 작성한 글
     public String myWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria) {
@@ -128,6 +122,5 @@ public class MemberController {
         memberService.editInfo(member);
         return "index";
     }
-
 
 }

@@ -1,3 +1,4 @@
+/** 로그인체크(return true, false) */
 function checkIsAuthenticated() { // 권한체크
     let isAuthenticated;
     $.ajax({

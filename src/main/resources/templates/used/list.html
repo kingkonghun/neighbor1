@@ -53,16 +53,7 @@
             document.writeForm.submit();
         });
         $("#btnWrite").click(function (){
-            let isAuthenticated;
-            $.ajax({
-                type: "get",
-                url: "/member/isAuthenticated",
-                async: false,
-                success: function(result){
-                    isAuthenticated = result;
-                }
-            });
-            if(isAuthenticated){
+            if(checkIsAuthenticated()){
                 $("#writeForm").slideDown();
             }else{
                 if(confirm("글쓰기는 로그인 후 가능합니다\n로그인 하시겠습니까?")){

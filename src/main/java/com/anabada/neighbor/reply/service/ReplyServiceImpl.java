@@ -20,6 +20,9 @@ public class ReplyServiceImpl implements ReplyService {
     private final ReplyRepository replyRepository;
     private final UsedRepository usedRepository;
 
+    /**
+     * postId 로 댓글 리스트 가져오기
+     */
     @Override
     public List<CarryReply> list(long postId) { //댓글 목록
         List<CarryReply> list = new ArrayList<>(); //리턴할 값
@@ -51,6 +54,9 @@ public class ReplyServiceImpl implements ReplyService {
         return list;
     }
 
+    /**
+     * 댓글 작성
+     */
     @Override
     public void write(Reply reply, PrincipalDetails principalDetails) { //댓글 작성
         reply.setMemberId(principalDetails.getMember().getMemberId()); //session에 있는 memberId 가져와서 reply에 넣기
@@ -58,16 +64,25 @@ public class ReplyServiceImpl implements ReplyService {
         replyRepository.updateReGroup(reply); //댓글 작성 후 해당하는 튜플의 reGroup 컬럼 업데이트
     }
 
+    /**
+     * 댓글 삭제(update 로 comment 컬럼 빈값으로 변경)
+     */
     @Override
     public void delete(long replyId) { //댓글 삭제
         replyRepository.delete(replyId); //해당하는 튜플의 comment 컬럼을 ''(공백)으로 변경
     }
 
+    /**
+     * 댓글 수정
+     */
     @Override
     public void update(Reply reply) { //댓글 수정
         replyRepository.update(reply); //댓글 수정
     }
 
+    /**
+     * 대댓글 작성
+     */
     @Override
     public void writeReReply(Reply reply, PrincipalDetails principalDetails) { //대댓글 작성
         Reply parent = replyRepository.findReply(reply.getReplyId()); //reply에 담아온 부모의 replyId로 reply 테이블에서 해당하는 튜플 가져오기
@@ -79,6 +94,9 @@ public class ReplyServiceImpl implements ReplyService {
 
     }
 
+    /**
+     * 내가 쓴 댓글 리스트 조회
+     */
     @Override
     public List<CarryReply> findMyReply(long memberId) {//내가 쓴 댓글목록
         List<CarryReply> carryReplyList = new ArrayList<>();//리턴그릇
