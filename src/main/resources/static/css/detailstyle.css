@@ -73,7 +73,7 @@
 .item2{
     background-color: darkseagreen;
     width: 600px;
-    height: 500px;
+    height: auto;
 }
 .hashtags{
     display: flex;
@@ -134,7 +134,7 @@
 .item3{
     background-color: aquamarine;
     width: 1200px;
-    height: 300px;
+    height: auto;
     display: flex;
     
 }
