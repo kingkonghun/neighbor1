@@ -1,48 +1,64 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <title>Title</title>
-    <th:block th:insert="/common/common :: fragment-header"></th:block>
-    <link rel="stylesheet" th:href="@{/css/myPage.css}">
-    <style>
-        #adminT, #listMember {color: red;}
-        .reportList{font-family: 'GangwonEduPowerExtraBoldA';}
-        .reportTitle{color:#FF3366;}
-        .reportContent{color:#FF3366;}
+<meta charset="UTF-8"/>
+<title>Title</title>
+<th:block th:insert="/common/common :: fragment-header"></th:block>
+<link rel="stylesheet" th:href="@{/css/myPage.css}">
+<style>
+#adminT, #listMember {color: red;}
 
-    #modal {
-        position: fixed;
-        z-index: 3;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
-        display: none;
-    }
-    .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        border: 1px solid #888;
-        width: 500px;
-        border-radius: 12px;
-    }
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
+.reportList{font-family: 'GangwonEduPowerExtraBoldA';}
 
-    #close-modal {
-        cursor: pointer;
-    }
-    .modal-header {
-        display: flex;
-        justify-content: space-between;
-    }
+.reportTitle{color:#FF3366;}
+
+.reportContent{color:#FF3366;}
+
+#modal {
+    position: fixed;
+    z-index: 3;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none;
+    font-family: omyu_pretty;
+    font-size: 20px;
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    border: 1px solid #888;
+    width: 360px;
+    border-radius: 12px;
+}
+#close-modal {
+    cursor: pointer;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    font-family: GangwonEduPowerExtraBoldA;
+}
+#btnOk {
+    border-radius: 8px;
+    border-style: none;
+    border-color: #f4f4f4;
+    font-family: omyu_pretty;
+    background-color: #FF3366;
+    color: #f4f4f4;
+}
+#reportContent {
+    background-color: #f4f4f4;
+    border-radius: 8px;
+}
+#memberScore {
+    width: 48px;
+    border-radius: 8px;
+}
 </style>
 <script>
     $(function(){
@@ -51,21 +67,37 @@
             modal.css("display", "none");
             $("body").css("overflow", "auto");
         });
+        $("#btnOk").click(function(){
+            let reportedMemberScore = $("#memberScore");
+            const reportId = $("#reportId").text();
+            alert(reportId);
+            if(reportedMemberScore.val() <  0){
+                alert("사용자 점수는 0 점 밑으로 내릴 수 없습니다");
+                reportedMemberScore.val(0);
+                reportedMemberScore.focus();
+                return;
+            }
+            // $.ajax({
+            //     type: "post",
+            //     url: "/used/reportOk",
+            //     data: 
+            // });
+        });
     });
-    function openModal(reportId, score, rrName, rdName, rdId){
+    function openModal(reportId, score, rdName, rdId){
         const modal = $("#modal");
         modal.css("display", "block");
         $("body").css("overflow", "hidden");
-        $("#rrName").append(rrName);
-        $("#rdName").append(rdName);
+        $("#rdName").text(rdName);
         $("#memberScore").val(score);
-        $("#reportedId").val(rdId);
-        $("#reportId").val(reportId);
+        $("#memberScore").focus();
+        $("#reportedId").text(rdId);
+        $("#reportId").text(reportId);
     }
 </script>
 </head>
 <body>
-<div th:replace="nav :: nav"></div>
+<div th:replace="nav :: div"></div>
 <div th:replace="member/myPageNav :: nav"></div>
 <div class="reportList">
     <table  style="width: 100%;" class="table table-hover">
@@ -84,7 +116,7 @@
             <td th:text="${report.reportedName}"></td>
             <td th:text="${report.reportTypeName}"></td>
             <td><a class="reportTitle" href="#" th:onclick="|location.href='@{detail(postId=${report.postId})}'|" th:text="${report.title}"></a></td>
-            <td id="open-modal" class="reportContent" th:onclick="openModal([[${report.reportId}]], [[${report.reportedMemberScore}]], [[${report.reporterName}]], [[${report.reportedName}]], [[${report.reportedId}]])" th:text="${report.content}"></td>
+            <td id="open-modal" class="reportContent" th:onclick="openModal([[${report.reportId}]], [[${report.reportedMemberScore}]], [[${report.reportedName}]], [[${report.reportedId}]])" th:text="${report.content}"></td>
         </tr>
         </tbody>
     </table>
@@ -97,18 +129,21 @@
 <div id="modal">
     <div class="modal-content p-4">
         <div class="modal-header">
-            <h2>신고접수</h2>
+            <div style="display: flex;">
+                <img th:src="@{/img/siren.png}" style="width: 50px; height: 44px;">
+                <h3 class="pt-3">신고접수</h3>
+            </div>
             <i id="close-modal" class="bi bi-x-lg" style="font-size: 32px;"></i>
         </div>
-        <div>
-            <span id="rrName">신고한 사람 : </span> <br>
-            <h5>점수차감</h5>
-            <span id="rdName">나쁜놈 : </span>
-            <input id="reportId">
-            <input id="reportedId">
-            <input id="memberScore" type="number">
+        <div id="reportContent" class="p-2">
+            <span id="reportId" style="display: none;"></span>
+            <span id="reportedId" style="display: none;"></span>
+            <span class="mb-2">신고당한 사용자 : </span>
+            <span id="rdName"></span> <br>
+            <span>사용자 점수 : </span>
+            <input type="number" id="memberScore" step="5" min="0">
         </div>
-        <button type="button" id="btnOk">확인</button>
+        <button class="mt-3" type="button" id="btnOk">접수</button>
     </div>
 </div>
 
