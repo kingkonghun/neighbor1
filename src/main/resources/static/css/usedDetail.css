@@ -3,9 +3,10 @@
     padding: 0;
     box-sizing: border-box;
 }
-
-
-
+nav{z-index: 5;}
+#top{margin-bottom: 2em;}
+.item2 , .item3{font-family: GangwonEduPowerExtraBoldA;}
+.item2 pre {font-family: Humanbumsuk; font-size: 1.5em;}
 
 /*플랙스 박스*/
 .flex-box {
@@ -18,7 +19,7 @@
 /*아이템*/
 /*1번째 내용*/
 .section{
-    background-color: black;
+    /*background-color: black;*/
     width: 600px;
     height: 600px;
     overflow: hidden;
@@ -70,11 +71,14 @@
 
 /*2번째 내용*/
 .metadata{width: 100%;}
+.detail_menu{margin-top: 1em;margin-left: 2em;}
 .item2{
-    background-color: darkseagreen;
+    background-color: #FFFFFF;
     width: 600px;
-    height: auto;
+    height: 550px;
+    border-radius: 12px;
 }
+.usedInfo{height: 320px;}
 .hashtags{
     display: flex;
     font-size: 12px;
@@ -95,14 +99,18 @@
 }
 .bottom {
     list-style: none;
+    width: 530px;
+    height: 250px;
+    overflow: auto;
 }
+
 .views{
     text-align: right;
     display: block;
     font-size: 15px;
     color: gray;
     text-decoration: underline;
-  text-decoration-color: black;
+    text-decoration-color: black;
 }
 .username{
     display: flex;
@@ -126,17 +134,25 @@
 .info .fa-solid  {
     margin-right: 8px;
 }
+/* 신고하기, 댓글보기*/
 .btns{
     margin-top: 10px;
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
 }
+.btns .report{font-size: 15px;}
+.btns .reply{font-size: 20px;}
+
 /*3번째 내용*/
+.similarTitle{
+    text-align: center;
+    margin : 2em 0 1.5em 0;
+}
 .item3{
-    background-color: aquamarine;
-    width: 1200px;
+    /*background-color: aquamarine;*/
+    width: 100%;
     height: auto;
     display: flex;
-    
 }
 
 content{
