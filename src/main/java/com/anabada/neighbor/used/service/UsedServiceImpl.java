@@ -118,7 +118,8 @@ public class UsedServiceImpl implements UsedService{
         Collections.sort(usedList, comparator.reversed());
 
         if (listType.equals("similarList")) { //listType이 similarList라면
-            return usedList.subList(0, Math.min(usedList.size(), 4)); //usedList에서 앞에 4개만 리턴
+            
+            return usedList.subList(0, Math.min(usedList.size(), 6)); //usedList에서 앞에 4개만 리턴
         }
 
         if(num >= usedList.size()){//시작하는값이 usedList보다 크면 아무것도안함

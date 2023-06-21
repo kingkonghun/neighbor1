@@ -10,6 +10,13 @@
     .tableBox{overflow: auto; height: 400px;}
     .btnList{text-align: right; padding-top: 1.5em; padding-bottom: 1.5em;}
   </style>
+  <script>
+    function reply(postId){
+      if (confirm("댓글 적은 게시글을 확인하시겠습니까?")) {
+        location.href= "/used/detail?postId="+postId;
+      }
+    }
+  </script>
 </head>
 <body>
 <div class="myReply_div">
@@ -23,7 +30,7 @@
         <th>작성 날짜</th>
       </thead>
       <tbody th:each="reply : ${list}">
-      <tr>
+      <tr th:onclick="'reply('+${reply.postId}+')'">
         <td th:text="${reply.title}"></td>
         <td th:text="${reply.postType}"></td>
         <td th:text="${reply.comment}"></td>

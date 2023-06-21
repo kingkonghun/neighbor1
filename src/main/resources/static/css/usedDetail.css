@@ -2,53 +2,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
 }
-
-/*네비바*/
-nav{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 8%;
-}
-nav .logo{
-    font-size: 32px;
-    font-weight: 500;
-    cursor: pointer;
-}
-nav ul li{
-    list-style: none;
-    display: inline-block;
-}
-nav ul li a{
-    display: block;
-    margin: 0 10px;
-    color: #000;
-    font-weight: 500;
-    text-decoration: none;
-    font-size: 17px;
-    position: relative;
-}
-nav ul li a::before{
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background-color: #000;
-    width: 0;
-    height: 2.5px;
-    transition: all 0.3s ease;
-}
-nav ul li a:hover::before{
-    width: 100%;
-}
-nav ul i{
-    font-size: 20px;
-    margin-left: 10px;
-    cursor: pointer;
-}
-
+nav{z-index: 5;}
+#top{margin-bottom: 2em;}
+.item2 , .item3{font-family: GangwonEduPowerExtraBoldA;}
+.item2 pre {font-family: Humanbumsuk; font-size: 1.5em;}
 
 /*플랙스 박스*/
 .flex-box {
@@ -61,7 +19,7 @@ nav ul i{
 /*아이템*/
 /*1번째 내용*/
 .section{
-    background-color: black;
+    /*background-color: black;*/
     width: 600px;
     height: 600px;
     overflow: hidden;
@@ -112,14 +70,18 @@ nav ul i{
   }
 
 /*2번째 내용*/
+.metadata{width: 100%;}
+.detail_menu{margin-top: 1em;margin-left: 2em;}
 .item2{
-    background-color: darkseagreen;
+    background-color: #FFFFFF;
     width: 600px;
-    height: 500px;
+    height: 550px;
+    border-radius: 12px;
 }
+.usedInfo{height: 320px;}
 .hashtags{
     display: flex;
-    font-size: 12;
+    font-size: 12px;
     color: blue;
 }
 .hashtags li {
@@ -137,12 +99,18 @@ nav ul i{
 }
 .bottom {
     list-style: none;
+    width: 530px;
+    height: 250px;
+    overflow: auto;
 }
+
 .views{
-    font-size: 8px;
+    text-align: right;
+    display: block;
+    font-size: 15px;
     color: gray;
     text-decoration: underline;
-  text-decoration-color: black;
+    text-decoration-color: black;
 }
 .username{
     display: flex;
@@ -166,16 +134,25 @@ nav ul i{
 .info .fa-solid  {
     margin-right: 8px;
 }
+/* 신고하기, 댓글보기*/
 .btns{
     margin-top: 10px;
-}
-/*3번째 내용*/
-.item3{
-    background-color: aquamarine;
-    width: 1200px;
-    height: 300px;
     display: flex;
-    
+    justify-content: space-between;
+}
+.btns .report{font-size: 15px;}
+.btns .reply{font-size: 20px;}
+
+/*3번째 내용*/
+.similarTitle{
+    text-align: center;
+    margin : 2em 0 1.5em 0;
+}
+.item3{
+    /*background-color: aquamarine;*/
+    width: 100%;
+    height: auto;
+    display: flex;
 }
 
 content{

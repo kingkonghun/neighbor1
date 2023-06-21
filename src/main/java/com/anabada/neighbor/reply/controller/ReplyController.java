@@ -57,7 +57,6 @@ public class ReplyController {
     @GetMapping("/myReply")
     public String myReply(long memberId,Model model){ // 내가 쓴 댓글
         model.addAttribute("list",replyService.findMyReply(memberId));
-        System.out.println("replyList = " + replyService.findMyReply(memberId));
         return "reply/myReply";
     }
 }
