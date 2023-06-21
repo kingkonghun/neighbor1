@@ -47,22 +47,50 @@
             </label>
             <div class="sidebar">
                 <div class="menu">
-                    <div class="login_div">
-                        <button type="button" id="btnLogin" onclick="location.href='/member/loginForm'" sec:authorize="isAnonymous()">로그인</button>
-                        <button type="button" id="btnLogout" onclick="location.href='/logout'" sec:authorize="isAuthenticated()">로그아웃</button>
-                    </div>
-                    <div style="background-color: #FFCCCC;">
-                        <a href="/member/myInfo" sec:authorize="isAuthenticated()">내정보</a>
-                    </div>
-                    <div class="nav_menu_2" style="">
-                        <div style="background-color: #FFFFCC;">
-                            <a href="/used/list">중고거래</a>
+                    <div class="frame">
+                        <div class="center" sec:authorize="isAuthenticated()">
+
+                            <div class="profile">
+                                <div class="image">
+                                    <div class="circle-1"></div>
+                                    <div class="circle-2"></div>
+                                    <img src="https://100dayscss.com/codepen/jessica-potter.jpg" width="70" height="70" alt="Jessica Potter">
+                                </div>
+
+                                <div class="name">김김김</div>
+                                <div class="job">아이디 #111</div>
+
+                                <div class="actions">
+                                    <button class="btn">Setting</button>
+                                    <button class="btn">Message</button>
+                                </div>
+                            </div>
+
+                            <div class="stats">
+                                <div class="box">
+                                    <span class="value">523</span>
+                                    <span class="parameter">Posts</span>
+                                </div>
+                                <div class="box">
+                                    <span class="value">1387</span>
+                                    <span class="parameter">스코어</span>
+                                </div>
+                                <div class="box">
+                                    <span class="value">146</span>
+                                    <span class="parameter">Follower</span>
+                                </div>
+                            </div>
                         </div>
-                        <div style="background-color: #FFCCFF;">
-                            <a href="/club">동네모임</a>
-                        </div>
-                        <div style="background-color: #FFCCCC;">
-                            <a href="#">주변맛집</a>
+                        <div class="bottom">
+                            <div sec:authorize="isAnonymous()">
+                                <a href='/member/loginForm'>
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                </a>
+                                <span>로그인</span></div>
+                            <div class="logout" sec:authorize="isAuthenticated()"><a href='/logout'>
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                            </a>
+                            <span>로그아웃</span></div>
                         </div>
                     </div>
                 </div>
