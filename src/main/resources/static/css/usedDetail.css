@@ -73,9 +73,10 @@ nav{z-index: 5;}
 .metadata{width: 100%;}
 .detail_menu{margin-top: 1em;margin-left: 2em;}
 .item2{
+    margin-top: 8px;
     background-color: #FFFFFF;
     width: 600px;
-    height: 550px;
+    height: 542px;
     border-radius: 12px;
 }
 .usedInfo{height: 320px;}
@@ -115,12 +116,13 @@ nav{z-index: 5;}
 .username{
     display: flex;
     align-items: center;
-    margin-top: 20px;
+    margin: 0px;
+    padding: 0px;
 }
 .username img{
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
     margin-right: 10px;
 }
 .username li {
