@@ -60,7 +60,10 @@ a {
     gap: 12px;
 }
 .top_nav {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     background-color: #fff;
     height: 64px;
 }
@@ -187,7 +190,7 @@ input[id="menuicon"]:checked + label + div {
 }
 
 #searchForm_2 {
-    position: absolute;
+    position: fixed;
     top: -64px;
     left: 0px;
     width: 100%;
@@ -195,4 +198,13 @@ input[id="menuicon"]:checked + label + div {
     background-color: #FFF;
     transition:all .35s;
     z-index: 1;
+}
+
+#top{
+    width: 100%;
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 64px;
+    z-index: -9;
 }
