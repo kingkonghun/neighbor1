@@ -83,9 +83,8 @@ public class ClubController {
 
 
     @GetMapping("/clubDetail")
-    public String clubDetail(Model model, long postId) {
-        ClubResponse response = clubService.findClub(postId);
-        model.addAttribute("postId", postId);
+    public String clubDetail(Model model) {
+
         return "club/clubDetail";
     }
 
