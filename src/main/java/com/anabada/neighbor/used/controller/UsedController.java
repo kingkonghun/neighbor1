@@ -5,6 +5,7 @@ import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.page.PageDTO;
 import com.anabada.neighbor.used.domain.PostReport;
 import com.anabada.neighbor.used.domain.Report;
+import com.anabada.neighbor.used.domain.ReportOk;
 import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.service.UsedService;
 import lombok.RequiredArgsConstructor;
@@ -113,6 +114,12 @@ public class UsedController {
       List<Used> usedList=usedService.likePost(memberId);
       model.addAttribute("list",usedList);
         return "member/myLikes";
+    }
+
+    @PostMapping("/reportOk")
+    public ResponseEntity<Void> reportOk(ReportOk reportOk) {
+        usedService.reportOk(reportOk);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

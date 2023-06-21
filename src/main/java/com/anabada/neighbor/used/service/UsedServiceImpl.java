@@ -122,7 +122,7 @@ public class UsedServiceImpl implements UsedService{
             return usedList.subList(0, Math.min(usedList.size(), 6)); //usedList에서 앞에 4개만 리턴
         }
 
-        if(num>=usedList.size()){//시작하는값이 usedList보다 크면 아무것도안함
+        if(num >= usedList.size()){//시작하는값이 usedList보다 크면 아무것도안함
             return null;
         }
         return usedList.subList(num,Math.min(usedList.size(),num+9)); // 더보기를 누를 때마다 9개씩 가져감
@@ -385,6 +385,19 @@ public class UsedServiceImpl implements UsedService{
     }
 
 
+    /**
+     * 게시물 신고 접수(어드민 페이지)
+     */
+    @Transactional
+    @Override
+    public void reportOk(ReportOk reportOk) {
+        Report report = usedRepository.findByReportId(reportOk.getReportId());
+        long memberId = usedRepository.findMemberId(report.getPostId());
+        memberRepository.updateScore(memberId, reportOk.getReportedMemberScore()); // 신고당한 member 의 score update
+        usedRepository.UpdateReportStatus(reportOk.getReportId()); // 신고접수완료 처리
+        usedRepository.deleteProduct(report.getPostId()); // product 삭제처리(productStatus 를 'del' 로 update)
+        usedRepository.deletePost(report.getPostId()); // post 삭제처리(postType 을 'del' 로 update)
+    }
 }
 
 

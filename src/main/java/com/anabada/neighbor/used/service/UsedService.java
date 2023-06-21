@@ -76,4 +76,6 @@ public interface UsedService {
      * 페이징을 위한 신고된 게시글의 총 수
      * */
     int countReport();
+
+    void reportOk(ReportOk reportOk);
 }

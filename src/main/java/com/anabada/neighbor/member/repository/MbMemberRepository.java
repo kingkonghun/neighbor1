@@ -2,10 +2,8 @@ package com.anabada.neighbor.member.repository;
 
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 import java.util.Map;
@@ -93,5 +91,9 @@ public interface MbMemberRepository extends MemberRepository{
     @Override
     @Select("SELECT count(*) FROM member")
     int countMember();
+
+    @Override
+    @Update("update member set score = #{reportedMemberScore} where memberId = #{memberId}")
+    void updateScore(@Param("memberId") long memberId, @Param("reportedMemberScore") int reportedMemberScore);
 }
 
