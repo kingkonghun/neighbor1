@@ -106,4 +106,6 @@ public interface MemberRepository {
      * @return 멤버테이블의 count
      */
     int countMember();
+
+    void updateScore(long memberId, int reportedMemberScore);
 }

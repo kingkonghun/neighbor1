@@ -69,7 +69,7 @@
         });
         $("#btnOk").click(function(){
             let reportedMemberScore = $("#memberScore");
-            const reportId = $("#reportId").text();
+            const reportId = $("#reportId").val();
             alert(reportId);
             if(reportedMemberScore.val() <  0){
                 alert("사용자 점수는 0 점 밑으로 내릴 수 없습니다");
@@ -77,22 +77,25 @@
                 reportedMemberScore.focus();
                 return;
             }
-            // $.ajax({
-            //     type: "post",
-            //     url: "/used/reportOk",
-            //     data: 
-            // });
+            $.ajax({
+                type: "post",
+                url: "/used/reportOk",
+                data: {reportId : reportId, reportedMemberScore : reportedMemberScore.val()},
+                success: function(){
+                    alert('성공');
+                }
+            });
+            
         });
     });
-    function openModal(reportId, score, rdName, rdId){
+    function openModal(reportId, score, rdName){
         const modal = $("#modal");
         modal.css("display", "block");
         $("body").css("overflow", "hidden");
         $("#rdName").text(rdName);
         $("#memberScore").val(score);
         $("#memberScore").focus();
-        $("#reportedId").text(rdId);
-        $("#reportId").text(reportId);
+        $("#reportId").val(reportId);
     }
 </script>
 </head>
@@ -116,7 +119,7 @@
             <td th:text="${report.reportedName}"></td>
             <td th:text="${report.reportTypeName}"></td>
             <td><a class="reportTitle" href="#" th:onclick="|location.href='@{detail(postId=${report.postId})}'|" th:text="${report.title}"></a></td>
-            <td id="open-modal" class="reportContent" th:onclick="openModal([[${report.reportId}]], [[${report.reportedMemberScore}]], [[${report.reportedName}]], [[${report.reportedId}]])" th:text="${report.content}"></td>
+            <td id="open-modal" class="reportContent" th:onclick="openModal([[${report.reportId}]], [[${report.reportedMemberScore}]], [[${report.reportedName}]])" th:text="${report.content}"></td>
         </tr>
         </tbody>
     </table>
@@ -136,8 +139,7 @@
             <i id="close-modal" class="bi bi-x-lg" style="font-size: 32px;"></i>
         </div>
         <div id="reportContent" class="p-2">
-            <span id="reportId" style="display: none;"></span>
-            <span id="reportedId" style="display: none;"></span>
+            <input id="reportId" type="hidden">
             <span class="mb-2">신고당한 사용자 : </span>
             <span id="rdName"></span> <br>
             <span>사용자 점수 : </span>
