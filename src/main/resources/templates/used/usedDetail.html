@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>club Details Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/e2064a471f.js" crossorigin="anonymous"></script>
+    <th:block th:insert="/common/common :: fragment-header"></th:block>
+    <link rel="stylesheet" th:href="@{/css/detailstyle.css}">
+    <style>
+        .list_img{width: 100%;height: 200px;border-radius: 12px;}
+    </style>
+</head>
+<body>
+<!-- Nav바-->
+<div th:replace="nav :: nav"></div>
+
+<!--플랙스 박스-->
+<div class="flex-box">
+    <!--1번 박스 사진 나오는곳-->
+    <section class="section">
+        <div class="main-section-wrap">
+            <div class="slide-box">
+                <div class="content">
+                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
+
+                </div>
+                <!--반복-->
+
+
+                <div class="content">
+                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
+
+                </div>
+
+
+
+                <div class="content">
+                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
+
+                </div>
+
+
+
+                <div class="content">
+                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!--2번 박스 제목 작성자 뷰 등등-->
+    <section class="item2">
+        <div class="metadata">
+
+            <div class="detail_menu"><!--제목-->
+                <span class="menu_title" th:text="${dto.title}"></span>
+            </div>
+
+            <div class="views"><!--조회수 생성일-->
+                <span class="views" th:text="${#dates.format(dto.postUpdate,'yyyy년 MM월 dd일')}"></span>
+                <span class="views" th:text="${dto.postView}+'회'"></span>
+            </div>
+
+            <ul class="username"><!--글쓴이 이름 사진-->
+                <li><img src="/img/author-4.jpg" alt="프로필 사진"/></li>
+                <li th:text="${dto.memberName}"></li>
+            </ul>
+            <div>
+                <ul>
+                    <li class="content">
+                        <span>상품 설명</span>
+                        <ul>
+                            <li class="bottom">
+                                <pre th:text="${dto.content}"></pre>
+                            </li>
+                        </ul>
+                        <span>가격</span>
+                        <ul>
+                            <li class="bottom">
+                                <p th:text="${dto.price}+'원'"></p>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="btns"><!--가입버튼-->
+                <a href="#"><i class="bi bi-chat-text" th:text="${dto.replyCount}"></i></a>
+                <a href="#" id="open-modal">신고</a>
+            </div>
+        </div>
+
+    </section>
+    <!--3번 박스 포스트 내용 보는곳-->
+
+    <!--4번 박스 클럽 추천 사진-->
+    <div class="item4">
+    </div>
+</div>
+<div>
+    <section class="item3 container">
+        <div id="list" class="row">
+            <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="list : ${similarList}">
+                <div class="item p-3" th:onclick="|location.href='@{detail(postId=${list.postId})}'|">
+                    <img class="list_img" th:src="@{/used/findImg(postId=${list.postId})}">
+                    <div class="div_2 mt-3">
+                        <h5 th:text="${list.title}"></h5>
+                        <span th:inline="text">
+                        [[${list.postView}]]
+                        <i class="bi bi-caret-up-fill"></i>
+                    </span>
+
+                    </div>
+                    <div class="div_3">
+                    <span class="price" th:inline="text">
+                        [[${list.price}]] 원
+                    </span>
+                        <span th:inline="text">
+                        [[${list.likesCount}]]
+                        <i class="bi bi-heart-fill" style="color: red"></i>
+                    </span>
+                    </div>
+                    <div class="div_4">
+                        <p th:text="${list.content}"></p>
+                        <span th:inline="text">
+                        [[${list.replyCount}]]
+                        <i class="bi bi-chat-dots-fill"></i>
+                    </span>
+                    </div>
+                    <span th:text="${list.address}"></span>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+<script>
+    $('.slide-box').slick({
+        slidesToShow:1,
+        swipeToSlide: true,
+        arrow:true,
+        dots:true,
+
+});
+</script>
+
+<!--footer-->
+<div th:replace="footer :: footer"></div>
+</body>
+</html>

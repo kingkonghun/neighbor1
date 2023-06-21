@@ -49,7 +49,7 @@ public class UsedController {
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0, ""));
         model.addAttribute("reportType", usedService.reportType());
-        return "used/detailEx";
+        return "used/usedDetail";
     }
 
 

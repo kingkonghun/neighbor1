@@ -97,17 +97,22 @@
 <div th:replace="footer :: footer"></div>
 
 <script th:inline="javascript">
+    /**
+     * 댓글 적은 게시글
+     * */
     function myReply(memberId) {
         $.ajax({
             type: "get",
             url: "/reply/myReply",
             data: {"memberId":memberId },
             success: function (data) {
-
                 $("#myWriteFive").html(data);
             }
         });
     }
+    /**
+     * 좋아요 누른 게시글
+     * */
     function likePost(memberId){
         $.ajax({
            type: "get",
@@ -118,6 +123,9 @@
             }
         });
     }
+    /**
+     * 내가 올린 게시글(중고게시글만)
+     * */
     function writeList(memberId) {//내가올린게시글
         $.ajax({
             type: "get",
