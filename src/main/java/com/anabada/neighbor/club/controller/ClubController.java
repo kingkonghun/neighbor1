@@ -81,6 +81,7 @@ public class ClubController {
         return "redirect:clubList";
     }
 
+
     @GetMapping("/clubDetail")
     public String clubDetail(Model model) {
 

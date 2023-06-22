@@ -2,10 +2,8 @@ package com.anabada.neighbor.member.repository;
 
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 import java.util.Map;
@@ -15,14 +13,11 @@ public interface MbMemberRepository extends MemberRepository{
 
     @Override
     @Select("SELECT * FROM post" +
-            " WHERE memberId=#{memberId}" +
+            " WHERE memberId=#{memberId} and postType='used' " +
             " ORDER BY postId desc" +
             " LIMIT #{criteria.amount} OFFSET #{criteria.offset}")
     List<Post> findMyPost(Map<String,Object> map);
 
-    @Override
-    @Select("SELECT count(*) FROM post WHERE memberId=#{memberId}")
-    int getTotal(long memberId);
 
     @Override
     @Insert("insert into member (memberEmail, memberName, memberPWD, address, addressDetail, providerId, role) values (#{memberEmail}, #{memberName}, #{memberPWD}, #{address}, #{addressDetail}, #{providerId}, #{role})")
@@ -51,12 +46,14 @@ public interface MbMemberRepository extends MemberRepository{
     @Select("SELECT profileImg FROM member WHERE memberId=#{memberId}")
     String findProfileImg(long memberId);
 
-    @Override
-    @Select("SELECT count(*) FROM post WHERE memberId=#{memberId}")
-    long countMyWrite(long memberId);
 
     @Override
-    @Select("SELECT * FROM post WHERE memberId=#{memberId} ORDER BY postUpdate DESC  LIMIT 5")
+    @Select("SELECT count(*) FROM post WHERE memberId=#{memberId} and postType='used' ")
+    int countMyWrite(long memberId);
+
+
+    @Override
+    @Select("SELECT * FROM post WHERE memberId=#{memberId} and postType='used' ORDER BY postUpdate DESC  LIMIT 5")
     List<Post> findMyPostFive(long memberId);
 
     @Override
@@ -72,7 +69,7 @@ public interface MbMemberRepository extends MemberRepository{
     void editProfileImg(Map<String, Object> map);
 
     @Override
-    @Select("SELECT * FROM member ORDER BY memberId desc LIMIT #{criteria.amount} OFFSET #{criteria.offset} ")
+    @Select("SELECT * FROM member ORDER BY memberId desc LIMIT #{criteria.amount} OFFSET #{criteria.offset}")
     List<Member> findAllMember(Map<String,Object> map);//관리자 모든 멤버 가져오기
 
     @Override
@@ -90,5 +87,13 @@ public interface MbMemberRepository extends MemberRepository{
     @Override
     @Select("select * from member where memberId = #{memberId}")
     Member findByMemberId(long reporterId);
+
+    @Override
+    @Select("SELECT count(*) FROM member")
+    int countMember();
+
+    @Override
+    @Update("update member set score = #{reportedMemberScore} where memberId = #{memberId}")
+    void updateScore(@Param("memberId") long memberId, @Param("reportedMemberScore") int reportedMemberScore);
 }
 

@@ -3,6 +3,9 @@ package com.anabada.neighbor.page;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+/**
+ * Criteria 객체를 이용 하여 페이지 계산
+ */
 @Data
 @Component
 public class PageDTO {

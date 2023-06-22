@@ -7,9 +7,7 @@
         <meta name="author" content="아나바다" />
         <title>오이마켓</title>
         <th:block th:insert="/common/common :: fragment-header"></th:block>
-        <!-- 상단바 아이콘 나중에 괜찮은 이미 찾으면 넣기 -->
-<!--        <link rel="icon" type="image/x-icon" href="../static/img/favicon.ico" />-->
-        <!-- BootStrap 추가설정 -->
+
         <link href="/css/style.css" rel="stylesheet" type="text/css">
         <style>
             .usedTitle{font-family: 'GangwonEduPowerExtraBoldA'; }
@@ -22,7 +20,7 @@
     </head>
     <body>
         <!-- Nav바-->
-     <div th:replace="nav :: nav"></div>
+     <div th:replace="nav :: div"></div>
         <!-- 헤더-->
         <header class="bg-image py-5 mainBackgroundImg">
             <div class="container px-4 px-lg-5 my-5" style="height: 500px;">

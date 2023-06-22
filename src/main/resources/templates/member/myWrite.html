@@ -7,17 +7,12 @@
     <style>
         #liWrite{color:red;}
 
-        .table{font-family: 'GangwonEduPowerExtraBoldA';}
-
-        .img {width: 50px; height: 50px;}
-        .pagination {margin-top: 3em; margin-bottom: 5em;}
-        .pagination .pageNum{list-style: none; display: flex;}
     </style>
     <link rel="stylesheet" th:href="@{/css/myPage.css}">
 </head>
 <body>
 <!-- Nav바-->
-<div th:replace="nav :: nav"></div>
+<div th:replace="nav :: div"></div>
 <div th:replace="member/myPageNav :: nav"></div>
 
 <div class="myWrite">
@@ -43,48 +38,7 @@
     </table>
 
     <!--페이지네비게이션-->
-    <div class="pagination justify-content-center">
-        <ul class="pageNum">
-
-            <!--맨앞번호-->
-            <li class="page-item" th:if="${pageMaker.startPage > 1}">
-                <a class="page-link" th:href="|?pageNum=${1}|">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-left" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5ZM10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5Z"/>
-                    </svg>
-                </a>
-            </li>
-
-            <li class="page-item" th:classappend="${pageMaker.prev ? '' : 'disabled'}" th:if="${pageMaker.startPage > 1}">
-                <a class="page-link" th:href="|?pageNum=${pageMaker.startPage - 1}|">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                    </svg>
-                </a>
-            </li>
-            <th:block th:each="num : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
-                <li class="page-item" th:classappend="${pageMaker.criteria.pageNum == num ? 'active' : ''}">
-                    <a class="page-link" th:href="|?pageNum=${num}|"><span th:text="${num}"></span></a>
-                </li>
-            </th:block>
-            <li class="page-item" th:classappend="${pageMaker.next ? '' : 'disabled'}" th:if="${pageMaker.endPage < pageMaker.realEnd}">
-                <a class="page-link" th:href="|?pageNum=${pageMaker.endPage + 1}|">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                       <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                    </svg>
-                </a>
-            </li>
-
-            <!--맨끝번호-->
-            <li class="page-item" th:if="${pageMaker.endPage < pageMaker.realEnd}">
-                <a class="page-link" th:href="|?pageNum=${pageMaker.realEnd}|">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
-                    </svg>
-                </a>
-            </li>
-        </ul>
-    </div>
+    <div th:replace="pagination/paging :: div"></div>
 </div>
 
     <script th:inline="javascript">

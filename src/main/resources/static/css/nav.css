@@ -60,9 +60,13 @@ a {
     gap: 12px;
 }
 .top_nav {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     background-color: #fff;
     height: 64px;
+    z-index: 10;
 }
 .nav_menu_1 {
     display: flex;
@@ -345,7 +349,7 @@ input[id="menuicon"]:checked + label span:nth-child(3) {
 div[class="sidebar"] {
     width: 360px;
     height: 100%;
-    background: #FFF;
+    background: #F4F4F4;
     position: fixed;
     top: 0;
     right: -360px;
@@ -358,7 +362,7 @@ input[id="menuicon"]:checked + label + div {
 }
 
 #searchForm_2 {
-    position: absolute;
+    position: fixed;
     top: -64px;
     left: 0px;
     width: 100%;
@@ -366,4 +370,171 @@ input[id="menuicon"]:checked + label + div {
     background-color: #FFF;
     transition:all .35s;
     z-index: 1;
+}
+
+#top{
+    width: 100%;
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 64px;
+    z-index: -9;
+}
+
+.center {
+position: relative;
+top: 50px;
+left: 20px;
+height: 299px;
+width: 320px;
+background: #fff;
+border-radius: 3px;
+overflow: hidden;
+box-shadow: 10px 10px 15px 0 rgba(0,0,0,0.3);
+}
+
+.profile {
+float: left;
+width: 200px;
+height: 320px;
+text-align: center;
+}
+
+.profile .image {
+position: relative;
+width: 70px;
+height: 70px;
+margin: 38px auto 0 auto;
+}
+
+.profile .image .circle-1 {
+position: absolute;
+box-sizing: border-box;
+width: 76px;
+height: 76px;
+top: -3px;
+left: -3px;
+border-width: 1px;
+border-style: solid;
+border-color: #786450 #786450 #786450 transparent;
+border-radius: 50%;
+transition: all 1.5s ease-in-out;
+}
+
+.profile .image .circle-2 {
+position: absolute;
+box-sizing: border-box;
+width: 82px;
+height: 82px;
+top: -6px;
+left: -6px;
+border-width: 1px;
+border-style: solid;
+border-color: #786450 transparent #786450 #786450;
+border-radius: 50%;
+}
+
+.profile .image img {
+display: block;
+border-radius: 50%;
+background: #F5E8DF;
+}
+
+.profile .image:hover .circle-1 {
+transform: rotate(360deg);
+}
+
+.profile .image:hover .circle-2 {
+transform: rotate(-360deg);
+}
+
+.profile .name {
+font-size: 15px;
+font-weight: 600;
+margin-top: 20px;
+}
+
+.profile .memberId {
+font-size: 11px;
+line-height: 15px;
+}
+
+.profile .actions {
+margin-top: 33px;
+}
+
+.profile .actions .btn {
+display: block;
+width: 120px;
+height: 30px;
+margin: 0 auto 10px auto;
+background: none;
+border: 1px solid #786450;
+border-radius: 15px;
+font-size: 12px;
+font-weight: 600;
+box-sizing: border-box;
+transition: all .3s ease-in-out;
+color: #786450;
+}
+
+.profile .actions .btn:hover {
+background: #786450;
+color: #fff;
+}
+
+.stats {
+float: left;
+}
+
+.stats .box {
+box-sizing: border-box;
+width: 120px;
+height: 99px;
+background: #F5E8DF;
+text-align: center;
+padding-top: 28px;
+transition: all .4s ease-in-out;
+}
+
+.stats .box:hover {
+background: #E1CFC2;
+cursor: pointer;
+}
+
+.stats .box:nth-child(2) {
+margin: 1px 0;
+}
+
+.stats span {
+display: block;
+}
+
+.stats .value {
+font-size: 18px;
+font-weight: 600;
+}
+
+.stats .parameter {
+font-size: 11px;
+}
+.bottom{
+  position: relative;
+  width: 330px;
+  height: 70px;
+
+  margin-left: 15px;
+  margin-top: 22px;
+}
+.bottom span {
+position: relative;
+top: -11px;
+}
+.bottom i{
+  font-size: 50px;
+  color: #d11515;
+}
+.bottom .logout{
+position: absolute;
+top: 270px;
 }

@@ -5,11 +5,14 @@ import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.page.PageDTO;
 import com.anabada.neighbor.used.domain.PostReport;
 import com.anabada.neighbor.used.domain.Report;
+import com.anabada.neighbor.used.domain.ReportOk;
 import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.service.UsedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,10 +50,12 @@ public class UsedController {
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0, ""));
         model.addAttribute("reportType", usedService.reportType());
-        return "used/detailEx";
+        return "used/usedDetail";
     }
 
+
     @PostMapping("/post") //게시물 작성
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String post(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception {
         usedService.write(used, principalDetails);
         System.out.println("used=" + used);
@@ -66,43 +71,55 @@ public class UsedController {
     }
 
     @PostMapping("/postEdit") //게시물 수정
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String postEdit(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception {
         usedService.update(used, principalDetails);
         return "redirect:/used/list";
     }
 
     @GetMapping("/postDelete") //게시물 삭제
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String postDelete(long postId) {
         usedService.delete(postId);
         return "redirect:/used/list";
     }
 
-    @PostMapping("/likes")
+    @PostMapping("/likes") //게시물 좋아요
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @ResponseBody
     public Used likes(long postId, int likesCheck, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return usedService.likes(postId, principalDetails, likesCheck);
     }
 
-    @PostMapping("/report")
+    @PostMapping("/report") //게시물 신고
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> report(Report report, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         usedService.report(report, principalDetails);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/reportList")//신고게시글
+    @GetMapping("/reportList") //신고게시물 리스트
+    @Secured("ROLE_ADMIN")
     public String report(Model model, Criteria criteria) {
         List<PostReport> reportList = usedService.findAllReport(criteria);
-
-        System.out.println("reportList = " + reportList);
+        int total = usedService.countReport();
         model.addAttribute("list", reportList);
-        model.addAttribute("pageMaker", new PageDTO(reportList.size(), 10, criteria));
+        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
         return "admin/reportList";
     }
 
-    @GetMapping("/likePost")//좋아요 누른 게시글
+    @GetMapping("/likePost") //좋아요 누른 게시글
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String likePost(Model model, long memberId) {
       List<Used> usedList=usedService.likePost(memberId);
       model.addAttribute("list",usedList);
         return "member/myLikes";
     }
+
+    @PostMapping("/reportOk")
+    public ResponseEntity<Void> reportOk(ReportOk reportOk) {
+        usedService.reportOk(reportOk);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
