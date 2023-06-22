@@ -32,12 +32,8 @@ public class MainController {
     }
 
     @GetMapping("/ex")
-    public String ex(){
+    public String ex() {
         return "chat/mapEx";
     }
-
-    @GetMapping("/exList")
-    public String exList() {
-        return "/used/ex";
-    }
 }
+
