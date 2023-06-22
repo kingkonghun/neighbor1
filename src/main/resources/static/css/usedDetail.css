@@ -25,18 +25,19 @@ nav{z-index: 5;}
     overflow: hidden;
     position: relative;
 }
+
 .main-section-wrap{
     max-width: 550px;
     margin: 0 auto;
     align-items: center;
 }
-
 .main-section-wrap .slide-box .content{
     margin-right: 5px;
     margin-left: 5px;
     border-radius: 30px;
     overflow: hidden;
 }
+
 .slide-box .content > .img-box {
     width: 100%;
     padding-bottom: 100%;
@@ -78,6 +79,7 @@ nav{z-index: 5;}
     width: 600px;
     height: 542px;
     border-radius: 12px;
+    padding: 20px;
 }
 .usedInfo{height: 320px;}
 .hashtags{
@@ -156,34 +158,41 @@ nav{z-index: 5;}
     height: auto;
     display: flex;
 }
-
 content{
     color : red;
 }
-
 /*4번째 내용*/
 
-  
-
-
-  
 /*공통 내용*/
 .section,
 .item2,
 .item4 {
- 
-    
-  display: flex;
-  
-  
-}
+   display: flex;
+ }
 
 
 /*반응형 조절*/
+/*1번 아이템*/
+@media screen and (max-width: 750px) {
+    .section{/*이미지 틀*/
+        width: 516px;
+        height: 516px;
+         padding: 0;
+    }
+    .main-section-wrap{/*이미지 크기*/
+        max-width: 516px;
+    }
+/*2번아이템*/
 @media screen and (max-width: 600px) {
     body {
       min-width: 600px;
       overflow-x: hidden;
-      
     }
   }
+  @media screen and (max-width: 576px) {
+      .item2 {
+          width: 506px;
+          height: 506px;
+      }
+  }
+
