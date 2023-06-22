@@ -17,6 +17,7 @@
 }
 #myInfo_text {
     font-size: 24px;
+    word-break: break-all;
 }
 #myInfo_button_div {
     display: flex;
