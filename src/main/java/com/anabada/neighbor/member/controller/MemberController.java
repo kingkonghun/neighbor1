@@ -94,7 +94,7 @@ public class MemberController {
     public String myInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         Member member = memberService.myInfo(principalDetails);
         model.addAttribute("list", member);
-        return "member/myInfo";
+        return "/member/myInfoEx";
     }
 
     @ResponseBody
