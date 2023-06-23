@@ -17,21 +17,46 @@
             .container .title{font-size: xxx-large; margin-bottom: 1em;}
             .container .subtitle{font-size: x-large;}
         </style>
+        <!--헤더 스타일-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/css/popani.css">
+        <link rel="preload" href="/static/img/hero-banner.png">
     </head>
     <body>
         <!-- Nav바-->
      <div th:replace="nav :: div"></div>
         <!-- 헤더-->
         <header class="bg-image py-5 mainBackgroundImg">
-            <div class="container px-4 px-lg-5 my-5" style="height: 500px;">
-                <div class="container" >
-                    <h1 class="title">아-나-바-다</h1>
-                    <p class="subtitle">중고거래, 동호회 등 내 주변에서 동네 친구찾자!</p>
+
+            <section class="section hero" aria-label="home">
+                <div class="container">
+
+                    <div class="hero-content">
+
+                        <p class="hero-subtitle">👋, My name is 아나바다</p>
+
+                        <h1 class="headline-lg">저는 주변의 즐거운 일을 함께해요.</h1>
+
+                        <p class="hero-text body-md">
+                            Anytime, anywhere!
+                        </p>
+
+                        <a href="#section1" class="btn1 btn1-primary">Let's Start</a>
+
+                    </div>
+
+                    <figure class="hero-banner">
+                        <img src="/img/hero-banner.png" width="680" height="400"
+                             alt="Annie, the blonde, dressed in a green hoodie with a smile on her face" class="w-100">
+                    </figure>
+
                 </div>
-            </div>
+            </section>
         </header>
         <!-- 섹션 -->
-        <section class="py-5 section1">
+        <section class="py-5 section1" id="section1">
             <div class="usedTitle" >
                 <h2>아껴쓰고 나눠써요</h2>
                 <p>같은제품 더 저렴하게 중고거래</p>
