@@ -6,31 +6,23 @@
                 <ul class="nav_menu_1">
                     <li><a href="/used/list">중고거래</a></li>
                     <li><a href="/exList">동네모임</a></li>
-                    <li><a href="#">주변맛집</a></li>
+                    <li><a href="#">잡담해요</a></li>
                 </ul>
             </div>
             <div class="nav_div">
-                <form id="searchForm_1" class="searchForm" method="get">
-                    <select class="searchSelect" name="searchOption">
-                        <option value="used">중고물품</option>
-                        <option value="club">동네모임</option>
-                    </select>
-                    <div class="search_1">
-                        <input name="search" class="searchInput" type="search" placeholder="검색어 입력" onkeyup="search()">
-                        <input type="hidden">
-                        <img id="btnSearch_1" class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
-                    </div>
-                </form>
-
-                <form id="searchForm_2" class="searchForm" method="get">
-                    <select class="searchSelect" name="searchOption">
-                        <option value="used">중고물품</option>
-                        <option value="club">동네모임</option>
-                    </select>
+                <form id="searchForm_1" class="searchForm" method="get" action="/used/list">
                     <div class="search_1">
                         <input name="search" class="searchInput" type="search" placeholder="검색어 입력">
                         <input type="hidden">
-                        <img id="btnSearch_2" class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+                        <img id="btnSearch_1" class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" onclick="submit();">
+                    </div>
+                </form>
+
+                <form id="searchForm_2" class="searchForm" method="get" action="/used/list">
+                    <div class="search_1">
+                        <input name="search" class="searchInput" type="search" placeholder="검색어 입력">
+                        <input type="hidden">
+                        <img id="btnSearch_2" class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" onclick="submit();">
                     </div>
                 </form>
 

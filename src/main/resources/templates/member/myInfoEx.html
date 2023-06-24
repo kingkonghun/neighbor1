@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta charset="UTF-8"/>
+<title>Title</title>
+<th:block th:insert="/common/common :: fragment-header"></th:block>
+<link rel="stylesheet" th:href="@{/css/myInfo.css}">
+<style>
+    body{background-color: #f4f4f4;}
+</style>
+</head>
+<body>
+
+<div th:replace="nav :: div"></div>
+
+<section class="container mb-5" id="myInfo_section">
+    <header class="mt-5">
+        <h2>마이페이지</h2>
+    </header>
+    <article class="row mt-3" id="myInfo_article">
+        <div id="myInfo_img_div" class="col-4 col-md-4 col-lg-2 col-xl-2 p-4">
+            <img id="myInfo_img" th:src="@{/member/findProfileImg(memberId=${list.memberId})}" src="/static/img/defaultImg.png">
+        </div>
+        <div id="myInfo_text" class="col-8 col-md-8 col-lg-8 col-xl-8 py-5 px-4">
+            <div class="mb-2" th:text="${list.memberName} + '님, 반갑습니다'"></div>
+            <div th:text="'ID : ' + ${list.providerId}"></div>
+        </div>
+        <div id="myInfo_button_div" class="col-12 col-md-12 col-lg-2 col-xl-2 p-4">
+            <button id="myInfo_button" class="py-2">내 정보 수정</button>
+        </div>
+
+        <div class="col-6 col-md-6 col-lg-3 col-xl-3 p-4 myInfo_link_div">
+            <div class="p-5">
+            <span>내 글</span> <br>
+            <a href="#" th:text="${list.myWrite}"></a>
+            </div>
+        </div>
+        <div class="col-6 col-md-6 col-lg-3 col-xl-3 p-4 myInfo_link_div">
+            <div class="p-5">
+                <span>내 댓글</span> <br>
+                <a href="#" th:text="${list.myReply}"></a>
+            </div>
+        </div>
+        <div class="col-6 col-md-6 col-lg-3 col-xl-3 p-4 myInfo_link_div">
+            <div class="p-5">
+                <span>좋아요 누른 글</span> <br>
+                <a href="#" th:text="${list.myLikesCount}"></a>
+            </div>
+        </div>
+        <div class="col-6 col-md-6 col-lg-3 col-xl-3 p-4 myInfo_link_div">
+            <div class="p-5">
+                <span>내 점수</span> <br>
+                <a href="#" th:text="${list.score}"></a>
+            </div>
+        </div>
+    </article>
+</section>
+
+<!--footer-->
+</body>
+</html>
