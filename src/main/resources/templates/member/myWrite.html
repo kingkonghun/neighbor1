@@ -12,10 +12,11 @@
 </head>
 <body>
 <!-- Nav바-->
-<div th:replace="nav :: div"></div>
-<div th:replace="member/myPageNav :: nav"></div>
+<!--<div th:replace="nav :: div"></div>-->
+<!--<div th:replace="member/myPageNav :: nav"></div>-->
 
 <div class="myWrite">
+    <h2 class="h2">내가 작성한 중고 게시글</h2>
     <table  style="width: 100%;" class="table table-hover">
         <thead>
             <th>글번호</th>
@@ -37,8 +38,12 @@
         </tbody>
     </table>
 
-    <!--페이지네비게이션-->
-    <div th:replace="pagination/paging :: div"></div>
+        <!--페이지네비게이션-->
+        <div th:replace="pagination/paging :: div" style="text-align: center;"></div>
+
+        <div class="btnList" style="text-align: right;">
+            <button class="btn btn-outline-danger" type="button" id="btnBack" onclick="removeHTML()">뒤로가기</button>
+        </div>
 </div>
 
     <script th:inline="javascript">
@@ -47,8 +52,24 @@
                 location.href="/used/detail?postId="+postId;
             }
         }
-    </script>
+
+        /**
+         *  비동기 페이징
+         * @param num 페이지 네비게이션의 버튼의 숫자
+         */
+        function paging(num) {
+            $.ajax({
+                method:"get",
+                url: "/member/myWrite",
+                data: {"pageNum": num},
+                success: function (data) {
+                    $(".myWrite").html(data);
+                }
+            });
+        }
+
+</script>
 <!-- Footer-->
-<div th:replace="footer :: footer"></div>
+<!--<div th:replace="footer :: footer"></div>-->
 </body>
 </html>

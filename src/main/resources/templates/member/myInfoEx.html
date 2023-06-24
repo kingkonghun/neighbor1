@@ -33,19 +33,25 @@
         <div class="col-6 col-md-6 col-lg-3 col-xl-3 p-4 myInfo_link_div">
             <div class="p-5">
             <span>내 글</span> <br>
-            <a href="#" th:text="${list.myWrite}"></a>
+            <a href="#" th:onclick="'writeList('+${list.memberId}+')'">
+                <p th:text="${list.myWrite}"></p>
+            </a>
             </div>
         </div>
         <div class="col-6 col-md-6 col-lg-3 col-xl-3 p-4 myInfo_link_div">
             <div class="p-5">
                 <span>내 댓글</span> <br>
-                <a href="#" th:text="${list.myReply}"></a>
+                <a href="#" th:onclick="'myReply('+${list.memberId}+')'">
+                    <p th:text="${list.myWrite}"></p>
+                </a>
             </div>
         </div>
         <div class="col-6 col-md-6 col-lg-3 col-xl-3 p-4 myInfo_link_div">
             <div class="p-5">
                 <span>좋아요 누른 글</span> <br>
-                <a href="#" th:text="${list.myLikesCount}"></a>
+                <a href="#" th:onclick="'likePost('+${list.memberId}+')'">
+                    <p th:text="${list.myLikesCount}"></p>
+                </a>
             </div>
         </div>
         <div class="col-6 col-md-6 col-lg-3 col-xl-3 p-4 myInfo_link_div">
@@ -55,8 +61,60 @@
             </div>
         </div>
     </article>
+    <article class="row mt-3 memberDetail" id="memberDetail"></article>
 </section>
-
 <!--footer-->
+<div th:replace="footer :: footer"></div>
+<script th:inline="javascript">
+    /**
+     * 내가 올린 게시글(중고게시글만)
+     * */
+    function writeList(memberId) {//내가올린게시글
+        $.ajax({
+            type: "get",
+            url: "/member/myWrite",
+            data: { "memberId": memberId },
+            success: function (data) {
+                $("#memberDetail").hide().html(data).slideDown();
+            }
+        });
+    }
+
+    /**
+     * 댓글 적은 게시글
+     * */
+    function myReply(memberId) {
+        $.ajax({
+            type: "get",
+            url: "/reply/myReply",
+            data: {"memberId":memberId },
+            success: function (data) {
+                $("#memberDetail").hide().html(data).slideDown();
+            }
+        });
+    }
+
+    /**
+     * 좋아요 누른 게시글
+     * */
+    function likePost(memberId){
+        $.ajax({
+            type: "get",
+            url: "/used/likePost",
+            data: {"memberId":memberId },
+            success: function (data) {
+                $("#memberDetail").hide().html(data).slideDown();
+            }
+        });
+    }
+
+    /**
+     * 뒤로가기버튼
+     */
+    function removeHTML(){
+        $("#memberDetail").slideUp().empty();
+    }
+</script>
+
 </body>
 </html>
