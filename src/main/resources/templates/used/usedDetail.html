@@ -198,6 +198,11 @@ body{background-color: #f4f4f4;}
             <div style="text-align: right;">
                 <a href="#" id="open-modal">신고</a>
             </div>
+            <form method="post" action="/openRoom" name="chatForm">
+                <input type="hidden" th:value="${dto.postId}" name="postId">
+                <input type="hidden" th:value="${dto.memberId}" name="receiver">
+                <button id="btnChat" type="button">채팅</button>
+            </form>
         </div>
     </section>
     <!--3번 박스 비슷한 게시글 리스트 보는곳-->

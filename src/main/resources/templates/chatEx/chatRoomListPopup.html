@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <th:block th:insert="/common/common :: fragment-header"></th:block>
+</head>
+<body>
+<h2>채팅목록</h2>
+<div id="roomList">
+    <div th:onclick="|location.href='@{chatDetail(roomId=${row.roomId})}'|" class="mb-2 p-2" style="border: 1px solid black; border-radius: 12px;" th:each="row : ${list}">
+        <h4 th:text="${row.senderName}"></h4>
+        <p th:text="${row.content}"></p>
+    </div>
+</div>
+</body>
+</html>

@@ -367,3 +367,16 @@ top: -11px;
 position: absolute;
 top: 270px;
 }
+#notification{
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 80px;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 20px;
+    border: 1px solid black;
+    z-index: 999;
+}
