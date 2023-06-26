@@ -37,5 +37,13 @@
     <button class="btn btn-outline-danger" type="button" id="btnBack" onclick="removeHTML()">뒤로가기</button>
   </div>
 </div>
+<script th:inline="javascript">
+  /**
+   * 게시글 리스트로 이동
+   */
+  function myWrite(){
+    location.href="/member/myWrite";
+  }
+</script>
 </body>
 </html>

@@ -41,3 +41,6 @@
     font-size: 20px;
     background-color: #F4F4F4;
 }
+
+.memberDetail .h2{margin-top: 1.5em; margin-bottom: 1.5em; text-align: center;}
+.memberDetail .btnList{margin-bottom: 2em;}

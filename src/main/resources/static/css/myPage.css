@@ -6,7 +6,7 @@
 .myPage{font-family: 'GangwonEduPowerExtraBoldA';}
 
 /* 페이징 css*/
-.pagination {margin-top: 3em; margin-bottom: 5em;}
+.pagination {margin-top:3em;}
 .pagination .pageNum{list-style: none; display: flex;}
 .img {width: 50px; height: 50px;}
 /* 테이블 css*/

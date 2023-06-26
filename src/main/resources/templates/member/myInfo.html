@@ -106,7 +106,7 @@
             url: "/reply/myReply",
             data: {"memberId":memberId },
             success: function (data) {
-                $("#myWriteFive").html(data);
+                $("#myWriteFive").slideDown(data);
             }
         });
     }
@@ -119,7 +119,7 @@
             url: "/used/likePost",
            data: {"memberId":memberId },
             success: function (data) {
-               $("#myWriteFive").html(data);
+               $("#myWriteFive").slideDown(data);
             }
         });
     }
@@ -132,7 +132,7 @@
             url: "/member/myWriteFive",
             data: { "memberId": memberId },
             success: function (data) {
-                $("#myWriteFive").html(data);
+                $("#myWriteFive").slideDown(data);
             }
         });
     }
