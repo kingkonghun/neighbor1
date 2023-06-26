@@ -31,7 +31,8 @@ public class MemberServiceImpl implements MemberService{
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ImgDownService imgDownService;
     private final ReplyRepository replyRepository;
-    final String uploadDir = "C:\\upload_anabada\\profile\\";
+//    final String uploadDir = "C:\\upload_anabada\\profile\\";
+    final String uploadDir = "/Users/upload_anabada/profile/";
 
     /**
      * 회원 가입

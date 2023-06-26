@@ -102,4 +102,9 @@ public class ClubController {
         return clubService.findAllImageByPostId(postId);
     }
 
+    @GetMapping("/testest")
+    public String getListImages(Model model) {
+        return null;
+    }
+
 }
