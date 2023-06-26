@@ -16,4 +16,5 @@ public class Chat {
     private long sender;
     private String senderName;
     private String content;
+    private int chatCount;
 }

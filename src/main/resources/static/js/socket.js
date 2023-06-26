@@ -24,8 +24,8 @@ function connect() {
     stompClient.connect({}, function (frame) {
         console.log("Connected: " + frame);
         stompClient.subscribe("/user/topic/messageNotification", function (message) {
-            refreshChatList();
             showTopNotification(JSON.parse(message.body).senderName, JSON.parse(message.body).content);
+            refreshChatList();
         });
 
         stompClient.subscribe("/topic/message/" + roomId, function (message) {
@@ -41,7 +41,6 @@ function showMessage(receiver, message) {
     }else {
         $("#messages").append("<tr><td style='background-color: blue;'>" + message + "</td></tr>");
     }
-
 }
 function showTopNotification(senderName, message) {
     $("#notification").text(senderName + "님 : " + message);
@@ -51,6 +50,7 @@ function showTopNotification(senderName, message) {
     $("#notification").fadeOut();
     }, 1500);
 }
+
 function refreshChatList() {
     $("#roomList").load(location.href+' #roomList');
 }
