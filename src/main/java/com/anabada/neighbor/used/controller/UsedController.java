@@ -44,7 +44,7 @@ public class UsedController {
     public String detail(long postId, Model model, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Used dto = usedService.detail(postId, request, response, principalDetails);
         model.addAttribute("dto", dto);
-        System.out.println(dto.getImgList());
+        model.addAttribute("imgCount", dto.getImgList().size());
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0, ""));
         model.addAttribute("reportType", usedService.reportType());
