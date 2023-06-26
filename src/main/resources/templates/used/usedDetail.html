@@ -142,7 +142,9 @@ body{background-color: #f4f4f4;}
             <div class="slide-box" >
                 <div class="content" th:each="imgList : ${dto.imgList}">
                     <div class="img-box" th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'"></div>
+<!--                    <img th:if="${#lists.size(imgList) == 1}" th:src="@{/used/downFiles(img=${imgList})}" alt="Image">-->
                 </div>
+                <div class="content" style="display: none;"></div>
             </div>
 
         </div>
@@ -153,7 +155,7 @@ body{background-color: #f4f4f4;}
             <h3 th:text="${dto.title}"></h3>
             <div class="mb-2" style="display: flex; justify-content: space-between;">
                 <ul class="username">
-                    <li><img src="/img/author-4.jpg" alt="프로필 사진"/></li>
+                    <li><img th:src="@{/member/findProfileImg(memberId=${dto.memberId})}" alt="프로필 사진"/></li>
                     <li th:text="${dto.memberName}"></li>
                 </ul>
                 <span class="views pt-2" th:text="${#dates.format(dto.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></span>

@@ -68,7 +68,6 @@ public class UsedController {
     }
     @GetMapping("/downFiles")//이미지 다운
     public void downFiles(String img,HttpServletResponse response) throws IOException{
-        System.out.println(img);
         usedService.downloadFiles(img,response);
     }
 
