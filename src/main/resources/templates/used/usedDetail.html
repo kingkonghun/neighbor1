@@ -58,7 +58,20 @@ body{background-color: #f4f4f4;}
 }
 </style>
 <script>
+
     $(function(){
+        const imgCount = [[${imgCount}]];
+        console.log(imgCount);
+        if(imgCount === 1 ){
+            $(".slick-dots").css('display','none');
+            $(".slick-prev").css('display','none');
+            $(".slick-next").css('display','none');
+        }
+
+        /**
+         * 신고
+         * @type {*|jQuery|HTMLElement}
+         */
         const modal = $("#modal");
         let likesCheck = [[${dto.likesCheck}]];
         heartClass(likesCheck);
@@ -139,34 +152,14 @@ body{background-color: #f4f4f4;}
     <!--1번 박스 사진 나오는곳-->
     <section class="section">
         <div class="main-section-wrap">
-            <div class="slide-box">
-                <div class="content">
-                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
-
+            <div class="slide-box" >
+                <div class="content" th:each="imgList : ${dto.imgList}">
+                    <div class="img-box" th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'"></div>
                 </div>
-                <!--반복-->
-
-
-                <div class="content">
-                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
-
-                </div>
-
-
-
-                <div class="content">
-                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
-
-                </div>
-
-
-
-                <div class="content">
-                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
-
+                <div class="content" th:if="${#lists.size(dto.imgList)==1}">
+                    <div class="img-box" th:style="'background-image:url('+ @{/used/downFiles(img=${dto.imgList})} +');'"></div>
                 </div>
             </div>
-
         </div>
     </section>
 
@@ -175,7 +168,7 @@ body{background-color: #f4f4f4;}
             <h3 th:text="${dto.title}"></h3>
             <div class="mb-2" style="display: flex; justify-content: space-between;">
                 <ul class="username">
-                    <li><img src="/img/author-4.jpg" alt="프로필 사진"/></li>
+                    <li><img th:src="@{/member/findProfileImg(memberId=${dto.memberId})}" alt="프로필 사진"/></li>
                     <li th:text="${dto.memberName}"></li>
                 </ul>
                 <span class="views pt-2" th:text="${#dates.format(dto.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></span>
@@ -205,6 +198,7 @@ body{background-color: #f4f4f4;}
             </form>
         </div>
     </section>
+
     <!--3번 박스 비슷한 게시글 리스트 보는곳-->
     <section class="item3 row ">
         <h2 class="similarTitle">비슷한 상품들</h2>

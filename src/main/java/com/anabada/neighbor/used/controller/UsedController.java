@@ -3,10 +3,7 @@ package com.anabada.neighbor.used.controller;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.page.PageDTO;
-import com.anabada.neighbor.used.domain.PostReport;
-import com.anabada.neighbor.used.domain.Report;
-import com.anabada.neighbor.used.domain.ReportOk;
-import com.anabada.neighbor.used.domain.Used;
+import com.anabada.neighbor.used.domain.*;
 import com.anabada.neighbor.used.service.UsedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,9 +44,11 @@ public class UsedController {
     public String detail(long postId, Model model, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Used dto = usedService.detail(postId, request, response, principalDetails);
         model.addAttribute("dto", dto);
+        model.addAttribute("imgCount", dto.getImgList().size());
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0, ""));
         model.addAttribute("reportType", usedService.reportType());
+
         return "used/usedDetail";
     }
 
@@ -66,7 +65,10 @@ public class UsedController {
         String filenames = usedService.findImgUrl(postId);
 //        System.out.println("filenames = " + filenames);
         usedService.downloadFiles(filenames, response);
-
+    }
+    @GetMapping("/downFiles")//이미지 다운
+    public void downFiles(String img,HttpServletResponse response) throws IOException{
+        usedService.downloadFiles(img,response);
     }
 
     @PostMapping("/postEdit") //게시물 수정

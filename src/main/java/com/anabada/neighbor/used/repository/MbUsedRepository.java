@@ -152,4 +152,8 @@ public interface MbUsedRepository extends UsedRepository {
     @Override
     @Update("update report set reportStatus = 'n' where reportId = #{reportId}")
     void UpdateReportStatus(long reportId);
+
+    @Override
+    @Select("SELECT imgUrl FROM img WHERE postId=#{postId}")
+    List<String> findAllImgUrl(long postId);
 }
