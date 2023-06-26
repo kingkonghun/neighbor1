@@ -45,10 +45,10 @@ function showMessage(receiver, message) {
 }
 function showTopNotification(senderName, message) {
     $("#notification").text(senderName + "님 : " + message);
-    $("#notification").fadeIn(); // 요소를 나타낸다.
+    $("#notification").fadeIn();
 
     setTimeout(function() {
-    $("#notification").fadeOut(); // 지정된 시간(여기서는 3초)이 지나면 요소를 사라지게 한다.
+    $("#notification").fadeOut();
     }, 1500);
 }
 function refreshChatList() {
