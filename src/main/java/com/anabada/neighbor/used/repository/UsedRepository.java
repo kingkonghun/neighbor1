@@ -170,4 +170,6 @@ public interface UsedRepository {
     long findMemberId(long postId);
 
     void UpdateReportStatus(long reportId);
+
+    List<String> findAllImgUrl(long postId);
 }

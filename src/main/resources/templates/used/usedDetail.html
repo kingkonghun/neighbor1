@@ -139,31 +139,9 @@ body{background-color: #f4f4f4;}
     <!--1번 박스 사진 나오는곳-->
     <section class="section">
         <div class="main-section-wrap">
-            <div class="slide-box">
-                <div class="content">
-                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
-
-                </div>
-                <!--반복-->
-
-
-                <div class="content">
-                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
-
-                </div>
-
-
-
-                <div class="content">
-                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
-
-                </div>
-
-
-
-                <div class="content">
-                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
-
+            <div class="slide-box" >
+                <div class="content" th:each="imgList : ${dto.imgList}">
+                    <div class="img-box" th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'"></div>
                 </div>
             </div>
 
