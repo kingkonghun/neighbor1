@@ -29,6 +29,7 @@ public class ChattingController {
     @GetMapping("/chatRoomList")
     public String chatRoomList(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         model.addAttribute("list", chattingService.chattingRoomList(principalDetails));
+        model.addAttribute("receiver", principalDetails.getMember().getMemberId());
         return "chatEx/chatRoomListPopup";
     }
 

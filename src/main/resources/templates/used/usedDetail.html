@@ -148,16 +148,16 @@ body{background-color: #f4f4f4;}
 <div th:replace="nav :: div"></div>
 
 <!--플랙스 박스-->
-<div class="flex-box container">
+<div class="flex-box container mt-5">
     <!--1번 박스 사진 나오는곳-->
     <section class="section">
         <div class="main-section-wrap">
             <div class="slide-box" >
                 <div class="content" th:each="imgList : ${dto.imgList}">
-                    <div class="img-box" th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'"></div>
+                    <div class="img-box" style="width: 100%;" th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'"></div>
                 </div>
                 <div class="content" th:if="${#lists.size(dto.imgList)==1}">
-                    <div class="img-box" th:style="'background-image:url('+ @{/used/downFiles(img=${dto.imgList})} +');'"></div>
+                    <div class="img-box" style="width: 100%;" th:style="'background-image:url('+ @{/used/downFiles(img=${dto.imgList})} +');'"></div>
                 </div>
             </div>
         </div>
@@ -197,6 +197,8 @@ body{background-color: #f4f4f4;}
                 <button id="btnChat" type="button">채팅</button>
             </form>
         </div>
+    </section>
+
     </section>
 
     <!--3번 박스 비슷한 게시글 리스트 보는곳-->
@@ -273,6 +275,5 @@ body{background-color: #f4f4f4;}
 </div>
 
 <!--footer-->
-<div th:replace="footer :: footer"></div>
 </body>
 </html>

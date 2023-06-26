@@ -52,7 +52,7 @@ function showTopNotification(senderName, message) {
 }
 
 function refreshChatList() {
-    $("#roomList").load(location.href+' #roomList');
+    $(".chatlist").load(location.href+' .chatlist');
 }
 
 function sendPrivateMessage() {
