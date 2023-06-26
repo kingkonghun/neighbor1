@@ -11,6 +11,7 @@
     <div th:onclick="|location.href='@{chatDetail(roomId=${row.roomId})}'|" class="mb-2 p-2" style="border: 1px solid black; border-radius: 12px;" th:each="row : ${list}">
         <h4 th:text="${row.senderName}"></h4>
         <p th:text="${row.content}"></p>
+        <span id="notificationCount" th:text="${row.chatCount}" style="background-color: red;" th:if="${row.chatCount} != '0'"></span>
     </div>
 </div>
 </body>

@@ -34,7 +34,7 @@ public class ChattingController {
 
     @GetMapping("/chatDetail")
     public String chatDetail(long roomId, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        model.addAttribute("list", chattingService.chattingMessageList(roomId));
+        model.addAttribute("list", chattingService.chattingMessageList(roomId, principalDetails));
         model.addAttribute("receiver", chattingService.getReceiver(roomId, principalDetails));
         model.addAttribute("roomId", roomId);
         return "chatEx/chatDetailPopup";

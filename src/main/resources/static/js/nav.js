@@ -16,7 +16,7 @@ $(function(){
         var screenHeight = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : window.screen.height;
         var _left = ((screenWidth / 2) - (_width / 2)) + dualScreenLeft;
         var _top = ((screenHeight / 2) - (_height / 2)) + dualScreenTop;
-        window.open('/chatRoomList', 'popup-test', 'width='+ _width +', height='+ _height +', left=' + _left + ', top='+ _top );
+        window.open('/chatRoomList', 'chatListPopup', 'width='+ _width +', height='+ _height +', left=' + _left + ', top='+ _top );
     });
 
     $("#btnChat").click(function(){
