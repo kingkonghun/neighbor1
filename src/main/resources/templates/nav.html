@@ -1,29 +1,94 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light" xmlns:sec="http://www.w3.org/1999/xhtml">
-  <div class="container px-4 px-lg-5">
-    <a class="navbar-brand" href="/">오이 마켓</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-        <li class="nav-item"><a class="nav-link active" aria-current="page" href="/used/list">중고거래</a></li>
-        <li class="nav-item"><a class="nav-link" href="/member/myInfo">내정보</a></li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">커뮤니티</a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="/clubList">같이해요</a></li>
-            <!-- <li><hr class="dropdown-divider" /></li> 줄쳐주는 코드 -->
-            <li><a class="dropdown-item" href="#!">실시간 채팅</a></li>
-            <li><a class="dropdown-item" href="#!">주변맛집</a></li>
-          </ul>
-        </li>
-      </ul>
-      <form class="d-flex" action="/member/loginForm" method="get">
-        <button class="btn btn-outline-dark" type="submit">
-          <i class="me-1"></i>
-          <span sec:authorize="isAnonymous()">로그인</span>
-          <span sec:authorize="isAuthenticated()"><a href="/logout">로그아웃</a></span>
-          <!-- <span class="badge bg-dark text-white ms-1 rounded-pill">0</span> 상품개수 확인해주는 코드 -->
-        </button>
-      </form>
-    </div>
-  </div>
-</nav>
+<div>
+    <nav class="top_nav">
+        <div class="container nav_container">
+            <div class="nav_div">
+                <h1 class="nav_title"><a href="/">아나바다</a></h1>
+                <ul class="nav_menu_1">
+                    <li><a href="/used/list">중고거래</a></li>
+                    <li><a href="/exList">동네모임</a></li>
+                    <li><a href="#" id="open-popup">채팅목록</a></li>
+                </ul>
+            </div>
+            <div class="nav_div">
+                <form id="searchForm_1" class="searchForm" method="get" action="/used/list">
+                    <div class="search_1">
+                        <input name="search" class="searchInput" type="search" placeholder="검색어 입력">
+                        <input type="hidden">
+                        <img id="btnSearch_1" class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" onclick="submit();">
+                    </div>
+                </form>
+
+                <form id="searchForm_2" class="searchForm" method="get" action="/used/list">
+                    <div class="search_1">
+                        <input name="search" class="searchInput" type="search" placeholder="검색어 입력">
+                        <input type="hidden">
+                        <img id="btnSearch_2" class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" onclick="submit();">
+                    </div>
+                </form>
+
+                <div class="open-search">
+                    <div class="border">
+                        <img class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+                    </div>
+                </div>
+
+                <input type="checkbox" id="menuicon">
+                <label for="menuicon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+                <div class="sidebar">
+                    <div class="menu">
+                        <div class="center" sec:authorize="isAuthenticated()">
+                            <div class="profile">
+                                <div class="image">
+                                    <div class="circle-1"></div>
+                                    <div class="circle-2"></div>
+                                    <img src="https://100dayscss.com/codepen/jessica-potter.jpg" width="70" height="70" alt="Jessica Potter">
+                                </div>
+
+                                <div class="name">김김김</div>
+
+                                <div class="actions">
+                                    <button type="button" class="btn" onclick="location.href='/member/myInfo'">마이페이지</button>
+                                    <button type="button" class="btn" onclick="location.href='/logout'">로그아웃</button>
+                                </div>
+                            </div>
+
+                            <div class="stats">
+                                <div class="box">
+                                    <span class="value">523</span>
+                                    <span class="parameter">내글</span>
+                                </div>
+                                <div class="box">
+                                    <span class="value">1387</span>
+                                    <span class="parameter">내점수</span>
+                                </div>
+                                <div class="box">
+                                    <span class="value">146</span>
+                                    <span class="parameter">Follower</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bottom">
+                            <div sec:authorize="isAnonymous()">
+                                <a href='/member/loginForm'>
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                </a>
+                                <span>로그인</span></div>
+                            <div class="logout" sec:authorize="isAuthenticated()"><a href='/logout'>
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                            </a>
+                                <span>로그아웃</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div id="top"></div>
+    <div class="p-2" id="notification"></div>
+</div>
+
+

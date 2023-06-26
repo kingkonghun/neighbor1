@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Title</title>
+  <th:block th:insert="/common/common :: fragment-header"></th:block>
+</head>
+<body>
+
+<div class="container" style="margin-top: 50px">
+  <div class="row">
+    <div class="col-md-12">
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="message">Private Message</label>
+          <input type="hidden" id="roomId" th:value="${roomId}">
+          <input type="hidden" id="receiver" th:value="${receiver}">
+          <input type="text" id="message" class="form-control" placeholder="내용을 입력하세요">
+        </div>
+        <button id="send" class="btn btn-default" type="button">Send Private Message</button>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table id="message-history" class="table table-striped">
+        <tbody id="messages">
+        <tr th:each="row : ${list}">
+          <td th:text="${row.content}" style="background-color: red;" th:if="${row.writer ne receiver}"></td>
+          <td th:text="${row.content}" style="background-color: blue;" th:if="${row.writer eq receiver}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>

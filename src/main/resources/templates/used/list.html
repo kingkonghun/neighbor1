@@ -7,10 +7,14 @@
 <link rel="stylesheet" th:href="@{/css/list.css}">
 <style>
     body {
-        background-color: #E6E6E6;
+        background-color: #f4f4f4;
     }
 </style>
 <script th:inline="javascript">
+    function reload(){
+        location.href="/used/list";
+    }
+
     $(function (){
         let num = 0;
         $("#btnPlus").click(function (){
@@ -52,20 +56,16 @@
             }
             document.writeForm.submit();
         });
+
         $("#btnWrite").click(function (){
-            let isAuthenticated;
-            $.ajax({
-                type: "get",
-                url: "/member/isAuthenticated",
-                async: false,
-                success: function(result){
-                    isAuthenticated = result;
+            if(checkIsAuthenticated()){
+                if(checkIsAuthorization()){
+                    location.href="/member/editInfo?message=추가 정보를 입력한 뒤에 사용하세요";
+                }else{
+                    $("#writeForm").slideDown();
                 }
-            });
-            if(isAuthenticated){
-                $("#writeForm").slideDown();
             }else{
-                if(confirm("글쓰기는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
+                if(confirm("상품등록은 로그인 후 가능합니다\n로그인 하시겠습니까?")){
                     location.href="/member/loginForm";
                 }
             }
@@ -96,16 +96,16 @@
 </script>
 </head>
 <body>
-<div th:replace="ex::nav"></div>
+<div th:replace="nav::div"></div>
 
 <header class="mt-5">
-    <h1>중고거래</h1>
+    <h1><a href="#" onclick="reload()">중고거래</a></h1>
 </header>
 
 <section class="container mt-2">
     <div class="div_1 py-3">
         <article class="write">
-            <button type="button" class="mb-3" id="btnWrite">글쓰기</button>
+            <button type="button" class="mb-3" id="btnWrite">상품등록</button>
         </article>
         <article class="category">
             <select id="category_select" name="categoryId">

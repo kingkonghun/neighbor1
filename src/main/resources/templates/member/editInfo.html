@@ -17,9 +17,18 @@
         .btnSubmit{text-align: center;}
     </style>
     <link rel="stylesheet" th:href="@{/css/myPage.css}">
+    <script type="text/javascript">
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const message = urlParams.get('message');
+
+        if (message) {
+            alert(decodeURIComponent(message));
+        }
+    </script>
 </head>
 <body>
-<div th:replace="ex :: nav"></div>
+<div th:replace="nav :: div"></div>
 <div th:replace="member/myPageNav :: nav"></div>
 
 <div class="myInfomation">

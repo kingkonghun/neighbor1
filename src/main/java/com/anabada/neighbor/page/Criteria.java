@@ -8,7 +8,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Data
 @Component
-
+/**
+ * 페이징을 위한 객체
+ */
 public class Criteria {
     private int pageNum; //현재 페이지 번호
     private int amount;//한 페이지당 보여줄 게시글의 갯수

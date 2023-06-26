@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <title>중고거래</title>
 <th:block th:insert="/common/common :: fragment-header"></th:block>
 <style>
@@ -42,33 +43,41 @@
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
     display: none;
+    font-family: omyu_pretty;
+    font-size: 20px;
 }
 .modal-content {
     background-color: #fefefe;
     margin: 15% auto;
     border: 1px solid #888;
-    width: 500px;
+    width: 360px;
     border-radius: 12px;
 }
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
 #close-modal {
     cursor: pointer;
 }
-select, textarea {
+#reportType_select, #content {
     width: 100%;
+    border-style: none;
+    background-color: #f4f4f4;
 }
-textarea {
-    height: 160px;
+#content {
+    height: 120px;
+    border-style: none;
+    resize: none;
 }
 .modal-header {
     display: flex;
     justify-content: space-between;
+    font-family: GangwonEduPowerExtraBoldA;
+}
+#btnReport {
+    border-radius: 8px;
+    border-style: none;
+    border-color: #f4f4f4;
+    font-family: omyu_pretty;
+    background-color: #FF3366;
+    color: #f4f4f4;
 }
 </style>
 <script>
@@ -146,7 +155,7 @@ textarea {
 </head>
 <body>
 <!-- Nav바-->
-    <div th:replace="ex :: nav"></div>
+    <div th:replace="nav :: div"></div>
     <section>
         <article class="p-3">
             <img src="https://cdn.pixabay.com/photo/2015/01/20/12/51/mobile-605422_1280.jpg">
@@ -177,17 +186,20 @@ textarea {
     <div id="modal">
         <div class="modal-content p-4">
             <div class="modal-header">
-                <h2>신고하기</h2>
+                <div style="display: flex;">
+                    <img th:src="@{/img/siren.png}" style="width: 50px; height: 44px;">
+                    <h3 class="pt-3">신고하기</h3>
+                </div>
                 <i id="close-modal" class="bi bi-x-lg" style="font-size: 32px;"></i>
             </div>
             <select id="reportType_select" name="reportTypeId">
-                <option value="0">신고유형</option>
+                <option value="0" class="pb-1">신고유형</option>
                 <th:block th:each="reportType:${reportType}">
                     <option th:value="${reportType.reportTypeId}" th:text="${reportType.reportTypeName}"></option>
                 </th:block>
             </select>
             <label for="content">내용</label>
-            <textarea id="content" name="content"></textarea>
+            <textarea id="content" name="content" class="px-2 mb-3"></textarea>
             <button type="button" id="btnReport">신고</button>
         </div>
     </div>

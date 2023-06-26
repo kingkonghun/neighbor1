@@ -23,7 +23,8 @@ import java.util.stream.Stream;
 
 @Service
 public class ImageUtils {
-    private final String uploadPath = Paths.get("/Users", "upload_anabada").toString();
+//    private final String uploadPath = Paths.get("/Users", "upload_anabada").toString();
+    private final String uploadPath = "C:\\upload_anabada\\";
 
     /**
      * 다중 이미지 업로드

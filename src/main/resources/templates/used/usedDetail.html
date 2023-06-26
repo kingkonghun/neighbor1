@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>club Details Page</title>
+<th:block th:insert="/common/common :: fragment-header"></th:block>
+<link rel="stylesheet" th:href="@{/css/usedDetail.css}">
+<link rel="stylesheet" th:href="@{/css/list.css}">
+<style>
+body{background-color: #f4f4f4;}
+#modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none;
+    font-family: omyu_pretty;
+    font-size: 20px;
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    border: 1px solid #888;
+    width: 360px;
+    border-radius: 12px;
+}
+#close-modal {
+    cursor: pointer;
+}
+#reportType_select, #content {
+    width: 100%;
+    border-style: none;
+    background-color: #f4f4f4;
+}
+#content {
+    height: 120px;
+    border-style: none;
+    resize: none;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    font-family: GangwonEduPowerExtraBoldA;
+}
+#btnReport {
+    border-radius: 8px;
+    border-style: none;
+    border-color: #f4f4f4;
+    font-family: omyu_pretty;
+    background-color: #FF3366;
+    color: #f4f4f4;
+}
+</style>
+<script>
+    $(function(){
+        const modal = $("#modal");
+        let likesCheck = [[${dto.likesCheck}]];
+        heartClass(likesCheck);
+        $("#heart").click(function(){
+            if(checkIsAuthenticated()){
+                $.ajax({
+                    type: "post",
+                    url: "/used/likes",
+                    data: {postId: [[${dto.postId}]], likesCheck: likesCheck},
+                    success: function(likes){
+                        likesCheck = likes.likesCheck;
+                        heartClass(likesCheck);
+                        $(".likesCount").text(likes.likesCount);
+                    }
+                });
+            }else{
+                if(confirm("좋아요는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
+                    location.href="/member/loginForm";
+                }
+            }
+        });
+        $("#open-modal").click(function(){
+            if(checkIsAuthenticated()){
+                modal.css("display", "block");
+                $("body").css("overflow", "hidden");
+            }else{
+                if(confirm("신고는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
+                    location.href="/member/loginForm";
+                }
+            }
+        });
+        $("#close-modal").click(function(){
+            modal.css("display", "none");
+            $("body").css("overflow", "auto");
+        });
+        $("#btnReport").click(function(){
+            const reportTypeId = $("#reportType_select");
+            const content = $("#content");
+            if(reportTypeId.val() == 0){
+                alert("신고유형을 선택하세요");
+                reportTypeId.focus();
+                return;
+            }
+            if(content.val() == ""){
+                alert("신고내용을 입력하세요");
+                content.focus();
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: "/used/report",
+                data: {"postId": [[${dto.postId}]], "content": content.val(), "reportTypeId": reportTypeId.val()},
+                success: function(){
+                    alert("신고완료");
+                    modal.css("display", "none");
+                    $("body").css("overflow", "auto");
+                    reportTypeId.val(0);
+                    content.val("");
+                }
+            });
+        });
+    });
+    function heartClass(likesCheck){
+        if (likesCheck == 0) {
+            $("#heart").removeClass("bi-heart-fill").addClass("bi-suit-heart");
+        } else {
+            $("#heart").removeClass("bi-suit-heart").addClass("bi-heart-fill");
+        }
+    }
+</script>
+</head>
+<body>
+<!-- Nav바-->
+<div th:replace="nav :: div"></div>
+
+<!--플랙스 박스-->
+<div class="flex-box container">
+    <!--1번 박스 사진 나오는곳-->
+    <section class="section">
+        <div class="main-section-wrap">
+            <div class="slide-box" >
+                <div class="content" th:each="imgList : ${dto.imgList}">
+                    <div class="img-box" th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'"></div>
+<!--                    <img th:if="${#lists.size(imgList) == 1}" th:src="@{/used/downFiles(img=${imgList})}" alt="Image">-->
+                </div>
+                <div class="content" style="display: none;"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="item2 p-4">
+        <div style="display: flex; flex-direction: column; width: 100%;">
+            <h3 th:text="${dto.title}"></h3>
+            <div class="mb-2" style="display: flex; justify-content: space-between;">
+                <ul class="username">
+                    <li><img th:src="@{/member/findProfileImg(memberId=${dto.memberId})}" alt="프로필 사진"/></li>
+                    <li th:text="${dto.memberName}"></li>
+                </ul>
+                <span class="views pt-2" th:text="${#dates.format(dto.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></span>
+            </div>
+            <p th:text="${dto.content}" style="height: 60%; overflow: auto;"></p>
+            <div style="display: flex; justify-content: space-between;">
+                <span th:text="'가격 : ' + ${dto.price} + ' 원'"></span>
+                <span th:text="'조회수 : ' + ${dto.postView}"</span>
+            </div>
+            <div class="atag" style="display: flex; gap: 20px; justify-content: flex-end;">
+                <div>
+                    <span th:text="${dto.replyCount}"></span>
+                    <a href="#"><i class="bi bi-chat-text"></i></a>
+                </div>
+                <div id="likes">
+                    <span class="likesCount">[[${dto.likesCount}]]</span>
+                    <i id="heart" style="color: red"></i>
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <a href="#" id="open-modal">신고</a>
+            </div>
+            <form method="post" action="/openRoom" name="chatForm">
+                <input type="hidden" th:value="${dto.postId}" name="postId">
+                <input type="hidden" th:value="${dto.memberId}" name="receiver">
+                <button id="btnChat" type="button">채팅</button>
+            </form>
+        </div>
+    </section>
+    <!--3번 박스 비슷한 게시글 리스트 보는곳-->
+    <section class="item3 row ">
+        <h2 class="similarTitle">비슷한 상품들</h2>
+        <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${similarList}">
+            <div class="item p-3" th:onclick="|location.href='@{detail(postId=${row.postId})}'|">
+                <img class="list_img" th:src="@{/used/findImg(postId=${row.postId})}">
+                <div class="div_2 mt-3">
+                    <h5 th:text="${row.title}"></h5>
+                    <span th:inline="text">
+                        [[${row.postView}]]
+                        <i class="bi bi-caret-up-fill"></i>
+                    </span>
+
+                </div>
+                <div class="div_3">
+                    <span class="price" th:inline="text">
+                        [[${row.price}]] 원
+                    </span>
+                    <span th:inline="text">
+                        [[${row.likesCount}]]
+                        <i class="bi bi-heart-fill" style="color: red"></i>
+                    </span>
+                </div>
+                <div class="div_4">
+                    <p th:text="${row.content}"></p>
+                    <span th:inline="text">
+                        [[${row.replyCount}]]
+                        <i class="bi bi-chat-dots-fill"></i>
+                    </span>
+                </div>
+                <span th:text="${row.address}"></span>
+            </div>
+        </article>
+    </section>
+
+    <!--4번 박스 클럽 추천 사진-->
+    <div class="item4">
+    </div>
+</div>
+
+
+<script>
+    $('.slide-box').slick({
+        slidesToShow:1,
+        swipeToSlide: true,
+        arrow:true,
+        dots:true,
+
+});
+</script>
+
+<!--신고모달-->
+<div id="modal">
+    <div class="modal-content p-4">
+        <div class="modal-header">
+            <div style="display: flex;">
+                <img th:src="@{/img/siren.png}" style="width: 50px; height: 44px;">
+                <h3 class="pt-3">신고하기</h3>
+            </div>
+            <i id="close-modal" class="bi bi-x-lg" style="font-size: 32px;"></i>
+        </div>
+        <select id="reportType_select" name="reportTypeId">
+            <option value="0" class="pb-1">신고유형</option>
+            <th:block th:each="reportType:${reportType}">
+                <option th:value="${reportType.reportTypeId}" th:text="${reportType.reportTypeName}"></option>
+            </th:block>
+        </select>
+        <label for="content">내용</label>
+        <textarea id="content" name="content" class="px-2 mb-3"></textarea>
+        <button type="button" id="btnReport">신고</button>
+    </div>
+</div>
+
+<!--footer-->
+<div th:replace="footer :: footer"></div>
+</body>
+</html>
