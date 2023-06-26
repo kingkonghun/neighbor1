@@ -36,7 +36,7 @@ public class ClubController {
     @GetMapping("/clubList")
     public String clubList(Model model) {
         model.addAttribute("clubList", clubService.findClubList());
-        return "club/clubList";
+        return "club/clubListEx";
     }
 
     //게시글 작성 페이지

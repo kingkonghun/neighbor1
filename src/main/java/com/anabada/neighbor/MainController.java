@@ -31,16 +31,4 @@ public class MainController {
 //        model.addAttribute("club", clubService.mainList());
         return "index";
     }
-
-    @GetMapping("/ex")
-    public String ex(){
-        return "chat/mapEx";
-    }
-
-    @GetMapping("/exList")
-    public String exList() {
-        return "/used/ex";
-    }
-
-
 }

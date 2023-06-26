@@ -1,28 +1,172 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-<meta charset="UTF-8"/>
-<title>Title</title>
-<script src="https://kit.fontawesome.com/e16047a0d4.js" crossorigin="anonymous"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <th:block th:insert="/common/common :: fragment-header"></th:block>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/editInfo.css">
+    <style>
+        #liEditInfo{color:red;}
+
+       .myInfo{font-family: 'GangwonEduPowerExtraBoldA';}
+
+        .myInfo{padding-left: 10em;}
+        .myInfomation{display: flex; justify-content: space-evenly;}
+        .titleBox{width: 200px; height: auto; text-align: left; padding-left: 2em; padding-bottom: 1.5em;}
+        .profileImg{width: 100%;height: 100%;}
+        .info-aria{display: flex;padding-bottom: 1.5em;}
+        .btnSubmit{text-align: center;}
+    </style>
+    <link rel="stylesheet" th:href="@{/css/myPage.css}">
+    <script type="text/javascript">
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const message = urlParams.get('message');
+
+        if (message) {
+            alert(decodeURIComponent(message));
+        }
+    </script>
 </head>
 <body>
-<section class="container" style="border: 1px solid red;">
-    <article class="row" style="border: 1px solid green;">
-        <div class="col-12 col-md-6 col-lg-4 col-xl-4" style="border: 1px solid yellow; display: flex; justify-content: center;">
-            <img src="https://cdn.pixabay.com/photo/2023/05/09/07/18/space-7980556_1280.jpg" style="width: 300px; height: 400px;">
+<div th:replace="nav :: div"></div>
+<section class="py-5 my-5">
+    <div class="container">
+        <h1 class="mb-5">Account Settings</h1>
+        <div class="bg-white shadow rounded-lg d-block d-sm-flex">
+            <div class="profile-tab-nav border-right">
+                <div class="p-4">
+                    <div class="img-circle text-center mb-3">
+                        <img src="/img/author-1.jpg" alt="Image" class="shadow">
+                    </div>
+                    <h4 class="text-center">rlarlarla</h4>
+                </div>
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" >
+                    <a class="nav-link active1" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
+                        <i class="fa fa-home text-center mr-1"></i>
+                        Account
+                    </a>
+
+                    <a class="nav-link" id="password-tab" data-toggle="pill" href="#password" role="tab" aria-controls="password" aria-selected="false">
+                        <i class="fa fa-key text-center mr-1"></i>
+                        Password
+                    </a>
+                    <a class="nav-link" id="security-tab" data-toggle="pill" href="#security" role="tab" aria-controls="security" aria-selected="false">
+                        <i class="fa fa-user text-center mr-1"></i>
+                        Profile photo
+                    </a>
+               </div>
+            </div>
+            <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+                    <h3 class="mb-4">Account Settings</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" value="Kiran">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" value="Acharya">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="text" class="form-control" value="kiranacharya287@gmail.com">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Phone number</label>
+                                <input type="text" class="form-control" value="+91 9876543215">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Region</label>
+                                <input type="text" class="form-control" value="Kiran Workspace">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Birthday</label>
+                                <input type="date" class="form-control" placeholder="yyyy-mm-dd">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Info</label>
+                                <textarea class="form-control" rows="4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore vero enim error similique quia numquam ullam corporis officia odio repellendus aperiam consequatur laudantium porro voluptatibus, itaque laboriosam veritatis voluptatum distinctio!</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <button class="btn btn-primary" style="background-color:#FF3366;">Update</button>
+                        <button class="btn btn-light">Cancel</button>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
+                    <h3 class="mb-4">Password Settings</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Old password</label>
+                                <input type="password" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>New password</label>
+                                <input type="password" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Confirm new password</label>
+                                <input type="password" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <button class="btn btn-primary">Update</button>
+                        <button class="btn btn-light">Cancel</button>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
+                    <h3 class="mb-4">Profile photo</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Upload Image</label>
+                                <input type="file" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <button class="btn btn-primary">Update</button>
+                        <button class="btn btn-light">Cancel</button>
+                    </div>
+                </div>
+
+
+                </div>
+            </div>
         </div>
-        <div class="col-12 col-md-6 col-lg-8 col-xl-8" style="border: 1px solid yellow;">
-            <input type="hidden" value="memberId">
-            <span>ID : GOOGLE_123479801324790813247</span> <br>
-            PASSWORD : <input value="비밀번호는 일반 로그인만 보이게"> <br>
-            ADDRESS : <input value="주소"> <br>
-            ADDRESSDETAIL : <input value="상세주소"> <br>
-        </div>
-    </article>
+    </div>
 </section>
+
+<div th:replace="footer :: footer"></div>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script th:src="@{/js/address.js}" type="text/javascript"></script>
+
 </body>
 </html>
