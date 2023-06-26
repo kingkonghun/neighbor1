@@ -87,6 +87,90 @@
     function removeFile() {
         document.getElementById("formFileMultiple").value = '';
     }
+
+    /**
+ * 데이터 조회
+ * @param uri - API Request URI
+ * @param params - Parameters
+ * @returns json - 결과 데이터
+ */
+function getJson(uri, params) {
+
+    let json = {}
+
+    $.ajax({
+        url : uri,
+        type : 'get',
+        dataType : 'json',
+        data : params,
+        async : false,
+        success : function (response) {
+            json = response;
+        },
+        error : function (request, status, error) {
+            console.log(error)
+        }
+    })
+
+    return json;
+}
+
+
+/**
+ * 데이터 저장/수정/삭제
+ * @param uri - API Request URI
+ * @param method - API Request Method
+ * @param params - Parameters
+ * @returns json - 결과 데이터
+ */
+function callApi(uri, method, params) {
+
+    let json = {}
+
+     $.ajax({
+        url : uri,
+        type : method,
+        contentType : 'application/json; charset=utf-8',
+        dataType : 'json',
+        data : (params) ? JSON.stringify(params) : {},
+        async : false,
+        success : function (response) {
+            json = response;
+        },
+        error : function (request, status, error) {
+            console.log(error)
+        }
+    })
+
+    return json;
+}
+
+window.onload = () => {
+    findAllFile();
+}
+
+// 전체 파일 조회
+function findAllFile() {
+    // 1. API 호출
+    const postId = [[ ${postId}]];
+    const response = getJson(`/posts/${postId}/images`);
+<!--    console.log(response); // 응답확인-->
+    // 2. 로직 종료
+    if ( !response.length ) {
+        return false;
+    }
+
+    // 3. 파일 영역 추가
+    let fileHtml = '';
+    if(response.length == 1){
+        fileHtml = response[0].origName;
+        return;
+    }else{
+        fileHtml = response.length + '개의 파일';
+    }
+    // 4. 파일 HTML 렌더링
+    document.getElementById('formFileMultiple').value = fileHtml;
+}
 </script>
 </body>
 </html>

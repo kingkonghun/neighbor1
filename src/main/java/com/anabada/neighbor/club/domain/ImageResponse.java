@@ -1,7 +1,12 @@
 package com.anabada.neighbor.club.domain;
 
+import lombok.Builder;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
+@Data
+@Builder
 public class ImageResponse {
     private Long imgId;
     private Long postId;

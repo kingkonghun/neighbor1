@@ -1,18 +1,25 @@
 package com.anabada.neighbor.club.service;
 
 import com.anabada.neighbor.club.domain.ImageRequest;
+import com.anabada.neighbor.club.domain.ImageResponse;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 public class ImageUtils {
@@ -21,7 +28,7 @@ public class ImageUtils {
     /**
      * 다중 이미지 업로드
      * @param multipartFileList - 이미지 객체 List
-     * @return db에 저장할 이미지 List
+     * @return db에 저장할 이미지 정보 List
      */
     public List<ImageRequest> uploadImages(final List<MultipartFile> multipartFileList) {
         List<ImageRequest> images = new ArrayList<>();
@@ -100,6 +107,39 @@ public class ImageUtils {
             dir.mkdirs();
         }
         return dir.getPath();
+    }
+
+    /**
+     * 다운로드할 첨부파일(리소스) 조회
+     * @param file 첨부파일 상세정보
+     * @return 첨부파일(리소스)
+     */
+    public Resource readFileAsResource(ImageResponse file) {
+        String uploadedDate = file.getCreaDate().toLocalDate().format(DateTimeFormatter.ofPattern("yyMMdd"));
+        String filename = file.getSaveName();
+        Path filePath = Paths.get(uploadPath, uploadedDate, filename);
+        try {
+            Resource resource = new UrlResource(filePath.toUri());
+            if (!resource.exists() || !resource.isFile()) {
+                throw new RuntimeException("file not found : " + filePath.toString());
+            }
+            return resource;
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("file not found : " + filePath.toString());
+        }
+    }
+
+    public Stream<Path> loadAll(ImageResponse file) {
+        String uploadedDate = file.getCreaDate().toLocalDate().format(DateTimeFormatter.ofPattern("yyMMdd"));
+        String filename = file.getSaveName();
+        Path filePath = Paths.get(uploadPath, uploadedDate, filename);
+        try {
+            return Files.walk(filePath, 1)
+                    .filter(path -> !path.equals(filePath)).map(filePath::relativize);
+        } catch (IOException e) {
+            throw new RuntimeException(e) ;
+       }
+
     }
 
 }

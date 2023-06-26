@@ -83,6 +83,11 @@ public class ClubServiceImpl implements ClubService {
         return result;
     }
 
+    @Override
+    public ImageResponse findImageByImgId(Long imgId) {
+        return clubRepository.selectImageByImgId(imgId);
+    }
+
     /**
      * 이미지 삭제(from DataBase)
      *

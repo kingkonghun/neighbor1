@@ -8,15 +8,13 @@ import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.service.ClubService;
 import com.anabada.neighbor.club.service.ImageUtils;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.service.FilesStorageService;
 import com.anabada.neighbor.used.domain.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -26,11 +24,13 @@ public class ClubController {
 
     private final ClubService clubService;
     private final ImageUtils imageUtils;
+    private final FilesStorageService storageService;
 
     @Autowired
-    public ClubController(ClubService clubService, ImageUtils imageUtils) {
+    public ClubController(ClubService clubService, ImageUtils imageUtils, FilesStorageService storageService) {
         this.clubService = clubService;
         this.imageUtils = imageUtils;
+        this.storageService = storageService;
     }
 
     @GetMapping("/clubList")
@@ -82,8 +82,9 @@ public class ClubController {
     }
 
     @GetMapping("/clubDetail")
-    public String clubDetail(Model model, long postId) {
+    public String clubDetail(@RequestParam(value = "postId", required = false) Long postId, Model model) {
         ClubResponse response = clubService.findClub(postId);
+
         model.addAttribute("postId", postId);
         return "club/clubDetail";
     }
@@ -94,8 +95,11 @@ public class ClubController {
         return "redirect:clubList";
     }
 
-    @GetMapping("/post/write.do")
-    public List<ImageResponse> clubImage() {
-        return null;
+    // 파일 리스트 조회
+    @GetMapping("/posts/{postId}/images")
+    @ResponseBody
+    public List<ImageResponse> clubImage(@PathVariable Long postId) {
+        return clubService.findAllImageByPostId(postId);
     }
+
 }

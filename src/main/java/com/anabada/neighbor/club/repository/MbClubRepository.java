@@ -64,13 +64,12 @@ public interface MbClubRepository extends ClubRepository {
     List<Post> selectPostList();
 
     @Override
-    @Select("select * from file where deleteYn = 0 and postId = #{postId}" +
-            " order by imgId")
+    @Select("select * from file where deleteYn = 0 and postId = #{postId} order by imgId")
     List<ImageResponse> selectImagesByPostId(Long postId);
 
     @Override
     @Select("select * from file" +
-            " where deleteYn = 0 and imgId IN (#{imgId}) order by imgId")
+            " where deleteYn = 0 and imgId = #{imgId} order by imgId")
     ImageResponse selectImageByImgId(Long imgId);
 
     @Override
