@@ -63,10 +63,10 @@ public class ChattingServiceImpl implements ChattingService {
         String key = chat.getRoomId() + "_" + chat.getReceiver();
 
         chattingRepository.insertMessage(chat);
-        System.out.println(chat.getMessageDate());
         chat.setSenderName(memberRepository.findMemberName(chat.getSender()));
         chat.setMessageDate(dateFormat.format(new Date()));
 
+        System.out.println(dateFormat.format(new Date()));
         if (chatNotificationMap.get(key) == null || chatNotificationMap.get(key) == 0) {
             chatNotificationMap.put(key, 1);
         } else {

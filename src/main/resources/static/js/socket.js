@@ -25,7 +25,7 @@ function connect() {
     stompClient.connect({}, function (frame) {
         console.log("Connected: " + frame);
         stompClient.subscribe("/user/topic/messageNotification", function (chat) {
-            showTopNotification(JSON.parse(chat.body).senderName, JSON.parse(chat.body).content);
+            showTopNotification(JSON.parse(chat.body).sender, JSON.parse(chat.body).senderName, JSON.parse(chat.body).content, JSON.parse(chat.body).messageDate);
             refreshChatList();
         });
 
@@ -44,12 +44,16 @@ function showMessage(sender, content, messageDate) {
         $("#messages").prepend("<div><div class='message frnd_message'><p>" + content + "<br><span>" + messageDate + "</span></p></div></div>");
     }
 }
-function showTopNotification(senderName, content) {
-    $("#notification").text(senderName + "님 : " + message);
-    $("#notification").fadeIn();
+function showTopNotification(sender, senderName, content, messageDate) {
+    $(".popupup").css("display", "flex");
+    $(".userImg_").attr("src", "/member/findProfileImg?memberId="+sender);
+    $("#popupName").text(senderName);
+    var date = messageDate.substr(11, 9);
+    $(".calltime").text(date);
+    $(".popupup").fadeIn();
 
     setTimeout(function() {
-    $("#notification").fadeOut();
+        $(".popupup").fadeOut();
     }, 1500);
 }
 
