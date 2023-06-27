@@ -1,17 +1,18 @@
 var stompClient = null;
-
 $(function(){
     console.log("Index page is ready");
     connect();
 
     $("#send").click(function() {
         sendPrivateMessage();
+        $("#message").val('');
     });
 
     $("#message").keydown(function(event) {
         if (event.keyCode === 13) {
             event.preventDefault();
             sendPrivateMessage();
+            $("#message").val('');
         }
     });
 });
@@ -23,26 +24,27 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log("Connected: " + frame);
-        stompClient.subscribe("/user/topic/messageNotification", function (message) {
-            showTopNotification(JSON.parse(message.body).senderName, JSON.parse(message.body).content);
+        stompClient.subscribe("/user/topic/messageNotification", function (chat) {
+            showTopNotification(JSON.parse(chat.body).senderName, JSON.parse(chat.body).content);
             refreshChatList();
         });
 
-        stompClient.subscribe("/topic/message/" + roomId, function (message) {
-            showMessage(JSON.parse(message.body).receiver, JSON.parse(message.body).content);
+        stompClient.subscribe("/topic/message/" + roomId, function (chat) {
+            showMessage(JSON.parse(chat.body).sender, JSON.parse(chat.body).content, JSON.parse(chat.body).messageDate);
         });
     });
 }
 
-function showMessage(receiver, message) {
-    var receiver_ = $("#receiver").val();
-    if(receiver == receiver_) {
-        $("#messages").append("<tr><td style='background-color: red;'>" + message + "</td></tr>");
+function showMessage(sender, content, messageDate) {
+    var myId = $("#sender").val();
+    if(sender == myId) {
+        $("#messages").prepend("<div><div class='message my_message'><p>" + content + "<br><span>" + messageDate + "</span></p></div></div>");
+
     }else {
-        $("#messages").append("<tr><td style='background-color: blue;'>" + message + "</td></tr>");
+        $("#messages").prepend("<div><div class='message frnd_message'><p>" + content + "<br><span>" + messageDate + "</span></p></div></div>");
     }
 }
-function showTopNotification(senderName, message) {
+function showTopNotification(senderName, content) {
     $("#notification").text(senderName + "님 : " + message);
     $("#notification").fadeIn();
 
@@ -52,7 +54,7 @@ function showTopNotification(senderName, message) {
 }
 
 function refreshChatList() {
-    $(".chatlist").load(location.href+' .chatlist');
+    $("#chatRoomList").load(location.href+' #chatRoomList');
 }
 
 function sendPrivateMessage() {

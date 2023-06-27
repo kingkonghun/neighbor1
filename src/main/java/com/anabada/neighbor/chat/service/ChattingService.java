@@ -9,13 +9,13 @@ import java.security.Principal;
 import java.util.List;
 
 public interface ChattingService {
-    ChattingRoom openRoom(ChattingRoom chattingRoom, PrincipalDetails principalDetails);
+    long openRoom(ChattingRoom chattingRoom, PrincipalDetails principalDetails);
 
     void sendMessage(Chat chat, Principal principal);
 
     List<Chat> chattingRoomList(PrincipalDetails principalDetails);
 
-    List<ChattingMessage> chattingMessageList(long roomId, PrincipalDetails principalDetails);
+    List<Chat> chattingMessageList(long roomId, PrincipalDetails principalDetails);
 
-    long getReceiver(long roomId, PrincipalDetails principalDetails);
+    Chat getReceiver(long roomId, PrincipalDetails principalDetails);
 }

@@ -5,17 +5,17 @@ import com.anabada.neighbor.chat.domain.ChattingMessage;
 import com.anabada.neighbor.chat.domain.ChattingRoom;
 import com.anabada.neighbor.chat.repository.ChattingRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.repository.MemberRepository;
+import com.anabada.neighbor.used.domain.Post;
+import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,41 +24,54 @@ public class ChattingServiceImpl implements ChattingService {
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final ChattingRepository chattingRepository;
     private final MemberRepository memberRepository;
+    private final UsedRepository usedRepository;
     private Map<String, Integer> chatNotificationMap = new HashMap<>();
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
-    public ChattingRoom openRoom(ChattingRoom chattingRoom, PrincipalDetails principalDetails) {
+    public long openRoom(ChattingRoom chattingRoom, PrincipalDetails principalDetails) {
 
-        chattingRoom.setSender(principalDetails.getMember().getMemberId());
+        chattingRoom.setCreator(principalDetails.getMember().getMemberId());
 
         ChattingRoom chattingRoomTemp = chattingRepository.roomCheck(chattingRoom);
 
         if (chattingRoomTemp == null) {
             chattingRepository.insertRoom(chattingRoom);
-            System.out.println("create roomId = " + chattingRoom.getRoomId());
-            return chattingRoom;
+
+            long roomId = chattingRoom.getRoomId();
+
+            Post post = usedRepository.findPost(chattingRoom.getPostId());
+            Member member = memberRepository.findByMemberId(post.getMemberId());
+
+            chattingRepository.insertChatMember(roomId, chattingRoom.getCreator());
+            chattingRepository.insertChatMember(roomId, member.getMemberId());
+            return roomId;
         }else {
-            System.out.println("NO! create roomId = " + chattingRoomTemp.getRoomId());
-            return chattingRoomTemp;
+            return chattingRoomTemp.getRoomId();
         }
     }
 
     @Override
     public void sendMessage(Chat chat, Principal principal) {
+
+
         chat.setSender(Long.parseLong(principal.getName()));
+        chat.setSenderName(memberRepository.findMemberName(chat.getSender()));
+
+        chat.setReceiverName(memberRepository.findMemberName(chat.getReceiver()));
 
         String key = chat.getRoomId() + "_" + chat.getReceiver();
 
         chattingRepository.insertMessage(chat);
+        System.out.println(chat.getMessageDate());
         chat.setSenderName(memberRepository.findMemberName(chat.getSender()));
+        chat.setMessageDate(dateFormat.format(new Date()));
 
         if (chatNotificationMap.get(key) == null || chatNotificationMap.get(key) == 0) {
             chatNotificationMap.put(key, 1);
         } else {
             chatNotificationMap.put(key, chatNotificationMap.get(key) + 1);
         }
-
-//        chat.setChatCount(chatNotificationMap.get(key));
 
         simpMessagingTemplate.convertAndSendToUser(String.valueOf(chat.getReceiver()), "/topic/messageNotification", chat);
         simpMessagingTemplate.convertAndSend("/topic/message/" + chat.getRoomId(), chat);
@@ -70,18 +83,22 @@ public class ChattingServiceImpl implements ChattingService {
 
         long memberId = principalDetails.getMember().getMemberId();
 
-        List<ChattingRoom> chattingRoomList = chattingRepository.chattingRoomList(memberId);
+        List<Long> roomIdList = chattingRepository.findRoomIdByMemberId(memberId);
+        for (long roomId : roomIdList) {
+            String lastMessage = chattingRepository.lastMessage(roomId);
+            List<Long> memberIdList = chattingRepository.findChatMemberIdByRoomId(roomId);
+            long sender = memberIdList.get(0);
+            if (memberId == sender) {
+                sender = memberIdList.get(1);
+            }
 
-        for (ChattingRoom chattingRoom : chattingRoomList) {
-            String lastMessage = chattingRepository.lastMessage(chattingRoom.getRoomId());
             Chat chat = Chat.builder()
-                    .roomId(chattingRoom.getRoomId())
+                    .roomId(roomId)
                     .receiver(memberId)
-                    .sender(chattingRoom.getSender() == memberId ? chattingRoom.getReceiver() : chattingRoom.getSender())
+                    .sender(sender)
                     .content(lastMessage)
-                    .chatCount(chatNotificationMap.get(chattingRoom.getRoomId() + "_" + principalDetails.getMember().getMemberId()) != null ? chatNotificationMap.get(chattingRoom.getRoomId() + "_" + principalDetails.getMember().getMemberId()) : 0)
+                    .chatCount(chatNotificationMap.get(roomId + "_" + principalDetails.getMember().getMemberId()) != null ? chatNotificationMap.get(roomId + "_" + principalDetails.getMember().getMemberId()) : 0)
                     .build();
-
             chat.setSenderName(memberRepository.findMemberName(chat.getSender()));
             chatList.add(chat);
         }
@@ -89,22 +106,38 @@ public class ChattingServiceImpl implements ChattingService {
     }
 
     @Override
-    public List<ChattingMessage> chattingMessageList(long roomId, PrincipalDetails principalDetails) {
-        String key = roomId + "_" + principalDetails.getMember().getMemberId();
+    public List<Chat> chattingMessageList(long roomId, PrincipalDetails principalDetails) {
+        long memberId = principalDetails.getMember().getMemberId();
+        String key = roomId + "_" + memberId;
         chatNotificationMap.remove(key);
-        return chattingRepository.chattingMessageList(roomId);
+        List<Chat> chatList = new ArrayList<>();
+        List<ChattingMessage> messageList = chattingRepository.chattingMessageList(roomId);
+
+        for (ChattingMessage message : messageList) {
+            Chat chat = Chat.builder()
+                    .roomId(message.getRoomId())
+                    .sender(message.getWriter())
+                    .senderName(memberRepository.findMemberName(message.getWriter()))
+                    .receiver(memberId)
+                    .receiverName(memberRepository.findMemberName(memberId))
+                    .content(message.getContent())
+                    .messageDate(dateFormat.format(message.getMessageDate()))
+                    .build();
+            chatList.add(chat);
+        }
+        return chatList;
     }
 
     @Override
-    public long getReceiver(long roomId, PrincipalDetails principalDetails) {
-        ChattingRoom chattingRoom = chattingRepository.findChatRoomByRoomId(roomId);
-        long receiver = chattingRoom.getReceiver();
-        long sender = principalDetails.getMember().getMemberId();
-        if (receiver != sender) {
-            return receiver;
-        }else {
-            return chattingRoom.getSender();
-        }
+    public Chat getReceiver(long roomId, PrincipalDetails principalDetails) {
+        List<Long> memberIdList = chattingRepository.findChatMemberIdByRoomId(roomId);
+        long memberId = principalDetails.getMember().getMemberId();
+        long receiver = memberId == memberIdList.get(0) ? memberIdList.get(1) : memberIdList.get(0);
+        Chat chat = Chat.builder()
+                .receiver(receiver)
+                .receiverName(memberRepository.findMemberName(receiver))
+                .build();
+        return chat;
     }
 
 }

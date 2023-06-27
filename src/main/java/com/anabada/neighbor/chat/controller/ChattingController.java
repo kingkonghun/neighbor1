@@ -21,9 +21,9 @@ public class ChattingController {
     private final ChattingService chattingService;
 
     @PostMapping("/openRoom")
-    public String openRoom(ChattingRoom chattingRoom, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        ChattingRoom result = chattingService.openRoom(chattingRoom, principalDetails);
-        return "redirect:/chatDetail?roomId="+result.getRoomId();
+    public String openRoom(ChattingRoom chattingRoom, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        long roomId = chattingService.openRoom(chattingRoom, principalDetails);
+        return "redirect:/chatDetail?roomId="+roomId;
     }
 
     @GetMapping("/chatRoomList")

@@ -193,7 +193,7 @@ body{background-color: #f4f4f4;}
             </div>
             <form method="post" action="/openRoom" name="chatForm">
                 <input type="hidden" th:value="${dto.postId}" name="postId">
-                <input type="hidden" th:value="${dto.memberId}" name="receiver">
+                <input type="hidden" th:value="${dto.memberId}" name="memberId">
                 <button id="btnChat" type="button">채팅</button>
             </form>
         </div>

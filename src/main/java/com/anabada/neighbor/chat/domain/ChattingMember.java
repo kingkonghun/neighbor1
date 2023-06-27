@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class ResponseMessage {
-    private String content;
+public class ChattingMember {
+    private long roomId;
+    private long memberId;
 }

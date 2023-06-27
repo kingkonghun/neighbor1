@@ -17,4 +17,5 @@ public class Chat {
     private String senderName;
     private String content;
     private int chatCount;
+    private String messageDate;
 }
