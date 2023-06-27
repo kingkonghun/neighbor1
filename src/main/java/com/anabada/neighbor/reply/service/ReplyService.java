@@ -1,6 +1,7 @@
 package com.anabada.neighbor.reply.service;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.reply.domain.CarryReply;
 import com.anabada.neighbor.reply.domain.Reply;
 
@@ -35,5 +36,7 @@ public interface ReplyService {
     /**
      * 내가 쓴 댓글 리스트 조회
      */
-    List<CarryReply> findMyReply(long memberId);
+    List<CarryReply> findMyReply(long memberId, Criteria criteria);
+
+    int countMyReply(long memberId);
 }

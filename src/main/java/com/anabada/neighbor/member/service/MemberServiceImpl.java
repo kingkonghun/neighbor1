@@ -12,6 +12,7 @@ import com.anabada.neighbor.used.repository.UsedRepository;
 import com.anabada.neighbor.used.service.ImgDownService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,7 +32,10 @@ public class MemberServiceImpl implements MemberService{
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ImgDownService imgDownService;
     private final ReplyRepository replyRepository;
+    private final PasswordEncoder passwordEncoder;
+
     final String uploadDir = "C:\\upload_anabada\\profile\\";
+
 
     /**
      * 회원 가입
@@ -93,7 +97,7 @@ public class MemberServiceImpl implements MemberService{
         long memberId = principalDetails.getMember().getMemberId();
         member = memberRepository.findMyInfo(memberId);
         member.setMyWrite(memberRepository.countMyWrite(memberId));
-        member.setMyReply(replyRepository.findMyReply(memberId).size());
+        member.setMyReply(replyRepository.countMyReply(memberId));
         member.setMyLikesCount(memberRepository.countMyLikes(memberId));
 
         return  member;
@@ -142,35 +146,7 @@ public class MemberServiceImpl implements MemberService{
      */
     @Override
     public void editInfo(Member member) {
-        if(member.getMemberPWD()!=null){//비밀번호가 들어온 경우
-            member.setMemberPWD(bCryptPasswordEncoder.encode(member.getMemberPWD()));
-            memberRepository.editInfo(member);
-        }else{//안 들어온 경우
-            memberRepository.editInfoNotPwd(member);
-        }
-
-        if(!member.getProfileImg().getOriginalFilename().equals("") && member.getProfileImg().getOriginalFilename()!=null){//사진 input 했을 때만
-            
-            try {
-                if (Files.exists(Paths.get(uploadDir))) {//폴더가 없으면 만듦.
-                    Files.createDirectories(Paths.get(uploadDir));
-                }
-                MultipartFile file = member.getProfileImg();
-                String uuid = UUID.randomUUID().toString();
-                String profileImg = uuid+"_"+file.getOriginalFilename();
-                
-                String filePath = uploadDir+File.separator+profileImg;
-                file.transferTo(new File(filePath));
-
-                Map<String, Object> map = new HashMap<>();
-                map.put("memberId", member.getMemberId());
-                map.put("profileImg",profileImg);
-                memberRepository.editProfileImg(map);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
+        memberRepository.editInfo(member);
     }
 
     /**
@@ -195,5 +171,50 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public int countMember() {
         return memberRepository.countMember();
+    }
+
+    /**
+     * 비밀번호수정
+     * @param oldPwd 원래 비밀번호
+     * @param memberPWD 수정할 비밀번호
+     */
+    @Override
+    public String editPwd(String oldPwd, String memberPWD,long memberId) {
+
+        String msg="";
+        String pwdCk=memberRepository.pwdCheck(memberId);//비밀번호 체크
+        System.out.println("pwdCk = " + pwdCk);
+        if (!passwordEncoder.matches(oldPwd,pwdCk)) {
+             msg = "fail";
+        }else{
+            memberPWD = bCryptPasswordEncoder.encode(memberPWD);
+            System.out.println("memberPWD = " + memberPWD);
+            memberRepository.editPwd(memberPWD,memberId);
+            msg = "success";
+        }
+        return msg;
+    }
+
+    @Override
+    public void editPhoto(Member member) {
+        try {
+            if (Files.exists(Paths.get(uploadDir))) {
+                Files.createDirectories(Paths.get(uploadDir));
+            }
+            MultipartFile file = member.getProfileImg();
+            String uuid = UUID.randomUUID().toString();
+            String profileImg = uuid+"_"+file.getOriginalFilename();
+
+            String filePath = uploadDir+File.separator+profileImg;
+            file.transferTo(new File(filePath));
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("memberId",member.getMemberId());
+            map.put("profileImg", profileImg);
+            memberRepository.editProfileImg(map);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

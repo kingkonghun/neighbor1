@@ -9,6 +9,23 @@
 <style>
     body{background-color: #f4f4f4;}
 </style>
+    <script type="text/javascript">
+        window.onload = function() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const message = urlParams.get('navMsg');
+
+            if (message === 'myWrite') {
+                $("#a_myWrite").click();
+                const targetOffset = $("#memberDetail").offset().top;
+                $("html, body").animate({ scrollTop: targetOffset }, 500);
+            }else if (message === 'likes') {
+                $("#a_likes").click();
+                const targetOffset = $("#memberDetail").offset().top;
+                $("html, body").animate({ scrollTop: targetOffset }, 500);
+            }
+        };
+    </script>
 </head>
 <body>
 
@@ -27,13 +44,13 @@
             <div th:text="'ID : ' + ${list.providerId}"></div>
         </div>
         <div id="myInfo_button_div" class="col-12 col-md-12 col-lg-2 col-xl-2 p-4">
-            <button id="myInfo_button" class="py-2">내 정보 수정</button>
+            <button id="myInfo_button" class="py-2" th:onclick="|location.href='@{/member/editInfo}'|">내 정보 수정</button>
         </div>
 
         <div class="col-6 col-md-6 col-lg-3 col-xl-3 p-4 myInfo_link_div">
             <div class="p-5">
             <span>내 글</span> <br>
-            <a href="#" th:onclick="'writeList('+${list.memberId}+')'">
+            <a id="a_myWrite" href="#" th:onclick="'writeList('+${list.memberId}+')'">
                 <p th:text="${list.myWrite}"></p>
             </a>
             </div>
@@ -42,14 +59,14 @@
             <div class="p-5">
                 <span>내 댓글</span> <br>
                 <a href="#" th:onclick="'myReply('+${list.memberId}+')'">
-                    <p th:text="${list.myWrite}"></p>
+                    <p th:text="${list.myReply}"></p>
                 </a>
             </div>
         </div>
         <div class="col-6 col-md-6 col-lg-3 col-xl-3 p-4 myInfo_link_div">
             <div class="p-5">
                 <span>좋아요 누른 글</span> <br>
-                <a href="#" th:onclick="'likePost('+${list.memberId}+')'">
+                <a id="a_likes"href="#" th:onclick="'likePost('+${list.memberId}+')'">
                     <p th:text="${list.myLikesCount}"></p>
                 </a>
             </div>

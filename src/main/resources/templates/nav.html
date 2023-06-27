@@ -45,10 +45,12 @@
                                 <div class="image">
                                     <div class="circle-1"></div>
                                     <div class="circle-2"></div>
-                                    <img src="https://100dayscss.com/codepen/jessica-potter.jpg" width="70" height="70" alt="Jessica Potter">
+                                    <img  id="imgSrc" th:src="@{/member/findProfileImg(memberId=${#authentication.principal.member.memberId})}" width="70" height="70" alt="Jessica Potter">
                                 </div>
 
-                                <div class="name">김김김</div>
+                                <div class="name">
+                                    <p id="memberName"></p>
+                                </div>
 
                                 <div class="actions">
                                     <button type="button" class="btn" onclick="location.href='/member/myInfo'">마이페이지</button>
@@ -57,18 +59,19 @@
                             </div>
 
                             <div class="stats">
-                                <div class="box">
-                                    <span class="value">523</span>
+                                <div class="box" onclick="myWrite()">
+                                    <span class="value" id="countMyWrite"></span>
                                     <span class="parameter">내글</span>
                                 </div>
+                                <div class="box" onclick="myLikes()">
+                                    <span class="value" id="likes"></span>
+                                    <span class="parameter">관심 있는 글</span>
+                                </div>
                                 <div class="box">
-                                    <span class="value">1387</span>
+                                    <span class="value" id="myScore"></span>
                                     <span class="parameter">내점수</span>
                                 </div>
-                                <div class="box">
-                                    <span class="value">146</span>
-                                    <span class="parameter">Follower</span>
-                                </div>
+
                             </div>
                         </div>
                         <div class="bottom">

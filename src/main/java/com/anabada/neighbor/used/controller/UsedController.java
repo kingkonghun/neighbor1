@@ -3,7 +3,10 @@ package com.anabada.neighbor.used.controller;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.page.PageDTO;
-import com.anabada.neighbor.used.domain.*;
+import com.anabada.neighbor.used.domain.PostReport;
+import com.anabada.neighbor.used.domain.Report;
+import com.anabada.neighbor.used.domain.ReportOk;
+import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.service.UsedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -111,8 +114,10 @@ public class UsedController {
 
     @GetMapping("/likePost") //좋아요 누른 게시글
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String likePost(Model model, long memberId) {
-      List<Used> usedList=usedService.likePost(memberId);
+    public String likePost(Model model, long memberId, Criteria criteria) {
+      List<Used> usedList=usedService.likePost(memberId,criteria);
+        int total = usedService.countLikePost(memberId);
+        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
       model.addAttribute("list",usedList);
         return "member/myLikes";
     }
@@ -122,5 +127,7 @@ public class UsedController {
         usedService.reportOk(reportOk);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 
 }

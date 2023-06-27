@@ -59,4 +59,15 @@ public interface MemberService {
      * @return 멤버테이블의 count
      */
     int countMember();
+
+    /**
+     * 비밀번호수정
+     * @param oldPwd
+     * @param memberPWD
+     */
+    String editPwd(String oldPwd, String memberPWD,long memberId);
+
+    void editPhoto(Member member);
+
+
 }

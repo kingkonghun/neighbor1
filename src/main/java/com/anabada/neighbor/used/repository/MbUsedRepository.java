@@ -102,8 +102,8 @@ public interface MbUsedRepository extends UsedRepository {
     int findReplyCount(long postId);
 
     @Override
-    @Select("SELECT * FROM likes WHERE memberId=#{memberId}")
-    List<Likes> findLikePosts(long memberId);
+    @Select("SELECT * FROM likes WHERE memberId=#{memberId} ORDER BY likeId desc LIMIT #{criteria.amount} OFFSET #{criteria.offset}")
+    List<Likes> findLikePosts(Map<String, Object> map);
 
     @Override
     @Select("select count(*) from likes where postId = #{postId}")
