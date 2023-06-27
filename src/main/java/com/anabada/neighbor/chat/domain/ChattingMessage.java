@@ -18,4 +18,5 @@ public class ChattingMessage {
     private long writer;
     private String content;
     private Date messageDate;
+    private String messageType;
 }

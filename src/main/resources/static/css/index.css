@@ -1,0 +1,215 @@
+
+/*-----------------------------------*\
+  #HEADER
+\*-----------------------------------*/
+
+.header { background-color: transparent; }
+
+.header.active { background-color: var(--white); }
+
+
+
+
+
+/*-----------------------------------*\
+  #HERO
+\*-----------------------------------*/
+
+.hero {
+  position: relative;
+  background-color: var(--maximum-yellow-red_a10);
+  padding-block-start: calc(var(--section-padding) + 60px);
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  bottom: 70%;
+  right: -75%;
+  background-color: var(--maximum-yellow-red_a40);
+  transform: rotate(-45deg);
+  border-radius: var(--radius-50);
+  z-index: -1;
+}
+
+.hero .container {
+  display: grid;
+  gap: 70px;
+}
+
+.hero-subtitle {
+  color: var(--jet);
+  text-transform: uppercase;
+  font-weight: var(--fw-600);
+  letter-spacing: 3px;
+  margin-block-end: 20px;
+}
+
+.hero-text { margin-block: 25px; }
+
+.hero .btn1 { margin-inline: auto; }
+
+.hero-banner {
+  max-width: max-content;
+  margin-inline: auto;
+}
+
+/*-----------------------------------*\
+  #btn.css
+\*-----------------------------------*/
+
+.btn1 {
+  background-color: var(--orange-red);
+  font-size: var(--fs-14);
+  font-weight: var(--fw-500);
+  text-transform: uppercase;
+  max-width: max-content;
+  letter-spacing: 2px;
+  padding: 10px 22px;
+  box-shadow: 6px 6px 0 -1px var(--shadow-color, var(--jet));
+  transition: var(--transition-1);
+  text-decoration: none;
+}
+.btn1:is(:hover, :focus-visible) {
+  background-color: var(--hover-bg, var(--jet));
+  box-shadow: 5px 5px 0 -2px var(--hover-shadow-color, var(--orange-red));
+}
+.btn1:hover{
+color:white;}
+.btn1-primary,
+.btn1-secondary { color: var(--white); }
+
+.btn1-secondary {
+  background-color: var(--jet);
+  --shadow-color: var(--orange-red);
+  --hover-bg: var(--orange-red);
+  --hover-shadow-color: var(--jet);
+}
+
+.btn1-tertiary {
+  color: var(--jet);
+  background-color: var(--maximum-yellow-red);
+  --shadow-color: var(--orange-red);
+  --hover-bg: var(--orange-red);
+  --hover-shadow-color: var(--maximum-yellow-red);
+}
+
+.btn1-tertiary:is(:hover, :focus-visible) { color: var(--white); }
+
+
+
+
+:root {
+
+  /**
+   * colors
+   */
+
+  --maximum-yellow-red_a10: hsla(41, 99%, 64%, 0.1);
+  --maximum-yellow-red_a40: hsla(41, 99%, 64%, 0.4);
+  --maximum-yellow-red: hsl(41, 99%, 64%);
+  --orange-red_a20: hsla(19, 100%, 55%, 0.2);
+  --eerie-black: hsl(210, 11%, 15%);
+  --orange-red: hsl(19, 100%, 55%);
+  --davys-gray: hsl(0, 0%, 33%);
+  --white_a80: hsla(0, 0%, 100%, 0.8);
+  --white_a75: hsla(0, 0%, 100%, 0.75);
+  --white_a10: hsla(0, 0%, 100%, 0.1);
+  --jet_a10: hsla(0, 0%, 22%, 0.1);
+  --black: hsl(0, 0%, 0%);
+  --white: hsl(0, 0%, 100%);
+  --jet: hsl(0, 0%, 22%);
+
+  /**
+   * typography
+   */
+
+  --ff-jost: 'Jost', sans-serif;
+
+  --fs-45: 4.5rem;
+  --fs-38: 3.8rem;
+  --fs-32: 3.2rem;
+  --fs-27: 2.7rem;
+  --fs-26: 2.6rem;
+  --fs-22: 2.2rem;
+  --fs-20: 2rem;
+  --fs-18: 1.8rem;
+  --fs-17: 1.7rem;
+  --fs-14: 1.4rem;
+  --fs-12: 1.2rem;
+
+  --fw-400: 400;
+  --fw-500: 500;
+  --fw-600: 600;
+
+  /**
+   * spacing
+   */
+
+  --section-padding: 60px;
+
+  /**
+   * shadow
+   */
+
+  --shadow: 0 2px 2px hsla(0, 0%, 22%, 0.08);
+
+  /**
+   * border radius
+   */
+
+  --radius-50: 50px;
+  --radius-pill: 100px;
+  --radius-circle: 50%;
+
+  /**
+   * transition
+   */
+
+  --transition-1: 0.25s ease;
+  --transition-2: 0.5s ease;
+  --cubic-out: cubic-bezier(0.05, 0.83, 0.52, 0.97);
+
+}
+
+  /*-----------------------------------*\
+    #REUSED STYLE
+  \*-----------------------------------*/
+
+  .container { padding-inline: 16px; }
+
+  .section { padding-block: var(--section-padding); }
+
+  .w-100 { width: 100%; }
+
+  .section-title {
+    margin-block-end: 30px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+
+  .text-center { text-align: center; }
+
+  .img-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .has-bg-image {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .img-holder {
+    aspect-ratio: var(--width) / var(--height);
+    background-color: var(--light-gray);
+    overflow: hidden;
+  }
+
+/*섹션*/

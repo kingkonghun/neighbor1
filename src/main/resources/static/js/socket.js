@@ -30,19 +30,24 @@ function connect() {
         });
 
         stompClient.subscribe("/topic/message/" + roomId, function (chat) {
-            showMessage(JSON.parse(chat.body).sender, JSON.parse(chat.body).content, JSON.parse(chat.body).messageDate);
+            showMessage(JSON.parse(chat.body).sender, JSON.parse(chat.body).content, JSON.parse(chat.body).messageDate, JSON.parse(chat.body).messageType);
         });
     });
 }
 
-function showMessage(sender, content, messageDate) {
+function showMessage(sender, content, messageDate, messageType) {
     var myId = $("#sender").val();
-    if(sender == myId) {
-        $("#messages").prepend("<div><div class='message my_message'><p>" + content + "<br><span>" + messageDate + "</span></p></div></div>");
+    if(messageType == "SEND") {
+        if(sender == myId) {
+            $("#messages").prepend("<div><div class='message my_message'><p>" + content + "<br><span>" + messageDate + "</span></p></div></div>");
 
-    }else {
-        $("#messages").prepend("<div><div class='message frnd_message'><p>" + content + "<br><span>" + messageDate + "</span></p></div></div>");
+        }else {
+            $("#messages").prepend("<div><div class='message frnd_message'><p>" + content + "<br><span>" + messageDate + "</span></p></div></div>");
+        }
+    }else if(messageType == "ENTER") {
+        $("#messages").prepend("<div class='message1 join'><p>" + content + "</p></div>");
     }
+
 }
 function showTopNotification(sender, senderName, content, messageDate) {
     $(".popupup").css("display", "flex");
@@ -66,5 +71,5 @@ function sendPrivateMessage() {
     var receiver = $("#receiver").val();
     var roomId = $("#roomId").val();
     console.log("sending private message");
-    stompClient.send("/ws/message", {}, JSON.stringify({"roomId": roomId, "receiver": receiver, "content": content}));
+    stompClient.send("/ws/message", {}, JSON.stringify({"roomId": roomId, "receiver": receiver, "content": content, "messageType": "SEND"}));
 }

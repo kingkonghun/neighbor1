@@ -207,3 +207,13 @@ content{
 @media screen and (max-width: 480px) {
 
 }
+
+#btnChat {
+    background-color: #FF3366;
+    border-radius: 12px;
+    border-style: none;
+    color: #FFFFFF;
+    font-family: 'omyu_pretty';
+    font-size: 20px;
+    width: 100px;
+}

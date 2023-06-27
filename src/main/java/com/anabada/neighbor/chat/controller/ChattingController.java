@@ -21,8 +21,8 @@ public class ChattingController {
     private final ChattingService chattingService;
 
     @PostMapping("/openRoom")
-    public String openRoom(ChattingRoom chattingRoom, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        long roomId = chattingService.openRoom(chattingRoom, principalDetails);
+    public String openRoom(long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        long roomId = chattingService.openRoom(postId, principalDetails, "used");
         return "redirect:/chatDetail?roomId="+roomId;
     }
 
@@ -35,9 +35,12 @@ public class ChattingController {
 
     @GetMapping("/chatDetail")
     public String chatDetail(long roomId, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        model.addAttribute("list", chattingService.chattingMessageList(roomId, principalDetails));
-        model.addAttribute("receiver", chattingService.getReceiver(roomId, principalDetails));
-        model.addAttribute("roomId", roomId);
+        boolean check = chattingService.check(roomId, principalDetails);
+        if (check) {
+            model.addAttribute("list", chattingService.chattingMessageList(roomId, principalDetails));
+            model.addAttribute("receiver", chattingService.getReceiver(roomId, principalDetails));
+            model.addAttribute("roomId", roomId);
+        }
         return "chatEx/chatDetailPopup";
     }
 

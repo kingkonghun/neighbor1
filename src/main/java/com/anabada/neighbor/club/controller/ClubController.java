@@ -1,5 +1,6 @@
 package com.anabada.neighbor.club.controller;
 
+import com.anabada.neighbor.chat.domain.ChattingRoom;
 import com.anabada.neighbor.chat.service.ChattingService;
 import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ClubResponse;
@@ -77,9 +78,11 @@ public class ClubController {
             List<ImageRequest> images = imageUtils.uploadImages(clubRequest.getImages());
             clubService.saveImages(postId, images);
             model.addAttribute("result", "글 등록성공!");//나중에 삭제
+            chattingService.openRoom(postId, principalDetails, "club");
         } else {
             model.addAttribute("result", "글 등록실패!");//나중에 삭제
         }
+
         return "redirect:clubList";
     }
 
