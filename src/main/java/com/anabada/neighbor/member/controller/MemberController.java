@@ -8,16 +8,17 @@ import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.page.PageDTO;
 import com.anabada.neighbor.used.domain.Used;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -114,6 +115,7 @@ public class MemberController {
         String profileImg = memberService.findProfileImg(memberId);//사진이름가져오기
         memberService.downProfileImg(response, profileImg);//사진다운
     }
+
     @GetMapping("/editInfo")//수정페이지로 이동
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String editInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model,String message) {
@@ -122,11 +124,41 @@ public class MemberController {
         model.addAttribute("message",message);
         return "member/editInfo";
     }
-    @PostMapping("/myEdit")//진짜수정
+    @PostMapping("/editMyInfo")//정보수정
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String myEdit(Member member){
+    public String editInfo( Member member,RedirectAttributes redirectAttributes){
         memberService.editInfo(member);
-        return "index";
+        System.out.println("member = " + member);
+        redirectAttributes.addAttribute("msg","infoSuccess");
+        return  "redirect:/member/editInfo";
+    }
+
+    @PostMapping("/editPwd")//비밀번호 수정
+    public String editPwd(@RequestParam String oldPwd, @RequestParam String memberPWD, long memberId, Model model, RedirectAttributes redirectAttributes){
+        String msg= memberService.editPwd(oldPwd,memberPWD,memberId);
+        System.out.println("msg = " + msg);
+
+        if (msg.equals("성공")) {
+            model.addAttribute("msg", msg);
+            return "index";
+        } else {
+            redirectAttributes.addAttribute("msg", msg);
+            return "redirect:/member/editInfo";
+        }
+    }
+
+    @PostMapping("/editPhoto")
+    public String editPhoto(Member member,RedirectAttributes redirectAttributes) {
+        memberService.editPhoto(member);
+        redirectAttributes.addAttribute("msg", "photoSuccess");
+        return  "redirect:/member/editInfo";
+    }
+
+    @GetMapping("/slideBar")
+    @ResponseBody
+    public Member slideBar(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Member member = memberService.myInfo(principalDetails);
+        return member;
     }
 
     @ResponseBody

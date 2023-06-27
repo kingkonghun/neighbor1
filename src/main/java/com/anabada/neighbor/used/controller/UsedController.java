@@ -3,7 +3,10 @@ package com.anabada.neighbor.used.controller;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.page.PageDTO;
-import com.anabada.neighbor.used.domain.*;
+import com.anabada.neighbor.used.domain.PostReport;
+import com.anabada.neighbor.used.domain.Report;
+import com.anabada.neighbor.used.domain.ReportOk;
+import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.service.UsedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -122,5 +125,7 @@ public class UsedController {
         usedService.reportOk(reportOk);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 
 }
