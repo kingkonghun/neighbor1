@@ -97,7 +97,7 @@ public class MemberServiceImpl implements MemberService{
         long memberId = principalDetails.getMember().getMemberId();
         member = memberRepository.findMyInfo(memberId);
         member.setMyWrite(memberRepository.countMyWrite(memberId));
-        member.setMyReply(replyRepository.findMyReply(memberId).size());
+        member.setMyReply(replyRepository.countMyReply(memberId));
         member.setMyLikesCount(memberRepository.countMyLikes(memberId));
 
         return  member;

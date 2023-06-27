@@ -158,7 +158,7 @@ public interface UsedRepository {
     /**
      * memberId 로 좋아요 누른 게시물 정보 조회
      */
-    List<Likes> findLikePosts(long memberId);
+    List<Likes> findLikePosts(Map<String, Object> map);
 
     /**
      * 페이징을 위한 신고된 게시글의 총 수

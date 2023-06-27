@@ -8,9 +8,6 @@ import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.page.PageDTO;
 import com.anabada.neighbor.used.domain.Used;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.JSONObject;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -82,13 +79,7 @@ public class MemberController {
         return "member/myWrite";
     }
 
-    @GetMapping("/myWriteFive")//내가 작성한 글 5개만
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String myWriteFive(long memberId,Model model) {
-        List<Used> used = memberService.myWriteFive(memberId);
-        model.addAttribute("list",used);
-        return "member/myWriteFive";
-    }
+
 
     @GetMapping("/myInfo")//내 개인정보
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")

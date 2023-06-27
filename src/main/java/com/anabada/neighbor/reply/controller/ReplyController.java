@@ -1,6 +1,8 @@
 package com.anabada.neighbor.reply.controller;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.page.Criteria;
+import com.anabada.neighbor.page.PageDTO;
 import com.anabada.neighbor.reply.domain.Reply;
 import com.anabada.neighbor.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
@@ -55,8 +57,10 @@ public class ReplyController {
         return 0;
     }
     @GetMapping("/myReply")
-    public String myReply(long memberId,Model model){ // 내가 쓴 댓글
-        model.addAttribute("list",replyService.findMyReply(memberId));
+    public String myReply(long memberId, Model model, Criteria criteria){ // 내가 쓴 댓글
+        model.addAttribute("list",replyService.findMyReply(memberId,criteria));
+        int total = replyService.countMyReply(memberId);
+        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
         return "reply/myReply";
     }
 }

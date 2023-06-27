@@ -1,10 +1,10 @@
 package com.anabada.neighbor.reply.repository;
 
-import com.anabada.neighbor.reply.domain.CarryReply;
 import com.anabada.neighbor.reply.domain.Reply;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface ReplyRepository {
@@ -51,5 +51,7 @@ public interface ReplyRepository {
     /**
      * memberId 로 reply 테이블 조회(내가 쓴 댓글 조회)
      */
-    List<Reply> findMyReply(long memberId);
+    List<Reply> findMyReply(Map<String,Object> map);
+
+    int countMyReply(long memberId);
 }

@@ -5,14 +5,15 @@ import com.anabada.neighbor.reply.domain.Reply;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface MbReplyRepository extends ReplyRepository {
 
 
     @Override
-    @Select("SELECT*FROM reply WHERE memberId = #{memberId}")//내가 작성한 댓글목록
-    List<Reply> findMyReply(long memberId);
+    @Select("SELECT*FROM reply WHERE memberId = #{memberId} ORDER BY replyId desc LIMIT #{criteria.amount} OFFSET #{criteria.offset}")//내가 작성한 댓글목록
+    List<Reply> findMyReply(Map<String,Object> map);
 
     @Override
     @Select("select * from reply where postId = #{postId} order by reGroup, replyId")
@@ -46,4 +47,8 @@ public interface MbReplyRepository extends ReplyRepository {
     @Override
     @Insert("insert into reply (memberId, postId, comment, parentId, depth, reGroup) values (#{memberId}, #{postId}, #{comment}, #{parentId}, 1, #{reGroup})")
     public void writeReReply(Reply reply);
+
+    @Override
+    @Select("SELECT count(*) FROM reply WHERE memberId=#{memberId}")
+    int countMyReply(long memberId);
 }

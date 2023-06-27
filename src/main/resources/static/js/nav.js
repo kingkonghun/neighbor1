@@ -54,5 +54,10 @@ $(function(){
     });
 });
 
-
+function myWrite(){
+    location.href="/member/myInfo?navMsg=myWrite";
+}
+function myLikes(){
+    location.href="/member/myInfo?navMsg=likes"
+}
 
