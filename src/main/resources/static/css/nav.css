@@ -367,16 +367,83 @@ top: -11px;
 position: absolute;
 top: 270px;
 }
-#notification{
-    display: none;
+
+.userImg_{/*이미지 조절*/
     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.popupup{
+    display: none;
+    position: fixed;
     left: 50%;
     top: 80px;
     transform: translate(-50%, -50%);
-    background-color: #fff;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 20px;
-    border: 1px solid black;
+    width: 320px;
+    height: 100px;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid rgba(0,0,0,0.06);
+    cursor: pointer;
     z-index: 999;
+}
+.popupup{
+    background: #F5EFE6;
+    border-radius: 15px;
+}
+.popupup:hover{
+    background: #E8DFCA;
+}
+.popupup .imgbox{
+    position: relative;
+    min-width: 45px;
+    height: 45px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.popupup .pop_detail{
+    padding-top: 20px;
+    position: relative;
+    align-items: center;
+    flex-direction: row;
+
+}
+.popupup .pop_detail .usernamecall{
+    display: flex;
+    justify-content: space-between;
+    width: 140px;
+}
+
+.popupup .pop_detail .usernamecall h4 {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #111;
+
+}
+.popupup .pop_detail .usernamecall .calltime {
+    /* 추가 설정 */
+    align-self: center;  /* p.time 요소를 중앙에 배치 */
+}
+
+
+.message_new{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 5px;
+}
+.message_new p{/*메세지*/
+    color: gray;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    font-size: 0.9em;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;/*넘으면 ...*/
+    margin-top: 0;
 }

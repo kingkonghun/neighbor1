@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 public class ChattingRoom {
     private long roomId;
     private long postId;
-    private long receiver;
-    private long sender;
+    private long creator;
 }

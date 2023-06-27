@@ -4,35 +4,55 @@
   <meta charset="UTF-8"/>
   <title>Title</title>
   <th:block th:insert="/common/common :: fragment-header"></th:block>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/chatDetail.css}">
 </head>
 <body>
-
-<div class="container" style="margin-top: 50px">
-  <div class="row">
-    <div class="col-md-12">
-      <form class="form-inline">
-        <div class="form-group">
-          <label for="message">Private Message</label>
-          <input type="hidden" id="roomId" th:value="${roomId}">
-          <input type="hidden" id="receiver" th:value="${receiver}">
-          <input type="text" id="message" class="form-control" placeholder="내용을 입력하세요">
+<input type="hidden" id="roomId" th:value="${roomId}">
+<input type="hidden" id="receiver" th:value="${receiver.receiver}">
+<input type="hidden" id="sender" th:value="${#authentication.principal.member.memberId}">
+<div class="container3">
+  <div class="rightSide">
+    <div class="header"><!--채팅 상대방 창 -->
+      <div class="imgText">
+        <div class="userimg">
+          <img th:src="@{/member/findProfileImg(memberId=${receiver.receiver})}" class="cover"><!--상대방 이미지-->
         </div>
-        <button id="send" class="btn btn-default" type="button">Send Private Message</button>
-      </form>
+        <h4 th:text="${receiver.receiverName}">이씨</h4><!--상대 이름-->
+        <!--리스트 꾸미려면 넣기 <ul class="nav_icons">
+            <li></li>
+            <li></li>
+        </ul> -->
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <table id="message-history" class="table table-striped">
-        <tbody id="messages">
-        <tr th:each="row : ${list}">
-          <td th:text="${row.content}" style="background-color: red;" th:if="${row.writer ne receiver}"></td>
-          <td th:text="${row.content}" style="background-color: blue;" th:if="${row.writer eq receiver}"></td>
-        </tr>
-        </tbody>
-      </table>
+    <!--채팅방-->
+    <div class="chatBox" id="messages">
+      <div th:each="row : ${list}">
+        <div class="message my_message" th:if="${row.sender} == ${#authentication.principal.member.memberId}"><!--내가 보낸 부분 오른쪽-->
+          <p th:inline="text">
+            [[${row.content}]]<br>
+            <span th:text="${row.messageDate}"></span>
+          </p><!--시간-->
+        </div>
+        <div class="message frnd_message" th:if="${row.sender} != ${#authentication.principal.member.memberId}"><!--상대가 보낸 부분 왼쪽-->
+          <p th:inline="text">
+            [[${row.content}]]<br>
+            <span th:text="${row.messageDate}"></span>
+          </p><!--시간-->
+        </div>
+
+      </div>
+    </div>
+<!--      <div class="message1 join">-->
+<!--        <p>사용자 이씨가 입장하였습니다.</p>-->
+<!--      </div>-->
+    <!--채팅입력 부분-->
+    <div class="chatbox_input">
+      <input type="text" id="message" placeholder="메세지를 입력하세요.">
+      <i id="send" class="fa-regular fa-paper-plane" style="color: gray;"></i><!--보내기 버튼-->
     </div>
   </div>
 </div>
+<script>
+</script>
 </body>
 </html>

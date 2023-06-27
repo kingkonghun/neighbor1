@@ -31,4 +31,5 @@ public class MainController {
 //        model.addAttribute("club", clubService.mainList());
         return "index";
     }
+
 }

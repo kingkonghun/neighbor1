@@ -25,7 +25,7 @@ $(function(){
         }
     });
     $("#open-popup").click(function(){
-        var _width = 400;
+        var _width = 450;
         var _height = 600;
         var dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screen.left;
         var dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screen.top;
@@ -37,7 +37,7 @@ $(function(){
     });
 
     $("#btnChat").click(function(){
-        var _width = 400;
+        var _width = 450;
         var _height = 600;
         var dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screen.left;
         var dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screen.top;

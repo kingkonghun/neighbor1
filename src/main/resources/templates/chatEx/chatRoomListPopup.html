@@ -4,15 +4,120 @@
     <meta charset="UTF-8"/>
     <title>Title</title>
     <th:block th:insert="/common/common :: fragment-header"></th:block>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/chatRoomList.css}">
 </head>
 <body>
-<h2>채팅목록</h2>
-<div id="roomList">
-    <div th:onclick="|location.href='@{chatDetail(roomId=${row.roomId})}'|" class="mb-2 p-2" style="border: 1px solid black; border-radius: 12px;" th:each="row : ${list}">
-        <h4 th:text="${row.senderName}"></h4>
-        <p th:text="${row.content}"></p>
-        <span id="notificationCount" th:text="${row.chatCount}" style="background-color: red;" th:if="${row.chatCount} != '0'"></span>
+<!--<h2>채팅목록</h2>-->
+<!--<div id="roomList">-->
+<!--    <div th:onclick="|location.href='@{chatDetail(roomId=${row.roomId})}'|" class="mb-2 p-2" style="border: 1px solid black; border-radius: 12px;" th:each="row : ${list}">-->
+<!--        <h4 th:text="${row.senderName}"></h4>-->
+<!--        <p th:text="${row.content}"></p>-->
+<!--        <span id="notificationCount" th:text="${row.chatCount}" style="background-color: red;" th:if="${row.chatCount} != '0'"></span>-->
+<!--    </div>-->
+<!--</div>-->
+<div class="container3" id="chatRoomList">
+    <div class="leftSide">
+        <div class="header">
+            <div class="userimg">
+                <img th:src="@{/member/findProfileImg(memberId=${receiver})}" class="cover">
+            </div>
+            <div>
+                <span th:text="'반갑습니다. ' + ${#authentication.principal.member.memberName} + '님'"></span>
+            </div>
+        </div>
+
+        <!--chat list-->
+        <div class="chatlist">
+            <div class="block active" th:each="row : ${list}" th:onclick="|location.href='@{chatDetail(roomId=${row.roomId})}'|"><!--호버한 리스트-->
+                <div class="imgbx">
+                    <img th:src="@{/member/findProfileImg(memberId=${row.sender})}" class="cover">
+                </div>
+                <div class="details">
+                    <div class="listHead">
+                        <h4 th:text="${row.senderName}">김씨</h4>
+
+                    </div>
+                    <div class="message_p">
+                        <p th:text="${row.content}"></p>
+                        <b id="notificationCount" th:text="${row.chatCount}" th:if="${row.chatCount} != '0'"></b><!--알림 숫자-->
+                    </div>
+                </div>
+            </div>
+            <!--반복부분
+            <div class="block unread">호버 안한 리스트
+                <div class="imgbx">
+                    <img src="/static/img/author-2.jpg" class="cover">
+                </div>
+                <div class="details">
+                    <div class="listHead">
+                        <h4>김씨</h4>
+
+                    </div>
+                    <div class="message_p">
+                        <p>어찌지냐</p>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <div class="imgbx">
+                    <img src="/static/img/author-2.jpg" class="cover">
+                </div>
+                <div class="details">
+                    <div class="listHead">
+                        <h4>김씨</h4>
+
+                    </div>
+                    <div class="message_p">
+                        <p>어찌지냐</p>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <div class="imgbx">
+                    <img src="/static/img/author-2.jpg" class="cover">
+                </div>
+                <div class="details">
+                    <div class="listHead">
+                        <h4>김씨</h4>
+                        <p class="time">10:56</p>이건 빼기
+                    </div>
+                    <div class="message_p">
+                        <p>어찌지냐</p>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <div class="imgbx">
+                    <img src="/static/img/author-2.jpg" class="cover">
+                </div>
+                <div class="details">
+                    <div class="listHead">
+                        <h4>김씨</h4>
+                        <p class="time">10:56</p>이건 빼기
+                    </div>
+                    <div class="message_p">
+                        <p>어찌지냐</p>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <div class="imgbx">
+                    <img src="/static/img/author-2.jpg" class="cover">
+                </div>
+                <div class="details">
+                    <div class="listHead">
+                        <h4>김씨</h4>
+                        <p class="time">10:56</p>이건 빼기
+                    </div>
+                    <div class="message_p">
+                        <p>어찌지냐</p>
+                    </div>
+                </div>
+            </div>
+            반복 끝-->
+        </div>
     </div>
 </div>
+
 </body>
 </html>

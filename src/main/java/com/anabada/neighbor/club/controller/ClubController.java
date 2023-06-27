@@ -1,5 +1,6 @@
 package com.anabada.neighbor.club.controller;
 
+import com.anabada.neighbor.chat.service.ChattingService;
 import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.domain.ImageRequest;
@@ -26,11 +27,12 @@ public class ClubController {
 
     private final ClubService clubService;
     private final ImageUtils imageUtils;
+    private final ChattingService chattingService;
 
-    @Autowired
-    public ClubController(ClubService clubService, ImageUtils imageUtils) {
+    public ClubController(ClubService clubService, ImageUtils imageUtils, ChattingService chattingService) {
         this.clubService = clubService;
         this.imageUtils = imageUtils;
+        this.chattingService = chattingService;
     }
 
     @GetMapping("/clubList")
