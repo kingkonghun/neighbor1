@@ -12,12 +12,15 @@
             }
         }
     </script>
+    <style>
+        body{background-color: #f4f4f4;}
+    </style>
     <link rel="stylesheet" th:href="@{/css/myPage.css}">
 </head>
 <body>
 <div class="myReply_div">
     <h2 class="h2">관심 있는 게시글</h2>
-    <div class="tableBox">
+    <div class="table">
         <table  style="width: 100%;" class="table table-hover">
             <thead>
             <th>제목</th>
@@ -34,10 +37,11 @@
             </tr>
             </tbody>
         </table>
-    </div>
-    <div th:replace="pagination/paging :: div" style="text-align: center;"></div>
-    <div class="btnList">
-        <button class="btn btn-outline-danger" type="button" id="btnBack" onclick="removeHTML()">뒤로가기</button>
+
+        <div th:replace="pagination/paging :: div" style="text-align: center;"></div>
+        <div class="btnList">
+            <button class="btn btn-outline-danger" type="button" id="btnBack" onclick="removeHTML()">뒤로가기</button>
+        </div>
     </div>
 </div>
 </body>

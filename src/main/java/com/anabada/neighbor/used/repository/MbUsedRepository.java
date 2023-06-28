@@ -16,7 +16,7 @@ public interface MbUsedRepository extends UsedRepository {
             " FROM post" +
             " WHERE postUpdate >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 week) and postType='used' " +
             " ORDER BY postView desc" +
-            " LIMIT 8")
+            " LIMIT 6")
     List<Post> postList();
 
     @Override
