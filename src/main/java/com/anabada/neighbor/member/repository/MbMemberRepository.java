@@ -58,7 +58,7 @@ public interface MbMemberRepository extends MemberRepository{
 
 
     @Override
-    @Update("UPDATE member SET memberName=#{memberName},address=#{address}, addressDetail=#{addressDetail} WHERE memberId=#{memberId}")
+    @Update("UPDATE member SET memberName=#{memberName},address=#{address}, addressDetail=#{addressDetail}, role='ROLE_USER' WHERE memberId=#{memberId}")
     void editInfo(Member member);
 
 

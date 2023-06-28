@@ -17,16 +17,33 @@
         <div class="userimg">
           <img th:src="@{/member/findProfileImg(memberId=${receiver.receiver})}" class="cover"><!--상대방 이미지-->
         </div>
-        <h4 th:text="${receiver.receiverName}">이씨</h4><!--상대 이름-->
+        <h4 th:text="${receiver.receiverName}"></h4><!--상대 이름-->
         <!--리스트 꾸미려면 넣기 <ul class="nav_icons">
             <li></li>
             <li></li>
         </ul> -->
       </div>
     </div>
+    <div id="block"></div>
+
     <!--채팅방-->
+
+    <div class="search_chat">
+      <div class="room_detail">
+        <img th:src="@{/used/findImg(postId=${list[0].postId})}">
+        <div class="used_detail">
+          <span class="used_name" th:text="${list[0].title}"></span>
+          <span class="used_cost" th:text="${list[0].price} + ' 원'"></span>
+        </div>
+      </div>
+      <form action="/used/success" method="post">
+        <input type="hidden" th:value="${list[0].postId}">
+        <button class="deal_comp py-2 px-4">거래 완료</button>
+      </form>
+    </div>
+
     <div class="chatBox" id="messages">
-      <div th:each="row : ${list}">
+      <th:block th:each="row : ${list}">
         <div class="message my_message" th:if="${row.messageType == 'SEND' && row.sender == #authentication.principal.member.memberId}"><!--내가 보낸 부분 오른쪽-->
           <p th:inline="text">
             [[${row.content}]]<br>
@@ -34,20 +51,19 @@
           </p><!--시간-->
         </div>
         <div class="message frnd_message" th:if="${row.messageType == 'SEND' && row.sender != #authentication.principal.member.memberId}"><!--상대가 보낸 부분 왼쪽-->
-          <div class="user_profile"><!--상대 대화 위에 이미지와 이름 생성-->
-            <img th:src="@{/member/findProfileImg(memberId=${row.receiver})}" class="room_cover"><!--상대 사진-->
-            <span th:text="${row.receiverName}"></span><!--상대 이름-->
+            <div class="user_profile"><!--상대 대화 위에 이미지와 이름 생성-->
+              <img th:src="@{/member/findProfileImg(memberId=${row.receiver})}" class="room_cover"><!--상대 사진-->
+              <span th:text="${row.receiverName}"></span><!--상대 이름-->
+            </div>
+            <p th:inline="text">
+              [[${row.content}]]<br>
+              <span th:text="${row.messageDate}"></span>
+            </p><!--시간-->
           </div>
-          <p th:inline="text">
-            [[${row.content}]]<br>
-            <span th:text="${row.messageDate}"></span>
-          </p><!--시간-->
-        </div>
         <div class="message1 join" th:if="${row.messageType} == 'ENTER'"><!--상대가 보낸 부분 왼쪽-->
           <p th:text="${row.content}"></p>
         </div>
-      </div>
-
+      </th:block>
     </div>
 
     <!--채팅입력 부분-->

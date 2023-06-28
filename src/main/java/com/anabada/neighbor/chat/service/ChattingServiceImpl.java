@@ -9,6 +9,7 @@ import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.repository.MemberRepository;
 import com.anabada.neighbor.used.domain.Post;
+import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -40,43 +41,51 @@ public class ChattingServiceImpl implements ChattingService {
 
         String memberName = principalDetails.getMember().getMemberName();
 
-        ChattingRoom chattingRoomTemp = chattingRepository.roomCheck(chattingRoom);
+        if (type.equals("used")) {
+            ChattingRoom chattingRoomTemp = chattingRepository.roomCheck(chattingRoom);
 
-        if (chattingRoomTemp == null) {
-            chattingRepository.insertRoom(chattingRoom);
+            if (chattingRoomTemp == null) {
+                chattingRepository.insertRoom(chattingRoom);
 
-            Post post = usedRepository.findPost(chattingRoom.getPostId());
-            Member member = memberRepository.findByMemberId(post.getMemberId());
+                Post post = usedRepository.findPost(chattingRoom.getPostId());
+                Member member = memberRepository.findByMemberId(post.getMemberId());
+                Product product = usedRepository.findProduct(post.getPostId());
 
-            long roomId = chattingRoom.getRoomId();
-            long receiver = member.getMemberId();
+                long roomId = chattingRoom.getRoomId();
+                long receiver = member.getMemberId();
 
-            Chat chat = Chat.builder()
-                    .roomId(roomId)
-                    .sender(memberId)
-                    .senderName(memberName)
-                    .receiver(receiver)
-                    .receiverName(memberRepository.findMemberName(receiver))
-                    .content(memberName + "님이 입장하셨습니다.")
-                    .messageDate(dateFormat.format(new Date()))
-                    .messageType("ENTER")
-                    .build();
-            chattingRepository.insertMessage(chat);
+                Chat chat = Chat.builder()
+                        .postId(postId)
+                        .title(post.getTitle())
+                        .price(product.getPrice())
+                        .roomId(roomId)
+                        .sender(memberId)
+                        .senderName(memberName)
+                        .receiver(receiver)
+                        .receiverName(memberRepository.findMemberName(receiver))
+                        .content(memberName + "님이 입장하셨습니다.")
+                        .messageDate(dateFormat.format(new Date()))
+                        .messageType("ENTER")
+                        .build();
+                chattingRepository.insertMessage(chat);
 
-            chattingRepository.insertChatMember(roomId, memberId);
-            chattingRepository.insertChatMember(roomId, receiver);
+                chattingRepository.insertChatMember(roomId, memberId);
+                chattingRepository.insertChatMember(roomId, receiver);
 
-            simpMessagingTemplate.convertAndSendToUser(String.valueOf(chat.getReceiver()), "/topic/messageNotification", chat);
-            simpMessagingTemplate.convertAndSend("/topic/message/" + chat.getRoomId(), chat);
-            return roomId;
+                simpMessagingTemplate.convertAndSendToUser(String.valueOf(chat.getReceiver()), "/topic/messageNotification", chat);
+                simpMessagingTemplate.convertAndSend("/topic/message/" + chat.getRoomId(), chat);
+                return roomId;
+            }else {
+                return chattingRoomTemp.getRoomId();
+            }
         }else {
-            return chattingRoomTemp.getRoomId();
+            return 0;
         }
+
     }
 
     @Override
     public void sendMessage(Chat chat, Principal principal) {
-
 
         chat.setSender(Long.parseLong(principal.getName()));
         chat.setSenderName(memberRepository.findMemberName(chat.getSender()));
@@ -136,7 +145,13 @@ public class ChattingServiceImpl implements ChattingService {
         List<ChattingMessage> messageList = chattingRepository.chattingMessageList(roomId);
 
         for (ChattingMessage message : messageList) {
+            ChattingRoom chattingRoom = chattingRepository.findChatRoomByRoomId(message.getRoomId());
+            Post post = usedRepository.findPost(chattingRoom.getPostId());
+            Product product = usedRepository.findProduct(post.getPostId());
             Chat chat = Chat.builder()
+                    .postId(post.getPostId())
+                    .title(post.getTitle())
+                    .price(product.getPrice())
                     .roomId(message.getRoomId())
                     .sender(message.getWriter())
                     .senderName(memberRepository.findMemberName(message.getWriter()))

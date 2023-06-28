@@ -6,7 +6,6 @@
                 <ul class="nav_menu_1">
                     <li><a href="/used/list">중고거래</a></li>
                     <li><a href="/clubList">동네모임</a></li>
-                    <li><a href="#" id="open-popup">채팅목록</a></li>
                 </ul>
             </div>
             <div class="nav_div">
@@ -38,54 +37,100 @@
                     <span></span>
                     <span></span>
                 </label>
+<!--                <div class="sidebar">-->
+<!--                    <div class="menu">-->
+<!--                        <div class="center" sec:authorize="isAuthenticated()">-->
+<!--                            <div class="profile">-->
+<!--                                <div class="image">-->
+<!--                                    <div class="circle-1"></div>-->
+<!--                                    <div class="circle-2"></div>-->
+<!--                                    <img  id="imgSrc" th:src="@{/member/findProfileImg(memberId=${#authentication.principal.member.memberId})}" width="70" height="70" alt="Jessica Potter">-->
+<!--                                </div>-->
+
+<!--                                <div class="name">-->
+<!--                                    <p id="memberName"></p>-->
+<!--                                </div>-->
+
+<!--                                <div class="actions">-->
+<!--                                    <button type="button" class="btn" onclick="location.href='/member/myInfo'">마이페이지</button>-->
+<!--                                    <button type="button" class="btn" onclick="location.href='/logout'">로그아웃</button>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                            <div class="stats">-->
+<!--                                <div class="box" onclick="myWrite()">-->
+<!--                                    <span class="value" id="countMyWrite"></span>-->
+<!--                                    <span class="parameter">내글</span>-->
+<!--                                </div>-->
+<!--                                <div class="box" onclick="myLikes()">-->
+<!--                                    <span class="value" id="likes"></span>-->
+<!--                                    <span class="parameter">관심 있는 글</span>-->
+<!--                                </div>-->
+<!--                                <div class="box">-->
+<!--                                    <span class="value" id="myScore"></span>-->
+<!--                                    <span class="parameter">내점수</span>-->
+<!--                                </div>-->
+
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="bottom">-->
+<!--                            <div sec:authorize="isAnonymous()">-->
+<!--                                <a href='/member/loginForm'>-->
+<!--                                    <i class="fa-solid fa-right-from-bracket"></i>-->
+<!--                                </a>-->
+<!--                                <span>로그인</span></div>-->
+<!--                            <div class="logout" sec:authorize="isAuthenticated()"><a href='/logout'>-->
+<!--                                <i class="fa-solid fa-right-from-bracket"></i>-->
+<!--                            </a>-->
+<!--                                <span>로그아웃</span></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div class="sidebar">
-                    <div class="menu">
-                        <div class="center" sec:authorize="isAuthenticated()">
-                            <div class="profile">
-                                <div class="image">
-                                    <div class="circle-1"></div>
-                                    <div class="circle-2"></div>
-                                    <img  id="imgSrc" th:src="@{/member/findProfileImg(memberId=${#authentication.principal.member.memberId})}" width="70" height="70" alt="Jessica Potter">
-                                </div>
-
-                                <div class="name">
-                                    <p id="memberName"></p>
-                                </div>
-
-                                <div class="actions">
-                                    <button type="button" class="btn" onclick="location.href='/member/myInfo'">마이페이지</button>
-                                    <button type="button" class="btn" onclick="location.href='/logout'">로그아웃</button>
-                                </div>
-                            </div>
-
-                            <div class="stats">
-                                <div class="box" onclick="myWrite()">
-                                    <span class="value" id="countMyWrite"></span>
-                                    <span class="parameter">내글</span>
-                                </div>
-                                <div class="box" onclick="myLikes()">
-                                    <span class="value" id="likes"></span>
-                                    <span class="parameter">관심 있는 글</span>
-                                </div>
-                                <div class="box">
-                                    <span class="value" id="myScore"></span>
-                                    <span class="parameter">내점수</span>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="bottom">
+                    <ul class="navbar-list">
+                        <li class="navbar-item" sec:authorize="isAuthenticated()">
+                            <a href="/member/myInfo" class="navbar-link title-sm" data-nav-link><i class="bi bi-info-square"></i> 내정보</a>
+                        </li>
+                        <li class="navbar-item" sec:authorize="isAuthenticated()">
+                            <a href="#" id="open-popup" class="navbar-link title-sm" data-nav-link><i class="fa-regular fa-envelope"></i> 채팅</a>
+                        </li>
+                        <li class="navbar-item" sec:authorize="isAuthenticated()">
+                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-coin"></i> 구매내역</a>
+                        </li>
+                        <li class="navbar-item" sec:authorize="isAuthenticated()">
+                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-coin"></i> 판매내역</a>
+                        </li>
+                        <li class="navbar-item hideItem">
+                            <a href="/used/list" class="navbar-link title-sm" data-nav-link><i class="bi bi-cart"></i> 중고거래</a>
+                        </li>
+                        <li class="navbar-item hideItem">
+                            <a href="/clubList" class="navbar-link title-sm" data-nav-link><i class="bi bi-house-door"></i> 동네모임</a>
+                        </li>
+                        <li class="navbar-item">
                             <div sec:authorize="isAnonymous()">
-                                <a href='/member/loginForm'>
-                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                <a href="/member/loginForm" class="navbar-link title-sm" data-nav-link>
+                                    <i class="fa-solid fa-right-from-bracket"></i> 로그인
                                 </a>
-                                <span>로그인</span></div>
-                            <div class="logout" sec:authorize="isAuthenticated()"><a href='/logout'>
-                                <i class="fa-solid fa-right-from-bracket"></i>
-                            </a>
-                                <span>로그아웃</span></div>
+                            </div>
+                            <div sec:authorize="isAuthenticated()">
+                                <a href="/logout" class="navbar-link title-sm" data-nav-link>
+                                    <i class="fa-solid fa-right-from-bracket"></i> 로그아웃
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="bottom2" sec:authorize="isAuthenticated()">
+                        <div class="profile1">
+                            <div class="parent">
+                                <img th:src="@{/member/findProfileImg(memberId=${#authentication.principal.member.memberId})}" alt="Profile Picture1" class="profile-picture">
+                            </div>
+                            <div class="profile-details">
+                                <div class="name2"></div>
+                                <div class="nickname2" th:text="${#authentication.principal.member.memberName}"></div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -101,7 +146,7 @@
                 <p class="calltime">10:56</p><!--이건 빼기-->
             </div>
             <div class="message_new">
-                <p>새로운 메세지가 도착 하였습니다.</p>
+                <p id="popup_message">새로운 메세지가 도착 하였습니다.</p>
             </div>
         </div>
     </div>

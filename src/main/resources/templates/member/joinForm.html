@@ -9,12 +9,12 @@
 </head>
 <body>
 <section class="login-form">
-    <h1>JOIN</h1>
+    <h1>회원가입</h1>
     <form action="/member/join" method="post" name="form1" id="form1">
         <div class="int-area">
             <div class="email">
                 <input type="email" name="memberEmail" id="memberEmail" autocomplete="off" required>
-                <label for="memberEmail">MEMBER E-MAIL</label>
+                <label for="memberEmail">이메일</label>
                 <button type="button" id="btnAuthentication">
                     <i class="bi bi-bookmark-check"></i>
                 </button>
@@ -26,23 +26,23 @@
         </div>
         <div class="int-area">
             <input name="memberName" id="memberName" autocomplete="off" required>
-            <label for="memberName">MEMBER NAME</label>
+            <label for="memberName">닉네임</label>
         </div>
 
 
         <div class="int-area">
             <input type="password" name="memberPWD" id="memberPWD" autocomplete="off" required>
-            <label for="memberPWD">PASSWORD</label>
+            <label for="memberPWD">비밀번호</label>
         </div>
         <div class="int-area">
             <input type="password"  id="passCheck" autocomplete="off" required>
-            <label for="memberPWD">PASSCHECK</label>
+            <label for="memberPWD">비밀번호 확인</label>
         </div>
 
         <div class="int-area">
             <div class="address">
                 <input type="text" name="address" id="address" autocomplete="off" required >
-                <label for="address">ZIPCODE</label>
+                <label for="address">우편번호</label>
                 <button type="button" onclick="zipcode()" id="btnSearch">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search-heart-fill" viewBox="0 0 16 16" color="#669900">
                         <path d="M6.5 13a6.474 6.474 0 0 0 3.845-1.258h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.008 1.008 0 0 0-.115-.1A6.471 6.471 0 0 0 13 6.5 6.502 6.502 0 0 0 6.5 0a6.5 6.5 0 1 0 0 13Zm0-8.518c1.664-1.673 5.825 1.254 0 5.018-5.825-3.764-1.664-6.69 0-5.018Z"/>
@@ -52,15 +52,15 @@
         </div>
         <div class="int-area">
             <input type="text" name="addressDetail" id="addressDetail" autocomplete="off" required>
-            <label for="addressDetail">ADDRESS</label>
+            <label for="addressDetail">상세주소</label>
         </div>
 
         <div class="btn-area">
-            <button id="btnJoin" type="button">JOIN</button>
+            <button id="btnJoin" type="button">가입</button>
         </div>
     </form>
     <div class="caption">
-        <a href="/login">Already have an ID?</a>
+        <a href="/member/loginForm">계정이 이미 있으신가요?</a>
     </div>
 </section>
 
