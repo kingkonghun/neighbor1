@@ -61,6 +61,7 @@
             if(checkIsAuthenticated()){
                 if(checkIsAuthorization()){
                     location.href="/member/editInfo?message=추가 정보를 입력한 뒤에 사용하세요";
+                    return;
                 }else{
                     $("#writeForm").slideDown();
                 }

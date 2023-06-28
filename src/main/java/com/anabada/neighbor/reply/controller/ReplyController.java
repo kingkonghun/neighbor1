@@ -6,6 +6,8 @@ import com.anabada.neighbor.page.PageDTO;
 import com.anabada.neighbor.reply.domain.Reply;
 import com.anabada.neighbor.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,32 +32,28 @@ public class ReplyController {
         return "/reply/list";
     }
 
-    @ResponseBody
     @PostMapping("/write") //댓글 작성
-    public int write(Reply reply, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<Void> write(Reply reply, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         replyService.write(reply, principalDetails);
-        return 0;
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @ResponseBody
     @PostMapping("/delete") //댓글 삭제
-    public int delete(long replyId) {
+    public ResponseEntity<Void> delete(long replyId) {
         replyService.delete(replyId);
-        return 0;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ResponseBody
     @PostMapping("/update") //댓글 수정
-    public int update(Reply reply) {
+    public ResponseEntity<Void> update(Reply reply) {
         replyService.update(reply);
-        return 0;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ResponseBody
     @PostMapping("/writeReReply") //대댓글 작성
-    public int writeReReply(Reply reply, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<Void> writeReReply(Reply reply, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         replyService.writeReReply(reply, principalDetails);
-        return 0;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/myReply")
     public String myReply(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria){ // 내가 쓴 댓글

@@ -9,7 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/usedDetail.css}">
     <link rel="stylesheet" th:href="@{/css/list.css}">
     <style>
-        body{background-color: #f4f4f4;}
+        body{background-color: #f4f4f4; font-family: GangwonEduPowerExtraBoldA;}
         #modal {
             position: fixed;
             z-index: 1;
@@ -58,7 +58,6 @@
         }
     </style>
     <script>
-
         $(function(){
             const imgCount = [[${imgCount}]];
             console.log(imgCount);
@@ -143,9 +142,14 @@
         }
     </script>
     <script th:inline="javascript">
+        //댓글
         $(function(){
-            // list();
-            $("#btnWrite").click(function(){
+            list();
+            $("#btnReplyWrite").click(function(){
+                if(checkIsAuthorization()) {
+                    location.href="/member/editInfo?message=추가 정보를 입력한 뒤에 사용하세요";
+                    return;
+                }
                 var comment = $("#comment");
                 if(comment.val() == ""){
                     alert("내용을 입력하세요");
@@ -163,7 +167,12 @@
                     }
                 });
             });
+            $("#open-reply").click(function(){
+                $("#reply").show();
+            });
         });
+
+        //OK
         function list() {
             $.ajax({
                 type: "get",
@@ -171,10 +180,10 @@
                 data: {postId: [[${dto.postId}]]},
                 success: function(result) {
                     $("#replyList").html(result);
-                    $(".replyBtn").css('display', 'block');
                 }
             });
         }
+
         function deleteReply(replyId) {
             if(confirm("댓글을 삭제하시겠습니까?")) {
                 $.ajax({
@@ -187,14 +196,21 @@
                 });
             }
         }
+
+
+        //OK
         function update(replyId) {
-            $(".comment_"+replyId).css("display", "none");
-            $(".buttonDiv_"+replyId).css("display", "none");
-            $(".commentUpdate_"+replyId).show();
-            $(".btnUpdateReply_"+replyId).show();
+            $(".comment_"+replyId+" p").css("display", "none");
+            $(".comment_"+replyId+" .updateComment").show();
+            $(".date_"+replyId).css("display", "none");
+            $(".buttons_"+replyId+" .btnReReply").css("display", "none");
+            $(".buttons_"+replyId+" .btnCancel").show();
+            $(".buttons_"+replyId+" .btnUpdateSubmit").show();
         }
+
+        //OK
         function updateReply(replyId) {
-            var comment = $(".commentUpdate_"+replyId);
+            var comment = $(".comment_"+replyId+" .updateComment");
             if(comment.val() == "") {
                 alert("내용을 입력하세요");
                 comment.focus();
@@ -209,13 +225,35 @@
                 }
             });
         }
-        function reReply(replyId) {
-            $(".buttonDiv_"+replyId).css("display", "none");
-            $(".reComment_"+replyId).show();
-            $(".btnReReply_"+replyId).show();
+
+        //OK
+        function cancel(replyId) {
+            $(".comment_"+replyId+" p").show();
+            $(".comment_"+replyId+" .updateComment").css("display", "none");
+            $(".comment_"+replyId+" .reReplyComment").css("display", "none");
+            $(".date_"+replyId).show();
+            $(".buttons_"+replyId+" .btnReReply").show();
+            $(".buttons_"+replyId+" .btnCancel").css("display", "none");
+            $(".buttons_"+replyId+" .btnUpdateSubmit").css("display", "none");
+            $(".buttons_"+replyId+" .btnReReplySubmit").css("display", "none");
         }
+
+        //OK
+        function reReply(replyId) {
+            if(checkIsAuthorization()) {
+                location.href="/member/editInfo?message=추가 정보를 입력한 뒤에 사용하세요";
+                return;
+            }
+            $(".comment_"+replyId+" .reReplyComment").show();
+            $(".date_"+replyId).css("display", "none");
+            $(".buttons_"+replyId+" .btnReReply").css("display", "none");
+            $(".buttons_"+replyId+" .btnCancel").show();
+            $(".buttons_"+replyId+" .btnReReplySubmit").show();
+        }
+
+        //OK
         function writeReReply(replyId) {
-            var comment = $(".reComment_"+replyId);
+            var comment =  $(".comment_"+replyId+" .reReplyComment");
             if(comment.val() == "") {
                 alert("내용을 입력하세요");
                 comment.focus();
@@ -262,7 +300,7 @@
                 </ul>
                 <span class="views pt-2" th:text="${#dates.format(dto.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></span>
             </div>
-            <p th:text="${dto.content}" style="height: 60%; overflow: auto;"></p>
+            <p th:text="${dto.content}" style="height: 60%; overflow: auto; word-break: break-all;"></p>
             <div style="display: flex; justify-content: space-between;">
                 <span th:text="'가격 : ' + ${dto.price} + ' 원'"></span>
                 <span th:text="'조회수 : ' + ${dto.postView}"></span>
@@ -270,7 +308,7 @@
             <div class="atag" style="display: flex; gap: 20px; justify-content: flex-end;">
                 <div>
                     <span th:text="${dto.replyCount}"></span>
-                    <a href="#" onclick="list()"><i class="bi bi-chat-text"></i></a>
+                    <a href="#" id="open-reply"><i class="bi bi-chat-text"></i></a>
                 </div>
                 <div id="likes">
                     <span class="likesCount">[[${dto.likesCount}]]</span>
@@ -288,14 +326,16 @@
         </div>
     </section>
 
+    <section id="reply">
+        <article class="mt-2" id="replyList"></article>
 
-    <div class="replyBtn" style="margin: 20px; display: none; width: 100%;">
-        <textarea rows="3" id="comment" style="width: 100%; border-radius: 30px; resize: none; padding: 20px;" placeholder="댓글 작성"></textarea>
-        <div id="button_div" style="text-align: right;">
-            <button type="button" id="btnWrite">작성</button>
-        </div>
-    </div>
-    <section class="mt-2" id="replyList"></section>
+        <article id="contentBlock" class="p-3" style="width: 100%;" sec:authorize="isAuthenticated()">
+            <textarea class="p-3" rows="2" id="comment" placeholder="댓글 작성"></textarea>
+            <div id="button_div">
+                <button class="py-1 px-2" type="button" id="btnReplyWrite">작성</button>
+            </div>
+        </article>
+    </section>
 
 
     <!--3번 박스 비슷한 게시글 리스트 보는곳-->
