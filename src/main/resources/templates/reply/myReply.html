@@ -5,9 +5,7 @@
     <title>Title</title>
     <th:block th:insert="/common/common :: fragment-header"></th:block>
   <style>
-
-    /*.h2{text-align: center; padding-bottom: 1.5em;font-family: 'GangwonEduPowerExtraBoldA';}*/
-
+    body{background-color: #f4f4f4;}
     .btnList{text-align: right; padding-top: 1.5em; padding-bottom: 1.5em;}
   </style>
   <link rel="stylesheet" th:href="@{/css/myPage.css}">
@@ -17,12 +15,23 @@
         location.href= "/used/detail?postId="+postId;
       }
     }
+    function paging(num) {
+      $.ajax({
+        method:"get",
+        url: "/reply/myReply",
+        data: {"pageNum": num},
+        success: function (data) {
+          $(".myReply_div").html(data);
+        }
+      });
+    }
   </script>
+
 </head>
 <body>
 <div class="myReply_div">
   <h2 class="h2">내가 작성한 댓글</h2>
-  <div class="tableBox">
+  <div class="table">
     <table  style="width: 100%;" class="table table-hover">
       <thead>
         <th>제목</th>
@@ -39,10 +48,11 @@
       </tr>
       </tbody>
     </table>
-  </div>
-  <div th:replace="pagination/paging :: div" style="text-align: center;"></div>
-  <div class="btnList">
-    <button class="btn btn-outline-danger" type="button" id="btnBack" onclick="removeHTML()">뒤로가기</button>
+
+    <div th:replace="pagination/paging :: div" style="text-align: center;"></div>
+    <div class="btnList">
+      <button class="btn btn-outline-danger" type="button" id="btnBack" onclick="removeHTML()">뒤로가기</button>
+    </div>
   </div>
 </div>
 </body>

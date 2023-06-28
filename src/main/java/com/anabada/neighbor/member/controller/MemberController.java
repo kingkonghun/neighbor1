@@ -117,11 +117,11 @@ public class MemberController {
     }
     @PostMapping("/editMyInfo")//정보수정
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String editInfo( Member member,RedirectAttributes redirectAttributes){
+    public String editInfo( Member member,Model model){
         memberService.editInfo(member);
         System.out.println("member = " + member);
-        redirectAttributes.addAttribute("msg","infoSuccess");
-        return  "redirect:/member/editInfo";
+        model.addAttribute("msg","infoSuccess");
+        return  "index";
     }
 
     @PostMapping("/editPwd")//비밀번호 수정
@@ -129,7 +129,7 @@ public class MemberController {
         String msg= memberService.editPwd(oldPwd,memberPWD,memberId);
         System.out.println("msg = " + msg);
 
-        if (msg.equals("성공")) {
+        if (msg.equals("pwdSuccess")) {
             model.addAttribute("msg", msg);
             return "index";
         } else {

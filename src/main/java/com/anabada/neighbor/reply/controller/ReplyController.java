@@ -26,6 +26,7 @@ public class ReplyController {
     @GetMapping("/list") //댓글 리스트
     public String reply(long postId, Model model) {
         model.addAttribute("list", replyService.list(postId));
+        System.out.println("replyList : "+replyService.list(postId));
         return "/reply/list";
     }
 
@@ -57,9 +58,9 @@ public class ReplyController {
         return 0;
     }
     @GetMapping("/myReply")
-    public String myReply(long memberId, Model model, Criteria criteria){ // 내가 쓴 댓글
-        model.addAttribute("list",replyService.findMyReply(memberId,criteria));
-        int total = replyService.countMyReply(memberId);
+    public String myReply(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria){ // 내가 쓴 댓글
+        model.addAttribute("list",replyService.findMyReply(principalDetails.getMember().getMemberId(),criteria));
+        int total = replyService.countMyReply(principalDetails.getMember().getMemberId());
         model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
         return "reply/myReply";
     }

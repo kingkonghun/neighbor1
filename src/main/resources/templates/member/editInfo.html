@@ -28,9 +28,6 @@
                 alert("기존 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
                 $("#password-tab").click();
                 $("#oldPwd").focus();
-            }else if (message === 'infoSuccess') {
-                alert("개인 정보가 수정되었습니다.");
-                $("#account-tab").click();
             }else if (message === 'photoSuccess') {
                 alert("프로필 사진이 변경되었습니다.");
                 $("#security-tab").click();
@@ -120,7 +117,7 @@
                                 <div class="col-md-11">
                                     <div class="form-group">
                                         <label>주소</label>
-                                        <input type="text" name="address" class="form-control" id="address" th:value="${list.address}" required>
+                                        <input type="text" name="address" class="form-control" id="address" th:value="${list.address}" required readonly>
                                     </div>
                                 </div>
 

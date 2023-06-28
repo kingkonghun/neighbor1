@@ -190,7 +190,7 @@ public class MemberServiceImpl implements MemberService{
             memberPWD = bCryptPasswordEncoder.encode(memberPWD);
             System.out.println("memberPWD = " + memberPWD);
             memberRepository.editPwd(memberPWD,memberId);
-            msg = "success";
+            msg = "pwdSuccess";
         }
         return msg;
     }

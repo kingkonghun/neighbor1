@@ -1,147 +1,236 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-<title>club Details Page</title>
-<th:block th:insert="/common/common :: fragment-header"></th:block>
-<link rel="stylesheet" th:href="@{/css/usedDetail.css}">
-<link rel="stylesheet" th:href="@{/css/list.css}">
-<style>
-body{background-color: #f4f4f4;}
-#modal {
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: none;
-    font-family: omyu_pretty;
-    font-size: 20px;
-}
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    border: 1px solid #888;
-    width: 360px;
-    border-radius: 12px;
-}
-#close-modal {
-    cursor: pointer;
-}
-#reportType_select, #content {
-    width: 100%;
-    border-style: none;
-    background-color: #f4f4f4;
-}
-#content {
-    height: 120px;
-    border-style: none;
-    resize: none;
-}
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    font-family: GangwonEduPowerExtraBoldA;
-}
-#btnReport {
-    border-radius: 8px;
-    border-style: none;
-    border-color: #f4f4f4;
-    font-family: omyu_pretty;
-    background-color: #FF3366;
-    color: #f4f4f4;
-}
-</style>
-<script>
-
-    $(function(){
-        const imgCount = [[${imgCount}]];
-        console.log(imgCount);
-        if(imgCount === 1 ){
-            $(".slick-dots").css('display','none');
-            $(".slick-prev").css('display','none');
-            $(".slick-next").css('display','none');
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>club Details Page</title>
+    <th:block th:insert="/common/common :: fragment-header"></th:block>
+    <link rel="stylesheet" th:href="@{/css/usedDetail.css}">
+    <link rel="stylesheet" th:href="@{/css/list.css}">
+    <style>
+        body{background-color: #f4f4f4;}
+        #modal {
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: none;
+            font-family: omyu_pretty;
+            font-size: 20px;
         }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            border: 1px solid #888;
+            width: 360px;
+            border-radius: 12px;
+        }
+        #close-modal {
+            cursor: pointer;
+        }
+        #reportType_select, #content {
+            width: 100%;
+            border-style: none;
+            background-color: #f4f4f4;
+        }
+        #content {
+            height: 120px;
+            border-style: none;
+            resize: none;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            font-family: GangwonEduPowerExtraBoldA;
+        }
+        #btnReport {
+            border-radius: 8px;
+            border-style: none;
+            border-color: #f4f4f4;
+            font-family: omyu_pretty;
+            background-color: #FF3366;
+            color: #f4f4f4;
+        }
+    </style>
+    <script>
 
-        /**
-         * 신고
-         * @type {*|jQuery|HTMLElement}
-         */
-        const modal = $("#modal");
-        let likesCheck = [[${dto.likesCheck}]];
-        heartClass(likesCheck);
-        $("#heart").click(function(){
-            if(checkIsAuthenticated()){
+        $(function(){
+            const imgCount = [[${imgCount}]];
+            console.log(imgCount);
+            if(imgCount === 1 ){
+                $(".slick-dots").css('display','none');
+                $(".slick-prev").css('display','none');
+                $(".slick-next").css('display','none');
+            }
+
+            /**
+             * 신고
+             * @type {*|jQuery|HTMLElement}
+             */
+            const modal = $("#modal");
+            let likesCheck = [[${dto.likesCheck}]];
+            heartClass(likesCheck);
+            $("#heart").click(function(){
+                if(checkIsAuthenticated()){
+                    $.ajax({
+                        type: "post",
+                        url: "/used/likes",
+                        data: {postId: [[${dto.postId}]], likesCheck: likesCheck},
+                        success: function(likes){
+                            likesCheck = likes.likesCheck;
+                            heartClass(likesCheck);
+                            $(".likesCount").text(likes.likesCount);
+                        }
+                    });
+                }else{
+                    if(confirm("좋아요는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
+                        location.href="/member/loginForm";
+                    }
+                }
+            });
+            $("#open-modal").click(function(){
+                if(checkIsAuthenticated()){
+                    modal.css("display", "block");
+                    $("body").css("overflow", "hidden");
+                }else{
+                    if(confirm("신고는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
+                        location.href="/member/loginForm";
+                    }
+                }
+            });
+            $("#close-modal").click(function(){
+                modal.css("display", "none");
+                $("body").css("overflow", "auto");
+            });
+            $("#btnReport").click(function(){
+                const reportTypeId = $("#reportType_select");
+                const content = $("#content");
+                if(reportTypeId.val() == 0){
+                    alert("신고유형을 선택하세요");
+                    reportTypeId.focus();
+                    return;
+                }
+                if(content.val() == ""){
+                    alert("신고내용을 입력하세요");
+                    content.focus();
+                    return;
+                }
                 $.ajax({
                     type: "post",
-                    url: "/used/likes",
-                    data: {postId: [[${dto.postId}]], likesCheck: likesCheck},
-                    success: function(likes){
-                        likesCheck = likes.likesCheck;
-                        heartClass(likesCheck);
-                        $(".likesCount").text(likes.likesCount);
+                    url: "/used/report",
+                    data: {"postId": [[${dto.postId}]], "content": content.val(), "reportTypeId": reportTypeId.val()},
+                    success: function(){
+                        alert("신고완료");
+                        modal.css("display", "none");
+                        $("body").css("overflow", "auto");
+                        reportTypeId.val(0);
+                        content.val("");
                     }
                 });
-            }else{
-                if(confirm("좋아요는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
-                    location.href="/member/loginForm";
+            });
+        });
+        function heartClass(likesCheck){
+            if (likesCheck == 0) {
+                $("#heart").removeClass("bi-heart-fill").addClass("bi-suit-heart");
+            } else {
+                $("#heart").removeClass("bi-suit-heart").addClass("bi-heart-fill");
+            }
+        }
+    </script>
+    <script th:inline="javascript">
+        $(function(){
+            // list();
+            $("#btnWrite").click(function(){
+                var comment = $("#comment");
+                if(comment.val() == ""){
+                    alert("내용을 입력하세요");
+                    comment.focus();
+                    return;
                 }
-            }
+                $.ajax({
+                    type: "post",
+                    url: "/reply/write",
+                    data: {postId: [[${dto.postId}]], comment: $("#comment").val()},
+                    success: function() {
+                        alert("댓글을 작성했습니다");
+                        $("#comment").val("");
+                        list();
+                    }
+                });
+            });
         });
-        $("#open-modal").click(function(){
-            if(checkIsAuthenticated()){
-                modal.css("display", "block");
-                $("body").css("overflow", "hidden");
-            }else{
-                if(confirm("신고는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
-                    location.href="/member/loginForm";
+        function list() {
+            $.ajax({
+                type: "get",
+                url: "/reply/list",
+                data: {postId: [[${dto.postId}]]},
+                success: function(result) {
+                    $("#replyList").html(result);
+                    $(".replyBtn").css('display', 'block');
                 }
+            });
+        }
+        function deleteReply(replyId) {
+            if(confirm("댓글을 삭제하시겠습니까?")) {
+                $.ajax({
+                    type: "post",
+                    url: "/reply/delete",
+                    data: {replyId: replyId},
+                    success: function() {
+                        list();
+                    }
+                });
             }
-        });
-        $("#close-modal").click(function(){
-            modal.css("display", "none");
-            $("body").css("overflow", "auto");
-        });
-        $("#btnReport").click(function(){
-            const reportTypeId = $("#reportType_select");
-            const content = $("#content");
-            if(reportTypeId.val() == 0){
-                alert("신고유형을 선택하세요");
-                reportTypeId.focus();
-                return;
-            }
-            if(content.val() == ""){
-                alert("신고내용을 입력하세요");
-                content.focus();
+        }
+        function update(replyId) {
+            $(".comment_"+replyId).css("display", "none");
+            $(".buttonDiv_"+replyId).css("display", "none");
+            $(".commentUpdate_"+replyId).show();
+            $(".btnUpdateReply_"+replyId).show();
+        }
+        function updateReply(replyId) {
+            var comment = $(".commentUpdate_"+replyId);
+            if(comment.val() == "") {
+                alert("내용을 입력하세요");
+                comment.focus();
                 return;
             }
             $.ajax({
                 type: "post",
-                url: "/used/report",
-                data: {"postId": [[${dto.postId}]], "content": content.val(), "reportTypeId": reportTypeId.val()},
-                success: function(){
-                    alert("신고완료");
-                    modal.css("display", "none");
-                    $("body").css("overflow", "auto");
-                    reportTypeId.val(0);
-                    content.val("");
+                url: "/reply/update",
+                data: {replyId: replyId, comment: comment.val()},
+                success: function() {
+                    list();
                 }
             });
-        });
-    });
-    function heartClass(likesCheck){
-        if (likesCheck == 0) {
-            $("#heart").removeClass("bi-heart-fill").addClass("bi-suit-heart");
-        } else {
-            $("#heart").removeClass("bi-suit-heart").addClass("bi-heart-fill");
         }
-    }
-</script>
+        function reReply(replyId) {
+            $(".buttonDiv_"+replyId).css("display", "none");
+            $(".reComment_"+replyId).show();
+            $(".btnReReply_"+replyId).show();
+        }
+        function writeReReply(replyId) {
+            var comment = $(".reComment_"+replyId);
+            if(comment.val() == "") {
+                alert("내용을 입력하세요");
+                comment.focus();
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: "/reply/writeReReply",
+                data: {replyId: replyId, comment: comment.val()},
+                success: function() {
+                    list();
+                }
+            });
+        }
+    </script>
 </head>
 <body>
 <!-- Nav바-->
@@ -176,12 +265,12 @@ body{background-color: #f4f4f4;}
             <p th:text="${dto.content}" style="height: 60%; overflow: auto;"></p>
             <div style="display: flex; justify-content: space-between;">
                 <span th:text="'가격 : ' + ${dto.price} + ' 원'"></span>
-                <span th:text="'조회수 : ' + ${dto.postView}"</span>
+                <span th:text="'조회수 : ' + ${dto.postView}"></span>
             </div>
             <div class="atag" style="display: flex; gap: 20px; justify-content: flex-end;">
                 <div>
                     <span th:text="${dto.replyCount}"></span>
-                    <a href="#"><i class="bi bi-chat-text"></i></a>
+                    <a href="#" onclick="list()"><i class="bi bi-chat-text"></i></a>
                 </div>
                 <div id="likes">
                     <span class="likesCount">[[${dto.likesCount}]]</span>
@@ -199,8 +288,14 @@ body{background-color: #f4f4f4;}
         </div>
     </section>
 
-    <section class="mt-2" style="height: 500px; border: 1px solid red; width: 600px;">
-    </section>
+
+    <div class="replyBtn" style="margin: 20px; display: none; width: 100%;">
+        <textarea rows="3" id="comment" style="width: 100%; border-radius: 30px; resize: none; padding: 20px;" placeholder="댓글 작성"></textarea>
+        <div id="button_div" style="text-align: right;">
+            <button type="button" id="btnWrite">작성</button>
+        </div>
+    </div>
+    <section class="mt-2" id="replyList"></section>
 
 
     <!--3번 박스 비슷한 게시글 리스트 보는곳-->

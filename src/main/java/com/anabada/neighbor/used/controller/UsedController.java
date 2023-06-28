@@ -67,7 +67,7 @@ public class UsedController {
     public void findImg(long postId, HttpServletResponse response) throws IOException {
         String filenames = usedService.findImgUrl(postId);
 //        System.out.println("filenames = " + filenames);
-        usedService.downloadFiles(filenames, response);
+        downFiles(filenames,response);
     }
     @GetMapping("/downFiles")//이미지 다운
     public void downFiles(String img,HttpServletResponse response) throws IOException{
@@ -114,9 +114,9 @@ public class UsedController {
 
     @GetMapping("/likePost") //좋아요 누른 게시글
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String likePost(Model model, long memberId, Criteria criteria) {
-      List<Used> usedList=usedService.likePost(memberId,criteria);
-        int total = usedService.countLikePost(memberId);
+    public String likePost(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails, Criteria criteria) {
+      List<Used> usedList=usedService.likePost(principalDetails.getMember().getMemberId(),criteria);
+        int total = usedService.countLikePost(principalDetails.getMember().getMemberId());
         model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
       model.addAttribute("list",usedList);
         return "member/myLikes";

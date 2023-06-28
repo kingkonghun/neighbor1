@@ -60,7 +60,7 @@ public interface MemberRepository {
     /**
      * 개인 정보 수정
      */
-    void editInfo(Member member);//비밀번호가 들어왔을경우
+    void editInfo(Member member);
 
 
 
