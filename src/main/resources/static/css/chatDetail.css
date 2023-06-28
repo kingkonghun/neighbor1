@@ -255,9 +255,23 @@ body{/*컨테이너 배경*/
     justify-content: flex-end;
 }
 .frnd_message{
-    justify-content: flex-start;
+    display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        width: 50%;
 }
 .frnd_message p{
+
+    position: relative;
+    right: -20%;
+    /*text-align: right;*/
+
+    max-width: 120%;
+    padding: 12px;
+    /*background: #dcf8c6;*/
+    border-radius: 10px;
+    font-size: 0.9em;
     background: #fff;
     text-align: left;
 }
@@ -276,7 +290,8 @@ body{/*컨테이너 배경*/
 .join p{
     background: #d2d2d2;
     text-align: center;
-    right: -80px;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .chatbox_input{/*채팅 입력칸 배경*/
@@ -306,6 +321,5 @@ body{/*컨테이너 배경*/
     margin-bottom: 15px;
 }
 .user_profile span{
-    margin-left: 50px;
     margin-top: 8px;
 }

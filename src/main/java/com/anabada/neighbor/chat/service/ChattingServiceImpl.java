@@ -40,38 +40,43 @@ public class ChattingServiceImpl implements ChattingService {
 
         String memberName = principalDetails.getMember().getMemberName();
 
-        ChattingRoom chattingRoomTemp = chattingRepository.roomCheck(chattingRoom);
+        if (type.equals("used")) {
+            ChattingRoom chattingRoomTemp = chattingRepository.roomCheck(chattingRoom);
 
-        if (chattingRoomTemp == null) {
-            chattingRepository.insertRoom(chattingRoom);
+            if (chattingRoomTemp == null) {
+                chattingRepository.insertRoom(chattingRoom);
 
-            Post post = usedRepository.findPost(chattingRoom.getPostId());
-            Member member = memberRepository.findByMemberId(post.getMemberId());
+                Post post = usedRepository.findPost(chattingRoom.getPostId());
+                Member member = memberRepository.findByMemberId(post.getMemberId());
 
-            long roomId = chattingRoom.getRoomId();
-            long receiver = member.getMemberId();
+                long roomId = chattingRoom.getRoomId();
+                long receiver = member.getMemberId();
 
-            Chat chat = Chat.builder()
-                    .roomId(roomId)
-                    .sender(memberId)
-                    .senderName(memberName)
-                    .receiver(receiver)
-                    .receiverName(memberRepository.findMemberName(receiver))
-                    .content(memberName + "님이 입장하셨습니다.")
-                    .messageDate(dateFormat.format(new Date()))
-                    .messageType("ENTER")
-                    .build();
-            chattingRepository.insertMessage(chat);
+                Chat chat = Chat.builder()
+                        .roomId(roomId)
+                        .sender(memberId)
+                        .senderName(memberName)
+                        .receiver(receiver)
+                        .receiverName(memberRepository.findMemberName(receiver))
+                        .content(memberName + "님이 입장하셨습니다.")
+                        .messageDate(dateFormat.format(new Date()))
+                        .messageType("ENTER")
+                        .build();
+                chattingRepository.insertMessage(chat);
 
-            chattingRepository.insertChatMember(roomId, memberId);
-            chattingRepository.insertChatMember(roomId, receiver);
+                chattingRepository.insertChatMember(roomId, memberId);
+                chattingRepository.insertChatMember(roomId, receiver);
 
-            simpMessagingTemplate.convertAndSendToUser(String.valueOf(chat.getReceiver()), "/topic/messageNotification", chat);
-            simpMessagingTemplate.convertAndSend("/topic/message/" + chat.getRoomId(), chat);
-            return roomId;
+                simpMessagingTemplate.convertAndSendToUser(String.valueOf(chat.getReceiver()), "/topic/messageNotification", chat);
+                simpMessagingTemplate.convertAndSend("/topic/message/" + chat.getRoomId(), chat);
+                return roomId;
+            }else {
+                return chattingRoomTemp.getRoomId();
+            }
         }else {
-            return chattingRoomTemp.getRoomId();
+            return 0;
         }
+
     }
 
     @Override
