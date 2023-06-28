@@ -1,45 +1,81 @@
 <!DOCTYPE html>
 <html lang="ko">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="오이마켓" />
-        <meta name="author" content="아나바다" />
-        <title>오이마켓</title>
-        <th:block th:insert="/common/common :: fragment-header"></th:block>
-
-        <link href="/css/style.css" rel="stylesheet" type="text/css">
-        <style>
-            .usedTitle{font-family: 'GangwonEduPowerExtraBoldA'; }
-            .usedTitle{text-align: center;}
-            .section1{background-color: rgb(255, 255, 230);}
-            .container .title ,.subtitle{text-align: right;}
-            .container .title{font-size: xxx-large; margin-bottom: 1em;}
-            .container .subtitle{font-size: x-large;}
-        </style>
-        <script th:inline="javascript">
-            window.onload = function () {
-                const message = [[${msg}]];
-                console.log(message);
-                if(message){
-                    alert("비밀번호가 변경되었습니다. 다시 로그인 해 주세요.");
-                    location.href="/logout";
-                }
-            };
-        </script>
-    </head>
-    <body>
-        <!-- Nav바-->
-     <div th:replace="nav :: div"></div>
-        <!-- 헤더-->
-        <header class="bg-image py-5 mainBackgroundImg">
-            <div class="container px-4 px-lg-5 my-5" style="height: 500px;">
-                <div class="container" >
-                    <h1 class="title">아-나-바-다</h1>
-                    <p class="subtitle">중고거래, 동호회 등 내 주변에서 동네 친구찾자!</p>
-                </div>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="오이마켓" />
+<meta name="author" content="아나바다" />
+<title>오이마켓</title>
+<th:block th:insert="/common/common :: fragment-header"></th:block>
+<!--<link href="/css/style.css" rel="stylesheet" type="text/css">-->
+<!--헤더 스타일-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/css/index.css}">
+<link rel="preload" th:href="@{/img/hero-banner.png}">
+<!--사이드바 스타일-->
+<link rel="stylesheet" href="/css/sidenav.css">
+<style>
+    .usedTitle{font-family: 'GangwonEduPowerExtraBoldA'; }
+    .usedTitle{text-align: center;}
+    .section1{background-color: rgb(255, 255, 230);}
+    .container .title ,.subtitle{text-align: right;}
+    .container .title{font-size: xxx-large; margin-bottom: 1em;}
+    .container .subtitle{font-size: x-large;}
+</style>
+<script th:inline="javascript">
+    window.onload = function () {
+        const message = [[${msg}]];
+        console.log(message);
+        if(message){
+            alert("비밀번호가 변경되었습니다. 다시 로그인 해 주세요.");
+            location.href="/logout";
+        }
+    };
+</script>
+</head>
+<body>
+<!-- Nav바-->
+<div th:replace="nav :: div"></div>
+<!-- 헤더-->
+<header class="bg-image mainBackgroundImg">
+    <section class="section hero" aria-label="home">
+        <div class="container">
+            <div class="hero-content">
+                <p class="hero-subtitle">👋, My name is 아나바다</p>
+                <h1 class="headline-lg">저와 일상의 소소한 즐거움을 함께 나눠요.</h1>
+                <p class="hero-text body-md">
+                    Anytime, anywhere!
+                </p>
+                <a href="#section1" class="btn1 btn1-primary">Let's Start</a>
             </div>
-        </header>
+            <figure class="hero-banner">
+                <img th:src="@{/img/hero-banner.png}" width="680" height="400"
+                     alt="Annie, the blonde, dressed in a green hoodie with a smile on her face" class="w-100">
+            </figure>
+        </div>
+    </section>
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                let target = document.querySelector(this.getAttribute('href'));
+                let headerOffset = 63;  // 조절위치
+                let elementPosition = target.offsetTop;
+                let offsetPosition = elementPosition - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            });
+        });
+    </script>
+</header>
+
+
         <!-- 섹션 -->
         <section class="py-5 section1">
             <div class="usedTitle" >

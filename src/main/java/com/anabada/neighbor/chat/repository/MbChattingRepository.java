@@ -1,6 +1,7 @@
 package com.anabada.neighbor.chat.repository;
 
 import com.anabada.neighbor.chat.domain.Chat;
+import com.anabada.neighbor.chat.domain.ChattingMember;
 import com.anabada.neighbor.chat.domain.ChattingMessage;
 import com.anabada.neighbor.chat.domain.ChattingRoom;
 import org.apache.ibatis.annotations.*;
@@ -25,7 +26,7 @@ public interface MbChattingRepository extends ChattingRepository {
     void insertChatMember(@Param("roomId") long roomId, @Param("memberId") long memberId);
 
     @Override
-    @Insert("insert into chattingMessage (roomId, writer, content) values (#{roomId}, #{sender}, #{content})")
+    @Insert("insert into chattingMessage (roomId, writer, content, messageType) values (#{roomId}, #{sender}, #{content}, #{messageType})")
     void insertMessage(Chat chat);
 
     @Override
@@ -47,4 +48,8 @@ public interface MbChattingRepository extends ChattingRepository {
     @Override
     @Select("select roomId from chattingMember where memberId = #{memberId} order by roomId desc")
     List<Long> findRoomIdByMemberId(long memberId);
+
+    @Override
+    @Select("select count(*) from chattingMember where roomId = #{roomId} and memberId = #{memberId}")
+    int check(ChattingMember chattingMember);
 }

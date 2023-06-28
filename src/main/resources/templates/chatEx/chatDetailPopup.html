@@ -27,24 +27,29 @@
     <!--채팅방-->
     <div class="chatBox" id="messages">
       <div th:each="row : ${list}">
-        <div class="message my_message" th:if="${row.sender} == ${#authentication.principal.member.memberId}"><!--내가 보낸 부분 오른쪽-->
+        <div class="message my_message" th:if="${row.messageType == 'SEND' && row.sender == #authentication.principal.member.memberId}"><!--내가 보낸 부분 오른쪽-->
           <p th:inline="text">
             [[${row.content}]]<br>
             <span th:text="${row.messageDate}"></span>
           </p><!--시간-->
         </div>
-        <div class="message frnd_message" th:if="${row.sender} != ${#authentication.principal.member.memberId}"><!--상대가 보낸 부분 왼쪽-->
+        <div class="message frnd_message" th:if="${row.messageType == 'SEND' && row.sender != #authentication.principal.member.memberId}"><!--상대가 보낸 부분 왼쪽-->
+          <div class="user_profile"><!--상대 대화 위에 이미지와 이름 생성-->
+            <img th:src="@{/member/findProfileImg(memberId=${row.receiver})}" class="room_cover"><!--상대 사진-->
+            <span th:text="${row.receiverName}"></span><!--상대 이름-->
+          </div>
           <p th:inline="text">
             [[${row.content}]]<br>
             <span th:text="${row.messageDate}"></span>
           </p><!--시간-->
         </div>
-
+        <div class="message1 join" th:if="${row.messageType} == 'ENTER'"><!--상대가 보낸 부분 왼쪽-->
+          <p th:text="${row.content}"></p>
+        </div>
       </div>
+
     </div>
-<!--      <div class="message1 join">-->
-<!--        <p>사용자 이씨가 입장하였습니다.</p>-->
-<!--      </div>-->
+
     <!--채팅입력 부분-->
     <div class="chatbox_input">
       <input type="text" id="message" placeholder="메세지를 입력하세요.">

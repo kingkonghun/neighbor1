@@ -188,18 +188,20 @@ body{background-color: #f4f4f4;}
                     <i id="heart" style="color: red"></i>
                 </div>
             </div>
-            <div style="text-align: right;">
+            <div style="text-align: right; display: flex; justify-content: space-between;">
+                <form method="post" action="/openRoom" name="chatForm" >
+                    <input type="hidden" th:value="${dto.postId}" name="postId">
+                    <button class="py-1" id="btnChat" type="button" sec:authorize="isAuthenticated()" th:if="${dto.memberId != #authentication.principal.member.memberId}">채팅하기</button>
+                </form>
                 <a href="#" id="open-modal">신고</a>
             </div>
-            <form method="post" action="/openRoom" name="chatForm">
-                <input type="hidden" th:value="${dto.postId}" name="postId">
-                <input type="hidden" th:value="${dto.memberId}" name="memberId">
-                <button id="btnChat" type="button">채팅</button>
-            </form>
+
         </div>
     </section>
 
+    <section class="mt-2" style="height: 500px; border: 1px solid red; width: 600px;">
     </section>
+
 
     <!--3번 박스 비슷한 게시글 리스트 보는곳-->
     <section class="item3 row ">
@@ -248,8 +250,7 @@ body{background-color: #f4f4f4;}
         swipeToSlide: true,
         arrow:true,
         dots:true,
-
-});
+    });
 </script>
 
 <!--신고모달-->

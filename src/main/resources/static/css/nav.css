@@ -416,7 +416,7 @@ top: 270px;
 .popupup .pop_detail .usernamecall{
     display: flex;
     justify-content: space-between;
-    width: 140px;
+    width: auto;
 }
 
 .popupup .pop_detail .usernamecall h4 {

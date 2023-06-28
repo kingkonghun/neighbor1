@@ -1,6 +1,7 @@
 package com.anabada.neighbor.chat.service;
 
 import com.anabada.neighbor.chat.domain.Chat;
+import com.anabada.neighbor.chat.domain.ChattingMember;
 import com.anabada.neighbor.chat.domain.ChattingMessage;
 import com.anabada.neighbor.chat.domain.ChattingRoom;
 import com.anabada.neighbor.chat.repository.ChattingRepository;
@@ -25,26 +26,48 @@ public class ChattingServiceImpl implements ChattingService {
     private final ChattingRepository chattingRepository;
     private final MemberRepository memberRepository;
     private final UsedRepository usedRepository;
-    private Map<String, Integer> chatNotificationMap = new HashMap<>();
+    private Map<String, Integer> chatNotificationMap = new HashMap<>(); // 새로운 채팅 갯수
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
-    public long openRoom(ChattingRoom chattingRoom, PrincipalDetails principalDetails) {
+    public long openRoom(long postId, PrincipalDetails principalDetails, String type) {
+        long memberId = principalDetails.getMember().getMemberId();
 
-        chattingRoom.setCreator(principalDetails.getMember().getMemberId());
+        ChattingRoom chattingRoom = ChattingRoom.builder()
+                .postId(postId)
+                .creator(memberId)
+                .build();
+
+        String memberName = principalDetails.getMember().getMemberName();
 
         ChattingRoom chattingRoomTemp = chattingRepository.roomCheck(chattingRoom);
 
         if (chattingRoomTemp == null) {
             chattingRepository.insertRoom(chattingRoom);
 
-            long roomId = chattingRoom.getRoomId();
-
             Post post = usedRepository.findPost(chattingRoom.getPostId());
             Member member = memberRepository.findByMemberId(post.getMemberId());
 
-            chattingRepository.insertChatMember(roomId, chattingRoom.getCreator());
-            chattingRepository.insertChatMember(roomId, member.getMemberId());
+            long roomId = chattingRoom.getRoomId();
+            long receiver = member.getMemberId();
+
+            Chat chat = Chat.builder()
+                    .roomId(roomId)
+                    .sender(memberId)
+                    .senderName(memberName)
+                    .receiver(receiver)
+                    .receiverName(memberRepository.findMemberName(receiver))
+                    .content(memberName + "님이 입장하셨습니다.")
+                    .messageDate(dateFormat.format(new Date()))
+                    .messageType("ENTER")
+                    .build();
+            chattingRepository.insertMessage(chat);
+
+            chattingRepository.insertChatMember(roomId, memberId);
+            chattingRepository.insertChatMember(roomId, receiver);
+
+            simpMessagingTemplate.convertAndSendToUser(String.valueOf(chat.getReceiver()), "/topic/messageNotification", chat);
+            simpMessagingTemplate.convertAndSend("/topic/message/" + chat.getRoomId(), chat);
             return roomId;
         }else {
             return chattingRoomTemp.getRoomId();
@@ -66,7 +89,6 @@ public class ChattingServiceImpl implements ChattingService {
         chat.setSenderName(memberRepository.findMemberName(chat.getSender()));
         chat.setMessageDate(dateFormat.format(new Date()));
 
-        System.out.println(dateFormat.format(new Date()));
         if (chatNotificationMap.get(key) == null || chatNotificationMap.get(key) == 0) {
             chatNotificationMap.put(key, 1);
         } else {
@@ -122,6 +144,7 @@ public class ChattingServiceImpl implements ChattingService {
                     .receiverName(memberRepository.findMemberName(memberId))
                     .content(message.getContent())
                     .messageDate(dateFormat.format(message.getMessageDate()))
+                    .messageType(message.getMessageType())
                     .build();
             chatList.add(chat);
         }
@@ -138,6 +161,18 @@ public class ChattingServiceImpl implements ChattingService {
                 .receiverName(memberRepository.findMemberName(receiver))
                 .build();
         return chat;
+    }
+
+    @Override
+    public boolean check(long roomId, PrincipalDetails principalDetails) {
+
+        int result = chattingRepository.check(ChattingMember.builder()
+                .roomId(roomId)
+                .memberId(principalDetails.getMember().getMemberId())
+                .build());
+
+
+        return result > 0 ? true : false;
     }
 
 }

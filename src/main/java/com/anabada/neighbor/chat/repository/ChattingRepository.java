@@ -1,6 +1,7 @@
 package com.anabada.neighbor.chat.repository;
 
 import com.anabada.neighbor.chat.domain.Chat;
+import com.anabada.neighbor.chat.domain.ChattingMember;
 import com.anabada.neighbor.chat.domain.ChattingMessage;
 import com.anabada.neighbor.chat.domain.ChattingRoom;
 import org.springframework.stereotype.Repository;
@@ -26,4 +27,6 @@ public interface ChattingRepository {
     List<Long> findChatMemberIdByRoomId(long roomId);
 
     List<Long> findRoomIdByMemberId(long memberId);
+
+    int check(ChattingMember chattingMember);
 }
