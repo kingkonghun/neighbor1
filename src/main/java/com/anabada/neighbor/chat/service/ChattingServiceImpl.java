@@ -9,6 +9,7 @@ import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.repository.MemberRepository;
 import com.anabada.neighbor.used.domain.Post;
+import com.anabada.neighbor.used.domain.Product;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -48,11 +49,15 @@ public class ChattingServiceImpl implements ChattingService {
 
                 Post post = usedRepository.findPost(chattingRoom.getPostId());
                 Member member = memberRepository.findByMemberId(post.getMemberId());
+                Product product = usedRepository.findProduct(post.getPostId());
 
                 long roomId = chattingRoom.getRoomId();
                 long receiver = member.getMemberId();
 
                 Chat chat = Chat.builder()
+                        .postId(postId)
+                        .title(post.getTitle())
+                        .price(product.getPrice())
                         .roomId(roomId)
                         .sender(memberId)
                         .senderName(memberName)
@@ -81,7 +86,6 @@ public class ChattingServiceImpl implements ChattingService {
 
     @Override
     public void sendMessage(Chat chat, Principal principal) {
-
 
         chat.setSender(Long.parseLong(principal.getName()));
         chat.setSenderName(memberRepository.findMemberName(chat.getSender()));
@@ -141,7 +145,13 @@ public class ChattingServiceImpl implements ChattingService {
         List<ChattingMessage> messageList = chattingRepository.chattingMessageList(roomId);
 
         for (ChattingMessage message : messageList) {
+            ChattingRoom chattingRoom = chattingRepository.findChatRoomByRoomId(message.getRoomId());
+            Post post = usedRepository.findPost(chattingRoom.getPostId());
+            Product product = usedRepository.findProduct(post.getPostId());
             Chat chat = Chat.builder()
+                    .postId(post.getPostId())
+                    .title(post.getTitle())
+                    .price(product.getPrice())
                     .roomId(message.getRoomId())
                     .sender(message.getWriter())
                     .senderName(memberRepository.findMemberName(message.getWriter()))

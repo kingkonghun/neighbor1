@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>login</title>
   <th:block th:insert="/common/common :: fragment-header"></th:block>
 <link th:href="@{/css/login.css}" rel="stylesheet" type="text/css">
@@ -9,29 +10,28 @@
 </head>
 <body>
 <section class="login-form">
-  <h1>LOGIN</h1>
+  <h1><a href="/">아나바다</a></h1>
   <form action="/login" method="post" name="loginForm">
     <div class="int-area">
       <input type="email" name="memberEmail" id="memberEmail" autocomplete="off" required>
-      <label for="memberEmail">member E-MAIL</label>
+      <label for="memberEmail">이메일</label>
     </div>
     <div class="int-area">
       <input type="password" name="memberPWD" id="memberPWD" autocomplete="off" required>
-      <label for="memberPWD">PASSWORD</label>
+      <label for="memberPWD">비밀번호</label>
     </div>
     <div>
       <span th:text="${errorMessage}" style="color: red;"></span>
     </div>
     <div>
-      <a href="/member/joinForm">계정이 없으신가요?</a> <br>
-      <button class="mb-2" id="btn" style="border: 0; background-color: transparent; cursor:pointer;"><img th:src="@{/img/nomal.png}" style="width: 400px;"></button> <br>
+      <button class="my-2" id="btn" style="border: 0; background-color: transparent; cursor:pointer;"><img th:src="@{/img/nomal.png}" style="width: 400px;"></button> <br>
       <a href="/oauth2/authorization/google"><img class="mb-2" th:src="@{/img/google.png}" style="width: 400px;"></a> <br>
       <a href="/oauth2/authorization/kakao"><img class="mb-2" th:src="@{/img/kakao.png}" style="width: 400px;"></a> <br>
       <a href="/oauth2/authorization/naver"><img class="mb-2" th:src="@{/img/naver.png}" style="width: 400px;"></a> <br>
     </div>
   </form>
   <div class="caption">
-    <a href="#">Forgot Password?</a>
+    <a href="/member/joinForm">계정이 없으신가요?</a>
   </div>
 
 

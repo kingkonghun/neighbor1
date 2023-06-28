@@ -53,6 +53,9 @@ body{/*컨테이너 배경*/
     align-items: center;
     padding: 0 15px;
 }
+#block {
+    height: 80px;
+}
 .userimg{
     position: relative;
     width: 40px;
@@ -79,7 +82,7 @@ body{/*컨테이너 배경*/
     font-size: 1.5em;
     margin-left: 22px;
 }
-.search_chat{
+/*.search_chat{
     position: relative;
     width: 100%;
     height: 50px;
@@ -105,7 +108,7 @@ body{/*컨테이너 배경*/
 }
 .search_chat div input::placeholder{
     color: #bbb;
-}
+}*/
 .fa-solid{/*돋보기*/
     position: absolute;
     left: 30px;
@@ -204,7 +207,7 @@ body{/*컨테이너 배경*/
 .chatBox{/*채팅 입력창*/
     position: relative;
     width: 100%;
-    height: calc(100% - 120px);/*60+60*/
+    height: calc(100% - 180px);/*60+60*/
     padding: 50px;
     overflow-y: auto;
     display:flex;
@@ -322,4 +325,63 @@ body{/*컨테이너 배경*/
 }
 .user_profile span{
     margin-top: 8px;
+}
+
+/*상품 설명란*/
+.chat_container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+.search_chat{
+    justify-content: space-between;
+    display: flex;
+    background-color: #f4f4f4;
+    position: fixed;
+    align-items: center;
+    top: 112px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 433px;
+    height: 80px;
+    /*border: 1px solid rgb(154, 154, 154);*/
+    border-radius: 12px;
+    z-index: 999;
+}
+.search_chat .room_detail{
+    display: flex;
+    align-items: center;
+
+}
+.search_chat .room_detail img{
+    width: 70px;
+    height: 70px;
+    margin-left: 15px;
+    border-radius: 8px;
+}
+.search_chat .room_detail .used_detail{
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+}
+.search_chat .room_detail .used_detail .used_name{
+    margin-bottom: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 160px;
+}
+.search_chat .room_used{
+    width: 70px;
+    height: 70px;
+    display: flex;
+
+}
+.search_chat button{
+    border-style: none;
+    border-radius: 8px;
+    background-color: #FF3366;
+    margin-right: 15px;
+    color: #FFFFFF;
 }

@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class Chat {
+    private long postId;
+    private String title;
+    private String price;
     private long roomId;
     private long receiver;
     private String receiverName;
