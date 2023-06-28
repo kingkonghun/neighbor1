@@ -15,6 +15,16 @@
         location.href= "/used/detail?postId="+postId;
       }
     }
+    function paging(num) {
+      $.ajax({
+        method:"get",
+        url: "/reply/myReply",
+        data: {"pageNum": num},
+        success: function (data) {
+          $(".myReply_div").html(data);
+        }
+      });
+    }
   </script>
 
 </head>
