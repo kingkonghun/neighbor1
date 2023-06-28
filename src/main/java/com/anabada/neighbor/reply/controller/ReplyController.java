@@ -26,6 +26,7 @@ public class ReplyController {
     @GetMapping("/list") //댓글 리스트
     public String reply(long postId, Model model) {
         model.addAttribute("list", replyService.list(postId));
+        System.out.println("replyList : "+replyService.list(postId));
         return "/reply/list";
     }
 

@@ -88,43 +88,10 @@
                 <p>같은제품 더 저렴하게 중고거래</p>
             </div>
             <div class="container px-4 px-lg-5 mt-5" >
-<!--                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" >-->
-<!--                    <div class="col mb-5" th:each="list:${starList}">-->
-<!--                        <div class="card h-100" >-->
-<!--                            &lt;!&ndash; 인기 제품 뱃지&ndash;&gt;-->
-<!--                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>-->
-<!--                            &lt;!&ndash; 중고상품 이미지  450 * 300이 적절&ndash;&gt;-->
-<!--                                <img style="width: 268px; height: 180px;" class="card-img-top"  th:src="@{/used/findImg(postId=${list.postId})}"  alt="실패">-->
-<!--                            &lt;!&ndash; 중고상품 상세&ndash;&gt;-->
-<!--                            <div class="card-body p-4">-->
-<!--                                <div class="text-center">-->
-<!--                                    &lt;!&ndash; 중고상품 이름&ndash;&gt;-->
-<!--                                    <h5 class="fw-bolder" th:text="${list.title}"></h5>-->
-<!--                                    &lt;!&ndash; 판매자 이름 &ndash;&gt;-->
-<!--                                    <h6 class="fw" th:text="${list.memberName}"></h6>-->
-<!--                                    &lt;!&ndash; 판매자 평점&ndash;&gt;-->
-<!--                                    <div class="d-flex justify-content-center small text-warning mb-2">-->
-<!--                                        <div class="bi-star-fill"></div>-->
-<!--                                        <div class="bi-star-fill"></div>-->
-<!--                                        <div class="bi-star-fill"></div>-->
-<!--                                        <div class="bi-star-fill"></div>-->
-<!--                                        <div class="bi-star-fill"></div>-->
-<!--                                    </div>                                -->
-<!--                                    &lt;!&ndash; 중고상품 가격&ndash;&gt;-->
-<!--                                    <p th:text="${list.price}"></p>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            &lt;!&ndash; 상품 구매하기&ndash;&gt;-->
-<!--                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">-->
-<!--                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" th:onclick="|location.href='@{/used/detail(postId=${list.postId})}'|">자세히 보기</a></div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
+
                 <div id="list" class="row">
                     <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${starList}">
-                        <div class="item p-3" th:onclick="|location.href='@{detail(postId=${row.postId})}'|">
+                        <div class="item p-3" th:onclick="|location.href='@{used/detail(postId=${row.postId})}'|">
                             <img class="list_img" th:src="@{/used/findImg(postId=${row.postId})}">
                             <div class="div_2 mt-3">
                                 <h5 th:text="${row.title}"></h5>

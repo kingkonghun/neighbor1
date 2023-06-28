@@ -67,7 +67,7 @@ public class UsedController {
     public void findImg(long postId, HttpServletResponse response) throws IOException {
         String filenames = usedService.findImgUrl(postId);
 //        System.out.println("filenames = " + filenames);
-        usedService.downloadFiles(filenames, response);
+        downFiles(filenames,response);
     }
     @GetMapping("/downFiles")//이미지 다운
     public void downFiles(String img,HttpServletResponse response) throws IOException{
