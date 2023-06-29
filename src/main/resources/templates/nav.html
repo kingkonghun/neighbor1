@@ -37,55 +37,7 @@
                     <span></span>
                     <span></span>
                 </label>
-<!--                <div class="sidebar">-->
-<!--                    <div class="menu">-->
-<!--                        <div class="center" sec:authorize="isAuthenticated()">-->
-<!--                            <div class="profile">-->
-<!--                                <div class="image">-->
-<!--                                    <div class="circle-1"></div>-->
-<!--                                    <div class="circle-2"></div>-->
-<!--                                    <img  id="imgSrc" th:src="@{/member/findProfileImg(memberId=${#authentication.principal.member.memberId})}" width="70" height="70" alt="Jessica Potter">-->
-<!--                                </div>-->
 
-<!--                                <div class="name">-->
-<!--                                    <p id="memberName"></p>-->
-<!--                                </div>-->
-
-<!--                                <div class="actions">-->
-<!--                                    <button type="button" class="btn" onclick="location.href='/member/myInfo'">마이페이지</button>-->
-<!--                                    <button type="button" class="btn" onclick="location.href='/logout'">로그아웃</button>-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-<!--                            <div class="stats">-->
-<!--                                <div class="box" onclick="myWrite()">-->
-<!--                                    <span class="value" id="countMyWrite"></span>-->
-<!--                                    <span class="parameter">내글</span>-->
-<!--                                </div>-->
-<!--                                <div class="box" onclick="myLikes()">-->
-<!--                                    <span class="value" id="likes"></span>-->
-<!--                                    <span class="parameter">관심 있는 글</span>-->
-<!--                                </div>-->
-<!--                                <div class="box">-->
-<!--                                    <span class="value" id="myScore"></span>-->
-<!--                                    <span class="parameter">내점수</span>-->
-<!--                                </div>-->
-
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="bottom">-->
-<!--                            <div sec:authorize="isAnonymous()">-->
-<!--                                <a href='/member/loginForm'>-->
-<!--                                    <i class="fa-solid fa-right-from-bracket"></i>-->
-<!--                                </a>-->
-<!--                                <span>로그인</span></div>-->
-<!--                            <div class="logout" sec:authorize="isAuthenticated()"><a href='/logout'>-->
-<!--                                <i class="fa-solid fa-right-from-bracket"></i>-->
-<!--                            </a>-->
-<!--                                <span>로그아웃</span></div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
                 <div class="sidebar">
                     <ul class="navbar-list">
                         <li class="navbar-item" sec:authorize="isAuthenticated()">
@@ -137,21 +89,19 @@
     </nav>
     <div id="top"></div>
     <div class="popupup">
-        <form method="post" action="/openRoom" name="popupForm">
-            <input type="hidden" name="postId">
-            <div class="imgbox">
-                <img class="userImg_">
+        <input type="hidden" id="popupRoomId">
+        <div class="imgbox">
+            <img class="userImg_">
+        </div>
+        <div class="pop_detail">
+            <div class="usernamecall">
+                <h4 id="popupName"></h4>
+                <p class="calltime"></p><!--이건 빼기-->
             </div>
-            <div class="pop_detail">
-                <div class="usernamecall">
-                    <h4 id="popupName"></h4>
-                    <p class="calltime"></p><!--이건 빼기-->
-                </div>
-                <div class="message_new">
-                    <p id="popup_message"></p>
-                </div>
+            <div class="message_new">
+                <p id="popup_message"></p>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 

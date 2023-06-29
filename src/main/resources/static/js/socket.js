@@ -25,7 +25,7 @@ function connect() {
     stompClient.connect({}, function (frame) {
         console.log("Connected: " + frame);
         stompClient.subscribe("/user/topic/messageNotification", function (chat) {
-            showTopNotification(JSON.parse(chat.body).sender, JSON.parse(chat.body).senderName, JSON.parse(chat.body).content, JSON.parse(chat.body).messageDate);
+            showTopNotification(JSON.parse(chat.body).sender, JSON.parse(chat.body).senderName, JSON.parse(chat.body).content, JSON.parse(chat.body).messageDate, JSON.parse(chat.body).roomId);
             refreshChatList();
         });
 
@@ -49,7 +49,7 @@ function showMessage(sender, senderName, content, messageDate, messageType) {
     }
 
 }
-function showTopNotification(sender, senderName, content, messageDate) {
+function showTopNotification(sender, senderName, content, messageDate, roomId) {
     $(".popupup").css("display", "flex");
     $(".userImg_").attr("src", "/member/findProfileImg?memberId="+sender);
     $("#popupName").text(senderName);
@@ -57,7 +57,7 @@ function showTopNotification(sender, senderName, content, messageDate) {
     $(".calltime").text(date);
     $("#popup_message").text(content);
     $(".popupup").fadeIn();
-
+    $("#popupRoomId").val(roomId);
     setTimeout(function() {
         $(".popupup").fadeOut();
     }, 3000);
