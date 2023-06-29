@@ -137,18 +137,21 @@
     </nav>
     <div id="top"></div>
     <div class="popupup">
-        <div class="imgbox">
-            <img class="userImg_">
-        </div>
-        <div class="pop_detail">
-            <div class="usernamecall">
-                <h4 id="popupName">김씨</h4>
-                <p class="calltime">10:56</p><!--이건 빼기-->
+        <form method="post" action="/openRoom" name="popupForm">
+            <input type="hidden" name="postId">
+            <div class="imgbox">
+                <img class="userImg_">
             </div>
-            <div class="message_new">
-                <p id="popup_message">새로운 메세지가 도착 하였습니다.</p>
+            <div class="pop_detail">
+                <div class="usernamecall">
+                    <h4 id="popupName"></h4>
+                    <p class="calltime"></p><!--이건 빼기-->
+                </div>
+                <div class="message_new">
+                    <p id="popup_message"></p>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 

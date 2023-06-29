@@ -67,6 +67,8 @@
                 $(".slick-next").css('display','none');
             }
 
+
+
             /**
              * 신고
              * @type {*|jQuery|HTMLElement}
@@ -275,6 +277,12 @@
                 }
             });
         }
+
+        function deletePost() {
+            if(confirm("게시물을 삭제하시겠습니까?")) {
+                document.postForm.submit();
+            }
+        }
     </script>
 </head>
 <body>
@@ -302,15 +310,18 @@
             <div class="flexBox" style="display: flex; justify-content: space-between;">
                 <h3 th:text="${dto.title}"></h3>
                 <th:block sec:authorize="isAuthenticated()">
-                    <li class="navList nav-item dropdown" style="list-style: none;" th:if="${dto.memberId == #authentication.principal.member.memberId}">
-                        <a class="nav-link " id="adminT" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">
-                            <i class="bi bi-three-dots-vertical"></i>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item">수정</a></li>
-                            <li><a class="dropdown-item" th:onclick="|location.href='@{/used/deletePost(postId=${dto.postId})}'|">삭제</a></li>
-                        </ul>
-                    </li>
+                    <form action="/used/postDelete" method="post" id="postForm" name="postForm">
+                        <input type="hidden" name="postId" th:value="${dto.postId}">
+                        <li class="navList nav-item dropdown" style="list-style: none;" th:if="${dto.memberId == #authentication.principal.member.memberId or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                            <a class="nav-link " id="adminT" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#" id="postUpdateForm">수정</a></li>
+                                <li><a class="dropdown-item" href="#" id="postDelete" onclick="deletePost()">삭제</a></li>
+                            </ul>
+                        </li>
+                    </form>
                 </th:block>
             </div>
             <div class="mb-2" style="display: flex; justify-content: space-between;">
@@ -337,7 +348,7 @@
                 </div>
             </div>
             <div style="text-align: right; display: flex; justify-content: space-between;">
-                <form method="post" action="/openRoom" name="chatForm" >
+                <form method="post" action="/openRoom" name="chatForm">
                     <input type="hidden" th:value="${dto.postId}" name="postId">
                     <button class="py-1" id="btnChat" type="button" sec:authorize="isAuthenticated()" th:if="${dto.memberId != #authentication.principal.member.memberId}">채팅하기</button>
                 </form>
