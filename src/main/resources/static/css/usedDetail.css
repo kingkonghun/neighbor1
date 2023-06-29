@@ -217,3 +217,38 @@ content{
     font-size: 20px;
     width: 100px;
 }
+
+#contentBlock {
+    width: 100%;
+    font-family: omyu_pretty;
+}
+#contentBlock textarea {
+    width: 100%;
+    border-radius: 12px;
+    resize: none;
+    border-style: none;
+    background-color: #f4f4f4;
+}
+#button_div {
+    text-align: right;
+}
+#reply {
+    width: 1100px;
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    display: none;
+}
+#replyList {
+    height: 600px;
+    overflow-y: auto;
+    display:flex;
+    flex-direction: column-reverse;
+}
+#btnReplyWrite {
+    background-color:#FF3366;
+    color:#FFFFFF;
+    border-radius: 8px;
+    border-style: none;
+}
+
+
