@@ -128,6 +128,15 @@ public class UsedController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/success")
+    public void soldOut(long postId){
+        usedService.soldOut(postId);
+    }
 
+    @GetMapping("/deletePost")
+    public String deletePost(long postId){
+        usedService.soldOut(postId);
+        return null;
+    }
 
 }

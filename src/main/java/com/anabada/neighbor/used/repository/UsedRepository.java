@@ -172,4 +172,10 @@ public interface UsedRepository {
     void UpdateReportStatus(long reportId);
 
     List<String> findAllImgUrl(long postId);
+
+    /**
+     * 판매완료
+     * @param postId
+     */
+    void soldOut(long postId);
 }

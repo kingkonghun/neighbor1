@@ -407,6 +407,11 @@ public class UsedServiceImpl implements UsedService{
     public int countLikePost(long memberId) {
         return usedRepository.findLikesCount(memberId);
     }
+
+    @Override
+    public void soldOut(long postId) {
+        usedRepository.soldOut(postId);
+    }
 }
 
 

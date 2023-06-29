@@ -36,12 +36,7 @@ body {
 	width: 20px;
 }
 
-.img-circle img {
-	height: 100px;
-	width: 100px;
-	border-radius: 100%;
-	border: 5px solid #fff;
-}
+
 .nav-pills .nav-link.active {
     background-color: #ffc107 !important;
 }

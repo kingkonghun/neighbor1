@@ -80,4 +80,10 @@ public interface UsedService {
     void reportOk(ReportOk reportOk);
 
     int countLikePost(long memberId);
+
+    /**
+     * 판매완료
+     * @param postId
+     */
+    void soldOut(long postId);
 }

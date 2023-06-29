@@ -168,7 +168,7 @@
                 });
             });
             $("#open-reply").click(function(){
-                $("#reply").show();
+                $("#reply").slideDown();
             });
         });
 
@@ -293,7 +293,20 @@
 
     <section class="item2 p-4">
         <div style="display: flex; flex-direction: column; width: 100%;">
-            <h3 th:text="${dto.title}"></h3>
+            <div class="flexBox" style="display: flex; justify-content: space-between;">
+                <h3 th:text="${dto.title}"></h3>
+                <th:block sec:authorize="isAuthenticated()">
+                    <li class="navList nav-item dropdown" style="list-style: none;" th:if="${dto.memberId == #authentication.principal.member.memberId}">
+                        <a class="nav-link " id="adminT" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item">수정</a></li>
+                            <li><a class="dropdown-item" th:onclick="|location.href='@{/used/deletePost(postId=${dto.postId})}'|">삭제</a></li>
+                        </ul>
+                    </li>
+                </th:block>
+            </div>
             <div class="mb-2" style="display: flex; justify-content: space-between;">
                 <ul class="username">
                     <li><img th:src="@{/member/findProfileImg(memberId=${dto.memberId})}" alt="프로필 사진"/></li>
@@ -309,7 +322,7 @@
             <div class="atag" style="display: flex; gap: 20px; justify-content: flex-end;">
                 <div>
                     <span th:text="${dto.replyCount}"></span>
-                    <a href="#" id="open-reply"><i class="bi bi-chat-text"></i></a>
+                    <a href="javascript:void(0)" id="open-reply"><i class="bi bi-chat-text"></i></a>
                 </div>
                 <div id="likes">
                     <span class="likesCount">[[${dto.likesCount}]]</span>
