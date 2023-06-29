@@ -34,8 +34,23 @@
             }
         };
         $(function () {
+
+            // 비밀번호 정규식 패턴
+            const passwordPattern = /^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+
+            // 닉네임 정규식 패턴
+            const nicknamePattern = /^[a-zA-Z가-힣]{2,12}$/;
+
+            const memberName = $("#memberName");
+            const memberPWD = $("#newPWD");
+
             $("#btnInfo").on('click', function () {
                 if (confirm("개인정보를 수정 하시겠습니까?")) {
+                    if (!nicknamePattern.test(memberName.val())) {
+                        alert("2~12글자 사이로 입력해주세요.");
+                        memberName.focus();
+                        return false;
+                    }
                     $("#infoForm").submit();
                 }
             });
@@ -45,6 +60,11 @@
                 if (confirm("비밀번호를 변경 하시겠습니까?")) {
                     if (pwd !== pwdCk) {
                         alert("비밀번호가 일치하지 않습니다. 다시 입력해주세요");
+                        return false;
+                    }
+                    if (!passwordPattern.test(memberPWD.val())) {
+                        alert("8글자 이상, 영어대소문자와 특수문자(!@#$%^&*)를 사용해야 합니다.");
+                        memberPWD.focus();
                         return false;
                     }
 
@@ -100,7 +120,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>닉네임</label>
-                                        <input type="text" name="memberName" class="form-control" th:value="${list.memberName}" required>
+                                        <input id="memberName" type="text" name="memberName" class="form-control" th:value="${list.memberName}" required>
                                         <input type="hidden" name="memberId" class="form-control" th:value="${list.memberId}">
                                     </div>
                                 </div>
@@ -135,7 +155,6 @@
 
                             </div>
                             <div style="margin-top: 24px;">
-<!--                                <button class="btn btn-primary" style="background-color:#FF3366;" id="btnInfo">수정</button>-->
                                 <input type="button" class="btn btn-primary" id="btnInfo" value="수정">
                             </div>
                         </form>
