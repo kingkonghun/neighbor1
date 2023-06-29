@@ -3,6 +3,8 @@ header {
     text-align: center;
     font-family: GangwonEduPowerExtraBoldA;
 }
+#writeForm{font-family: 'omyu_pretty';}
+.write, .category,#btnPlus{font-family: 'omyu_pretty';}
 .container {
     height: 100%;
 }
