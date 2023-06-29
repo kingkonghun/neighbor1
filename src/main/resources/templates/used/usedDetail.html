@@ -168,7 +168,14 @@
                 });
             });
             $("#open-reply").click(function(){
-                $("#reply").show();
+                $("#reply").slideDown();
+                $("#open-reply").css("display", "none");
+                $("#close-reply").show();
+            });
+            $("#close-reply").click(function(){
+                $("#reply").slideUp();
+                $("#open-reply").show();
+                $("#close-reply").css("display", "none");
             });
         });
 
@@ -308,7 +315,8 @@
             <div class="atag" style="display: flex; gap: 20px; justify-content: flex-end;">
                 <div>
                     <span th:text="${dto.replyCount}"></span>
-                    <a href="#" id="open-reply"><i class="bi bi-chat-text"></i></a>
+                    <a href="javascript:void(0)" id="open-reply" ><i class="bi bi-chat-text"></i></a>
+                    <a href="javascript:void(0)" id="close-reply" style="display: none;"><i class="bi bi-chat-text"></i></a>
                 </div>
                 <div id="likes">
                     <span class="likesCount">[[${dto.likesCount}]]</span>
