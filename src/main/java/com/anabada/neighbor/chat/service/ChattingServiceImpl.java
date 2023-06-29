@@ -168,17 +168,17 @@ public class ChattingServiceImpl implements ChattingService {
         return chatList;
     }
 
-//    @Override
-//    public Chat getReceiver(long roomId, PrincipalDetails principalDetails) {
-//        List<Long> memberIdList = chattingRepository.findChatMemberIdByRoomId(roomId);
-//        long memberId = principalDetails.getMember().getMemberId();
-//        long receiver = memberId == memberIdList.get(0) ? memberIdList.get(1) : memberIdList.get(0);
-//        Chat chat = Chat.builder()
-//                .receiver(receiver)
-//                .receiverName(memberRepository.findMemberName(receiver))
-//                .build();
-//        return chat;
-//    }
+    @Override
+    public Chat getReceiver(long roomId, PrincipalDetails principalDetails) {
+        List<Long> memberIdList = chattingRepository.findChatMemberIdByRoomId(roomId);
+        long memberId = principalDetails.getMember().getMemberId();
+        long receiver = memberId == memberIdList.get(0) ? memberIdList.get(1) : memberIdList.get(0);
+        Chat chat = Chat.builder()
+                .receiver(receiver)
+                .receiverName(memberRepository.findMemberName(receiver))
+                .build();
+        return chat;
+    }
 
     @Override
     public boolean check(long roomId, PrincipalDetails principalDetails) {

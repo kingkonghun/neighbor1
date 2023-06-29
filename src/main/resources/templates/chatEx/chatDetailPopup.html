@@ -32,16 +32,16 @@ $(function(){
 <body>
 <input type="hidden" id="postId" th:value="${list[0].postId}">
 <input type="hidden" id="roomId" th:value="${list[0].roomId}">
-<input type="hidden" id="receiver" th:value="${list[0].receiver}">
+<input type="hidden" id="receiver" th:value="${receiver.receiver}">
 <input type="hidden" id="sender" th:value="${#authentication.principal.member.memberId}">
 <div class="container3">
   <div class="rightSide">
     <div class="header"><!--채팅 상대방 창 -->
       <div class="imgText">
         <div class="userimg">
-          <img th:src="@{/member/findProfileImg(memberId=${list[0].receiver})}" class="cover"><!--상대방 이미지-->
+          <img th:src="@{/member/findProfileImg(memberId=${receiver.receiver})}" class="cover"><!--상대방 이미지-->
         </div>
-        <h4 th:text="${list[0].receiverName}"></h4><!--상대 이름-->
+        <h4 th:text="${receiver.receiverName}"></h4><!--상대 이름-->
         <!--리스트 꾸미려면 넣기 <ul class="nav_icons">
             <li></li>
             <li></li>
