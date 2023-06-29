@@ -50,12 +50,19 @@ public class MemberController {
         return "redirect:/member/loginForm";
     }
 
-    @ResponseBody
-    @GetMapping("/admin")
+    @GetMapping("admin")
     @Secured("ROLE_ADMIN")
-    public ModelAndView admin(ModelAndView mav,Criteria criteria) {
+    public String admin(){//단순 페이지 이동
+        return "admin/admin";
+    }
+
+    @ResponseBody
+    @GetMapping("/memberList")
+    @Secured("ROLE_ADMIN")
+    public ModelAndView memberList(ModelAndView mav,Criteria criteria) {
         int total = memberService.countMember();//멤버의 총 수
         List<Member> member = memberService.findAllMember(criteria);//멤버리스트
+        System.out.println("member = " + member);
         mav.addObject("member",member);
         mav.addObject("pageMaker", new PageDTO(total, 10, criteria));
         mav.setViewName("admin/memberList");

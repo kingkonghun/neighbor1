@@ -46,7 +46,9 @@
         </div>
         <div id="myInfo_button_div" class="col-12 col-md-12 col-lg-2 col-xl-2 p-4">
             <button id="myInfo_button" class="py-2" th:onclick="|location.href='@{/member/editInfo}'|">내 정보 수정</button>
+            <button id="admin_button" class="py-2" th:onclick="|location.href='@{/member/admin}'|" sec:authorize="hasRole('ROLE_ADMIN')">관리자 페이지</button>
         </div>
+
 
         <div class="col-6 col-md-6 col-lg-3 col-xl-3 p-4 myInfo_link_div">
             <div class="p-5">

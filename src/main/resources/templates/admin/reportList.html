@@ -97,12 +97,22 @@
         $("#memberScore").focus();
         $("#reportId").val(reportId);
     }
+    function paging(num) {
+        $.ajax({
+            method:"get",
+            url: "/used/reportList",
+            data: {"pageNum": num},
+            success: function (data) {
+                $(".member").html(data);
+            }
+        });
+    }
 </script>
 </head>
 <body>
-<div th:replace="nav :: div"></div>
-<div th:replace="member/myPageNav :: nav"></div>
+
 <div class="reportList">
+    <h3 class="mb-4 h3">신고 게시글</h3>
     <table  style="width: 100%;" class="table table-hover">
         <thead>
             <th>신고 번호</th>
@@ -150,6 +160,6 @@
 </div>
 
 
-<div th:replace="footer :: footer"></div>
+
 </body>
 </html>

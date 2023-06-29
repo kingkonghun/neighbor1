@@ -156,4 +156,8 @@ public interface MbUsedRepository extends UsedRepository {
     @Override
     @Select("SELECT imgUrl FROM img WHERE postId=#{postId}")
     List<String> findAllImgUrl(long postId);
+
+    @Override
+    @Update("UPDATE product SET productStatus = 'n' WHERE postId=#{postId}")
+    void soldOut(long postId);
 }

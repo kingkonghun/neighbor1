@@ -4,45 +4,41 @@
     <meta charset="UTF-8"/>
     <title>Title</title>
     <style>
+        body{background-color: #f9f9f9!important;}
         #adminT {color: red;}
         .myPage, .admin{font-family: 'GangwonEduPowerExtraBoldA';}
         .img {width: 50px;height: 50px;}
         .pagination {margin-top: 3em; margin-bottom: 5em;}
         .pagination .pageNum{list-style: none; display: flex;}
+
     </style>
     <link rel="stylesheet" th:href="@{/css/myPage.css}">
 
     <th:block th:insert="/common/common :: fragment-header"></th:block>
 </head>
 <body>
-<div th:replace="nav :: div"></div>
-<div th:replace="member/myPageNav :: nav"></div>
 
-<section class="admin">
+
     <div class="member">
+        <h3 class="mb-4 h3">회원 정보</h3>
         <table  style="width: 100%;" class="table table-hover">
             <thead>
                 <th>프로필 사진</th>
                 <th>닉네임</th>
                 <th>이메일</th>
-                <th>주소</th>
-                <th>상세 주소</th>
-                <th>사용자 점수</th>
+                <th>점수</th>
                 <th>계정 생성 일자</th>
                 <th>올린 게시글</th>
-                <th>비고</th>
+
             </thead>
             <tbody th:each="list : ${member}">
                 <tr>
                     <td><img class="img"  th:src="@{/member/findProfileImg(memberId=${list.memberId})}"  alt="실패"></td>
                     <td th:text="${list.memberName}"></td>
                     <td th:text="${list.memberEmail}"></td>
-                    <td th:text="${list.address}"></td>
-                    <td th:text="${list.addressDetail}"></td>
                     <td th:text="${list.score}"></td>
-                    <td th:text="${#dates.format(list.memberDate,'yyyy년 MM월 dd일 HH시 mm분')}"></td>
+                    <td th:text="${#dates.format(list.memberDate,'yyyy년 MM월 dd일')}"></td>
                     <td th:text="${list.myWrite}"></td>
-                    <td th:text="${list.providerId}"></td>
                 </tr>
             </tbody>
         </table>
@@ -50,12 +46,21 @@
         <!--페이지네비게이션-->
         <div th:replace="pagination/paging :: div"></div>
     </div>
-</section>
+    <script th:inline="javascript">
+        function paging(num) {
+            $.ajax({
+                method:"get",
+                url: "/member/memberList",
+                data: {"pageNum": num},
+                success: function (data) {
+                    $(".member").html(data);
+                }
+            });
+        }
+    </script>
 
 
 
 
-
-<div th:replace="footer :: footer"></div>
 </body>
 </html>
