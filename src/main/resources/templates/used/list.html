@@ -120,6 +120,8 @@
     <article th:include="used/post :: section" style="display: none;" id="writeForm"></article>
 
 
+
+
     <div id="list" class="row">
         <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${list}">
             <div class="item p-3" th:onclick="|location.href='@{detail(postId=${row.postId})}'|">

@@ -24,6 +24,13 @@ $(function(){
             $("#searchForm_2").css("top", "-64px");
         }
     });
+    $("html").click(function(e) {
+        if ($(e.target).parents(".top_nav").length < 1 && e.target.id !== ".top_nav") {
+            $("#menuicon").prop("checked", false);
+        }
+    });
+
+
     $("#open-popup").click(function(){
         var _width = 450;
         var _height = 600;

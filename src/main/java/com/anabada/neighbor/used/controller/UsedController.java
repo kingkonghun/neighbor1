@@ -133,4 +133,16 @@ public class UsedController {
         usedService.soldOut(postId, receiver, principalDetails);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @GetMapping("/purchase")
+    public String purchase(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        model.addAttribute("list", usedService.purchase(principalDetails));
+        return "used/purchaseList";
+    }
+
+    @GetMapping("/sales")
+    public String sales(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        model.addAttribute("list", usedService.sales(principalDetails));
+        return "used/salesList";
+    }
 }

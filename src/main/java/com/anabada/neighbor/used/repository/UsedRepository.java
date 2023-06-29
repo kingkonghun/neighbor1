@@ -182,4 +182,8 @@ public interface UsedRepository {
     void insertSales(long postId, long memberId);
 
     void insertPurchase(long postId, long receiver);
+
+    List<Purchase> findPurchaseByMemberId(long memberId);
+
+    List<Sales> findSalesByMemberId(long memberId);
 }

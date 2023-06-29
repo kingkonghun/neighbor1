@@ -363,14 +363,15 @@
         <div class="main-section-wrap">
             <div class="slide-box">
                 <div class="content" th:each="imgList : ${dto.imgList}">
-                        <div class="img-box" style="width: 100%; " th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' " th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'">
-                            <p th:if="${dto.productStatus eq 'n'}" class="msg">판매된 상품 입니다.</p>
-                        </div>
+                    <div class="img-box" style="width: 100%; " th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' " th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'">
+                    </div>
+                    <p th:if="${dto.productStatus eq 'n'}" class="msg" style="z-index: 9;">판매된 상품 입니다.</p>
+
                 </div>
                 <div class="content" th:if="${#lists.size(dto.imgList)==1}">
                     <div class="img-box" style="width: 100%;" th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' " th:style="'background-image:url('+ @{/used/downFiles(img=${dto.imgList})} +');'">
-                        <p th:if="${dto.productStatus eq 'n'}" class="msg">판매된 상품 입니다.</p>
                     </div>
+                    <p th:if="${dto.productStatus eq 'n'}" class="msg">판매된 상품 입니다.</p>
                 </div>
             </div>
         </div>

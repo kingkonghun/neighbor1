@@ -419,6 +419,48 @@ public class UsedServiceImpl implements UsedService{
         usedRepository.insertPurchase(postId, receiver);
         usedRepository.soldOut(postId);
     }
+
+    @Override
+    public List<Used> purchase(PrincipalDetails principalDetails) {
+        List<Used> usedList = new ArrayList<>();
+        List<Purchase> purchaseList = usedRepository.findPurchaseByMemberId(principalDetails.getMember().getMemberId());
+
+        for (Purchase purchase : purchaseList) {
+            Post post = usedRepository.findPost(purchase.getPostId());
+            Product product = usedRepository.findProduct(post.getPostId());
+            String categoryName = usedRepository.findCategoryName(product.getCategoryId());
+
+            usedList.add(Used.builder()
+                    .postId(post.getPostId())
+                    .categoryName(categoryName)
+                    .title(post.getTitle())
+                    .price(product.getPrice())
+                    .build());
+        }
+        System.out.println(usedList);
+        return usedList;
+    }
+
+    @Override
+    public List<Used> sales(PrincipalDetails principalDetails) {
+        List<Used> usedList = new ArrayList<>();
+        List<Sales> salesList = usedRepository.findSalesByMemberId(principalDetails.getMember().getMemberId());
+
+        for (Sales sales : salesList) {
+            Post post = usedRepository.findPost(sales.getPostId());
+            Product product = usedRepository.findProduct(post.getPostId());
+            String categoryName = usedRepository.findCategoryName(product.getCategoryId());
+
+            usedList.add(Used.builder()
+                    .postId(post.getPostId())
+                    .categoryName(categoryName)
+                    .title(post.getTitle())
+                    .price(product.getPrice())
+                    .build());
+        }
+        System.out.println(usedList);
+        return usedList;
+    }
 }
 
 

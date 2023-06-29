@@ -8,7 +8,7 @@
 <script>
 $(function(){
     $(".deal_comp").click(function(){
-        if(confirm("판매")){
+        if(confirm("판매완료 처리하시겠습니까?")){
             postId = $("#postId").val();
             receiver = $("#receiver").val();
             $.ajax({

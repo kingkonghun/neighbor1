@@ -86,4 +86,8 @@ public interface UsedService {
      * @param postId
      */
     void soldOut(long postId, long receiver, PrincipalDetails principalDetails);
+
+    List<Used> purchase(PrincipalDetails principalDetails);
+
+    List<Used> sales(PrincipalDetails principalDetails);
 }
