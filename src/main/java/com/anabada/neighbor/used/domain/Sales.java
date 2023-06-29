@@ -1,4 +1,4 @@
-package com.anabada.neighbor.chat.domain;
+package com.anabada.neighbor.used.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class ChattingRoom {
-    private long roomId;
+public class Sales {
+    private long salesId;
     private long postId;
-    private long creator;
+    private long memberId;
 }

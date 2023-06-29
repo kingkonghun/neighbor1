@@ -3,7 +3,10 @@ package com.anabada.neighbor.used.controller;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.page.PageDTO;
-import com.anabada.neighbor.used.domain.*;
+import com.anabada.neighbor.used.domain.PostReport;
+import com.anabada.neighbor.used.domain.Report;
+import com.anabada.neighbor.used.domain.ReportOk;
+import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.service.UsedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,12 +47,12 @@ public class UsedController {
     public String detail(long postId, Model model, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Used dto = usedService.detail(postId, request, response, principalDetails);
         model.addAttribute("dto", dto);
-        System.out.println(dto.getImgList());
+        model.addAttribute("imgCount", dto.getImgList().size());
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0, ""));
         model.addAttribute("reportType", usedService.reportType());
 
-        return "used/usedDetail";
+        return "/used/usedDetail";
     }
 
 
@@ -64,7 +67,7 @@ public class UsedController {
     public void findImg(long postId, HttpServletResponse response) throws IOException {
         String filenames = usedService.findImgUrl(postId);
 //        System.out.println("filenames = " + filenames);
-        usedService.downloadFiles(filenames, response);
+        downFiles(filenames,response);
     }
     @GetMapping("/downFiles")//이미지 다운
     public void downFiles(String img,HttpServletResponse response) throws IOException{
@@ -78,7 +81,7 @@ public class UsedController {
         return "redirect:/used/list";
     }
 
-    @GetMapping("/postDelete") //게시물 삭제
+    @PostMapping("/postDelete") //게시물 삭제
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String postDelete(long postId) {
         usedService.delete(postId);
@@ -111,8 +114,10 @@ public class UsedController {
 
     @GetMapping("/likePost") //좋아요 누른 게시글
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String likePost(Model model, long memberId) {
-      List<Used> usedList=usedService.likePost(memberId);
+    public String likePost(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails, Criteria criteria) {
+      List<Used> usedList=usedService.likePost(principalDetails.getMember().getMemberId(),criteria);
+        int total = usedService.countLikePost(principalDetails.getMember().getMemberId());
+        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
       model.addAttribute("list",usedList);
         return "member/myLikes";
     }
@@ -123,4 +128,21 @@ public class UsedController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/success")
+    public ResponseEntity<Void> soldOut(long postId, long receiver, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        usedService.soldOut(postId, receiver, principalDetails);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/purchase")
+    public String purchase(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        model.addAttribute("list", usedService.purchase(principalDetails));
+        return "used/purchaseList";
+    }
+
+    @GetMapping("/sales")
+    public String sales(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        model.addAttribute("list", usedService.sales(principalDetails));
+        return "used/salesList";
+    }
 }

@@ -5,18 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class ChattingMessage {
-    private long messageId;
+public class ChattingMember {
     private long roomId;
-    private long writer;
-    private String content;
-    private Date messageDate;
-    private String messageType;
+    private long memberId;
 }

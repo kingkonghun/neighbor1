@@ -21,22 +21,26 @@ public class ChattingController {
     private final ChattingService chattingService;
 
     @PostMapping("/openRoom")
-    public String openRoom(ChattingRoom chattingRoom, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        ChattingRoom result = chattingService.openRoom(chattingRoom, principalDetails);
-        return "redirect:/chatDetail?roomId="+result.getRoomId();
+    public String openRoom(long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        long roomId = chattingService.openRoom(postId, principalDetails, "used");
+        return "redirect:/chatDetail?roomId="+roomId;
     }
 
     @GetMapping("/chatRoomList")
     public String chatRoomList(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         model.addAttribute("list", chattingService.chattingRoomList(principalDetails));
+        model.addAttribute("receiver", principalDetails.getMember().getMemberId());
         return "chatEx/chatRoomListPopup";
     }
 
     @GetMapping("/chatDetail")
     public String chatDetail(long roomId, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        model.addAttribute("list", chattingService.chattingMessageList(roomId, principalDetails));
-        model.addAttribute("receiver", chattingService.getReceiver(roomId, principalDetails));
-        model.addAttribute("roomId", roomId);
+        boolean check = chattingService.check(roomId, principalDetails);
+        if (check) {
+            model.addAttribute("list", chattingService.chattingMessageList(roomId, principalDetails));
+            model.addAttribute("receiver", chattingService.getReceiver(roomId, principalDetails));
+            model.addAttribute("roomId", roomId);
+        }
         return "chatEx/chatDetailPopup";
     }
 

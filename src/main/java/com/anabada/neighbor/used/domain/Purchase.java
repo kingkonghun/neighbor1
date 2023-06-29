@@ -1,4 +1,4 @@
-package com.anabada.neighbor.chat.domain;
+package com.anabada.neighbor.used.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class ResponseMessage {
-    private String content;
+public class Purchase {
+    private long purchaseId;
+    private long postId;
+    private long memberId;
 }

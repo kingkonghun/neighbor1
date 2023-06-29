@@ -13,11 +13,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,12 +50,19 @@ public class MemberController {
         return "redirect:/member/loginForm";
     }
 
-    @ResponseBody
-    @GetMapping("/admin")
+    @GetMapping("admin")
     @Secured("ROLE_ADMIN")
-    public ModelAndView admin(ModelAndView mav,Criteria criteria) {
+    public String admin(){//단순 페이지 이동
+        return "admin/admin";
+    }
+
+    @ResponseBody
+    @GetMapping("/memberList")
+    @Secured("ROLE_ADMIN")
+    public ModelAndView memberList(ModelAndView mav,Criteria criteria) {
         int total = memberService.countMember();//멤버의 총 수
         List<Member> member = memberService.findAllMember(criteria);//멤버리스트
+        System.out.println("member = " + member);
         mav.addObject("member",member);
         mav.addObject("pageMaker", new PageDTO(total, 10, criteria));
         mav.setViewName("admin/memberList");
@@ -81,13 +86,7 @@ public class MemberController {
         return "member/myWrite";
     }
 
-    @GetMapping("/myWriteFive")//내가 작성한 글 5개만
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String myWriteFive(long memberId,Model model) {
-        List<Used> used = memberService.myWriteFive(memberId);
-        model.addAttribute("list",used);
-        return "member/myWriteFive";
-    }
+
 
     @GetMapping("/myInfo")//내 개인정보
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
@@ -114,6 +113,7 @@ public class MemberController {
         String profileImg = memberService.findProfileImg(memberId);//사진이름가져오기
         memberService.downProfileImg(response, profileImg);//사진다운
     }
+
     @GetMapping("/editInfo")//수정페이지로 이동
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String editInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model,String message) {
@@ -122,11 +122,41 @@ public class MemberController {
         model.addAttribute("message",message);
         return "member/editInfo";
     }
-    @PostMapping("/myEdit")//진짜수정
+    @PostMapping("/editMyInfo")//정보수정
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String myEdit(Member member){
+    public String editInfo( Member member,Model model){
         memberService.editInfo(member);
-        return "index";
+        System.out.println("member = " + member);
+        model.addAttribute("msg","infoSuccess");
+        return  "index";
+    }
+
+    @PostMapping("/editPwd")//비밀번호 수정
+    public String editPwd(@RequestParam String oldPwd, @RequestParam String memberPWD, long memberId, Model model, RedirectAttributes redirectAttributes){
+        String msg= memberService.editPwd(oldPwd,memberPWD,memberId);
+        System.out.println("msg = " + msg);
+
+        if (msg.equals("pwdSuccess")) {
+            model.addAttribute("msg", msg);
+            return "index";
+        } else {
+            redirectAttributes.addAttribute("msg", msg);
+            return "redirect:/member/editInfo";
+        }
+    }
+
+    @PostMapping("/editPhoto")
+    public String editPhoto(Member member,RedirectAttributes redirectAttributes) {
+        memberService.editPhoto(member);
+        redirectAttributes.addAttribute("msg", "photoSuccess");
+        return  "redirect:/member/editInfo";
+    }
+
+    @GetMapping("/slideBar")
+    @ResponseBody
+    public Member slideBar(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Member member = memberService.myInfo(principalDetails);
+        return member;
     }
 
     @ResponseBody

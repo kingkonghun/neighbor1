@@ -6,7 +6,6 @@
                 <ul class="nav_menu_1">
                     <li><a href="/used/list">중고거래</a></li>
                     <li><a href="/clubList">동네모임</a></li>
-                    <li><a href="#" id="open-popup">채팅목록</a></li>
                 </ul>
             </div>
             <div class="nav_div">
@@ -38,57 +37,70 @@
                     <span></span>
                     <span></span>
                 </label>
+
                 <div class="sidebar">
-                    <div class="menu">
-                        <div class="center" sec:authorize="isAuthenticated()">
-                            <div class="profile">
-                                <div class="image">
-                                    <div class="circle-1"></div>
-                                    <div class="circle-2"></div>
-                                    <img src="https://100dayscss.com/codepen/jessica-potter.jpg" width="70" height="70" alt="Jessica Potter">
-                                </div>
-
-                                <div class="name">김김김</div>
-
-                                <div class="actions">
-                                    <button type="button" class="btn" onclick="location.href='/member/myInfo'">마이페이지</button>
-                                    <button type="button" class="btn" onclick="location.href='/logout'">로그아웃</button>
-                                </div>
-                            </div>
-
-                            <div class="stats">
-                                <div class="box">
-                                    <span class="value">523</span>
-                                    <span class="parameter">내글</span>
-                                </div>
-                                <div class="box">
-                                    <span class="value">1387</span>
-                                    <span class="parameter">내점수</span>
-                                </div>
-                                <div class="box">
-                                    <span class="value">146</span>
-                                    <span class="parameter">Follower</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bottom">
-                            <div sec:authorize="isAnonymous()">
-                                <a href='/member/loginForm'>
-                                    <i class="fa-solid fa-right-from-bracket"></i>
-                                </a>
-                                <span>로그인</span></div>
-                            <div class="logout" sec:authorize="isAuthenticated()"><a href='/logout'>
-                                <i class="fa-solid fa-right-from-bracket"></i>
+                    <ul class="navbar-list">
+                        <li class="navbar-item" onclick="location.href='/member/loginForm'" sec:authorize="isAnonymous()">
+                            <a href="#" class="navbar-link title-sm" data-nav-link>
+                                <i class="fa-solid fa-right-from-bracket"></i> 로그인
                             </a>
-                                <span>로그아웃</span></div>
+                        </li>
+                        <li class="navbar-item" sec:authorize="isAuthenticated()" onclick="location.href='/member/myInfo'">
+                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-info-square"></i> 내정보</a>
+                        </li>
+                        <li class="navbar-item" sec:authorize="isAuthenticated()" id="open-popup">
+                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="fa-regular fa-envelope"></i> 채팅</a>
+                        </li>
+                        <li class="navbar-item hideItem" onclick="location.href='/used/list'">
+                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-cart"></i> 중고거래</a>
+                        </li>
+                        <li class="navbar-item hideItem" onclick="location.href='/clubList'">
+                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-house-door"></i> 동네모임</a>
+                        </li>
+                        <li class="navbar-item" sec:authorize="isAuthenticated()" onclick="location.href='/used/purchase'">
+                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-coin"></i> 구매내역</a>
+                        </li>
+                        <li class="navbar-item" sec:authorize="isAuthenticated()" onclick="location.href='/used/sales'">
+                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-coin"></i> 판매내역</a>
+                        </li>
+                        <li class="navbar-item" onclick="location.href='/logout'" sec:authorize="isAuthenticated()">
+                            <a href="#" class="navbar-link title-sm" data-nav-link>
+                                <i class="fa-solid fa-right-from-bracket"></i> 로그아웃
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="bottom2" sec:authorize="isAuthenticated()">
+                        <div class="profile1">
+                            <div class="parent">
+                                <img th:src="@{/member/findProfileImg(memberId=${#authentication.principal.member.memberId})}" alt="Profile Picture1" class="profile-picture">
+                            </div>
+                            <div class="profile-details">
+                                <div class="name2"></div>
+                                <div class="nickname2" th:text="${#authentication.principal.member.memberName}"></div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </nav>
     <div id="top"></div>
-    <div class="p-2" id="notification"></div>
+    <div class="popupup">
+        <input type="hidden" id="popupRoomId">
+        <div class="imgbox">
+            <img class="userImg_">
+        </div>
+        <div class="pop_detail">
+            <div class="usernamecall">
+                <h4 id="popupName"></h4>
+                <p class="calltime"></p><!--이건 빼기-->
+            </div>
+            <div class="message_new">
+                <p id="popup_message"></p>
+            </div>
+        </div>
+    </div>
 </div>
 
 

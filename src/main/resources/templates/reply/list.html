@@ -3,34 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <title>Title</title>
-    <th:block th:insert="/common/common :: fragment-header"></th:block>
+    <style>
+        body{background-color: #f4f4f4;}
+        .reply{width: 100%;}
+        .reply button {background-color:#FF3366; color:#FFFFFF; border-radius: 8px; border-style: none; font-family: omyu_pretty;}
+        hr {margin: 0px;}
+        li {list-style: none;}
+        .dropdown-menu {font-family: omyu_pretty;}
+        .updateComment, .reReplyComment {width: 100%; border-radius: 12px; resize: none; border-style: none; background-color: #f4f4f4;}
+    </style>
 </head>
 <body>
-<table>
-    <div th:each="row : ${list}" style="border: 1px solid gray; width: 100%; border-radius: 30px; padding: 20px; margin-bottom: 20px;">
-        <div id="replyId_" th:attr="id='replyId_' + ${row.replyId}">
-            <div style="float: left;" th:text="${row.memberName}">이름</div>
-            <div style="float: right;" th:text="${row.replyDate}">작성일</div>
-            <div style="color: blue;" th:if="${row.replyDate != row.replyUpdate}">(수정된 댓글입니다)</div>
-            <div style="clear: both;"></div>
-            <p style="text-align: left;" class="comment_" th:attr="class='comment_' + ${row.replyId}">
-                <a style="color: gray;" th:href="'#replyId_' + ${row.parentId}" th:if="${row.parentName != null}" th:text="|@${row.parentName}|"></a>
-                <span th:text="${row.comment != '' ? row.comment : '삭제된 댓글입니다'}">내용</span>
-            </p>
-            <textarea rows="3" class="commentUpdate_" th:attr="class='commentUpdate_' + ${row.replyId}" style="width: 100%; border-radius: 30px; resize: none; padding: 20px; display: none;">[[${row.comment}]]</textarea>
-            <textarea rows="3" class="reComment_" th:attr="class='reComment_' + ${row.replyId}" style="width: 100%; border-radius: 30px; resize: none; padding: 20px; display: none;" placeholder="답글 작성"></textarea>
-
-            <div class="buttonDiv_" th:attr="class='buttonDiv_' + ${row.replyId}">
-                <th:block sec:authorize="isAuthenticated()">
-                    <button type="button" id="btnReReply" th:onclick="'reReply(' + ${row.replyId} + ')'">답글</button>
-                    <button type="button" id="btnUpdate" th:onclick="'update(' + ${row.replyId} + ')'" th:if="${row.memberId == #authentication.principal.member.memberId}">수정</button>
-                    <button type="button" id="btnDelete" th:onclick="'deleteReply(' + ${row.replyId} + ')'" th:if="${row.memberId == #authentication.principal.member.memberId}">삭제</button>
+<div class="reply">
+    <div th:each="row : ${list}" >
+        <div class="p-3" id="replyId" th:attr="id='replyId_'+${row.replyId}">
+            <div class="memberName" style="display: flex; justify-content: space-between">
+                <div style="display: flex; justify-content: flex-start; gap: 12px;">
+                    <p th:text="${row.memberName}"></p>
+                    <div style="color: blue; font-family: omyu_pretty;" th:if="${row.replyDate != row.replyUpdate && row.comment != ''}">(수정된 댓글입니다)</div>
+                </div>
+                <th:block sec:authorize="isAuthenticated()" th:if="${row.comment != ''}">
+                    <li class="navList nav-item dropdown" th:if="${row.memberId == #authentication.principal.member.memberId or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                        <a class="nav-link" id="adminT" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" th:onclick="'update(' + ${row.replyId} + ')'">수정</a></li>
+                            <li><a class="dropdown-item" th:onclick="'deleteReply(' + ${row.replyId} + ')'">삭제</a></li>
+                        </ul>
+                    </li>
                 </th:block>
             </div>
-            <button class="btnUpdateReply_" th:attr="class='btnUpdateReply_' + ${row.replyId}" th:onclick="'updateReply(' + ${row.replyId} + ')'" style="display: none;">작성</button>
-            <button class="btnReReply_" th:attr="class='btnReReply_' + ${row.replyId}" th:onclick="'writeReReply(' + ${row.replyId} + ')'" style="display: none;">작성</button>
+
+            <div class="comment_" th:attr="class='comment_' + ${row.replyId}">
+                <a th:href="'#replyId_'+${row.parentId}" th:if="${row.parentName != null}" th:text="|@ ${row.parentName}|" style="color: gray;"></a>
+                <p th:text="${row.comment != '' ? row.comment : '삭제된 댓글입니다'}" style="font-family: omyu_pretty;"></p>
+                <textarea class="updateComment p-2" rows="2" style="display: none; font-family: omyu_pretty;">[[${row.comment}]]</textarea>
+                <textarea class="reReplyComment p-2" rows="2" style="display: none; font-family: omyu_pretty;"></textarea>
+            </div>
+            <div class="date_" th:attr="class='date_' + ${row.replyId}" th:if="${row.comment != ''}">
+                <p th:text="${#dates.format(row.replyDate,'yyyy년 MM월 dd일')}" style="font-family: omyu_pretty;"></p>
+            </div>
+
+            <div class="buttons_" th:attr="class='buttons_' + ${row.replyId}" th:if="${row.comment != ''}" sec:authorize="isAuthenticated()">
+                <button class="btnReReply py-1 px-2" th:onclick="'reReply(' + ${row.replyId} + ')'">답글</button>
+                <button class="btnCancel py-1 px-2" th:onclick="'cancel(' + ${row.replyId} + ')'" style="display: none;">취소</button>
+                <button class="btnUpdateSubmit py-1 px-2" th:onclick="'updateReply(' + ${row.replyId} + ')'" style="display: none;">작성</button>
+                <button class="btnReReplySubmit py-1 px-2" th:onclick="'writeReReply(' + ${row.replyId} + ')'" style="display: none;">작성</button>
+            </div>
         </div>
+        <hr>
+
     </div>
-</table>
+</div>
 </body>
 </html>

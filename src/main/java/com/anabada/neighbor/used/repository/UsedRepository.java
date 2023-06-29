@@ -158,7 +158,7 @@ public interface UsedRepository {
     /**
      * memberId 로 좋아요 누른 게시물 정보 조회
      */
-    List<Likes> findLikePosts(long memberId);
+    List<Likes> findLikePosts(Map<String, Object> map);
 
     /**
      * 페이징을 위한 신고된 게시글의 총 수
@@ -172,4 +172,18 @@ public interface UsedRepository {
     void UpdateReportStatus(long reportId);
 
     List<String> findAllImgUrl(long postId);
+
+    /**
+     * 판매완료
+     * @param postId
+     */
+    void soldOut(long postId);
+
+    void insertSales(long postId, long memberId);
+
+    void insertPurchase(long postId, long receiver);
+
+    List<Purchase> findPurchaseByMemberId(long memberId);
+
+    List<Sales> findSalesByMemberId(long memberId);
 }

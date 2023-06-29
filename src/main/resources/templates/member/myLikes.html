@@ -4,24 +4,33 @@
     <meta charset="UTF-8"/>
     <title>Title</title>
     <th:block th:insert="/common/common :: fragment-header"></th:block>
-    <style>
-        .myReply_div{overflow: auto;}
-        .h2{text-align: center; padding-bottom: 1.5em;font-family: 'GangwonEduPowerExtraBoldA';}
-        .tableBox{overflow: auto; height: 400px;}
-        .btnList{text-align: right; padding-top: 1.5em; padding-bottom: 1.5em;}
-    </style>
+
     <script>
         function detail(postId){
             if (confirm("게시글 확인하러 가시겠습니까?")) {
                 location.href="/used/detail?postId="+postId;
             }
         }
+        function paging(num) {
+            $.ajax({
+                method:"get",
+                url: "/used/likePost",
+                data: {"pageNum": num},
+                success: function (data) {
+                    $(".myLike_div").html(data);
+                }
+            });
+        }
     </script>
+    <style>
+        body{background-color: #f4f4f4;}
+    </style>
+    <link rel="stylesheet" th:href="@{/css/myPage.css}">
 </head>
 <body>
-<div class="myReply_div">
+<div class="myLike_div">
     <h2 class="h2">관심 있는 게시글</h2>
-    <div class="tableBox">
+    <div class="table">
         <table  style="width: 100%;" class="table table-hover">
             <thead>
             <th>제목</th>
@@ -38,9 +47,11 @@
             </tr>
             </tbody>
         </table>
-    </div>
-    <div class="btnList">
-        <button class="btn btn-outline-danger" type="button" id="btnBack" onclick="removeHTML()">뒤로가기</button>
+
+        <div th:replace="pagination/paging :: div" style="text-align: center;"></div>
+        <div class="btnList">
+            <button class="btn btn-outline-danger" type="button" id="btnBack" onclick="removeHTML()">뒤로가기</button>
+        </div>
     </div>
 </div>
 </body>

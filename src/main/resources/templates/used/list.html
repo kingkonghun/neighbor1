@@ -57,12 +57,11 @@
             document.writeForm.submit();
         });
 
-//테스트를 위해 잠시 해제 $("#writeForm").slideDown(); 여기 바꿈
         $("#btnWrite").click(function (){
             if(checkIsAuthenticated()){
                 if(checkIsAuthorization()){
-<!--                    location.href="/member/editInfo?message=추가 정보를 입력한 뒤에 사용하세요";-->
-$("#writeForm").slideDown();
+                    location.href="/member/editInfo?message=추가 정보를 입력한 뒤에 사용하세요";
+                    return;
                 }else{
                     $("#writeForm").slideDown();
                 }
@@ -119,6 +118,8 @@ $("#writeForm").slideDown();
         </article>
     </div>
     <article th:include="used/post :: section" style="display: none;" id="writeForm"></article>
+
+
 
 
     <div id="list" class="row">

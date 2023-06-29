@@ -58,14 +58,11 @@ public interface MemberRepository {
     List<Post> findMyPostFive(long memberId);//내가작성한글5개만
 
     /**
-     * 비밀번호가 들어왔을경우
+     * 개인 정보 수정
      */
-    void editInfo(Member member);//비밀번호가 들어왔을경우
+    void editInfo(Member member);
 
-    /**
-     * 비밀번호 안들어왔을때
-     */
-    void editInfoNotPwd(Member member);//비밀번호 안들어왔을때
+
 
     /**
      * 프로필이미지 수정
@@ -108,4 +105,18 @@ public interface MemberRepository {
     int countMember();
 
     void updateScore(long memberId, int reportedMemberScore);
+
+    /**
+     * 비밀번호 수정전에
+     * @param  기존 비밀번호가
+     *  일치하는지 확인
+     */
+    String pwdCheck(long memberId);
+
+    /**
+     * 비밀번호 변경
+     * @param memberPWD
+     * @param memberId
+     */
+    void editPwd(String memberPWD, long memberId);
 }

@@ -359,9 +359,12 @@ public class UsedServiceImpl implements UsedService{
      * 좋아요 누른 게시물
      */
     @Override
-    public List<Used> likePost(long memberId) {
+    public List<Used> likePost(long memberId,Criteria criteria) {
         List<Used> usedList = new ArrayList<>();//리턴그릇
-        List<Likes> likesList = usedRepository.findLikePosts(memberId);//좋아요 누른 게시글 긁어오기
+        Map<String, Object> map = new HashMap<>();
+        map.put("memberId", memberId);
+        map.put("criteria", criteria);
+        List<Likes> likesList = usedRepository.findLikePosts(map);//좋아요 누른 게시글 긁어오기
         for (Likes likes : likesList) {//좋아요누른 게시글만큼 반복
             long postId = likes.getPostId();//좋아요 누른 게시글id
             Post post = usedRepository.findPost(postId);
@@ -399,6 +402,65 @@ public class UsedServiceImpl implements UsedService{
         usedRepository.UpdateReportStatus(reportOk.getReportId()); // 신고접수완료 처리
         usedRepository.deleteProduct(report.getPostId()); // product 삭제처리(productStatus 를 'del' 로 update)
         usedRepository.deletePost(report.getPostId()); // post 삭제처리(postType 을 'del' 로 update)
+    }
+
+    @Override
+    public int countLikePost(long memberId) {
+        return usedRepository.findLikesCount(memberId);
+    }
+
+
+    /**
+     * 판매완료
+     */
+    @Transactional
+    @Override
+    public void soldOut(long postId, long receiver, PrincipalDetails principalDetails) {
+        usedRepository.insertSales(postId, principalDetails.getMember().getMemberId());
+        usedRepository.insertPurchase(postId, receiver);
+        usedRepository.soldOut(postId);
+    }
+
+    @Override
+    public List<Used> purchase(PrincipalDetails principalDetails) {
+        List<Used> usedList = new ArrayList<>();
+        List<Purchase> purchaseList = usedRepository.findPurchaseByMemberId(principalDetails.getMember().getMemberId());
+
+        for (Purchase purchase : purchaseList) {
+            Post post = usedRepository.findPost(purchase.getPostId());
+            Product product = usedRepository.findProduct(post.getPostId());
+            String categoryName = usedRepository.findCategoryName(product.getCategoryId());
+
+            usedList.add(Used.builder()
+                    .postId(post.getPostId())
+                    .categoryName(categoryName)
+                    .title(post.getTitle())
+                    .price(product.getPrice())
+                    .build());
+        }
+        System.out.println(usedList);
+        return usedList;
+    }
+
+    @Override
+    public List<Used> sales(PrincipalDetails principalDetails) {
+        List<Used> usedList = new ArrayList<>();
+        List<Sales> salesList = usedRepository.findSalesByMemberId(principalDetails.getMember().getMemberId());
+
+        for (Sales sales : salesList) {
+            Post post = usedRepository.findPost(sales.getPostId());
+            Product product = usedRepository.findProduct(post.getPostId());
+            String categoryName = usedRepository.findCategoryName(product.getCategoryId());
+
+            usedList.add(Used.builder()
+                    .postId(post.getPostId())
+                    .categoryName(categoryName)
+                    .title(post.getTitle())
+                    .price(product.getPrice())
+                    .build());
+        }
+        System.out.println(usedList);
+        return usedList;
     }
 }
 

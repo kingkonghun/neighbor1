@@ -16,7 +16,7 @@ public interface MbUsedRepository extends UsedRepository {
             " FROM post" +
             " WHERE postUpdate >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 week) and postType='used' " +
             " ORDER BY postView desc" +
-            " LIMIT 8")
+            " LIMIT 6")
     List<Post> postList();
 
     @Override
@@ -24,7 +24,7 @@ public interface MbUsedRepository extends UsedRepository {
     List<Category> categoryList();
 
     @Override
-    @Select("select * from product where postId = #{postId}")
+    @Select("select * from product where postId = #{postId} and (productStatus = 'y' or productStatus = 'n')")
     public Product findProduct(long postId);
 
     @Override
@@ -36,7 +36,7 @@ public interface MbUsedRepository extends UsedRepository {
     public Member findMember(long memberId);
 
     @Override
-    @Select("select * from post where postId = #{postId}")
+    @Select("select * from post where postId = #{postId} and postType = 'used'")
     public Post findPost(long postId);
 
     @Override
@@ -90,7 +90,7 @@ public interface MbUsedRepository extends UsedRepository {
     public void updatePostView(long postId);
 
     @Override
-    @Select("select * from product where productStatus = 'y'")
+    @Select("select * from product where productStatus = 'y' or productStatus = 'n'")
     public List<Product> productList();
 
     @Override
@@ -102,8 +102,8 @@ public interface MbUsedRepository extends UsedRepository {
     int findReplyCount(long postId);
 
     @Override
-    @Select("SELECT * FROM likes WHERE memberId=#{memberId}")
-    List<Likes> findLikePosts(long memberId);
+    @Select("SELECT * FROM likes WHERE memberId=#{memberId} ORDER BY likeId desc LIMIT #{criteria.amount} OFFSET #{criteria.offset}")
+    List<Likes> findLikePosts(Map<String, Object> map);
 
     @Override
     @Select("select count(*) from likes where postId = #{postId}")
@@ -156,4 +156,24 @@ public interface MbUsedRepository extends UsedRepository {
     @Override
     @Select("SELECT imgUrl FROM img WHERE postId=#{postId}")
     List<String> findAllImgUrl(long postId);
+
+    @Override
+    @Update("UPDATE product SET productStatus = 'n' WHERE postId=#{postId}")
+    void soldOut(long postId);
+
+    @Override
+    @Insert("insert into sales (postId, memberId) values (#{postId}, #{memberId})")
+    void insertSales(@Param("postId") long postId, @Param("memberId") long memberId);
+
+    @Override
+    @Insert("insert into purchase (postId, memberId) values (#{postId}, #{memberId})")
+    void insertPurchase(@Param("postId") long postId, @Param("memberId") long receiver);
+
+    @Override
+    @Select("select * from purchase where memberId = #{memberId}")
+    List<Purchase> findPurchaseByMemberId(long memberId);
+
+    @Override
+    @Select("select * from sales where memberId = #{memberId}")
+    List<Sales> findSalesByMemberId(long memberId);
 }

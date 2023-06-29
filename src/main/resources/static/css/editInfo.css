@@ -3,7 +3,12 @@ body {
 	background: #f9f9f9;
 	font-family: "Roboto", sans-serif;
 }
-
+.h1, .h4, .h3{font-family: 'GangwonEduPowerExtraBoldA';}
+.h4{font-size: 40px;color: #FF3366;}
+.infoList{font-family: 'omyu_pretty';font-size: 20px;}
+.title{margin-top: 1em;}
+.form-group label{font-family: 'omyu_pretty';}
+.form-group input{font-family: 'Humanbumsuk'; font-size: 17px;}
 .shadow {
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
 }
@@ -31,12 +36,9 @@ body {
 	width: 20px;
 }
 
-.img-circle img {
-	height: 100px;
-	width: 100px;
-	border-radius: 100%;
-	border: 5px solid #fff;
-}
+
 .nav-pills .nav-link.active {
     background-color: #ffc107 !important;
 }
+
+#btnInfo, #btnPhoto, #btnPwd{background-color:#FF3366;font-family: 'Humanbumsuk';}
