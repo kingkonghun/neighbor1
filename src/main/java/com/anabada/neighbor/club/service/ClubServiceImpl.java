@@ -8,6 +8,7 @@ import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
+import com.anabada.neighbor.used.repository.UsedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +21,12 @@ import java.util.List;
 @Service
 public class ClubServiceImpl implements ClubService {
     private final ClubRepository clubRepository;
+    private final UsedRepository usedRepository;
 
     @Autowired
-    public ClubServiceImpl(ClubRepository clubRepository) {
+    public ClubServiceImpl(ClubRepository clubRepository, UsedRepository usedRepository) {
         this.clubRepository = clubRepository;
+        this.usedRepository = usedRepository;
     }
 
     @Transactional
@@ -117,6 +120,8 @@ public class ClubServiceImpl implements ClubService {
                 .content(post.getContent())
                 .hobbyName(clubRepository.selectHobbyName(club.getHobbyId()))
                 .score(member.getScore())
+                .postView(post.getPostView())
+                .ImageResponseList(clubRepository.selectImagesByPostId(postId))//여기까지완성
                 .maxMan(club.getMaxMan())
                 .nowMan(club.getNowMan())
                 .build();

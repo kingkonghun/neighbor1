@@ -134,6 +134,7 @@ public class ImageUtils {
         String uploadedDate = file.getCreaDate().toLocalDate().format(DateTimeFormatter.ofPattern("yyMMdd"));
         String filename = file.getSaveName();
         Path filePath = Paths.get(uploadPath, uploadedDate, filename);
+        System.out.println(filePath);
         try {
             return Files.walk(filePath, 1)
                     .filter(path -> !path.equals(filePath)).map(filePath::relativize);

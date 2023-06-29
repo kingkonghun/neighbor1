@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.FileAlreadyExistsException;
@@ -40,8 +41,23 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public Resource load(String filename) {
-        Path file = root.resolve(filename);
+    public Resource load(String fileName, String creaDate) {
+        Path file = root.resolve(fileName + File.separator + creaDate);//여기서 현재날짜 경로문제 발생 해결해야함
+        try {
+            Resource resource = new UrlResource(file.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            }else{
+                throw new RuntimeException("파일을 찾을 수 없습니다.");
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
+    }
+    @Override
+    public Resource load(String fileName) {
+
+        Path file = root.resolve(fileName);//여기서 현재날짜 경로문제 발생 해결해야함
         try {
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
@@ -63,7 +79,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public Stream<Path> loadAll() {
         try {
-            return Files.walk(this.root, 2).filter(path -> !path.equals(this.root)).map(this.root::relativize);
+            return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
         } catch (IOException e) {
             throw new RuntimeException("파일을 찾을 수 없습니다.");
         }

@@ -54,7 +54,7 @@ public class UsedController {
 
 
     @PostMapping("/post") //게시물 작성
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String post(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception {
         usedService.write(used, principalDetails);
         return "redirect:/used/list";

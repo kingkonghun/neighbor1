@@ -23,6 +23,8 @@ public class ClubResponse {
     private int score;  //사용자점수
     private int maxMan; //최대인원수
     private int nowMan; //현재인원수
+    private long postView;//조회수
+    private List<ImageResponse> ImageResponseList; //이미지 url List
     private List<MultipartFile> images = new ArrayList<>(); // 첨부파일 List
 
 }

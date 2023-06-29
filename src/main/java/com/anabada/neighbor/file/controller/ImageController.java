@@ -46,6 +46,7 @@ public class ImageController {
 
     @GetMapping("/images")
     public String getListImages(Model model) {
+        System.out.println(storageService.loadAll().collect(Collectors.toList()));
         List<ImageInfo> imageInfos = storageService.loadAll().map(path -> {
             String filename = path.getFileName().toString();
             String url = MvcUriComponentsBuilder
@@ -53,6 +54,7 @@ public class ImageController {
                             , path.getFileName().toString()).build().toString();
             return new ImageInfo(filename, url);
         }).collect(Collectors.toList());
+        System.out.println(imageInfos);
 
         model.addAttribute("images", imageInfos);
 
@@ -62,7 +64,6 @@ public class ImageController {
     @GetMapping("/images/{filename:.+}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
         Resource file = storageService.load(filename);
-
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""
                         + file.getFilename() + "\"").body(file);

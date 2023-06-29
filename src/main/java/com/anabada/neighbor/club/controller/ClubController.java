@@ -1,5 +1,6 @@
 package com.anabada.neighbor.club.controller;
 
+import com.anabada.neighbor.chat.repository.MbChattingRepository;
 import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.domain.ImageRequest;
@@ -8,6 +9,8 @@ import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.service.ClubService;
 import com.anabada.neighbor.club.service.ImageUtils;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.controller.ImageController;
+import com.anabada.neighbor.file.domain.ImageInfo;
 import com.anabada.neighbor.file.service.FilesStorageService;
 import com.anabada.neighbor.used.domain.Post;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +18,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.servlet.http.HttpSession;
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ClubController {
@@ -84,7 +91,47 @@ public class ClubController {
     @GetMapping("/clubDetail")
     public String clubDetail(@RequestParam(value = "postId", required = false) Long postId, Model model) {
         ClubResponse response = clubService.findClub(postId);
+        List<ImageResponse> imageResponses = response.getImageResponseList();
 
+        List<ImageInfo> imageInfose = new ArrayList<>();
+        for (ImageResponse image : imageResponses) {
+            ImageInfo imageInfo = ImageInfo.builder()
+                    .name(image.getOrigName())
+                    .url(MvcUriComponentsBuilder
+                            .fromMethodName(ImageController.class, "getImage"
+                            , image.getSaveName(), image.getCreaDate().toString()).build().toString())
+                    .build();
+            imageInfose.add(imageInfo);
+        }
+        System.out.println(imageInfose);
+
+//        imageInfose = imageResponses.stream().map(path ->{
+//            String fileName = path.getOrigName();
+//            String url = MvcUriComponentsBuilder
+//                    .fromMethodName(ImageController.class, "getImage"
+//                            , path.getOrigName()).build().toString();
+//            return new ImageInfo(fileName,url);
+//        }).collect(Collectors.toList());
+//        List<ImageInfo> imageInfose = imageResponses.stream().map(path ->{
+//            String fileName = path.getOrigName();
+//            String url = MvcUriComponentsBuilder
+//                    .fromMethodName(ImageController.class, "getImage"
+//                    , path.getOrigName()).build().toString();
+//            return new ImageInfo(fileName,url);
+//        }).collect(Collectors.toList());
+
+//        System.out.println(imageInfose);
+//        for (ImageResponse image : imageResponses) {
+//            List<ImageInfo> imageInfos = storageService.loadAll().map(path -> {
+//                String fileName = path.getFileName().toString();
+//                String url = MvcUriComponentsBuilder
+//                        .fromMethodName(ImageController.class, "getImage"
+//                        , path.getFileName().toString()).build().toString();
+//                return new ImageInfo(fileName, url);
+//            }).collect(Collectors.toList());
+//        }
+
+        model.addAttribute("club", response);
         model.addAttribute("postId", postId);
         return "club/clubDetail";
     }
