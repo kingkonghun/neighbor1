@@ -6,23 +6,42 @@
 <th:block th:insert="/common/common :: fragment-header"></th:block>
 <link rel="stylesheet" type="text/css" th:href="@{/css/chatDetail.css}">
 <script>
+$(function(){
+    $(".deal_comp").click(function(){
+        if(confirm("판매")){
+            postId = $("#postId").val();
+            receiver = $("#receiver").val();
+            $.ajax({
+                type: "post",
+                url: "used/success",
+                data: {"postId": postId, "receiver": receiver},
+                success: function(data){
+                    tongkn2_pop();
+                    $(".deal_comp").css("display", "none");
+                }
+            });
+        }
+    });
+});
+
     function tongkn2_pop(){
         opener.location.href="/used/detail?postId="+[[${list[0].postId}]];
     }
 </script>
 </head>
 <body>
-<input type="hidden" id="roomId" th:value="${roomId}">
-<input type="hidden" id="receiver" th:value="${receiver.receiver}">
+<input type="hidden" id="postId" th:value="${list[0].postId}">
+<input type="hidden" id="roomId" th:value="${list[0].roomId}">
+<input type="hidden" id="receiver" th:value="${list[0].receiver}">
 <input type="hidden" id="sender" th:value="${#authentication.principal.member.memberId}">
 <div class="container3">
   <div class="rightSide">
     <div class="header"><!--채팅 상대방 창 -->
       <div class="imgText">
         <div class="userimg">
-          <img th:src="@{/member/findProfileImg(memberId=${receiver.receiver})}" class="cover"><!--상대방 이미지-->
+          <img th:src="@{/member/findProfileImg(memberId=${list[0].receiver})}" class="cover"><!--상대방 이미지-->
         </div>
-        <h4 th:text="${receiver.receiverName}"></h4><!--상대 이름-->
+        <h4 th:text="${list[0].receiverName}"></h4><!--상대 이름-->
         <!--리스트 꾸미려면 넣기 <ul class="nav_icons">
             <li></li>
             <li></li>
@@ -41,10 +60,7 @@
           <span class="used_cost" th:text="${list[0].price} + ' 원'"></span>
         </div>
       </div>
-      <form action="/used/success" method="post">
-        <input type="hidden" name="postId" th:value="${list[0].postId}">
-        <button class="deal_comp py-2 px-4">거래 완료</button>
-      </form>
+      <button type="button" class="deal_comp py-2 px-4" th:if="${list[0].productStatus == 'y' && list[0].master == #authentication.principal.member.memberId}">판매완료</button>
     </div>
 
     <div class="chatBox" id="messages">

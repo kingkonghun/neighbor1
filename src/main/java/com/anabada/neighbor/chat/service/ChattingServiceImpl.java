@@ -150,6 +150,7 @@ public class ChattingServiceImpl implements ChattingService {
             Product product = usedRepository.findProduct(post.getPostId());
             Chat chat = Chat.builder()
                     .postId(post.getPostId())
+                    .master(post.getMemberId())
                     .title(post.getTitle())
                     .price(product.getPrice())
                     .roomId(message.getRoomId())
@@ -160,23 +161,24 @@ public class ChattingServiceImpl implements ChattingService {
                     .content(message.getContent())
                     .messageDate(dateFormat.format(message.getMessageDate()))
                     .messageType(message.getMessageType())
+                    .productStatus(product.getProductStatus())
                     .build();
             chatList.add(chat);
         }
         return chatList;
     }
 
-    @Override
-    public Chat getReceiver(long roomId, PrincipalDetails principalDetails) {
-        List<Long> memberIdList = chattingRepository.findChatMemberIdByRoomId(roomId);
-        long memberId = principalDetails.getMember().getMemberId();
-        long receiver = memberId == memberIdList.get(0) ? memberIdList.get(1) : memberIdList.get(0);
-        Chat chat = Chat.builder()
-                .receiver(receiver)
-                .receiverName(memberRepository.findMemberName(receiver))
-                .build();
-        return chat;
-    }
+//    @Override
+//    public Chat getReceiver(long roomId, PrincipalDetails principalDetails) {
+//        List<Long> memberIdList = chattingRepository.findChatMemberIdByRoomId(roomId);
+//        long memberId = principalDetails.getMember().getMemberId();
+//        long receiver = memberId == memberIdList.get(0) ? memberIdList.get(1) : memberIdList.get(0);
+//        Chat chat = Chat.builder()
+//                .receiver(receiver)
+//                .receiverName(memberRepository.findMemberName(receiver))
+//                .build();
+//        return chat;
+//    }
 
     @Override
     public boolean check(long roomId, PrincipalDetails principalDetails) {

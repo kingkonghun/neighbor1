@@ -85,5 +85,5 @@ public interface UsedService {
      * 판매완료
      * @param postId
      */
-    void soldOut(long postId);
+    void soldOut(long postId, long receiver, PrincipalDetails principalDetails);
 }

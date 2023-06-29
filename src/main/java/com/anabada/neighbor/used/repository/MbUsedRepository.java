@@ -24,7 +24,7 @@ public interface MbUsedRepository extends UsedRepository {
     List<Category> categoryList();
 
     @Override
-    @Select("select * from product where postId = #{postId} and productStatus = 'y'")
+    @Select("select * from product where postId = #{postId} and (productStatus = 'y' or productStatus = 'n')")
     public Product findProduct(long postId);
 
     @Override
@@ -90,7 +90,7 @@ public interface MbUsedRepository extends UsedRepository {
     public void updatePostView(long postId);
 
     @Override
-    @Select("select * from product where productStatus = 'y'")
+    @Select("select * from product where productStatus = 'y' or productStatus = 'n'")
     public List<Product> productList();
 
     @Override
@@ -160,4 +160,12 @@ public interface MbUsedRepository extends UsedRepository {
     @Override
     @Update("UPDATE product SET productStatus = 'n' WHERE postId=#{postId}")
     void soldOut(long postId);
+
+    @Override
+    @Insert("insert into sales (postId, memberId) values (#{postId}, #{memberId})")
+    void insertSales(@Param("postId") long postId, @Param("memberId") long memberId);
+
+    @Override
+    @Insert("insert into purchase (postId, memberId) values (#{postId}, #{memberId})")
+    void insertPurchase(@Param("postId") long postId, @Param("memberId") long receiver);
 }
