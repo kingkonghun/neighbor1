@@ -60,7 +60,7 @@ function showTopNotification(sender, senderName, content, messageDate) {
 
     setTimeout(function() {
         $(".popupup").fadeOut();
-    }, 1500);
+    }, 3000);
 }
 
 function refreshChatList() {

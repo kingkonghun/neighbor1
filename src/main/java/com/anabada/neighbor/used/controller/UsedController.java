@@ -81,7 +81,7 @@ public class UsedController {
         return "redirect:/used/list";
     }
 
-    @GetMapping("/postDelete") //게시물 삭제
+    @PostMapping("/postDelete") //게시물 삭제
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String postDelete(long postId) {
         usedService.delete(postId);

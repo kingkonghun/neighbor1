@@ -24,7 +24,7 @@ public interface MbUsedRepository extends UsedRepository {
     List<Category> categoryList();
 
     @Override
-    @Select("select * from product where postId = #{postId}")
+    @Select("select * from product where postId = #{postId} and productStatus = 'y'")
     public Product findProduct(long postId);
 
     @Override
@@ -36,7 +36,7 @@ public interface MbUsedRepository extends UsedRepository {
     public Member findMember(long memberId);
 
     @Override
-    @Select("select * from post where postId = #{postId}")
+    @Select("select * from post where postId = #{postId} and postType = 'used'")
     public Post findPost(long postId);
 
     @Override
