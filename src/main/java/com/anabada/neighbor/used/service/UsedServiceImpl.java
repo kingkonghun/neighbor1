@@ -408,8 +408,15 @@ public class UsedServiceImpl implements UsedService{
         return usedRepository.findLikesCount(memberId);
     }
 
+
+    /**
+     * 판매완료
+     */
+    @Transactional
     @Override
-    public void soldOut(long postId) {
+    public void soldOut(long postId, long receiver, PrincipalDetails principalDetails) {
+        usedRepository.insertSales(postId, principalDetails.getMember().getMemberId());
+        usedRepository.insertPurchase(postId, receiver);
         usedRepository.soldOut(postId);
     }
 }

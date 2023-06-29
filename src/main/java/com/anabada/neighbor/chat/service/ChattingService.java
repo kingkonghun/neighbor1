@@ -15,7 +15,7 @@ public interface ChattingService {
 
     List<Chat> chattingMessageList(long roomId, PrincipalDetails principalDetails);
 
-    Chat getReceiver(long roomId, PrincipalDetails principalDetails);
+//    Chat getReceiver(long roomId, PrincipalDetails principalDetails);
 
     boolean check(long roomId, PrincipalDetails principalDetails);
 }

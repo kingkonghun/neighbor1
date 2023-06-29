@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Chat {
     private long postId;
+    private long master;
     private String title;
     private String price;
     private long roomId;
@@ -22,4 +23,5 @@ public class Chat {
     private int chatCount;
     private String messageDate;
     private String messageType;
+    private String productStatus;
 }

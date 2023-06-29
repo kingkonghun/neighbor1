@@ -38,8 +38,8 @@ public class ChattingController {
         boolean check = chattingService.check(roomId, principalDetails);
         if (check) {
             model.addAttribute("list", chattingService.chattingMessageList(roomId, principalDetails));
-            model.addAttribute("receiver", chattingService.getReceiver(roomId, principalDetails));
-            model.addAttribute("roomId", roomId);
+//            model.addAttribute("receiver", chattingService.getReceiver(roomId, principalDetails));
+//            model.addAttribute("roomId", roomId);
         }
         return "chatEx/chatDetailPopup";
     }

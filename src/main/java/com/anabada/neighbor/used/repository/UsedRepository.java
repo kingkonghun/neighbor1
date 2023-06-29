@@ -178,4 +178,8 @@ public interface UsedRepository {
      * @param postId
      */
     void soldOut(long postId);
+
+    void insertSales(long postId, long memberId);
+
+    void insertPurchase(long postId, long receiver);
 }
