@@ -51,7 +51,7 @@ public class ImageController {
             String filename = path.getFileName().toString();
             String url = MvcUriComponentsBuilder
                     .fromMethodName(ImageController.class, "getImage"
-                            , path.getFileName().toString()).build().toString();
+                            , path.getFileName().toString(), "1").build().toString();
             return new ImageInfo(filename, url);
         }).collect(Collectors.toList());
         System.out.println(imageInfos);
@@ -62,8 +62,13 @@ public class ImageController {
     }
 
     @GetMapping("/images/{filename:.+}")
-    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
-        Resource file = storageService.load(filename);
+    public ResponseEntity<Resource> getImage(@PathVariable String filename, String creaDate) {
+        Resource file;
+        if (creaDate.equals("1")) {
+             file = storageService.load(filename);
+        }else {
+             file = storageService.load(filename, creaDate);
+        }
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""
                         + file.getFilename() + "\"").body(file);

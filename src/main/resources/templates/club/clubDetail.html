@@ -21,7 +21,8 @@
     <section class="section">
         <div class="main-section-wrap">
             <div class="slide-box">
-                <div class="content" th:each="ImageResponseList : ${club.ImageResponseList}">
+                <div class="content" th:each="image : ${images}">
+                    <img th:src="@{${image.url}}" alt="${image.name}"/>
 <!--                    <div class="img-box" th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'"></div>-->
 <!--                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>-->
                 </div>

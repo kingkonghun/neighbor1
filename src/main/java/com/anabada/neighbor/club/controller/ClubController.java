@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import javax.servlet.http.HttpSession;
 import java.awt.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -99,38 +100,13 @@ public class ClubController {
                     .name(image.getOrigName())
                     .url(MvcUriComponentsBuilder
                             .fromMethodName(ImageController.class, "getImage"
-                            , image.getSaveName(), image.getCreaDate().toString()).build().toString())
+                            , image.getSaveName(), image.getCreaDate().format(DateTimeFormatter.ofPattern("yyMMdd"))).build().toString())
                     .build();
             imageInfose.add(imageInfo);
         }
         System.out.println(imageInfose);
 
-//        imageInfose = imageResponses.stream().map(path ->{
-//            String fileName = path.getOrigName();
-//            String url = MvcUriComponentsBuilder
-//                    .fromMethodName(ImageController.class, "getImage"
-//                            , path.getOrigName()).build().toString();
-//            return new ImageInfo(fileName,url);
-//        }).collect(Collectors.toList());
-//        List<ImageInfo> imageInfose = imageResponses.stream().map(path ->{
-//            String fileName = path.getOrigName();
-//            String url = MvcUriComponentsBuilder
-//                    .fromMethodName(ImageController.class, "getImage"
-//                    , path.getOrigName()).build().toString();
-//            return new ImageInfo(fileName,url);
-//        }).collect(Collectors.toList());
-
-//        System.out.println(imageInfose);
-//        for (ImageResponse image : imageResponses) {
-//            List<ImageInfo> imageInfos = storageService.loadAll().map(path -> {
-//                String fileName = path.getFileName().toString();
-//                String url = MvcUriComponentsBuilder
-//                        .fromMethodName(ImageController.class, "getImage"
-//                        , path.getFileName().toString()).build().toString();
-//                return new ImageInfo(fileName, url);
-//            }).collect(Collectors.toList());
-//        }
-
+        model.addAttribute("images", imageInfose);
         model.addAttribute("club", response);
         model.addAttribute("postId", postId);
         return "club/clubDetail";
