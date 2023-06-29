@@ -10,6 +10,19 @@
     <link rel="stylesheet" th:href="@{/css/list.css}">
     <style>
         body{background-color: #f4f4f4; font-family: GangwonEduPowerExtraBoldA;}
+        .soldout{
+            opacity: 0.7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .msg{
+            position: absolute;
+            top:150px;
+            background-color: #FFFFFF;
+            color: #FF3366;
+            font-size: 50px;
+            font-weight: bold;}
         #modal {
             position: fixed;
             z-index: 1;
@@ -288,10 +301,14 @@
         <div class="main-section-wrap">
             <div class="slide-box">
                 <div class="content" th:each="imgList : ${dto.imgList}">
-                    <div class="img-box" style="width: 100%;" th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'"></div>
+                        <div class="img-box" style="width: 100%; " th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' " th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'">
+                            <p th:if="${dto.productStatus eq 'n'}" class="msg">판매된 상품 입니다.</p>
+                        </div>
                 </div>
                 <div class="content" th:if="${#lists.size(dto.imgList)==1}">
-                    <div class="img-box" style="width: 100%;" th:style="'background-image:url('+ @{/used/downFiles(img=${dto.imgList})} +');'"></div>
+                    <div class="img-box" style="width: 100%;" th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' " th:style="'background-image:url('+ @{/used/downFiles(img=${dto.imgList})} +');'">
+                        <p th:if="${dto.productStatus eq 'n'}" class="msg">판매된 상품 입니다.</p>
+                    </div>
                 </div>
             </div>
         </div>
