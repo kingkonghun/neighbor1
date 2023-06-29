@@ -10,14 +10,16 @@ body{display: flex; justify-content: center; align-items: center; height: 100vh;
 .login-form h1{font-size:32px; color:#FF3366; text-align:center;margin-bottom: 60px;font-family: GangwonEduPowerExtraBoldA;}
 .login-form h1 a{color:#FF3366;}
 .int-area{width:400px; position:relative; margin-top: 20px;}
+
 .int-area:first-child{margin-top:0;}
+
+
 .int-area input{width:100%;padding:20px 10px 10px; background-color: transparent; border:none; border-bottom: 1px solid #999; font-size:18px; color:#000;outline: none;}
 .int-area label{position:absolute; left:10px; top:15px; font-size:18px;color:#999;transition:top .5s ease;}
 #region{color:#999;}
 .int-area .email{display: flex; align-items: center;justify-content: space-between;}
 .int-area .address{ display: flex; align-items: center;justify-content: space-between;}
 
-.int-area .select-box{width: 100%;background-color: transparent;border: none; color:#999; text-align: center;font-size: 20px; border-bottom: 1px solid #999;}
 .int-area label.warning{color:red !important; animation: warning .3s ease; animation-iteration-count: 3;}
 @keyframes warning {
     0%{transform: translateX(-8px);}
