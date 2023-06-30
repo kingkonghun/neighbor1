@@ -11,18 +11,32 @@
     <style>
         body{background-color: #f4f4f4; font-family: GangwonEduPowerExtraBoldA;}
         .soldout{
-            opacity: 0.7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            opacity: 0.4;
         }
-        .msg{
+
+        .double-strike {
             position: absolute;
-            top:150px;
-            background-color: #FFFFFF;
-            color: #FF3366;
+            top: 80px;
             font-size: 50px;
-            font-weight: bold;}
+            width: 300px;
+            text-align: center;
+            transform: rotate(-20deg);
+            margin-top: 150px;
+            color: #FF3366;;
+            opacity: 1;
+        }
+
+        .double-strike::before {
+            content: "";
+            position: absolute;
+            left: 40px;
+            top: -20%;
+            right: 40px;
+            bottom: -20%;
+            border-top: 5px solid #FF3366;;
+            border-bottom: 5px solid #FF3366;;
+        }
+
         #modal {
             position: fixed;
             z-index: 1;
@@ -365,13 +379,14 @@
                 <div class="content" th:each="imgList : ${dto.imgList}">
                     <div class="img-box" style="width: 100%; " th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' " th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'">
                     </div>
-                    <p th:if="${dto.productStatus eq 'n'}" class="msg" style="z-index: 9;">판매된 상품 입니다.</p>
+                    <div class="double-strike">판매 완료</div>
+
 
                 </div>
                 <div class="content" th:if="${#lists.size(dto.imgList)==1}">
                     <div class="img-box" style="width: 100%;" th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' " th:style="'background-image:url('+ @{/used/downFiles(img=${dto.imgList})} +');'">
                     </div>
-                    <p th:if="${dto.productStatus eq 'n'}" class="msg">판매된 상품 입니다.</p>
+                    <div class="double-strike">판매 완료</div>
                 </div>
             </div>
         </div>
