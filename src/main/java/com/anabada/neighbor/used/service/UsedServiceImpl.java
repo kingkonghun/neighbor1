@@ -421,9 +421,12 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public List<Used> purchase(PrincipalDetails principalDetails) {
+    public List<Used> purchase(PrincipalDetails principalDetails,Criteria criteria) {
         List<Used> usedList = new ArrayList<>();
-        List<Purchase> purchaseList = usedRepository.findPurchaseByMemberId(principalDetails.getMember().getMemberId());
+        Map<String, Object> map = new HashMap<>();
+        map.put("memberId", principalDetails.getMember().getMemberId());
+        map.put("criteria", criteria);
+        List<Purchase> purchaseList = usedRepository.findPurchaseByMemberId(map);
 
         for (Purchase purchase : purchaseList) {
             Post post = usedRepository.findPost(purchase.getPostId());
@@ -441,10 +444,15 @@ public class UsedServiceImpl implements UsedService{
         return usedList;
     }
 
+
+
     @Override
-    public List<Used> sales(PrincipalDetails principalDetails) {
+    public List<Used> sales(PrincipalDetails principalDetails,Criteria criteria) {
         List<Used> usedList = new ArrayList<>();
-        List<Sales> salesList = usedRepository.findSalesByMemberId(principalDetails.getMember().getMemberId());
+        Map<String, Object> map = new HashMap<>();
+        map.put("memberId", principalDetails.getMember().getMemberId());
+        map.put("criteria",criteria);
+        List<Sales> salesList = usedRepository.findSalesByMemberId(map);
 
         for (Sales sales : salesList) {
             Post post = usedRepository.findPost(sales.getPostId());
@@ -460,6 +468,15 @@ public class UsedServiceImpl implements UsedService{
         }
         System.out.println(usedList);
         return usedList;
+    }
+
+    @Override
+    public int countPurchase(long memberId) {
+        return usedRepository.countPurchase(memberId);
+    }
+    @Override
+    public int countSales(long memberId) {
+        return usedRepository.countSales(memberId);
     }
 }
 

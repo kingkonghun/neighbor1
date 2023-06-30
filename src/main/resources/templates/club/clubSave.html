@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="오이마켓" />
-    <meta name="author" content="아나바다" />
-    <title>오이마켓</title>
-    <th:block th:insert="/common/common :: fragment-header"></th:block>
-</head>
-<body>
-<!-- Nav바-->
-<div th:replace="nav::div"></div>
+
 <div th:text="${result}">no</div>
 <section>
     <form class="row g-3" action="/clubSave" method="post" enctype="multipart/form-data">
@@ -52,26 +40,5 @@
     </form>
 </section>
 
-<div th:replace="footer::footer"></div>
 
-<script>
-        // 파일 선택
-    function selectFile(element) {
 
-        const file = element.files[0];
-
-        // 파일 크기가 10MB를 초과하는 경우
-        const fileSize = Math.floor(file.size / 1024 / 1024);
-        if (fileSize > 10) {
-            alert('10MB 이하의 파일로 업로드해 주세요.');
-            element.value = '';
-            return false;
-        }
-    }
-
-    function removeFile() {
-        document.getElementById("formFileMultiple").value = '';
-    }
-</script>
-</body>
-</html>

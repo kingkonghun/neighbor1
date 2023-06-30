@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Title</title>
+  <style>
+    body{background-color: #f9f9f9!important;}
+    #adminT {color: red;}
+    .myPage, .admin{font-family: 'GangwonEduPowerExtraBoldA';}
+    .img {width: 50px;height: 50px;}
+    .pagination {margin-top: 3em; margin-bottom: 5em;}
+    .pagination .pageNum{list-style: none; display: flex;}
+
+  </style>
+  <link rel="stylesheet" th:href="@{/css/myPage.css}">
+
+  <th:block th:insert="/common/common :: fragment-header"></th:block>
+</head>
+<body>
+
+
+<div class="member">
+  <h3 class="mb-4 h3">판매 내역</h3>
+  <table style="width: 100%;" class="table table-hover">
+    <thead>
+    <th>글 번호</th>
+    <th>제 목</th>
+    <th>카테고리</th>
+    <th>가격</th>
+
+    </thead>
+    <tbody th:each="list : ${sales}">
+    <tr>
+      <td th:text="${list.postId}"></td>
+      <td th:text="${list.title}"></td>
+      <td th:text="${list.categoryName}"></td>
+      <td th:text="${list.price}"></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!--페이지네비게이션-->
+  <div th:replace="pagination/paging :: div"></div>
+</div>
+<script th:inline="javascript">
+  function paging(num) {
+    $.ajax({
+      method:"get",
+      url: "/used/sales",
+      data: {"pageNum": num},
+      success: function (data) {
+        $(".member").html(data);
+      }
+    });
+  }
+</script>
+
+
+
+
+</body>
+</html>

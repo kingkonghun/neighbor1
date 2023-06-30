@@ -11,9 +11,25 @@
         background-color: #f4f4f4;
     }
 </style>
-<script th:inline="javascript">
+    <script>
+        // 파일 선택
+        function selectFile(element) {
 
-</script>
+            const file = element.files[0];
+
+            // 파일 크기가 10MB를 초과하는 경우
+            const fileSize = Math.floor(file.size / 1024 / 1024);
+            if (fileSize > 10) {
+                alert('10MB 이하의 파일로 업로드해 주세요.');
+                element.value = '';
+                return false;
+            }
+        }
+
+        function removeFile() {
+            document.getElementById("formFileMultiple").value = '';
+        }
+    </script>
 </head>
 <body>
 <div th:replace="nav::div"></div>
@@ -36,7 +52,7 @@
             </select>
         </article>
     </div>
-    <article  style="display: none;" id="writeForm"></article>
+    <article  id="writeForm" th:include="club/clubSave :: article"></article>
 
 
     <div id="list" class="row">

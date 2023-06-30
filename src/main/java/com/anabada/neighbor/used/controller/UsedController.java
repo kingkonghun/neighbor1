@@ -135,14 +135,26 @@ public class UsedController {
     }
 
     @GetMapping("/purchase")
-    public String purchase(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        model.addAttribute("list", usedService.purchase(principalDetails));
+    public String purchase(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,Criteria criteria) {
+        List<Used> purchase = usedService.purchase(principalDetails,criteria);
+        int total = usedService.countPurchase(principalDetails.getMember().getMemberId());
+
+        model.addAttribute("purchase", purchase);
+        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
+
         return "used/purchaseList";
     }
 
     @GetMapping("/sales")
-    public String sales(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        model.addAttribute("list", usedService.sales(principalDetails));
+    public String sales(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,Criteria criteria) {
+        int total = usedService.countSales(principalDetails.getMember().getMemberId());
+        model.addAttribute("sales", usedService.sales(principalDetails,criteria));
+        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
         return "used/salesList";
+    }
+
+    @GetMapping("/trade")
+    public String trade() {
+        return "used/trade";
     }
 }

@@ -170,10 +170,19 @@ public interface MbUsedRepository extends UsedRepository {
     void insertPurchase(@Param("postId") long postId, @Param("memberId") long receiver);
 
     @Override
-    @Select("select * from purchase where memberId = #{memberId}")
-    List<Purchase> findPurchaseByMemberId(long memberId);
+    @Select("select * from purchase where memberId = #{memberId} LIMIT #{criteria.amount} OFFSET #{criteria.offset}")
+    List<Purchase> findPurchaseByMemberId(Map<String, Object> map);
 
     @Override
-    @Select("select * from sales where memberId = #{memberId}")
-    List<Sales> findSalesByMemberId(long memberId);
+    @Select("SELECT count(*) FROM purchase WHERE memberId = #{memberId}")
+    int countPurchase(long memberId);
+
+    @Override
+    @Select("select * from sales where memberId = #{memberId} LIMIT #{criteria.amount} OFFSET #{criteria.offset}")
+    List<Sales> findSalesByMemberId(Map<String, Object> map);
+
+    @Override
+    @Select("SELECT count(*) FROM sales WHERE memberId = #{memberId}")
+    int countSales(long memberId);
+
 }

@@ -57,12 +57,11 @@
                         <li class="navbar-item hideItem" onclick="location.href='/clubList'">
                             <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-house-door"></i> 동네모임</a>
                         </li>
-                        <li class="navbar-item" sec:authorize="isAuthenticated()" onclick="location.href='/used/purchase'">
-                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-coin"></i> 구매내역</a>
+
+                        <li class="navbar-item" sec:authorize="isAuthenticated()" onclick="location.href='/used/trade'">
+                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-coin"></i> 거래내역</a>
                         </li>
-                        <li class="navbar-item" sec:authorize="isAuthenticated()" onclick="location.href='/used/sales'">
-                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-coin"></i> 판매내역</a>
-                        </li>
+
                         <li class="navbar-item" onclick="location.href='/logout'" sec:authorize="isAuthenticated()">
                             <a href="#" class="navbar-link title-sm" data-nav-link>
                                 <i class="fa-solid fa-right-from-bracket"></i> 로그아웃
