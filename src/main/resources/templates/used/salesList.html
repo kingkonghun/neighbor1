@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <title>Title</title>
+  <th:block th:insert="/common/common :: fragment-header"></th:block>?
   <style>
     body{background-color: #f9f9f9!important;}
     #adminT {color: red;}
@@ -10,14 +11,10 @@
     .img {width: 50px;height: 50px;}
     .pagination {margin-top: 3em; margin-bottom: 5em;}
     .pagination .pageNum{list-style: none; display: flex;}
-
   </style>
   <link rel="stylesheet" th:href="@{/css/myPage.css}">
-
-  <th:block th:insert="/common/common :: fragment-header"></th:block>
 </head>
 <body>
-
 
 <div class="member">
   <h3 class="mb-4 h3">판매 내역</h3>

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -24,4 +26,7 @@ public class Chat {
     private String messageDate;
     private String messageType;
     private String productStatus;
+    private String type;
+    private List<Long> memberList;
+    private int memberCount;
 }

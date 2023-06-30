@@ -29,4 +29,8 @@ public interface ChattingRepository {
     List<Long> findRoomIdByMemberId(long memberId);
 
     int check(ChattingMember chattingMember);
+
+    String findTypeByRoomId(long roomId);
+
+    int chatMemberCount(long roomId);
 }
