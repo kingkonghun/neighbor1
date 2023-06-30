@@ -30,10 +30,25 @@
         });
 
         $("#btnSubmit").click(function(){
+            let title = $("#inputTitle");
             let category = $("#category");
             let price = $("#inputPrice");
             let content = $("#inputContent");
             let files = $("#files");
+
+            const titleTest = /^[\s\S]{1,12}$/;
+            if (title.val() == '') {
+                alert("제목을 입력하세요");
+                title.focus();
+                return;
+            }
+            if (!titleTest.test(title.val())) {
+                alert("12글자 이내로 입력해주세요.(공백 포함)");
+                title.focus();
+                return;
+            }
+
+
             if(category.val() == 0) {
                 alert("카테고리를 선택하세요");
                 category.focus();
@@ -123,7 +138,7 @@
 
 
 
-    <div id="list" class="row">
+    <section id="list" class="row"  >
         <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${list}">
             <div class="item p-3" th:onclick="|location.href='@{detail(postId=${row.postId})}'|">
                 <img class="list_img" th:src="@{/used/findImg(postId=${row.postId})}">
@@ -154,7 +169,7 @@
                 <span th:text="${row.address}"></span>
             </div>
         </article>
-    </div>
+    </section>
     <article class="col col-12 mb-5">
         <button type="button" id="btnPlus">더보기</button>
     </article>

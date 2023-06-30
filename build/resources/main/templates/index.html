@@ -7,12 +7,13 @@
 <meta name="author" content="아나바다" />
 <title>오이마켓</title>
 <th:block th:insert="/common/common :: fragment-header"></th:block>
-<!--<link href="/css/style.css" rel="stylesheet" type="text/css">-->
+
 <!--헤더 스타일-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" th:href="@{/css/index.css}">
+<link rel="stylesheet" th:href="@{/css/indexList.css}">
 <link rel="preload" th:href="@{/img/hero-banner.png}">
     <link rel="stylesheet" th:href="@{/css/list.css}">
 <!--사이드바 스타일-->
@@ -89,40 +90,44 @@
             </div>
             <div class="container px-4 px-lg-5 mt-5" >
 
-                <div id="list" class="row">
-                    <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${starList}">
-                        <div class="item p-3" th:onclick="|location.href='@{used/detail(postId=${row.postId})}'|">
-                            <img class="list_img" th:src="@{/used/findImg(postId=${row.postId})}">
-                            <div class="div_2 mt-3">
-                                <h5 th:text="${row.title}"></h5>
-                                <span th:inline="text">
-                        [[${row.postView}]]
-                        <i class="bi bi-caret-up-fill"></i>
-                    </span>
+                    <div id="list" class="row">
+                        <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${starList}">
+                            <div class="item p-3" th:onclick="|location.href='@{used/detail(postId=${row.postId})}'|">
+                                <img class="list_img" th:src="@{/used/findImg(postId=${row.postId})}">
+                                <div class="div_2 mt-3">
+                                    <h5 th:text="${row.title}"></h5>
+                                    <span th:inline="text">
+                            [[${row.postView}]]
+                            <i class="bi bi-caret-up-fill"></i>
+                        </span>
 
+                                </div>
+                                <div class="div_3">
+                        <span class="price" th:inline="text">
+                            [[${row.price}]] 원
+                        </span>
+                        <span th:inline="text">
+                            [[${row.likesCount}]]
+                            <i class="bi bi-heart-fill" style="color: red"></i>
+                        </span>
+                                </div>
+                                <div class="div_4">
+                                    <p th:text="${row.content}"></p>
+                                    <span th:inline="text">
+                            [[${row.replyCount}]]
+                            <i class="bi bi-chat-dots-fill"></i>
+                        </span>
+                                </div>
+                                <span th:text="${row.address}"></span>
                             </div>
-                            <div class="div_3">
-                    <span class="price" th:inline="text">
-                        [[${row.price}]] 원
-                    </span>
-                                <span th:inline="text">
-                        [[${row.likesCount}]]
-                        <i class="bi bi-heart-fill" style="color: red"></i>
-                    </span>
-                            </div>
-                            <div class="div_4">
-                                <p th:text="${row.content}"></p>
-                                <span th:inline="text">
-                        [[${row.replyCount}]]
-                        <i class="bi bi-chat-dots-fill"></i>
-                    </span>
-                            </div>
-                            <span th:text="${row.address}"></span>
-                        </div>
-                    </article>
-                </div>
-        <div class="btnUsed" style="text-align: center;"><button class="btn btn-outline-secondary" th:onclick="|location.href='@{/used/list}'|">더 많은 상품 보기</button></div>
-     </section>
+                        </article>
+                    </div>
+                <div class="btnUsed" style="text-align: center;"><button class="btn btn-outline-secondary" th:onclick="|location.href='@{/used/list}'|">더 많은 상품 보기</button></div>
+            </div>
+        </section>
+
+
+
 
         <section class="py-5 section2">
         <div class="usedTitle">
@@ -130,39 +135,39 @@
             <p>같은제품 더 저렴하게 중고거래</p>
         </div>
         <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <!-- 인기 제품 뱃지-->
-                        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
-                        <!-- 중고상품 이미지  450 * 300이 적절-->
-                        <img class="card-img-top" src="https://file2.nocutnews.co.kr/newsroom/image/2020/02/19/20200219114114556225_8_450_300.jpg" alt="..." />
-                        <!-- 중고상품 상세-->
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <!-- 중고상품 이름-->
-                                <h5 class="fw-bolder">아이폰</h5>
-                                <!-- 판매자 이름 -->
-                                <h6 class="fw">중고만파는사람</h6>
-                                <!-- 판매자 평점-->
-                                <div class="d-flex justify-content-center small text-warning mb-2">
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
-                                 </div>
-                                <!-- 중고상품 가격-->
-                                1,500,000원
+            <div id="list2" class="row">
+                <article class="col col-xl-6 col-lg-6 col-md-12 col-sm-12 pb-5" th:each="club : ${clubList}">
+                    <div class="item p-3" th:onclick="|location.href='@{clubDetail(postId=${club.postId})}'|">
+                        <img class="list_img" src="https://cdn.pixabay.com/photo/2015/07/28/22/05/child-865116_1280.jpg">
+                        <div class="text">
+                            <h5 th:text="${club.title}">제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. </h5>
+                            <span class="content" th:text="${club.content}">내용내용ddddddddddd</span><!--내용 10자이내로-->
+                            <div class="listdetail"><!--지역 운동 생성일-->
+                                <span class="category" th:text="${club.hobbyName}">운동</span>
+                                <span class="region"><i class="fa-solid fa-map-location-dot"></i>지역<span> • </span></span>
+                                <span class="date">생성일</span>
+                            </div>
+                            <div class="members">
+                                <img src="/img/author-1.jpg" alt="Member 1">
+                                <img src="/img/author-2.jpg" alt="Member 2">
+                                <img src="/img/author-3.jpg" alt="Member 3">
+                                <img src="/img/author-4.jpg" alt="Member 4">
+                                <img src="/img/author-5.jpg" alt="Member 5">
+                                <img src="/img/author-6.jpg" alt="Member 6">
+
+                                <div class="count">
+                                    <i class="fa-solid fa-people-group"></i>
+                                    <span th:text="${club.nowMan}">6</span>
+                                    <span>/</span>
+                                    <span th:text="${club.maxMan}">50</span>
+                                </div><!--인원수 나타내는-->
                             </div>
                         </div>
-                        <!-- 상품 구매하기-->
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
-                        </div>
                     </div>
+                </article>
+                <div class="btnUsed" style="text-align: center;">
+                    <button class="btn btn-outline-secondary" th:onclick="|location.href='@{/clubList}'|">더 많은 모임 보기</button>
                 </div>
-                <div class="btnUsed" style="text-align: center;"><button>더 많은 상품 보기</button></div>
             </div>
         </div>
     </section>

@@ -5,6 +5,7 @@ import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.domain.ImageRequest;
 import com.anabada.neighbor.club.domain.ImageResponse;
+import com.anabada.neighbor.club.domain.*;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.service.ClubService;
 import com.anabada.neighbor.club.service.ImageUtils;
@@ -34,18 +35,22 @@ public class ClubController {
 
 
     @Autowired
-    public ClubController(ClubService clubService, ImageUtils imageUtils, ChattingService chattingService, FilesStorageService storageService) {
+    public ClubController(ClubService clubService, ImageUtils imageUtils, FilesStorageService storageService, ChattingService chattingService) {
         this.clubService = clubService;
         this.imageUtils = imageUtils;
-        this.chattingService = chattingService;
         this.storageService = storageService;
+        this.chattingService = chattingService;
     }
+
+
 
     @GetMapping("/clubList")
     public String clubList(Model model) {
         model.addAttribute("clubList", clubService.findClubList());
-        return "club/clubListEx";
+        return "club/clubList";
     }
+
+
 
     @PostMapping("/clubSave")
     public String clubSave(ClubRequest clubRequest, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {

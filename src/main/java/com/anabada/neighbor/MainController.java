@@ -1,5 +1,6 @@
 package com.anabada.neighbor;
 
+import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.service.ClubService;
 import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.service.UsedService;
@@ -19,6 +20,7 @@ public class MainController {
     private final UsedService usedService;
     private final ClubService clubService;
 
+
     @Autowired
     public MainController(UsedService usedService, ClubService clubService) {
         this.usedService = usedService;
@@ -27,8 +29,9 @@ public class MainController {
 
     @GetMapping("/")
     public String main(Model model) {
+        List<ClubResponse> clubList = clubService.findClubList();
         model.addAttribute("starList", usedService.mainList());
-//        model.addAttribute("club", clubService.mainList());
+        model.addAttribute("clubList", clubList.subList(0, Math.min(clubList.size(),6)));
         return "index";
     }
 

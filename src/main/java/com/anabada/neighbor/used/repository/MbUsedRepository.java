@@ -185,4 +185,7 @@ public interface MbUsedRepository extends UsedRepository {
     @Select("SELECT count(*) FROM sales WHERE memberId = #{memberId}")
     int countSales(long memberId);
 
+    @Override
+    @Select("select count(*) from likes where memberId = #{memberId}")
+    int countMyLikePost(long memberId);
 }
