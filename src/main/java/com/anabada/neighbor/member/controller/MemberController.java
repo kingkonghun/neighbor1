@@ -63,6 +63,7 @@ public class MemberController {
         int total = memberService.countMember();//멤버의 총 수
         List<Member> member = memberService.findAllMember(criteria);//멤버리스트
         System.out.println("member = " + member);
+        System.out.println(total);
         mav.addObject("member",member);
         mav.addObject("pageMaker", new PageDTO(total, 10, criteria));
         mav.setViewName("admin/memberList");

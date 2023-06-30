@@ -21,31 +21,31 @@
     <section class="section">
         <div class="main-section-wrap">
             <div class="slide-box">
-                <div class="content">
-                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
-
+                <div class="content" th:each="ImageResponseList : ${club.ImageResponseList}">
+<!--                    <div class="img-box" th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'"></div>-->
+<!--                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>-->
                 </div>
                 <!--반복-->
 
 
-                <div class="content">
-                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
+<!--                <div class="content">-->
+<!--                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>-->
 
-                </div>
-
-
-
-                <div class="content">
-                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
-
-                </div>
+<!--                </div>-->
 
 
 
-                <div class="content">
-                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>
+<!--                <div class="content">-->
+<!--                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>-->
 
-                </div>
+<!--                </div>-->
+
+
+
+<!--                <div class="content">-->
+<!--                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>-->
+
+<!--                </div>-->
             </div>
 
         </div>
@@ -61,7 +61,7 @@
             </ul>
 
             <div class="detail_menu"><!--제목-->
-                <span class="menu_title">
+                <span th:text="${club.title}" class="menu_title">
                     제목 모든일 합니다.
                 </span>
             </div>
@@ -71,14 +71,14 @@
             </div>
 
             <ul class="username"><!--글쓴이 이름 사진-->
-                <li><img src="/img/author-4.jpg" alt="프로필 사진"/></li>
+                <li><img th:src="@{/member/findProfileImg(memberId=${club.memberId})}" src="/img/author-4.jpg" alt="프로필 사진"/></li>
                 <li>김김김</li>
             </ul>
             <div>
                 <ul>
                     <li class="content">내용
                         <ul>
-                            <li class="bottom">
+                            <li th:text="${club.content}" class="bottom">
                                 와인🍷에 관심이 있으신 회원분들 어서오세용 :)
                                 문토에서 와인소셜링으로 좋은 사람들 많이 만났고,
                                 또 열어달라고 하신분들도 많아서
@@ -101,8 +101,8 @@
             <div class="info">
                 <!-- 인원수 받는 곳 -->
                 <i class="fa-solid fa-users"></i>
-                <span class="current-members">현재 인원: <span></span>명</span>
-                <span class="max-members">모집 인원: <span></span>명</span>
+                <span class="current-members">현재 인원: <span th:text="${club.nowMan}"></span>명</span>
+                <span class="max-members" >모집 인원: <span th:text="${club.maxMan}"></span>명</span>
             </div>
 
             <div class="btns"><!--가입버튼-->

@@ -48,6 +48,7 @@ public interface ClubService {
      */
     public List<ImageResponse> findAllImageByImgIds(List<Long> imgIds);
 
+    public ImageResponse findImageByImgId(Long imgId);
     /**
      * 이미지 삭제 (from DateBase)
      *
