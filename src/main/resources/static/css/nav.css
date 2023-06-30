@@ -556,6 +556,7 @@ top: 270px;
     overflow: hidden;
     text-overflow: ellipsis;/*넘으면 ...*/
     margin-top: 0;
+    font-family: 'omyu_pretty';
 }
 .navbar-item {
     cursor: pointer;

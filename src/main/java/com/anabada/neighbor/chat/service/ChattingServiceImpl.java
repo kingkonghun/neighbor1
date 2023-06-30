@@ -41,12 +41,11 @@ public class ChattingServiceImpl implements ChattingService {
 
         String memberName = principalDetails.getMember().getMemberName();
 
-        if (type.equals("used")) {
-            ChattingRoom chattingRoomTemp = chattingRepository.roomCheck(chattingRoom);
+        ChattingRoom chattingRoomTemp = chattingRepository.roomCheck(chattingRoom);
 
-            if (chattingRoomTemp == null) {
-                chattingRepository.insertRoom(chattingRoom);
-
+        if (chattingRoomTemp == null) {
+            chattingRepository.insertRoom(chattingRoom);
+            if (type.equals("used")) {
                 Post post = usedRepository.findPost(chattingRoom.getPostId());
                 Member member = memberRepository.findByMemberId(post.getMemberId());
                 Product product = usedRepository.findProduct(post.getPostId());
@@ -75,13 +74,12 @@ public class ChattingServiceImpl implements ChattingService {
                 simpMessagingTemplate.convertAndSendToUser(String.valueOf(chat.getReceiver()), "/topic/messageNotification", chat);
                 simpMessagingTemplate.convertAndSend("/topic/message/" + chat.getRoomId(), chat);
                 return roomId;
-            }else {
-                return chattingRoomTemp.getRoomId();
             }
         }else {
-            return 0;
+            return chattingRoomTemp.getRoomId();
         }
 
+        return 0;
     }
 
     @Override

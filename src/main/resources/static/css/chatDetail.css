@@ -232,10 +232,10 @@ body{/*컨테이너 배경*/
 }
 .frnd_message{
     display: flex;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        align-content: flex-start;
-        width: 50%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    width: 50%;
 }
 .frnd_message p{
 
