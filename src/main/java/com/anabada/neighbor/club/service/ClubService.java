@@ -5,6 +5,7 @@ import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ImageRequest;
 import com.anabada.neighbor.club.domain.ImageResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
+import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.used.domain.Post;
 
 import java.util.List;
@@ -79,4 +80,17 @@ public interface ClubService {
 
     public int checkPost(ClubRequest clubRequest);//clubPost객체의 Null값체크
 
+    int joinClubJoin(ClubResponse club, PrincipalDetails principalDetails);
+
+    Long findClubJoinIdByMemberId(ClubResponse club, Long memberId);
+
+    int deleteClubJoin(ClubResponse club, PrincipalDetails principalDetails);
+
+    /**
+     * 모임 현재인원 업데이트
+     * @param num 1이면 증가 0이면 감소
+     * @param clubId 클럽아이디
+     * @return 성공시 1 실패시 0
+     */
+    void updateNowMan(int num, Long clubId);
 }

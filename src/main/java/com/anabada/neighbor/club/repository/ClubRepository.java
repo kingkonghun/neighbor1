@@ -91,4 +91,19 @@ public interface ClubRepository {
      */
     int count();
 
+    /**
+     * 클럽에 가입해있는지 찾기
+     * @param clubId 클럽아이디
+     * @param memberId 멤버아이디
+     * @return clubJoinId 반환
+     */
+    Long selectClubJoinIdByMemberId(long clubId, Long memberId);
+
+    int insertClubJoin(Long clubId, Long memberId, Long postId);
+
+    int deleteClubJoin(Long clubId, Long memberId);
+
+    void updateNowManMinus(Long clubId);
+
+    void updateNowManPlus(Long clubId);
 }
