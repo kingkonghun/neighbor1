@@ -28,8 +28,8 @@ public class UsedServiceImpl implements UsedService{
     private final UsedRepository usedRepository;
     private final ImgDownService imgDownService;
     private final MemberRepository memberRepository;
-//    final String UPLOAD_DIR = "C:\\upload_anabada\\";
-    final String UPLOAD_DIR = "/Users/upload_anabada/";
+    final String UPLOAD_DIR = "C:\\upload_anabada\\";
+//    final String UPLOAD_DIR = "/Users/upload_anabada/";
 
     /**
      * 메인페이지 중고상품 리스트

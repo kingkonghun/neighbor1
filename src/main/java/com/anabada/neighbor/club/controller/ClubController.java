@@ -83,6 +83,8 @@ public class ClubController {
                 .maxMan(clubRequest.getMaxMan())
                 .build();
         if (clubService.saveClub(club) == 1) {
+            chattingService.openRoom(postId, principalDetails, "club");
+
             List<ImageRequest> images = imageUtils.uploadImages(clubRequest.getImages());
             clubService.saveImages(postId, images);
             model.addAttribute("result", "글 등록성공!");//나중에 삭제

@@ -4,14 +4,14 @@ $(function(){
     connect();
 
     $("#send").click(function() {
-        sendPrivateMessage();
+        sendMessage();
         $("#message").val('');
     });
 
     $("#message").keydown(function(event) {
         if (event.keyCode === 13) {
             event.preventDefault();
-            sendPrivateMessage();
+            sendMessage();
             $("#message").val('');
         }
     });
@@ -50,13 +50,13 @@ function showMessage(sender, senderName, content, messageDate, messageType) {
 
 }
 function showTopNotification(sender, senderName, content, messageDate, roomId) {
+    $(".popupup").fadeIn();
     $(".popupup").css("display", "flex");
     $(".userImg_").attr("src", "/member/findProfileImg?memberId="+sender);
     $("#popupName").text(senderName);
     var date = messageDate.substr(11, 9);
     $(".calltime").text(date);
     $("#popup_message").text(content);
-    $(".popupup").fadeIn();
     $("#popupRoomId").val(roomId);
     setTimeout(function() {
         $(".popupup").fadeOut();
@@ -67,10 +67,9 @@ function refreshChatList() {
     $("#chatRoomList").load(location.href+' #chatRoomList');
 }
 
-function sendPrivateMessage() {
+function sendMessage() {
     var content = $("#message").val();
-    var receiver = $("#receiver").val();
     var roomId = $("#roomId").val();
-    console.log("sending private message");
-    stompClient.send("/ws/message", {}, JSON.stringify({"roomId": roomId, "receiver": receiver, "content": content, "messageType": "SEND"}));
+    console.log("sending used message");
+    stompClient.send("/ws/message", {}, JSON.stringify({"roomId": roomId, "content": content, "messageType": "SEND"}));
 }

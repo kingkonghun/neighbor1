@@ -6,7 +6,6 @@ import com.anabada.neighbor.chat.domain.ChattingMessage;
 import com.anabada.neighbor.chat.domain.ChattingRoom;
 import org.apache.ibatis.annotations.*;
 
-import java.sql.Date;
 import java.util.List;
 
 @Mapper
@@ -17,7 +16,7 @@ public interface MbChattingRepository extends ChattingRepository {
     ChattingRoom roomCheck(ChattingRoom chattingRoom);
 
     @Override
-    @Insert("insert into chattingRoom (postId, creator) values (#{postId}, #{creator})")
+    @Insert("insert into chattingRoom (postId, creator, type) values (#{postId}, #{creator}, #{type})")
     @Options(useGeneratedKeys = true, keyProperty = "roomId")
     void insertRoom(ChattingRoom chattingRoom);
 
@@ -52,4 +51,12 @@ public interface MbChattingRepository extends ChattingRepository {
     @Override
     @Select("select count(*) from chattingMember where roomId = #{roomId} and memberId = #{memberId}")
     int check(ChattingMember chattingMember);
+
+    @Override
+    @Select("select type from chattingRoom where roomId = #{roomId}")
+    String findTypeByRoomId(long roomId);
+
+    @Override
+    @Select("select count(*) from chattingMember where roomId = #{roomId}")
+    int chatMemberCount(long roomId);
 }

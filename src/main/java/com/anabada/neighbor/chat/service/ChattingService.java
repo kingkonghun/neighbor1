@@ -13,7 +13,7 @@ public interface ChattingService {
 
     List<Chat> chattingRoomList(PrincipalDetails principalDetails);
 
-    List<Chat> chattingMessageList(long roomId, PrincipalDetails principalDetails);
+    List<Chat> chattingMessageList(long roomId, PrincipalDetails principalDetails, String type);
 
     Chat getReceiver(long roomId, PrincipalDetails principalDetails);
 

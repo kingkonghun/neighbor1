@@ -1,7 +1,6 @@
 package com.anabada.neighbor.chat.controller;
 
 import com.anabada.neighbor.chat.domain.Chat;
-import com.anabada.neighbor.chat.domain.ChattingRoom;
 import com.anabada.neighbor.chat.service.ChattingService;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ public class ChattingController {
     @PostMapping("/openRoom")
     public String openRoom(long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         long roomId = chattingService.openRoom(postId, principalDetails, "used");
-        return "redirect:/chatDetail?roomId="+roomId;
+        return "redirect:/chatDetail?roomId="+roomId+"&type=used";
     }
 
     @GetMapping("/chatRoomList")
@@ -34,14 +33,15 @@ public class ChattingController {
     }
 
     @GetMapping("/chatDetail")
-    public String chatDetail(long roomId, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public String chatDetail(long roomId, String type, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         boolean check = chattingService.check(roomId, principalDetails);
         if (check) {
-            model.addAttribute("list", chattingService.chattingMessageList(roomId, principalDetails));
-            model.addAttribute("receiver", chattingService.getReceiver(roomId, principalDetails));
-            model.addAttribute("roomId", roomId);
+            model.addAttribute("list", chattingService.chattingMessageList(roomId, principalDetails, type));
+            if (type.equals("used")) {
+                model.addAttribute("receiver", chattingService.getReceiver(roomId, principalDetails));
+            }
         }
-        return "chatEx/chatDetailPopup";
+        return type.equals("used") ? "chatEx/chatDetailPopupUsed" : "chatEx/chatDetailPopupClub";
     }
 
     @MessageMapping("/message")
