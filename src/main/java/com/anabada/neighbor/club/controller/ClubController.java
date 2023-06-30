@@ -5,20 +5,21 @@ import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.domain.ImageRequest;
 import com.anabada.neighbor.club.domain.ImageResponse;
-import com.anabada.neighbor.club.domain.*;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.service.ClubService;
 import com.anabada.neighbor.club.service.ImageUtils;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.controller.ImageController;
+import com.anabada.neighbor.file.domain.ImageInfo;
+import com.anabada.neighbor.file.service.FilesStorageService;
 import com.anabada.neighbor.used.domain.Post;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import javax.servlet.http.HttpSession;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class ClubController {
 
 
     @Autowired
-    public ClubController(ClubService clubService, ImageUtils imageUtils, FilesStorageService storageService) {
+    public ClubController(ClubService clubService, ImageUtils imageUtils, ChattingService chattingService, FilesStorageService storageService) {
         this.clubService = clubService;
         this.imageUtils = imageUtils;
         this.chattingService = chattingService;
@@ -113,11 +114,6 @@ public class ClubController {
         return clubService.findAllImageByPostId(postId);
     }
 
-    @GetMapping("/testest")
-    public String getListImages(Model model) {
-        return null;
-    }
-
     @PostMapping("/club/join")
     @ResponseBody
     public ClubResponse join(Long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -140,5 +136,4 @@ public class ClubController {
             }
         }
     }
-
 }
