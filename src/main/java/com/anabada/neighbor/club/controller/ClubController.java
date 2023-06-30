@@ -1,5 +1,7 @@
 package com.anabada.neighbor.club.controller;
 
+import com.anabada.neighbor.chat.domain.ChattingRoom;
+import com.anabada.neighbor.chat.service.ChattingService;
 import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.domain.ImageRequest;
@@ -26,17 +28,18 @@ public class ClubController {
 
     private final ClubService clubService;
     private final ImageUtils imageUtils;
+    private final ChattingService chattingService;
 
-    @Autowired
-    public ClubController(ClubService clubService, ImageUtils imageUtils) {
+    public ClubController(ClubService clubService, ImageUtils imageUtils, ChattingService chattingService) {
         this.clubService = clubService;
         this.imageUtils = imageUtils;
+        this.chattingService = chattingService;
     }
 
     @GetMapping("/clubList")
-    public String clubList() {
-
-        return "/club/clubList";
+    public String clubList(Model model) {
+        model.addAttribute("clubList", clubService.findClubList());
+        return "club/clubListEx";
     }
 
     //게시글 작성 페이지
@@ -75,9 +78,11 @@ public class ClubController {
             List<ImageRequest> images = imageUtils.uploadImages(clubRequest.getImages());
             clubService.saveImages(postId, images);
             model.addAttribute("result", "글 등록성공!");//나중에 삭제
+            chattingService.openRoom(postId, principalDetails, "club");
         } else {
             model.addAttribute("result", "글 등록실패!");//나중에 삭제
         }
+
         return "redirect:clubList";
     }
 

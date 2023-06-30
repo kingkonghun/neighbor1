@@ -1,6 +1,7 @@
 package com.anabada.neighbor.reply.service;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.reply.domain.CarryReply;
 import com.anabada.neighbor.reply.domain.Reply;
 import com.anabada.neighbor.reply.repository.ReplyRepository;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -98,9 +101,12 @@ public class ReplyServiceImpl implements ReplyService {
      * 내가 쓴 댓글 리스트 조회
      */
     @Override
-    public List<CarryReply> findMyReply(long memberId) {//내가 쓴 댓글목록
+    public List<CarryReply> findMyReply(long memberId, Criteria criteria) {//내가 쓴 댓글목록
         List<CarryReply> carryReplyList = new ArrayList<>();//리턴그릇
-        List<Reply> replyList=replyRepository.findMyReply(memberId);//댓글목록 긁어오기
+        Map<String, Object> map = new HashMap<>();
+        map.put("memberId", memberId);
+        map.put("criteria",criteria);
+        List<Reply> replyList=replyRepository.findMyReply(map);//댓글목록 긁어오기
         for (Reply reply : replyList) {
             long postId = reply.getPostId();
             Post post = usedRepository.findPost(postId);
@@ -114,5 +120,10 @@ public class ReplyServiceImpl implements ReplyService {
             carryReplyList.add(carryReply);
         }
         return carryReplyList;
+    }
+
+    @Override
+    public int countMyReply(long memberId) {
+        return replyRepository.countMyReply(memberId);
     }
 }

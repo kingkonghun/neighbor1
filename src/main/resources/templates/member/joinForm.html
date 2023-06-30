@@ -4,19 +4,19 @@
     <meta charset="UTF-8" />
     <title>join</title>
     <th:block th:insert="/common/common :: fragment-header"></th:block>
-    <link th:href="@{/css/login.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/join.css}" rel="stylesheet" type="text/css">
 
 </head>
 <body>
 <section class="login-form">
-    <h1>JOIN</h1>
+    <h1><a href="/">아나바다</a></h1>
     <form action="/member/join" method="post" name="form1" id="form1">
         <div class="int-area">
             <div class="email">
                 <input type="email" name="memberEmail" id="memberEmail" autocomplete="off" required>
-                <label for="memberEmail">MEMBER E-MAIL</label>
-                <button type="button" id="btnAuthentication">
-                    <i class="bi bi-bookmark-check"></i>
+                <label for="memberEmail">이메일</label>
+                <button type="button" class="btn btn-sm" id="btnAuthentication">
+                    인증
                 </button>
             </div>
         </div>
@@ -26,41 +26,41 @@
         </div>
         <div class="int-area">
             <input name="memberName" id="memberName" autocomplete="off" required>
-            <label for="memberName">MEMBER NAME</label>
+            <label for="memberName">닉네임</label>
         </div>
 
 
         <div class="int-area">
             <input type="password" name="memberPWD" id="memberPWD" autocomplete="off" required>
-            <label for="memberPWD">PASSWORD</label>
+            <label for="memberPWD">비밀번호</label>
         </div>
         <div class="int-area">
             <input type="password"  id="passCheck" autocomplete="off" required>
-            <label for="memberPWD">PASSCHECK</label>
+            <label for="memberPWD">비밀번호 확인</label>
         </div>
 
         <div class="int-area">
             <div class="address">
                 <input type="text" name="address" id="address" autocomplete="off" required >
-                <label for="address">ZIPCODE</label>
-                <button type="button" onclick="zipcode()" id="btnSearch">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search-heart-fill" viewBox="0 0 16 16" color="#669900">
-                        <path d="M6.5 13a6.474 6.474 0 0 0 3.845-1.258h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.008 1.008 0 0 0-.115-.1A6.471 6.471 0 0 0 13 6.5 6.502 6.502 0 0 0 6.5 0a6.5 6.5 0 1 0 0 13Zm0-8.518c1.664-1.673 5.825 1.254 0 5.018-5.825-3.764-1.664-6.69 0-5.018Z"/>
-                    </svg>
+                <label for="address">우편번호</label>
+                <button type="button" onclick="zipcode()" id="btnSearch" class="btn btn-sm">
+                    검색
                 </button>
             </div>
         </div>
         <div class="int-area">
             <input type="text" name="addressDetail" id="addressDetail" autocomplete="off" required>
-            <label for="addressDetail">ADDRESS</label>
+            <label for="addressDetail">상세주소</label>
         </div>
 
-        <div class="btn-area">
-            <button id="btnJoin" type="button">JOIN</button>
+        <div class="btn-area" style="margin-top:1.5em;">
+            <a id="btnJoin">
+                <img th:src="@{/img/btnJoin.png}" class="mb-2" style="width: 400px;" alt="fuck">
+            </a>
         </div>
     </form>
     <div class="caption">
-        <a href="/login">Already have an ID?</a>
+        <a href="/member/loginForm">계정이 이미 있으신가요?</a>
     </div>
 </section>
 
@@ -103,35 +103,51 @@
         }else alert('이메일을 입력해 주세요');
     });
 
+    /**
+     * 입력검증 및 정규식
+     */
     $(btnJoin).on('click', function (){
+        // 이메일 정규식 패턴
+        const emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+
+        // 비밀번호 정규식 패턴
+        const passwordPattern = /^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+
+        // 닉네임 정규식 패턴
+        const nicknamePattern = /^[a-zA-Z가-힣]{2,12}$/;
+
         if($(memberEmail).val() == ""){
             $(memberEmail).next('label').addClass('warning');
             setTimeout(function (){
                 $('label').removeClass('warning');
             },1500);
+            return false;
         }else if (!document.getElementsByClassName('confirm')) {
             alert('이메일 인증 버튼을 눌러주세요');
             memberEmail.focus();
-            return;
+            return false;
         } else if (random.val() == '' || random.val() !== authentication.val()) {
             alert("이메일 인증 코드를 확인해 주세요.");
             random.focus();
-            return;
+            return false;
         } else if ($(memberName).val() == "") {
             $(memberName).next('label').addClass('warning');
             setTimeout(function () {
                 $('label').removeClass('warning');
             }, 1500);
+            return false;
         } else if ($(memberPWD).val() == "") {
             $(memberPWD).next('label').addClass('warning');
             setTimeout(function () {
                 $('label').removeClass('warning');
             }, 1500);
+            return false;
         } else if ($(passCheck).val() == "") {
             $(passCheck).next('label').addClass('warning');
             setTimeout(function () {
                 $('label').removeClass('warning');
             }, 1500);
+            return false;
         } else if ($(passCheck).val() != $(memberPWD).val()) {
             $(passCheck).next('label').addClass('warning');
             passCheck.val('');
@@ -139,17 +155,47 @@
             setTimeout(function () {
                 $('label').removeClass('warning');
             }, 1500);
+            return false;
         } else if ($(address).val() == "") {
             $(address).next('label').addClass('warning');
             setTimeout(function () {
                 $('label').removeClass('warning');
             }, 1500);
+            return false;
         } else if ($(addressDetail).val() == "") {
             $(addressDetail).next('label').addClass('warning');
             setTimeout(function () {
                 $('label').removeClass('warning');
             }, 1500);
+            return false;
         }
+
+        if(!emailPattern.test(memberEmail.val())){
+            alert("사용 가능한 이메일을 작성해 주세요. ex)abc@gmail.com");
+            $(memberEmail).next('label').addClass('warning');
+            setTimeout(function (){
+                $('label').removeClass('warning');
+            },1500);
+            return false;
+        }
+        if (!passwordPattern.test(memberPWD.val())) {
+            alert("8글자 이상, 영어대소문자와 특수문자(!@#$%^&*)를 사용해야 합니다.");
+            $(memberPWD).next('label').addClass('warning');
+            setTimeout(function () {
+                $('label').removeClass('warning');
+            }, 1500);
+            return false;
+        }
+        if (!nicknamePattern.test(memberName.val())) {
+            alert("2~12글자 사이로 입력해주세요.");
+            $(memberName).next('label').addClass('warning');
+            setTimeout(function () {
+                $('label').removeClass('warning');
+            }, 1500);
+            return false;
+        }
+
+
         $('#form1').submit();
 
     });

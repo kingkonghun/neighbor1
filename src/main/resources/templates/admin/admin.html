@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <th:block th:insert="/common/common :: fragment-header"></th:block>
+    <link rel="stylesheet" href="/css/editInfo.css">
+  <link rel="stylesheet" th:href="@{/css/myPage.css}">
+  <script>
+    function memberList(){
+      $.ajax({
+        url:"/member/memberList",
+        type:"get",
+        success: function (data) {
+          $("#account-tab").attr('class','nav-link active1 active show');
+          $("#security-tab").attr('class','nav-link active1');
+          $("#admin").html(data);
+
+        }
+      });
+    }
+    function reportList(){
+      $.ajax({
+        url:"/used/reportList",
+        type:"get",
+        success:function (data){
+          $("#security-tab").attr('class','nav-link active1 active show');
+          $("#account-tab").attr('class','nav-link active1');
+          $("#admin").html(data);
+        }
+      });
+    }
+  </script>
+</head>
+<body>
+<div th:replace="nav :: div"></div>
+<section class="py-5 my-5">
+  <div class="container">
+    <h1 class="mb-5 h1">관리자 페이지</h1>
+    <div class="bg-white shadow rounded-lg d-block d-sm-flex">
+      <div class="profile-tab-nav border-right">
+        <div class="p-4 title">
+
+          <h4 class="text-center h4" style="font-size: 40px;">아나바다</h4>
+        </div>
+        <div class="nav flex-column nav-pills infoList" id="v-pills-tab" role="tablist" aria-orientation="vertical" >
+          <a class="nav-link active1" id="account-tab" data-toggle="pill" href="javascript:void(0)"  onclick="memberList()" role="tab" aria-controls="account" aria-selected="true">
+            <i class="fa fa-home text-center mr-1"></i>
+            회원 정보
+          </a>
+
+          <a class="nav-link" id="security-tab" data-toggle="pill" href="javascript:void(0)" onclick="reportList()" role="tab" aria-controls="security" aria-selected="false">
+            <i class="fa fa-user text-center mr-1"></i>
+            신고 목록
+          </a>
+        </div>
+      </div>
+      <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
+
+
+        <!--첫번째 폼 (단순 개인정보 수정)-->
+        <div class="tab-pane fade show active" id="admin" role="tabpanel" aria-labelledby="account-tab">
+          테테테테테테테테테테
+        </div>
+
+
+
+        <!--두번째 폼 비밀번호 변경(구글로그인등은 못들어옴)-->
+
+
+
+
+
+        <script>
+          function readURL(input) {
+            if (input.files && input.files[0]) {
+              var reader = new FileReader();
+              reader.onload = function(e) {
+                document.getElementById('preview').src = e.target.result;
+              };
+              reader.readAsDataURL(input.files[0]);
+            } else {
+              document.getElementById('preview').src = "";
+            }
+          }
+        </script>
+
+
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+
+
+
+<!--footer-->
+
+<div th:replace="footer :: footer"></div>
+</body>
+</html>

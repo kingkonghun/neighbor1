@@ -1,3 +1,112 @@
+/*사이드바 바텀*/
+.bottom2 {
+  width: 360px;
+  height: 300px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile1 {
+  position: relative;
+  width: 140px;
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+.profile-picture {
+   border-radius: 50%;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   background: #FFFFFF;
+   background-clip: content-box;
+   box-decoration-break: clone;
+ }
+
+ .settings-icon {
+   position: absolute;
+   top: 10px;
+   right: 10px;
+   color: hsl(42, 100%, 56%);
+   font-size: 1.5em;
+   cursor: pointer;
+ }
+
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.name2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333;
+}
+
+.nickname2 {
+  font-size: 1.2em;
+  color: #777;
+}
+.navbar-list {
+  list-style: none; /* 목록 스타일 제거 */
+  padding: 0; /* 패딩 제거 */
+  margin: 0; /* 마진 제거 */
+}
+
+.navbar-item {
+  margin: 10px 8px; /* 위 아래 마진 설정 */
+  background-color: #FF3366; /* 배경색 설정 */
+  border-radius: 5px; /* 테두리 둥글게 설정 */
+  padding: 10px; /* 패딩 설정 */
+  transition: background-color 0.5s ease; /* 배경색 변화 애니메이션 설정 */
+  color: white;
+  padding-top: 20px;
+}
+
+.navbar-item:hover {
+  background-color: #525FE1; /* 마우스 호버 시 배경색 변경 */
+  color: #ffffff;
+}
+.navbar-item a:hover {
+  color: white;
+}
+
+.navbar-link {
+  color: #ffffff; /* 링크 색상 설정 */
+  text-decoration: none; /* 텍스트 꾸밈 제거 */
+}
+
+.title-sm {
+  font-size: 1.2em; /* 글자 크기 설정 */
+}
+.sidebar{
+    margin-top: 64px;
+    font-family: GangwonEduPowerExtraBoldA;
+}
+.parent {
+  position: relative;
+  width: 135px;
+  height: 135px;
+}
+.hideItem {
+    display: none;
+}
+
+
+
+
+
+
+
+
+
 a {
     text-decoration: none;
     color: #000;
@@ -5,6 +114,7 @@ a {
 .search_1 {
     position: relative;
     width: 240px;
+    font-family: omyu_pretty;
 }
 .open-search {
     display: none;
@@ -15,9 +125,9 @@ a {
 .searchInput{
     width: 100%;
     border: 1px solid #bbb;
-    border-radius: 0px 8px 8px 0px;
+    border-radius: 12px;
     padding: 10px 12px;
-    font-size: 14px;
+    font-size: 16px;
 }
 .searchIcon{
     position: absolute;
@@ -290,7 +400,7 @@ border: 1px solid gray;
 }
 @media screen and (max-width: 992px) {
     .nav_menu_1 {display: none;}
-    .nav_menu_2 {display: block;}
+    .hideItem {display: block;}
 }
 
 @media screen and (max-width: 768px) {
@@ -378,10 +488,10 @@ input[id="menuicon"]:checked + label + div {
     top: 0;
     left: 0;
     height: 64px;
-    z-index: -9;
+    z-index: -10;
 }
 
-.center {
+/*.center {
 position: relative;
 top: 50px;
 left: 20px;
@@ -537,4 +647,108 @@ top: -11px;
 .bottom .logout{
 position: absolute;
 top: 270px;
+}*/
+
+.userImg_{/*이미지 조절*/
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
+
+.popupup{
+    display: none;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 80px;
+    width: 320px;
+    height: 100px;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid rgba(0,0,0,0.06);
+    cursor: pointer;
+    z-index: 999;
+}
+.popupup{
+    background: #F5EFE6;
+    border-radius: 15px;
+}
+.popupup:hover{
+    background: #E8DFCA;
+}
+.popupup .imgbox{
+    position: relative;
+    min-width: 45px;
+    height: 45px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.popupup .pop_detail{
+    padding-top: 20px;
+    position: relative;
+    align-items: center;
+    flex-direction: row;
+
+}
+.popupup .pop_detail .usernamecall{
+    display: flex;
+    justify-content: space-between;
+    width: auto;
+}
+
+.popupup .pop_detail .usernamecall h4 {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #111;
+
+}
+.popupup .pop_detail .usernamecall .calltime {
+    /* 추가 설정 */
+    align-self: center;  /* p.time 요소를 중앙에 배치 */
+}
+
+
+.message_new{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 5px;
+}
+.message_new p{/*메세지*/
+    color: gray;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    font-size: 0.9em;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;/*넘으면 ...*/
+    margin-top: 0;
+}
+.navbar-item {
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

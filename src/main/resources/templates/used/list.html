@@ -61,11 +61,12 @@
             if(checkIsAuthenticated()){
                 if(checkIsAuthorization()){
                     location.href="/member/editInfo?message=추가 정보를 입력한 뒤에 사용하세요";
+                    return;
                 }else{
                     $("#writeForm").slideDown();
                 }
             }else{
-                if(confirm("글쓰기는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
+                if(confirm("상품등록은 로그인 후 가능합니다\n로그인 하시겠습니까?")){
                     location.href="/member/loginForm";
                 }
             }
@@ -117,6 +118,8 @@
         </article>
     </div>
     <article th:include="used/post :: section" style="display: none;" id="writeForm"></article>
+
+
 
 
     <div id="list" class="row">

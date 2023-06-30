@@ -4,41 +4,48 @@
     <meta charset="UTF-8"/>
     <title>Title</title>
     <th:block th:insert="/common/common :: fragment-header"></th:block>
-    <style>
-        #liWrite{color:red;}
 
-    </style>
     <link rel="stylesheet" th:href="@{/css/myPage.css}">
+    <style>
+        body{background-color: #f4f4f4;}
+    </style>
 </head>
 <body>
 <!-- Nav바-->
-<div th:replace="nav :: div"></div>
-<div th:replace="member/myPageNav :: nav"></div>
+<!--<div th:replace="nav :: div"></div>-->
+<!--<div th:replace="member/myPageNav :: nav"></div>-->
 
 <div class="myWrite">
-    <table  style="width: 100%;" class="table table-hover">
-        <thead>
-            <th>글번호</th>
-            <th>카테고리</th>
-            <th>사진</th>
-            <th>제목</th>
-            <th>등록일</th>
-            <th>조회수</th>
-        </thead>
-        <tbody th:each="list : ${writeList}">
-            <tr th:onclick="'detail('+${list.postId}+')'" >
-                <td th:text="${list.postId}"></td>
-                <td th:text="${list.categoryName}"></td>
-                <td> <img class="img"  th:src="@{/used/findImg(postId=${list.postId})}"  alt="실패"></td>
-                <td th:text="${list.title}"></td>
-                <td th:text="${#dates.format(list.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></td>
-                <td th:text="${list.postView}"></td>
-            </tr>
-        </tbody>
-    </table>
+    <h2 class="h2">내가 작성한 중고 게시글</h2>
+    <div class="table">
+        <table  style="width: 100%;" class="table table-hover">
+            <thead>
+                <th>글번호</th>
+                <th>카테고리</th>
+                <th>사진</th>
+                <th>제목</th>
+                <th>등록일</th>
+                <th>조회수</th>
+            </thead>
+            <tbody th:each="list : ${writeList}">
+                <tr th:onclick="'detail('+${list.postId}+')'" >
+                    <td th:text="${list.postId}"></td>
+                    <td th:text="${list.categoryName}"></td>
+                    <td> <img class="img"  th:src="@{/used/findImg(postId=${list.postId})}"  alt="실패"></td>
+                    <td th:text="${list.title}"></td>
+                    <td th:text="${#dates.format(list.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></td>
+                    <td th:text="${list.postView}"></td>
+                </tr>
+            </tbody>
+        </table>
 
-    <!--페이지네비게이션-->
-    <div th:replace="pagination/paging :: div"></div>
+            <!--페이지네비게이션-->
+        <div th:replace="pagination/paging :: div" style="text-align: center;"></div>
+
+        <div class="btnList">
+            <button class="btn btn-outline-danger" type="button" id="btnBack" onclick="removeHTML()">뒤로가기</button>
+        </div>
+    </div>
 </div>
 
     <script th:inline="javascript">
@@ -47,8 +54,24 @@
                 location.href="/used/detail?postId="+postId;
             }
         }
-    </script>
+
+        /**
+         *  비동기 페이징
+         * @param num 페이지 네비게이션의 버튼의 숫자
+         */
+        function paging(num) {
+            $.ajax({
+                method:"get",
+                url: "/member/myWrite",
+                data: {"pageNum": num},
+                success: function (data) {
+                    $(".myWrite").html(data);
+                }
+            });
+        }
+
+</script>
 <!-- Footer-->
-<div th:replace="footer :: footer"></div>
+<!--<div th:replace="footer :: footer"></div>-->
 </body>
 </html>

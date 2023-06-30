@@ -56,13 +56,12 @@ public interface MbMemberRepository extends MemberRepository{
     @Select("SELECT * FROM post WHERE memberId=#{memberId} and postType='used' ORDER BY postUpdate DESC  LIMIT 5")
     List<Post> findMyPostFive(long memberId);
 
-    @Override
-    @Update("UPDATE member SET memberName=#{memberName},memberPWD=#{memberPWD},address=#{address}, addressDetail=#{addressDetail} WHERE memberId=#{memberId}")
-    void editInfo(Member member);
 
     @Override
-    @Update("UPDATE member SET memberName=#{memberName},address=#{address}, addressDetail=#{addressDetail} WHERE memberId=#{memberId}")
-    void editInfoNotPwd(Member member);
+    @Update("UPDATE member SET memberName=#{memberName},address=#{address}, addressDetail=#{addressDetail}, role='ROLE_USER' WHERE memberId=#{memberId}")
+    void editInfo(Member member);
+
+
 
     @Override
     @Update("UPDATE member SET profileImg=#{profileImg} WHERE memberId=#{memberId}")
@@ -95,5 +94,13 @@ public interface MbMemberRepository extends MemberRepository{
     @Override
     @Update("update member set score = #{reportedMemberScore} where memberId = #{memberId}")
     void updateScore(@Param("memberId") long memberId, @Param("reportedMemberScore") int reportedMemberScore);
+
+    @Override
+    @Select("SELECT memberPWD FROM member WHERE memberId=#{memberId}")
+    String pwdCheck(long memberId);
+
+    @Override
+    @Update("UPDATE member SET memberPWD=#{memberPWD} WHERE memberId=#{memberId} ")
+    void editPwd(@Param("memberPWD") String memberPWD, @Param("memberId") long memberId);
 }
 
