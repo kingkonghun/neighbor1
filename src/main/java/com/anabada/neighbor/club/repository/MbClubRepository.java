@@ -90,5 +90,25 @@ public interface MbClubRepository extends ClubRepository {
     String selectMemberName(long memberId);
 
     @Override
+    @Insert("insert into clubJoin (clubId, memberId, postId) values (#{clubId}, #{memberId}, #{postId})")
+    int insertClubJoin(@Param("clubId") Long clubId, @Param("memberId") Long memberId,@Param("postId") Long postId);
+
+    @Override
+    @Delete("delete from clubJoin where clubId = #{clubId} and memberId = #{memberId}")
+    int deleteClubJoin(@Param("clubId") Long clubId, @Param("memberId") Long memberId);
+
+    @Override
+    @Select("select id from clubJoin where clubId = #{clubId} and memberId = #{memberId} ")
+    Long selectClubJoinIdByMemberId(@Param("clubId") long clubId,@Param("memberId") Long memberId);
+
+    @Override
+    @Update("update club set nowMan = nowMan + 1 where clubId = ${clubId}")
+    void updateNowManMinus(Long clubId);
+
+    @Override
+    @Update("update club set nowMan = nowMan - 1 where clubId = ${clubId}")
+    void updateNowManPlus(Long clubId);
+
+    @Override
     int count();
 }

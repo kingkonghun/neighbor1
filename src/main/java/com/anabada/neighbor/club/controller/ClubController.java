@@ -1,10 +1,6 @@
 package com.anabada.neighbor.club.controller;
 
-import com.anabada.neighbor.chat.repository.MbChattingRepository;
-import com.anabada.neighbor.club.domain.ClubRequest;
-import com.anabada.neighbor.club.domain.ClubResponse;
-import com.anabada.neighbor.club.domain.ImageRequest;
-import com.anabada.neighbor.club.domain.ImageResponse;
+import com.anabada.neighbor.club.domain.*;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.service.ClubService;
 import com.anabada.neighbor.club.service.ImageUtils;
@@ -21,11 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.servlet.http.HttpSession;
-import java.awt.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class ClubController {
@@ -128,6 +122,29 @@ public class ClubController {
     @GetMapping("/testest")
     public String getListImages(Model model) {
         return null;
+    }
+
+    @PostMapping("/club/join")
+    @ResponseBody
+    public ClubResponse join(Long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long memberId = principalDetails.getMember().getMemberId();
+        ClubResponse club = clubService.findClub(postId);
+        Long clubJoinId = clubService.findClubJoinIdByMemberId(club, memberId);
+        if (clubJoinId == null) {//가입한적 없으면 join 있으면 delete
+            if (clubService.joinClubJoin(club, principalDetails) == 1) {
+                clubService.updateNowMan(1, club.getClubId());
+                return clubService.findClub(postId); // 가입성공시 클럽을 새로 조회
+            }else{
+                return club; // 가입 실패시 클럽을 새로조회하지않음
+            }
+        }else{
+            if (clubService.deleteClubJoin(club, principalDetails) == 1) {
+                clubService.updateNowMan(0, club.getClubId());
+                return clubService.findClub(postId);// 탈퇴성공시 클럽을 새로 조회
+            }else{
+                return club; // 탈퇴 실패시 클럽을 새로 조회하지않음
+            }
+        }
     }
 
 }

@@ -15,6 +15,7 @@ import java.util.List;
 @Data
 public class ClubResponse {
     private long postId; //게시글 번호
+    private Long clubId;
     private long memberId; // 작성자 아이디
     private String memberName; //작성자 닉네임
     private String title; //제목
@@ -26,5 +27,6 @@ public class ClubResponse {
     private long postView;//조회수
     private List<ImageResponse> ImageResponseList; //이미지 url List
     private List<MultipartFile> images = new ArrayList<>(); // 첨부파일 List
+    private int clubJoinYn;
 
 }
