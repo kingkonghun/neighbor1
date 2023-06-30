@@ -1,16 +1,16 @@
 
-<div th:text="${result}">no</div>
-<section>
+<!--<div th:text="${result}">no</div>-->
+<div>
     <form class="row g-3" action="/clubSave" method="post" enctype="multipart/form-data">
         <div class="container px-4 px-lg-5 my-5" >
             <div class="row">
                 <div class="col-md-6">
                     <label for="inputTitle" class="form-label">제목</label>
-                    <input th:value="${club.title}" type="text" class="form-control" id="inputTitle" name="title">
+                    <input type="text" class="form-control" id="inputTitle" name="title">
                 </div>
                 <div class="col-md-4">
                     <label for="inputHobby" class="form-label">취미종류</label>
-                    <select th:field="*{club.hobbyName}" id="inputHobby" class="form-select" name="hobbyName">
+                    <select id="inputHobby" class="form-select" name="hobbyName">
                         <option value="운동">운동</option>
                         <option value="공부">공부</option>
                         <option value="술">술</option>
@@ -18,12 +18,12 @@
                 </div>
                 <div class="col-md-2">
                     <label for="inputMaxMan" class="form-label">최대인원수</label>
-                    <input th:value="${club.maxMan}" type="number" class="form-control" id="inputMaxMan" placeholder="2~50" name="maxMan" min="2" max="50">
+                    <input type="number" class="form-control" id="inputMaxMan" placeholder="2~50" name="maxMan" min="2" max="50">
                 </div>
                 <div class="col-md-12">
                     <label for="inputContent" class="form-label">내용</label>
                     <div class="form-floating">
-                        <textarea th:text="${club.content}" class="form-control" placeholder="내용" id="inputContent" style="height: 300px" name="content"></textarea>
+                        <textarea class="form-control" placeholder="내용" id="inputContent" style="height: 300px" name="content"></textarea>
                         <label for="inputContent">커뮤니티 매너를 지켜주세요</label>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
             </div>
         </div>
     </form>
-</section>
+</div>
 
 
 
