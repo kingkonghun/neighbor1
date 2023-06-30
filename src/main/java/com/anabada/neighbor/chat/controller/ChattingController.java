@@ -49,7 +49,6 @@ public class ChattingController {
     }
 
     @MessageMapping("/message")
-    @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public void messageRoom(Chat chat, Principal principal) throws InterruptedException {
         Thread.sleep(1000);
         chattingService.sendMessage(chat, principal);

@@ -207,6 +207,7 @@ public class ChattingServiceImpl implements ChattingService {
                         .messageDate(dateFormat.format(message.getMessageDate()))
                         .messageType(message.getMessageType())
                         .productStatus(product.getProductStatus())
+                        .type(type)
                         .build();
             } else if (type.equals("club")) {
                 Post post = clubRepository.selectPost(chattingRoom.getPostId());
@@ -222,6 +223,7 @@ public class ChattingServiceImpl implements ChattingService {
                         .messageDate(dateFormat.format(message.getMessageDate()))
                         .messageType(message.getMessageType())
                         .memberCount(chattingRepository.chatMemberCount(message.getRoomId()) - 1)
+                        .type(type)
                         .build();
             }
             chatList.add(chat);

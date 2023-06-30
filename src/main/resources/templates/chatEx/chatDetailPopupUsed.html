@@ -30,8 +30,10 @@ $(function(){
 </script>
 </head>
 <body>
+<input type="hidden" id="type" th:value="${list[0].type}">
 <input type="hidden" id="postId" th:value="${list[0].postId}">
 <input type="hidden" id="roomId" th:value="${list[0].roomId}">
+<input type="hidden" id="receiver" th:value="${receiver.receiver}">
 <input type="hidden" id="sender" th:value="${#authentication.principal.member.memberId}">
 <div class="container3">
   <div class="rightSide">

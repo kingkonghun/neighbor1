@@ -25,7 +25,7 @@ function connect() {
     stompClient.connect({}, function (frame) {
         console.log("Connected: " + frame);
         stompClient.subscribe("/user/topic/messageNotification", function (chat) {
-            showTopNotification(JSON.parse(chat.body).sender, JSON.parse(chat.body).senderName, JSON.parse(chat.body).content, JSON.parse(chat.body).messageDate, JSON.parse(chat.body).roomId);
+            showTopNotification(JSON.parse(chat.body).sender, JSON.parse(chat.body).senderName, JSON.parse(chat.body).content, JSON.parse(chat.body).messageDate, JSON.parse(chat.body).roomId, JSON.parse(chat.body).type);
             refreshChatList();
         });
 
@@ -49,7 +49,7 @@ function showMessage(sender, senderName, content, messageDate, messageType) {
     }
 
 }
-function showTopNotification(sender, senderName, content, messageDate, roomId) {
+function showTopNotification(sender, senderName, content, messageDate, roomId, type) {
     $(".popupup").fadeIn();
     $(".popupup").css("display", "flex");
     $(".userImg_").attr("src", "/member/findProfileImg?memberId="+sender);
@@ -58,6 +58,7 @@ function showTopNotification(sender, senderName, content, messageDate, roomId) {
     $(".calltime").text(date);
     $("#popup_message").text(content);
     $("#popupRoomId").val(roomId);
+    $("#popupType").val(type);
     setTimeout(function() {
         $(".popupup").fadeOut();
     }, 3000);
@@ -70,6 +71,7 @@ function refreshChatList() {
 function sendMessage() {
     var content = $("#message").val();
     var roomId = $("#roomId").val();
+    var type = $("#type").val();
     console.log("sending used message");
-    stompClient.send("/ws/message", {}, JSON.stringify({"roomId": roomId, "content": content, "messageType": "SEND"}));
+    stompClient.send("/ws/message", {}, JSON.stringify({"roomId": roomId, "content": content, "messageType": "SEND", "type": type}));
 }
