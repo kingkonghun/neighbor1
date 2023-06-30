@@ -1,362 +1,294 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
-*
-{
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Open Sans', sans-serif;
 }
-body{/*컨테이너 배경*/
+
+.section{margin-top:8px;}
+.item2 , .item3{font-family: GangwonEduPowerExtraBoldA;}
+.item2 pre {font-family: Humanbumsuk; font-size: 1.5em;}
+#updatePost{font-family: 'omyu_pretty';}
+/*플랙스 박스*/
+.flex-box {
     display: flex;
+    height: 90%;
+    flex-wrap: wrap;
     justify-content: center;
+  }
+
+/*아이템*/
+/*1번째 내용*/
+.section{
+    /*background-color: black;*/
+    width: 600px;
+    height: 600px;
+    overflow: hidden;
+    position: relative;
+}
+.main-section-wrap{
+    max-width: 550px;
+    margin: 0 auto;
     align-items: center;
-    min-height: 100vh;/*위에 높이*/
-    background: linear-gradient(#FF3366 0%, #FF3366 130px, #f4f4f4 130px, #f4f4f4 100%); /*색 조합*/
 }
-.container3{
-    position: relative;
-    width: 550px;
-    max-width: 100%;
-    height: calc(100vh - 40px);
-    background: #fff;
-    box-shadow: 0 1px 1px 0 rgba(0,0,0,0.06), 0 2px 5px 0 rgba(0,0,0,0.06);/*채팅 메인페이지*/
-    display: flex;
+
+.main-section-wrap .slide-box .content{
+    margin-right: 5px;
+    margin-left: 5px;
+    border-radius: 12px;
+    overflow: hidden;
 }
-.container3 .leftSide{
-    position: relative;
-    flex: 30%;
-    background: #fff;
-    border-right: 1px solid rgba(0,0,0,0.6) ;/*리스트 오른쪽에 선*/
+
+.main-section-wrap .noSlide-box .content{
+    margin-right: 5px;
+    margin-left: 5px;
+    border-radius: 12px;
+    /*overflow: hidden;*/
 }
-.container3 .rightSide{
-    position: relative;
-    flex:100%;
-    background: #e5ddd5;
-}
-.container3 .rightSide::before{
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
+
+.noSlide-box .content > .imgOne-box{
     width: 100%;
-    height: 100%;
-    background: url(/static/img/watercolor-4117017_1920.png);
-    opacity: 0.06;
-}
-.header{
+    padding-bottom: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    max-width: 100%; /* 추가: 이미지의 최대 너비를 부모 요소에 맞춤 */
+    max-height: 100%; /* 추가: 이미지의 최대 높이를 부모 요소에 맞춤 */
     position: relative;
+    z-index: 1;
+}
+
+.slide-box .content > .img-box {
     width: 100%;
-    height: 60px;
-    background: #ededed;
+    padding-bottom: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    max-width: 100%; /* 추가: 이미지의 최대 너비를 부모 요소에 맞춤 */
+    max-height: 100%; /* 추가: 이미지의 최대 높이를 부모 요소에 맞춤 */
+    position: relative;
+    z-index: 1;
+}
+.slick-prev{/*버튼 위치 조정*/
+    left: 40%;
+    top: 90%;
+    z-index: 2;
+}
+.slick-next{
+    right: 40%;
+    top: 90%;
+    z-index: 2;
+}
+.slick-prev:before {/*왼쪽 버튼 디자인*/
+    content: "<";
+    color:rgb(47, 47, 47);
+    font-size: 50px;
+  }
+  .slick-next:before {/*오른쪽 버튼 디자인*/
+    content: ">";
+    color: rgb(47, 47, 47);
+    font-size: 50px;
+  }
+
+/*2번째 내용*/
+.metadata{width: 100%;}
+.detail_menu{margin-top: 1em;margin-left: 2em;}
+.item2{
+    margin-top: 8px;
+    background-color: #FFFFFF;
+    width: 600px;
+    height: 542px;
+    border-radius: 12px;
+}
+.usedInfo{height: 320px;}
+
+
+.menu_title{
     display: flex;
-    justify-content: space-between;
+    font-size: 25px;
+    margin-top: 10px;
+}
+/*.content{*/
+/*    list-style: none;*/
+/*    margin-top: 10px;*/
+/*}*/
+.bottom {
+    width: 530px;
+    height: 250px;
+    overflow: auto;
+}
+
+.views{
+    text-align: right;
+    display: block;
+    font-size: 15px;
+    color: gray;
+    text-decoration: underline;
+    text-decoration-color: black;
+}
+.username{
+    display: flex;
     align-items: center;
-    padding: 0 15px;
+    margin: 0px;
+    padding: 0px;
 }
-#block {
-    height: 80px;
-}
-.userimg{
-    position: relative;
+.username img{
     width: 40px;
     height: 40px;
-    overflow: hidden;
-    border-radius: 50%;
-}
-.cover{/*이미지 조절*/
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.nav_icons{
-    display: flex;
-}
-.nav_icons li{
-    display: flex;
-    list-style: none;
-    cursor: pointer;
-    color: aqua;
-    font-size: 1.5em;
-    margin-left: 22px;
-}
-.fa-solid{/*돋보기*/
-    position: absolute;
-    left: 30px;
-    top: 14px;
-    font-size: 1.2em;
-}
-.chatlist{
-    position: relative;
-    height: calc(100% - 110px);/*60+50px*/
-    overflow-y: auto;
-    background: #fff;
-}
-.chatlist .block{
-    position: relative;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
-    cursor: pointer;
-}
-.chatlist .block .active{
-    background: #ebebeb;
-}
-.chatlist .block:hover{
-    background: #f5f5f5;
-}
-.chatlist .block .imgbx{
-    position: relative;
-    min-width: 45px;
-    height: 45px;
-    overflow: hidden;
-    border-radius: 50%;
+    border-radius: 100%;
     margin-right: 10px;
 }
-.chatlist .block .details{
-    position: relative;
-    width: 100%;
+.username li {
+    list-style: none;
 }
-.chatlist .block .details .listHead{
+.info{
+    display: flex;
+    margin-top: 30px;
+    align-items: center;
+}
+.info .fa-solid  {
+    margin-right: 8px;
+}
+/* 신고하기, 댓글보기*/
+.btns{
+    margin-top: 10px;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 5px;
 }
-.chatlist .block .details .listHead h4{
-    font-size: 1.1em;
-    font-weight: 600;
-    color: #111;
+.btns .report{font-size: 15px;}
+.btns .reply{font-size: 20px;}
+
+/*3번째 내용*/
+.similarTitle{
+    text-align: center;
+    margin : 2em 0 1.5em 0;
 }
-.chatlist .block .details .listHead .time{/*나중에 지우기*/
-    font-size: 0.75em;
-    color: #aaa;
-}
-.chatlist .block .details .listHead .time{
-    color: #111;
-}
-.chatlist .block.unread .details .listHead .time{/*사용중이지 않은 채팅방*/
-    color: #009688;
-}
-.message_p{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.message_p p{/*메세지*/
-    color: #aaa;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    font-size: 0.9em;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;/*넘으면 ...*/
-}
-.message_p b{/*알림 숫자 디자인*/
-    background: red;
-    color: #fff;
-    min-width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 0.75em;
-}
-.imgText{
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.imgText h4{
-    font-weight: 500;
-    line-height: 1.2em;
-    margin-left: 15px;
-}
-.chatBox{/*채팅 입력창*/
-    position: relative;
+.item3{
+    /*background-color: aquamarine;*/
     width: 100%;
-    height: calc(100% - 180px);/*60+60*/
-    padding: 50px;
+    height: auto;
+    display: flex;
+}
+
+content{
+    color : red;
+}
+
+/*4번째 내용*/
+
+
+
+
+
+/*공통 내용*/
+.section,
+.item2,
+.item4 {
+
+
+  display: flex;
+
+
+}
+
+
+/*반응형 조절*/
+
+@media screen and (max-width: 768px) {
+    .section{/*이미지 틀*/
+        width: 100%;
+        height: 100%;
+        padding: 0;
+    }
+    .main-section-wrap{/*이미지 크기*/
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+
+}
+
+#btnChat {
+    background-color: #FF3366;
+    border-radius: 12px;
+    border-style: none;
+    color: #FFFFFF;
+    font-family: 'omyu_pretty';
+    font-size: 20px;
+    width: 100px;
+}
+
+#contentBlock {
+    width: 100%;
+    font-family: omyu_pretty;
+}
+#contentBlock textarea {
+    width: 100%;
+    border-radius: 12px;
+    resize: none;
+    border-style: none;
+    background-color: #f4f4f4;
+}
+#button_div {
+    text-align: right;
+}
+#reply {
+    width: 1100px;
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    display: none;
+}
+#replyList {
+    height: 600px;
     overflow-y: auto;
     display:flex;
     flex-direction: column-reverse;
 }
-.message{
-    position: relative;
-    display: flex;
-    width: 100%;
-    margin:5px 0;
-}
-.message p{/*채팅 말풍선*/
-    position: relative;
-    right: 0;
-    text-align: right;
-    max-width: 65%;
-    padding: 12px;
-    background: #dcf8c6; 
-    border-radius: 10px;
-    font-size: 0.9em;
-    word-break: break-all;
-}.message1 p{/*참가 말풍선*/
-    position: relative;
-    right: 0;
-    text-align: center;
-    max-width: 65%;
-    padding: 12px;
-    background: #dcf8c6; 
-    border-radius: 10px;
-    font-size: 0.9em;
-}
-.message p::before{
-    content: '';
-    position: absolute;
-    top: 0;
-    right: -12px;
-    width: 20px;
-    height: 20px;
-    background: linear-gradient(135deg, #dcf8c6 0%, #dcf8c6 50%, transparent 50%, transparent);/*네모의 꼭다리 색*/
-}
-.message p span{/*나중에 지우기*/
-    display: block;
-    margin-top: 5px;
-    font-size: 0.85em;
-    opacity: 0.5;
-}
-.my_message{
-    justify-content: flex-end;
-}
-.frnd_message{
-    display: flex;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        align-content: flex-start;
-        width: 50%;
-}
-.frnd_message p{
-
-    position: relative;
-    right: -20%;
-    /*text-align: right;*/
-
-    max-width: 120%;
-    padding: 12px;
-    /*background: #dcf8c6;*/
-    border-radius: 10px;
-    font-size: 0.9em;
-    background: #fff;
-    text-align: left;
-}
-.message.frnd_message p::before{
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -12px;
-    width: 20px;
-    height: 20px;
-    background: linear-gradient(225deg, #fff 0%, #fff 50%, transparent 50%, transparent);/*네모의 꼭다리 색*/
-}
-.join{
-    justify-content: center;
-}
-.join p{
-    background: #d2d2d2;
-    text-align: center;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.chatbox_input{/*채팅 입력칸 배경*/
-    position: relative;
-    width: 100%;
-    height: 60px;
-    background: #f0f0f0;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}.chatbox_input input{
-    position: relative;
-    width: 90%;
-    margin: 0 20px;
-    padding: 10px 20px;
-    border: none;
-    outline: none;
-    border-radius: 30px;
-    font-size: 1em;
-}
-.user_profile img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-    margin-bottom: 15px;
-}
-.user_profile span{
-    margin-top: 8px;
-}
-
-/*상품 설명란*/
-.chat_container {
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-  }
-
-.search_chat{
-    justify-content: space-between;
-    display: flex;
-    background-color: #f4f4f4;
-    position: fixed;
-    align-items: center;
-    top: 112px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 433px;
-    height: 80px;
-    /*border: 1px solid rgb(154, 154, 154);*/
-    border-radius: 12px;
-    z-index: 999;
-}
-.search_chat .room_detail{
-    display: flex;
-    align-items: center;
-
-}
-.search_chat .room_detail img{
-    width: 70px;
-    height: 70px;
-    margin-left: 15px;
+#btnReplyWrite {
+    background-color:#FF3366;
+    color:#FFFFFF;
     border-radius: 8px;
-}
-.search_chat .room_detail .used_detail{
-    display: flex;
-    flex-direction: column;
-    margin-left: 30px;
-}
-.search_chat .room_detail .used_detail .used_name{
-    margin-bottom: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 160px;
-}
-.search_chat .room_used{
-    width: 70px;
-    height: 70px;
-    display: flex;
-
-}
-.search_chat button{
     border-style: none;
-    border-radius: 8px;
-    background-color: #FF3366;
-    margin-right: 15px;
-    color: #FFFFFF;
-
 }
 
+
+/*나중에 clubdetail.css로 보내기*/
+.hash_title{
+    display: flex;
+    flex-direction: column;
+}
+.hashtags{
+    display: flex;
+    font-size: 12;
+    color: #FF3366;
+}
+.hashtags li {
+    margin-right: 15px;
+    list-style: none;
+}
+
+.count_people{
+display: flex;
+color: gray;
+}
+.count_people .margin_people{
+margin-left: 3px;
+}
+.inandout_butn{
+color: #FFF;
+width: 80px;
+height: 45px;
+background-color: #FF3366;
+border-radius: 15px;
+text-align: center;
+padding: 15px 0;
+box-sizing: border-box;
+}
+.people_butn{
+display: flex;
+flex-direction: column;
+
+}
+.atag{
+justify-content: space-between;
+}
