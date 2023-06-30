@@ -17,7 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import javax.servlet.http.HttpSession;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,12 +31,6 @@ public class ClubController {
 
 
     @Autowired
-    public ClubController(ClubService clubService, ImageUtils imageUtils, FilesStorageService storageService) {
-        this.clubService = clubService;
-        this.imageUtils = imageUtils;
-        this.storageService = storageService;
-    }
-
     public ClubController(ClubService clubService, ImageUtils imageUtils, FilesStorageService storageService, ChattingService chattingService) {
         this.clubService = clubService;
         this.imageUtils = imageUtils;
@@ -44,24 +38,15 @@ public class ClubController {
         this.chattingService = chattingService;
     }
 
+
+
     @GetMapping("/clubList")
     public String clubList(Model model) {
         model.addAttribute("clubList", clubService.findClubList());
-        return "club/clubListEx";
+        return "club/clubList";
     }
 
-//    //게시글 작성 페이지
-//    @GetMapping("/clubSave")
-//    public String clubSave(@RequestParam(value = "postId", required = false) Long postId
-//            , HttpSession session, Model model) {
-//        if (postId != null) {//postId가 있으면 검색해서 정보 가져오기
-//            ClubResponse clubResponse = clubService.findClub(postId);
-//            model.addAttribute("club", clubResponse);
-//        } else {
-//            model.addAttribute("club", new ClubResponse());
-//        }
-//        return "club/clubSave";
-//    }
+
 
     @PostMapping("/clubSave")
     public String clubSave(ClubRequest clubRequest, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {

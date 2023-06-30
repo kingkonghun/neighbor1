@@ -94,4 +94,6 @@ public interface UsedService {
     int countPurchase(long memberId);
 
     int countSales(long memberId);
+
+    int countMyLikePost(long memberId);
 }

@@ -5,6 +5,7 @@ import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ImageRequest;
 import com.anabada.neighbor.club.domain.ImageResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
+import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
@@ -226,5 +227,10 @@ public class ClubServiceImpl implements ClubService {
         }else{
             clubRepository.updateNowManMinus(clubId);
         }
+    }
+
+    @Override
+    public List<Hobby> findHobbyName() {
+        return clubRepository.findHobbyName();
     }
 }

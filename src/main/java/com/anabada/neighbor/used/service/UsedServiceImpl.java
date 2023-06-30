@@ -479,6 +479,11 @@ public class UsedServiceImpl implements UsedService{
     public int countSales(long memberId) {
         return usedRepository.countSales(memberId);
     }
+
+    @Override
+    public int countMyLikePost(long memberId) {
+        return usedRepository.countMyLikePost(memberId);
+    }
 }
 
 

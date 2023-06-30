@@ -11,7 +11,7 @@ body{display: flex; justify-content: center; align-items: center; height: 100vh;
 .login-form h1 a{color:#FF3366;}
 .int-area{width:400px; position:relative; margin-top: 20px;}
 
-#btnSearch,#btnAuthentication{width: 20%;background-color: #FF3366!important;color: #FFFFFF;}
+#btnSearch,#btnAuthentication{width: 20%;background-color: lightgreen!important;color: #FFFFFF;}
 .int-area:first-child{margin-top:0;}
 
 

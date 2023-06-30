@@ -3,6 +3,7 @@ package com.anabada.neighbor.club.repository;
 import com.anabada.neighbor.club.domain.ImageRequest;
 import com.anabada.neighbor.club.domain.ImageResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
+import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
 import org.apache.ibatis.annotations.*;
@@ -111,4 +112,8 @@ public interface MbClubRepository extends ClubRepository {
 
     @Override
     int count();
+
+    @Override
+    @Select("select * from hobby")
+    List<Hobby> findHobbyName();
 }

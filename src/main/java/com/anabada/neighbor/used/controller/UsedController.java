@@ -116,9 +116,9 @@ public class UsedController {
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String likePost(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails, Criteria criteria) {
       List<Used> usedList=usedService.likePost(principalDetails.getMember().getMemberId(),criteria);
-        int total = usedService.countLikePost(principalDetails.getMember().getMemberId());
+        int total = usedService.countMyLikePost(principalDetails.getMember().getMemberId());
         model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
-      model.addAttribute("list",usedList);
+        model.addAttribute("list",usedList);
         return "member/myLikes";
     }
 

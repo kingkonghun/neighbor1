@@ -288,13 +288,12 @@ input[id="menuicon"]:checked + label span:nth-child(3) {
 div[class="sidebar"] {
     width: 360px;
     height: 100%;
-    background: #F4F4F4;
+    background-color: lightgoldenrodyellow;
     position: fixed;
     top: 0;
     right: -360px;
     z-index: 1;
     transition:all .35s;
-    border: 1px solid gray;
 }
 input[id="menuicon"]:checked + label + div {
     right: 0;
@@ -561,3 +560,24 @@ top: 270px;
 .navbar-item {
     cursor: pointer;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
