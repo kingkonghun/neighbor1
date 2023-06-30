@@ -8,6 +8,7 @@ import com.anabada.neighbor.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,6 +57,7 @@ public class ReplyController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/myReply")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String myReply(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria){ // 내가 쓴 댓글
         model.addAttribute("list",replyService.findMyReply(principalDetails.getMember().getMemberId(),criteria));
         int total = replyService.countMyReply(principalDetails.getMember().getMemberId());

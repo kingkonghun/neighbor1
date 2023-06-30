@@ -1,7 +1,6 @@
-
 <!--<div th:text="${result}">no</div>-->
 <div class="write">
-    <form class="row g-3" action="/clubSave" method="post" enctype="multipart/form-data">
+    <form class="row g-3" name="writeForm" action="/clubSave" method="post" enctype="multipart/form-data">
         <div class="container px-4 px-lg-5 my-5" >
             <div class="row">
                 <div class="col-md-6">
@@ -9,20 +8,21 @@
                     <input type="text" class="form-control" id="inputTitle" name="title">
                 </div>
 
-                <div class="col-md-4 category">
-                    <label for="inputHobby" class="form-label">취미종류</label>
+                <div class="col-md-3 category">
+                    <label for="inputHobby" class="form-label">모임종류</label>
                     <select id="inputHobby" class="form-select" name="hobbyName">
+                        <option value="모임종류">모임종류</option>
                         <th:block th:each="hobby : ${hobby}">
                             <option th:value="${hobby.hobbyName}" th:text="${hobby.hobbyName}"></option>
                         </th:block>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label for="inputMaxMan" class="form-label">최대인원수</label>
                     <input type="number" class="form-control" id="inputMaxMan" placeholder="2~50" name="maxMan" min="2" max="50">
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label for="formFileMultiple" class="form-label">첨푸파일</label>
+                    <label for="formFileMultiple" class="form-label">첨부파일</label>
                     <input class="form-control" type="file" id="formFileMultiple" multiple="multiple" name="images" onchange="selectFile(this);">
                 </div>
                 <div class="col-md-12">
@@ -34,13 +34,10 @@
                 </div>
 
                 <div class="col-md-6 my-1">
-                    <button type="submit" class="btn btn-primary">작성완료</button>
+                    <button type="button" class="btn btn-primary" id="btnSubmit">작성완료</button>
                     <button type="button" class="btn btn-primary" id="returnBtn">뒤로가기</button>
                 </div>
             </div>
         </div>
     </form>
 </div>
-
-
-

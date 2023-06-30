@@ -57,7 +57,7 @@ public class UsedController {
 
 
     @PostMapping("/post") //게시물 작성
-//    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String post(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception {
         usedService.write(used, principalDetails);
         return "redirect:/used/list";
@@ -89,14 +89,12 @@ public class UsedController {
     }
 
     @PostMapping("/likes") //게시물 좋아요
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @ResponseBody
     public Used likes(long postId, int likesCheck, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return usedService.likes(postId, principalDetails, likesCheck);
     }
 
     @PostMapping("/report") //게시물 신고
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> report(Report report, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         usedService.report(report, principalDetails);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -112,7 +110,7 @@ public class UsedController {
         return "admin/reportList";
     }
 
-    @GetMapping("/likePost") //좋아요 누른 게시글
+    @GetMapping("/likePost") // 좋아요 누른 게시글
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String likePost(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails, Criteria criteria) {
       List<Used> usedList=usedService.likePost(principalDetails.getMember().getMemberId(),criteria);
@@ -122,7 +120,7 @@ public class UsedController {
         return "member/myLikes";
     }
 
-    @PostMapping("/reportOk")
+    @PostMapping("/reportOk") // 신고 접수
     public ResponseEntity<Void> reportOk(ReportOk reportOk) {
         usedService.reportOk(reportOk);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -135,6 +133,7 @@ public class UsedController {
     }
 
     @GetMapping("/purchase")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String purchase(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,Criteria criteria) {
         List<Used> purchase = usedService.purchase(principalDetails,criteria);
         int total = usedService.countPurchase(principalDetails.getMember().getMemberId());
@@ -146,6 +145,7 @@ public class UsedController {
     }
 
     @GetMapping("/sales")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String sales(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,Criteria criteria) {
         int total = usedService.countSales(principalDetails.getMember().getMemberId());
         model.addAttribute("sales", usedService.sales(principalDetails,criteria));
@@ -154,6 +154,7 @@ public class UsedController {
     }
 
     @GetMapping("/trade")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String trade() {
         return "used/trade";
     }

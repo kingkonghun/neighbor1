@@ -15,7 +15,6 @@
       $.ajax({
         url:"/used/sales",
         type:"get",
-        async: false,
         success: function (data) {
           $("#account-tab").attr('class','nav-link active1 active show');
           $("#security-tab").attr('class','nav-link active1');
@@ -27,7 +26,6 @@
       $.ajax({
         url:"/used/purchase",
         type:"get",
-        async: false,
         success:function (data){
           $("#security-tab").attr('class','nav-link active1 active show');
           $("#account-tab").attr('class','nav-link active1');

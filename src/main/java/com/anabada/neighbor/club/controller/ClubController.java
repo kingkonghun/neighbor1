@@ -47,6 +47,7 @@ public class ClubController {
     @GetMapping("/clubList")
     public String clubList(Model model) {
         model.addAttribute("clubList", clubService.findClubList());
+        model.addAttribute("hobby", clubService.findHobbyName());
         return "club/clubList";
     }
 
@@ -54,6 +55,7 @@ public class ClubController {
 
     @PostMapping("/clubSave")
     public String clubSave(ClubRequest clubRequest, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        clubRequest.setHobbyName("운동");
         Post post = Post.builder()
                 .memberId(principalDetails.getMember().getMemberId())
                 .title(clubRequest.getTitle())

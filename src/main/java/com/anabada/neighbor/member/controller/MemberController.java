@@ -133,6 +133,7 @@ public class MemberController {
     }
 
     @PostMapping("/editPwd")//비밀번호 수정
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String editPwd(@RequestParam String oldPwd, @RequestParam String memberPWD, long memberId, Model model, RedirectAttributes redirectAttributes){
         String msg= memberService.editPwd(oldPwd,memberPWD,memberId);
         System.out.println("msg = " + msg);
@@ -147,6 +148,7 @@ public class MemberController {
     }
 
     @PostMapping("/editPhoto")
+    @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String editPhoto(Member member,RedirectAttributes redirectAttributes) {
         memberService.editPhoto(member);
         redirectAttributes.addAttribute("msg", "photoSuccess");
@@ -163,6 +165,6 @@ public class MemberController {
     @ResponseBody
     @GetMapping("/noAdmin")
     public String noAdmin() {
-        return "권한이 없습니다. 꺼지세요";
+        return "권한이 없습니다";
     }
 }

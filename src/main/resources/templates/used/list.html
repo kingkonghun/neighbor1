@@ -15,7 +15,10 @@
         location.href="/used/list";
     }
 
+
     $(function (){
+
+        // 게시물 더보기
         let num = 0;
         $("#btnPlus").click(function (){
             num+=9;
@@ -43,14 +46,14 @@
                 return;
             }
             if (!titleTest.test(title.val())) {
-                alert("12글자 이내로 입력해주세요.(공백 포함)");
+                alert("12글자 이내로 입력하세요(공백 포함)");
                 title.focus();
                 return;
             }
 
 
             if(category.val() == 0) {
-                alert("카테고리를 선택하세요");
+                alert("상품종류를 선택하세요");
                 category.focus();
                 return;
             }
@@ -89,6 +92,9 @@
         $("#returnBtn").click(function (){
             $("#writeForm").slideUp();
         });
+
+
+        // 카테고리 체인지
         $("#category_select").change(function(){
             let categoryId = $("#category_select").val();
             let search = [[${search}]];
