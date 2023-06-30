@@ -6,6 +6,7 @@ import com.anabada.neighbor.club.domain.ImageRequest;
 import com.anabada.neighbor.club.domain.ImageResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.repository.ClubRepository;
+import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.repository.UsedRepository;
@@ -112,7 +113,10 @@ public class ClubServiceImpl implements ClubService {
         Post post = clubRepository.selectPost(postId);
         Member member = clubRepository.selectMember(post.getMemberId());
         Club club = clubRepository.selectClub(postId);
+        System.out.println(club.getClubId());
         return ClubResponse.builder()
+                .clubId(club.getClubId())
+                .clubJoinYn(clubRepository.selectClubJoinIdByMemberId(club.getClubId(), member.getMemberId()) == null ? 0 : 1) // 클럽에 가입되어있으면 1 아니면 0
                 .postId(post.getPostId())
                 .memberId(member.getMemberId())
                 .memberName(member.getMemberName())
@@ -187,5 +191,40 @@ public class ClubServiceImpl implements ClubService {
             return 0;
         }
         return 1;
+    }
+
+    @Override
+    public Long findClubJoinIdByMemberId(ClubResponse club, Long memberId) {
+        return clubRepository.selectClubJoinIdByMemberId(club.getClubId(), memberId);
+    }
+
+    /**
+     * 모임 가입하기
+     * @param club 모임정보
+     * @param principalDetails 사용자정보
+     * @return 가득찼을때 -1 성공시 1 실패시 0
+     */
+    @Override
+    public int joinClubJoin(ClubResponse club, PrincipalDetails principalDetails) {
+        Long memberId = principalDetails.getMember().getMemberId();
+        if (club.getMaxMan() == club.getNowMan()) {
+            return -1; // 모임 최대인원이 가득찼을때 -1 리턴
+        }
+        return clubRepository.insertClubJoin(club.getClubId(), memberId, club.getPostId());
+    }
+
+    @Override
+    public int deleteClubJoin(ClubResponse club, PrincipalDetails principalDetails) {
+        Long memberId = principalDetails.getMember().getMemberId();
+        return clubRepository.deleteClubJoin(club.getClubId(), memberId);
+    }
+
+    @Override
+    public void updateNowMan(int num, Long clubId) {
+        if (num == 1){
+            clubRepository.updateNowManPlus(clubId);
+        }else{
+            clubRepository.updateNowManMinus(clubId);
+        }
     }
 }

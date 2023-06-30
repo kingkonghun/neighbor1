@@ -1,23 +1,24 @@
 package com.anabada.neighbor.club.controller;
 
 import com.anabada.neighbor.chat.service.ChattingService;
-import com.anabada.neighbor.club.domain.ClubRequest;
-import com.anabada.neighbor.club.domain.ClubResponse;
-import com.anabada.neighbor.club.domain.ImageRequest;
-import com.anabada.neighbor.club.domain.ImageResponse;
+import com.anabada.neighbor.club.domain.*;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.service.ClubService;
 import com.anabada.neighbor.club.service.ImageUtils;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.controller.ImageController;
+import com.anabada.neighbor.file.domain.ImageInfo;
+import com.anabada.neighbor.file.service.FilesStorageService;
 import com.anabada.neighbor.used.domain.Post;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,11 +26,21 @@ public class ClubController {
 
     private final ClubService clubService;
     private final ImageUtils imageUtils;
+    private final FilesStorageService storageService;
     private final ChattingService chattingService;
 
-    public ClubController(ClubService clubService, ImageUtils imageUtils, ChattingService chattingService) {
+
+    @Autowired
+    public ClubController(ClubService clubService, ImageUtils imageUtils, FilesStorageService storageService) {
         this.clubService = clubService;
         this.imageUtils = imageUtils;
+        this.storageService = storageService;
+    }
+
+    public ClubController(ClubService clubService, ImageUtils imageUtils, FilesStorageService storageService, ChattingService chattingService) {
+        this.clubService = clubService;
+        this.imageUtils = imageUtils;
+        this.storageService = storageService;
         this.chattingService = chattingService;
     }
 
@@ -75,18 +86,32 @@ public class ClubController {
             List<ImageRequest> images = imageUtils.uploadImages(clubRequest.getImages());
             clubService.saveImages(postId, images);
             model.addAttribute("result", "글 등록성공!");//나중에 삭제
-            chattingService.openRoom(postId, principalDetails, "club");
         } else {
             model.addAttribute("result", "글 등록실패!");//나중에 삭제
         }
-
         return "redirect:clubList";
     }
 
-
     @GetMapping("/clubDetail")
-    public String clubDetail(Model model) {
+    public String clubDetail(@RequestParam(value = "postId", required = false) Long postId, Model model) {
+        ClubResponse response = clubService.findClub(postId);
+        List<ImageResponse> imageResponses = response.getImageResponseList();
 
+        List<ImageInfo> imageInfose = new ArrayList<>();
+        for (ImageResponse image : imageResponses) {
+            ImageInfo imageInfo = ImageInfo.builder()
+                    .name(image.getOrigName())
+                    .url(MvcUriComponentsBuilder
+                            .fromMethodName(ImageController.class, "getImage"
+                            , image.getSaveName(), image.getCreaDate().format(DateTimeFormatter.ofPattern("yyMMdd"))).build().toString())
+                    .build();
+            imageInfose.add(imageInfo);
+        }
+        System.out.println(imageInfose);
+
+        model.addAttribute("images", imageInfose);
+        model.addAttribute("club", response);
+        model.addAttribute("postId", postId);
         return "club/clubDetail";
     }
 
@@ -100,4 +125,28 @@ public class ClubController {
     public List<ImageResponse> clubImage() {
         return null;
     }
+
+    @PostMapping("/club/join")
+    @ResponseBody
+    public ClubResponse join(Long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long memberId = principalDetails.getMember().getMemberId();
+        ClubResponse club = clubService.findClub(postId);
+        Long clubJoinId = clubService.findClubJoinIdByMemberId(club, memberId);
+        if (clubJoinId == null) {//가입한적 없으면 join 있으면 delete
+            if (clubService.joinClubJoin(club, principalDetails) == 1) {
+                clubService.updateNowMan(1, club.getClubId());
+                return clubService.findClub(postId); // 가입성공시 클럽을 새로 조회
+            }else{
+                return club; // 가입 실패시 클럽을 새로조회하지않음
+            }
+        }else{
+            if (clubService.deleteClubJoin(club, principalDetails) == 1) {
+                clubService.updateNowMan(0, club.getClubId());
+                return clubService.findClub(postId);// 탈퇴성공시 클럽을 새로 조회
+            }else{
+                return club; // 탈퇴 실패시 클럽을 새로 조회하지않음
+            }
+        }
+    }
+
 }

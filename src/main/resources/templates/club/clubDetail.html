@@ -21,31 +21,12 @@
     <section class="section">
         <div class="main-section-wrap">
             <div class="slide-box">
-                <div class="content" th:each="ImageResponseList : ${club.ImageResponseList}">
+                <div class="content" th:each="image : ${images}">
+                    <img th:src="@{${image.url}}" alt="${image.name}"/>
+                    <a th:href="@{${image.url}}">다운로드</a>
 <!--                    <div class="img-box" th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'"></div>-->
 <!--                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>-->
                 </div>
-                <!--반복-->
-
-
-<!--                <div class="content">-->
-<!--                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>-->
-
-<!--                </div>-->
-
-
-
-<!--                <div class="content">-->
-<!--                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>-->
-
-<!--                </div>-->
-
-
-
-<!--                <div class="content">-->
-<!--                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>-->
-
-<!--                </div>-->
             </div>
 
         </div>
@@ -106,8 +87,9 @@
             </div>
 
             <div class="btns"><!--가입버튼-->
-                <button class="subscribe">가입하기</button>
-                <button class="unsubscribe">탈퇴하기</button>
+                <button th:if="${club.clubJoinYn == 0}" class="subscribe"  type="button" onclick="abc();">가입하기</button>
+                <button th:if="${club.clubJoinYn == 1}" class="subscribe" type="button">탈퇴하기</button>
+                <button class="unsubscribe" id="unsubscribe">탈퇴하기</button>
             </div>
         </div>
 
@@ -132,6 +114,62 @@
         dots:true,
 
 });
+
+function abc(){
+    alert("hi");
+ $.ajax(
+    {
+        type : "post",
+        url : "/club/join",
+        data: {postId: [[${club.postId}]]},
+        success: function(clubJoin){
+            if(clubJoin.clubJoinYn == 1){
+                alert("성공");
+            }else{
+                alert("실패");
+            }
+        }
+    }
+ )
+}
+
+//가입하기 ajax
+// $(".subscribe").click(function(){
+//     alert([[${club.postId}]]);
+//    $.ajax({
+//         type: "post",
+//         url :" /club/join",
+//         data: {postId: [[${club.postId}]]},
+//         success: function(clubJoin){
+//             if(clubJoin.clubJoinYn == 1){
+//                 $(".subscribe").html('탈퇴하기');
+//                 alert("가입성공");
+//             }else{
+//                 $(".subscribe").html('가입하기');
+//                 alert("탈퇴성공");
+//             }
+//         }
+//    });
+//    });
+
+<!--function abc(){-->
+<!--    alert([[${club.postId}]]);-->
+<!--   $.ajax({-->
+<!--        type: "post",-->
+<!--        url " /club/join",-->
+<!--        data: {postId: [[${club.postId}]]},-->
+<!--        success: function(clubJoin){-->
+<!--            if(clubJoin.clubJoinYn == 1){-->
+<!--                $(".subscribe").html('탈퇴하기');-->
+<!--                alert("가입성공");-->
+<!--            }else{-->
+<!--                $(".subscribe").html('가입하기');-->
+<!--                alert("탈퇴성공");-->
+<!--            }-->
+<!--        }-->
+<!--   });-->
+
+<!--}-->
 </script>
 
 
