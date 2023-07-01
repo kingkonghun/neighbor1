@@ -7,17 +7,14 @@
 <link rel="stylesheet" type="text/css" th:href="@{/css/chatDetail.css}">
 <script>
     $(function(){
-        $(".deal_comp").click(function(){
-            if(confirm("판매완료 처리하시겠습니까?")){
-                postId = $("#postId").val();
-                receiver = $("#receiver").val();
+        $("#chatOut").click(function(){
+            if(confirm("채팅방을 나가시겠습니까?")){
                 $.ajax({
                     type: "post",
-                    url: "used/success",
-                    data: {"postId": postId, "receiver": receiver},
-                    success: function(data){
-                        tongkn2_pop();
-                        $(".deal_comp").css("display", "none");
+                    url: "/chatOut",
+                    data: {"roomId": $("#roomId").val(), "type": "club"},
+                    success: function(){
+                        window.close();
                     }
                 });
             }

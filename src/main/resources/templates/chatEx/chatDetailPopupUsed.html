@@ -24,7 +24,14 @@
         });
         $("#chatOut").click(function(){
             if(confirm("채팅방을 나가시겠습니까?")){
-                alert("미친넘아~");
+                $.ajax({
+                    type: "post",
+                    url: "/chatOut",
+                    data: {"roomId": $("#roomId").val(), "type": "used"},
+                    success: function(){
+                        window.close();
+                    }
+                });
             }
         });
     });

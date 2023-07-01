@@ -18,4 +18,6 @@ public interface ChattingService {
     Chat getReceiver(long roomId, PrincipalDetails principalDetails);
 
     boolean check(long roomId, PrincipalDetails principalDetails);
+
+    void chatOut(long roomId, String type, PrincipalDetails principalDetails);
 }

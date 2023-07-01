@@ -20,7 +20,7 @@ public interface ChattingRepository {
 
     String lastMessage(long roomId);
 
-    List<ChattingMessage> chattingMessageList(long roomId);
+    List<ChattingMessage> chattingMessageList(long roomId, long memberId, long messageId);
 
     ChattingRoom findChatRoomByRoomId(long roomId);
 
@@ -33,4 +33,18 @@ public interface ChattingRepository {
     String findTypeByRoomId(long roomId);
 
     int chatMemberCount(long roomId);
+
+    void chatOutUsed(long roomId, long memberId);
+
+    int checkCreator(long roomId, long memberId);
+
+    void closeRoom(long roomId);
+
+    List<ChattingMember> findChatMemberByRoomId(long roomId);
+
+    String chatMemberStatus(long roomId, long memberId);
+
+    void updateStatus(long roomId);
+
+    long findLineMessageId(long roomId, long memberId);
 }

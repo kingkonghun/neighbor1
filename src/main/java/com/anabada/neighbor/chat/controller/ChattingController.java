@@ -4,9 +4,12 @@ import com.anabada.neighbor.chat.domain.Chat;
 import com.anabada.neighbor.chat.service.ChattingService;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,8 +53,14 @@ public class ChattingController {
 
     @MessageMapping("/message")
     public void messageRoom(Chat chat, Principal principal) throws InterruptedException {
-        Thread.sleep(1000);
+        Thread.sleep(500);
         chattingService.sendMessage(chat, principal);
+    }
+
+    @PostMapping("/chatOut")
+    public ResponseEntity<Void> chatOutUsed(long roomId, String type, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        chattingService.chatOut(roomId, type, principalDetails);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

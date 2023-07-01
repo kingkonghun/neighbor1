@@ -32,4 +32,5 @@ public class Chat {
     private String hobbyName;
     private int maxMan;
     private int nowMan;
+    private String chatMemberStatus;
 }

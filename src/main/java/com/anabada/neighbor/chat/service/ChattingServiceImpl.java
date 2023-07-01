@@ -57,29 +57,45 @@ public class ChattingServiceImpl implements ChattingService {
                 Post post = usedRepository.findPost(chattingRoom.getPostId());
                 Member member = memberRepository.findByMemberId(post.getMemberId());
                 Product product = usedRepository.findProduct(post.getPostId());
-
                 long receiver = member.getMemberId();
+                String receiverName = memberRepository.findMemberName(receiver);
+
+                chattingRepository.insertChatMember(roomId, memberId);
+                chattingRepository.insertChatMember(roomId, receiver);
 
                 chat = Chat.builder()
                         .postId(postId)
                         .title(post.getTitle())
                         .price(product.getPrice())
                         .roomId(roomId)
-                        .sender(memberId)
+                        .sender(receiver)
                         .senderName(memberName)
                         .receiver(receiver)
-                        .receiverName(memberRepository.findMemberName(receiver))
-                        .content(memberName + "님이 입장하셨습니다.")
+                        .receiverName(receiverName)
+                        .content("x")
                         .messageDate(dateFormat.format(new Date()))
-                        .messageType("ENTER")
+                        .messageType("LINE")
+                        .type("used")
                         .build();
-                chattingRepository.insertMessage(chat);
+                chattingRepository.insertMessage(chat); // 채팅 시작점 만들기
 
-                chattingRepository.insertChatMember(roomId, memberId);
-                chattingRepository.insertChatMember(roomId, receiver);
+                chat.setSender(memberId);
+                chattingRepository.insertMessage(chat); // 채팅 시작점 만들기
+
+                chat.setSender(receiver);
+                chat.setContent(receiverName + "님이 입장하셨습니다.");
+                chat.setMessageType("ENTER");
+                chattingRepository.insertMessage(chat);
+//                simpMessagingTemplate.convertAndSend("/topic/message/" + chat.getRoomId(), chat);
+
+                chat.setSender(memberId);
+                chat.setContent(memberName + "님이 입장하셨습니다.");
+                chat.setMessageType("ENTER");
+                chattingRepository.insertMessage(chat);
+                simpMessagingTemplate.convertAndSend("/topic/message/" + chat.getRoomId(), chat);
 
                 simpMessagingTemplate.convertAndSendToUser(String.valueOf(chat.getReceiver()), "/topic/messageNotification", chat);
-                simpMessagingTemplate.convertAndSend("/topic/message/" + chat.getRoomId(), chat);
+
                 return roomId;
             } else if (type.equals("club")) {
                 chat = Chat.builder()
@@ -96,6 +112,7 @@ public class ChattingServiceImpl implements ChattingService {
                 chattingRepository.insertChatMember(roomId, memberId);
             }
         }else {
+            chattingRepository.updateStatus(chattingRoomTemp.getRoomId());
             return chattingRoomTemp.getRoomId();
         }
         return 0;
@@ -104,29 +121,33 @@ public class ChattingServiceImpl implements ChattingService {
     @Override
     public void sendMessage(Chat chat, Principal principal) {
 
+
         chat.setSender(Long.parseLong(principal.getName()));
         chat.setSenderName(memberRepository.findMemberName(chat.getSender()));
-
-        String key = chat.getRoomId() + "_" + chat.getReceiver();
 
         chattingRepository.insertMessage(chat);
         chat.setSenderName(memberRepository.findMemberName(chat.getSender()));
         chat.setMessageDate(dateFormat.format(new Date()));
 
-        if (chatNotificationMap.get(key) == null || chatNotificationMap.get(key) == 0) {
-            chatNotificationMap.put(key, 1);
-        } else {
-            chatNotificationMap.put(key, chatNotificationMap.get(key) + 1);
-        }
-
         List<Long> chatMemberIdList = chattingRepository.findChatMemberIdByRoomId(chat.getRoomId());
         for (long chatMemberId : chatMemberIdList) {
+            String key = chat.getRoomId() + "_" + chatMemberId;
+
             if (Long.parseLong(principal.getName()) == chatMemberId) {
+                chatNotificationMap.remove(key);
                 continue;
             }
+
+            if (chatNotificationMap.get(key) == null || chatNotificationMap.get(key) == 0) {
+                chatNotificationMap.put(key, 1);
+            } else {
+                chatNotificationMap.put(key, chatNotificationMap.get(key) + 1);
+            }
+
             simpMessagingTemplate.convertAndSendToUser(String.valueOf(chatMemberId), "/topic/messageNotification", chat);
         }
         simpMessagingTemplate.convertAndSend("/topic/message/" + chat.getRoomId(), chat);
+        chattingRepository.updateStatus(chat.getRoomId());
     }
 
     @Override
@@ -143,11 +164,14 @@ public class ChattingServiceImpl implements ChattingService {
             Chat chat = null;
 
             List<Long> memberIdList = chattingRepository.findChatMemberIdByRoomId(roomId);
+            String chatMemberStatus = chattingRepository.chatMemberStatus(roomId, memberId);
+
             if (type.equals("used")) {
                 long sender = memberIdList.get(0);
                 if (memberId == sender) {
                     sender = memberIdList.get(1);
                 }
+
                 chat = Chat.builder()
                         .roomId(roomId)
                         .receiver(memberId)
@@ -155,6 +179,7 @@ public class ChattingServiceImpl implements ChattingService {
                         .content(lastMessage)
                         .chatCount(chatNotificationMap.get(roomId + "_" + principalDetails.getMember().getMemberId()) != null ? chatNotificationMap.get(roomId + "_" + principalDetails.getMember().getMemberId()) : 0)
                         .type(type)
+                        .chatMemberStatus(chatMemberStatus)
                         .build();
                 chat.setSenderName(memberRepository.findMemberName(chat.getSender()));
                 chatList.add(chat);
@@ -184,8 +209,12 @@ public class ChattingServiceImpl implements ChattingService {
         long memberId = principalDetails.getMember().getMemberId();
         String key = roomId + "_" + memberId;
         chatNotificationMap.remove(key);
+
+
+        long lineMessageId = chattingRepository.findLineMessageId(roomId, memberId);
+
         List<Chat> chatList = new ArrayList<>();
-        List<ChattingMessage> messageList = chattingRepository.chattingMessageList(roomId);
+        List<ChattingMessage> messageList = chattingRepository.chattingMessageList(roomId, memberId, lineMessageId);
 
         for (ChattingMessage message : messageList) {
             ChattingRoom chattingRoom = chattingRepository.findChatRoomByRoomId(message.getRoomId());
@@ -262,4 +291,18 @@ public class ChattingServiceImpl implements ChattingService {
         return result > 0 ? true : false;
     }
 
+    @Override
+    public void chatOut(long roomId, String type, PrincipalDetails principalDetails) {
+        long memberId = principalDetails.getMember().getMemberId();
+
+        if (type.equals("used")) {
+            chattingRepository.insertMessage(Chat.builder()
+                    .roomId(roomId)
+                    .sender(memberId)
+                    .content("x")
+                    .messageType("LINE")
+                    .build());
+            chattingRepository.chatOutUsed(roomId, memberId);
+        }
+    }
 }

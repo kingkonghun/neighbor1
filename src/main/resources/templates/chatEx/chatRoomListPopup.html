@@ -21,7 +21,7 @@
         <!--chat list-->
         <div class="chatlist">
             <div th:each="row : ${list}"><!--호버한 리스트-->
-                <div class="block active" th:if="${row.type} eq 'used'" th:onclick="|location.href='@{chatDetail(roomId=${row.roomId}, type=used)}'|">
+                <div class="block active" th:if="${row.type eq 'used' && row.chatMemberStatus eq 'y'}" th:onclick="|location.href='@{chatDetail(roomId=${row.roomId}, type=used)}'|">
                     <div class="imgbx">
                         <img th:src="@{/member/findProfileImg(memberId=${row.sender})}" class="cover">
                     </div>
