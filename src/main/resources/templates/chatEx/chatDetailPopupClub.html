@@ -1,11 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8"/>
-  <title>Title</title>
-  <th:block th:insert="/common/common :: fragment-header"></th:block>
-  <link rel="stylesheet" type="text/css" th:href="@{/css/chatDetail.css}">
+<meta charset="UTF-8"/>
+<title>Title</title>
+<th:block th:insert="/common/common :: fragment-header"></th:block>
+<link rel="stylesheet" type="text/css" th:href="@{/css/chatDetail.css}">
+<script>
+    $(function(){
+        $(".deal_comp").click(function(){
+            if(confirm("판매완료 처리하시겠습니까?")){
+                postId = $("#postId").val();
+                receiver = $("#receiver").val();
+                $.ajax({
+                    type: "post",
+                    url: "used/success",
+                    data: {"postId": postId, "receiver": receiver},
+                    success: function(data){
+                        tongkn2_pop();
+                        $(".deal_comp").css("display", "none");
+                    }
+                });
+            }
+        });
+    });
 
+    function tongkn2_pop(){
+        opener.location.href="/clubDetail?postId="+[[${list[0].postId}]];
+    }
+</script>
 </head>
 <body>
 <input type="hidden" id="type" th:value="${list[0].type}">
@@ -16,19 +38,35 @@
   <div class="rightSide">
     <div class="header"><!--채팅 상대방 창 -->
       <div class="imgText">
-        <div class="userimg">
-          <img th:src="@{/used/findImg(postId=${list[0].postId})}" class="cover"><!--상대방 이미지-->
+        <div>
+          <div class="userimg">
+            <img th:src="@{/used/findImg(postId=${list[0].postId})}" class="cover"><!--상대방 이미지-->
+          </div>
+          <h4 th:text="${list[0].receiverName}+'님 외 '+${list[0].memberCount}+'명'"></h4><!--상대 이름-->
         </div>
-        <h4 th:text="${list[0].receiverName}+'님 외 '+${list[0].memberCount}+'명'"></h4><!--상대 이름-->
-        <!--리스트 꾸미려면 넣기 <ul class="nav_icons">
-            <li></li>
-            <li></li>
-        </ul> -->
+        <li class="navList nav-item dropdown" style="list-style: none;">
+          <a class="nav-link " id="adminT" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">
+            <i class="bi bi-three-dots-vertical"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#" id="chatOut">채팅방 나가기</a></li>
+          </ul>
+        </li>
       </div>
     </div>
     <div id="block"></div>
 
     <!--채팅방-->
+
+    <div class="search_chat" onclick="tongkn2_pop();" style="cursor: pointer;">
+      <div class="room_detail">
+        <img th:src="@{/used/findImg(postId=${list[0].postId})}">
+        <div class="used_detail">
+          <span class="used_name" th:text="${list[0].title}"></span>
+          <span class="used_cost" th:text="${list[0].nowMan}+' / '+${list[0].maxMan}"></span>
+        </div>
+      </div>
+    </div>
 
 
 

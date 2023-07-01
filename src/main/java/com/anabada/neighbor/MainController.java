@@ -20,7 +20,6 @@ public class MainController {
     private final UsedService usedService;
     private final ClubService clubService;
 
-
     @Autowired
     public MainController(UsedService usedService, ClubService clubService) {
         this.usedService = usedService;

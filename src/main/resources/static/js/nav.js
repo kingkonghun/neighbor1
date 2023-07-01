@@ -1,20 +1,20 @@
 $(function(){
-    $("#menuicon").on('click', function () {
-        if (checkIsAuthenticated()) {
-            $.ajax({
-                url:"/member/slideBar",
-                type:"get",
-                success: function (data) {
-                    console.log(data);
-                    $("#memberName").text(data.memberName);
-                    $("#countMyWrite").text(data.myWrite);
-                    $("#myScore").text(data.score);
-                    $("#likes").text(data.myLikesCount);
-
-                }
-            });
-        }
-    });
+//    $("#menuicon").on('click', function () {
+//        if (checkIsAuthenticated()) {
+//            $.ajax({
+//                url:"/member/slideBar",
+//                type:"get",
+//                success: function (data) {
+//                    console.log(data);
+//                    $("#memberName").text(data.memberName);
+//                    $("#countMyWrite").text(data.myWrite);
+//                    $("#myScore").text(data.score);
+//                    $("#likes").text(data.myLikesCount);
+//
+//                }
+//            });
+//        }
+//    });
 
     $(".open-search").click(function(){
         $("#searchForm_2").css("top", "0px");
@@ -75,9 +75,9 @@ $(function(){
     });
 });
 
-function myWrite(){
-    location.href="/member/myInfo?navMsg=myWrite";
-}
-function myLikes(){
-    location.href="/member/myInfo?navMsg=likes"
-}
+//function myWrite(){
+//    location.href="/member/myInfo?navMsg=myWrite";
+//}
+//function myLikes(){
+//    location.href="/member/myInfo?navMsg=likes"
+//}

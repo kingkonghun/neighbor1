@@ -5,6 +5,7 @@ import com.anabada.neighbor.chat.domain.ChattingMember;
 import com.anabada.neighbor.chat.domain.ChattingMessage;
 import com.anabada.neighbor.chat.domain.ChattingRoom;
 import com.anabada.neighbor.chat.repository.ChattingRepository;
+import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
@@ -211,9 +212,12 @@ public class ChattingServiceImpl implements ChattingService {
                         .build();
             } else if (type.equals("club")) {
                 Post post = clubRepository.selectPost(chattingRoom.getPostId());
+                Club club = clubRepository.selectClub(post.getPostId());
+
                 chat = Chat.builder()
                         .postId(post.getPostId())
                         .master(post.getMemberId())
+                        .title(post.getTitle())
                         .roomId(message.getRoomId())
                         .sender(message.getWriter())
                         .senderName(memberRepository.findMemberName(message.getWriter()))
@@ -223,6 +227,9 @@ public class ChattingServiceImpl implements ChattingService {
                         .messageDate(dateFormat.format(message.getMessageDate()))
                         .messageType(message.getMessageType())
                         .memberCount(chattingRepository.chatMemberCount(message.getRoomId()) - 1)
+                        .hobbyName(clubRepository.selectHobbyName(club.getHobbyId()))
+                        .nowMan(club.getNowMan())
+                        .maxMan(club.getMaxMan())
                         .type(type)
                         .build();
             }

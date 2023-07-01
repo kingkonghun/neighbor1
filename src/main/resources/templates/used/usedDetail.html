@@ -417,15 +417,18 @@
                 <span th:text="'가격 : ' + ${dto.price} + ' 원'"></span>
                 <span th:text="'조회수 : ' + ${dto.postView}"></span>
             </div>
-            <div class="atag" style="display: flex; gap: 20px; justify-content: flex-end;">
-                <div>
-                    <span th:text="${dto.replyCount}"></span>
-                    <a href="javascript:void(0)" id="open-reply" ><i class="bi bi-chat-text"></i></a>
-                    <a href="javascript:void(0)" id="close-reply" style="display: none;"><i class="bi bi-chat-text"></i></a>
-                </div>
-                <div id="likes">
-                    <span class="likesCount">[[${dto.likesCount}]]</span>
-                    <i id="heart" style="color: red"></i>
+            <div style="display: flex; justify-content: space-between;">
+                <span th:text="${dto.address}"></span>
+                <div class="atag" style="display: flex; gap: 20px; justify-content: flex-end;">
+                    <div>
+                        <span th:text="${dto.replyCount}"></span>
+                        <a href="javascript:void(0)" id="open-reply" ><i class="bi bi-chat-text"></i></a>
+                        <a href="javascript:void(0)" id="close-reply" style="display: none;"><i class="bi bi-chat-text"></i></a>
+                    </div>
+                    <div id="likes">
+                        <span class="likesCount">[[${dto.likesCount}]]</span>
+                        <i id="heart" style="color: red"></i>
+                    </div>
                 </div>
             </div>
             <div style="text-align: right; display: flex; justify-content: space-between;">

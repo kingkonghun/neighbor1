@@ -29,4 +29,7 @@ public class Chat {
     private String type;
     private List<Long> memberList;
     private int memberCount;
+    private String hobbyName;
+    private int maxMan;
+    private int nowMan;
 }
