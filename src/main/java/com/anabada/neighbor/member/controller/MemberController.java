@@ -87,12 +87,10 @@ public class MemberController {
         return "member/myWrite";
     }
 
-
-
     @GetMapping("/myInfo")//내 개인정보
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String myInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
-        Member member = memberService.myInfo(principalDetails);
+        Member member = memberService.myInfo(principalDetails.getMember().getMemberId());
         model.addAttribute("list", member);
         return "/member/myInfoEx";
     }
@@ -118,7 +116,7 @@ public class MemberController {
     @GetMapping("/editInfo")//수정페이지로 이동
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String editInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model,String message) {
-        Member member = memberService.myInfo(principalDetails);
+        Member member = memberService.myInfo(principalDetails.getMember().getMemberId());
         model.addAttribute("list", member);
         model.addAttribute("message",message);
         return "member/editInfo";
@@ -158,7 +156,7 @@ public class MemberController {
     @GetMapping("/slideBar")
     @ResponseBody
     public Member slideBar(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Member member = memberService.myInfo(principalDetails);
+        Member member = memberService.myInfo(principalDetails.getMember().getMemberId());
         return member;
     }
 
