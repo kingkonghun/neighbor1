@@ -14,7 +14,7 @@
                     url: "/chatOut",
                     data: {"roomId": $("#roomId").val(), "type": "club"},
                     success: function(){
-                        window.close();
+                        location.href = "/chatRoomList";
                     }
                 });
             }

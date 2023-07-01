@@ -29,7 +29,7 @@
                     url: "/chatOut",
                     data: {"roomId": $("#roomId").val(), "type": "used"},
                     success: function(){
-                        window.close();
+                        location.href = "/chatRoomList";
                     }
                 });
             }

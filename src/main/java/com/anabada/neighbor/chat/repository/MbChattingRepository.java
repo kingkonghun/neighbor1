@@ -29,7 +29,7 @@ public interface MbChattingRepository extends ChattingRepository {
     void insertMessage(Chat chat);
 
     @Override
-    @Select("select content from chattingMessage where roomId = #{roomId} and content != 'x' order by messageId desc limit 1")
+    @Select("select content from chattingMessage where roomId = #{roomId} and type != 'LINE' order by messageId desc limit 1")
     String lastMessage(long roomId);
 
     @Override
@@ -49,7 +49,7 @@ public interface MbChattingRepository extends ChattingRepository {
     List<Long> findRoomIdByMemberId(long memberId);
 
     @Override
-    @Select("select count(*) from chattingMember where roomId = #{roomId} and memberId = #{memberId}")
+    @Select("select count(*) from chattingMember where roomId = #{roomId} and memberId = #{memberId} and chatMemberStatus = 'y'")
     int check(ChattingMember chattingMember);
 
     @Override
@@ -62,7 +62,7 @@ public interface MbChattingRepository extends ChattingRepository {
 
     @Override
     @Update("update chattingMember set chatMemberStatus = 'n' where roomId = #{roomId} and memberId = #{memberId}")
-    void chatOutUsed(@Param("roomId") long roomId, @Param("memberId") long memberId);
+    void chatOut(@Param("roomId") long roomId, @Param("memberId") long memberId);
 
     @Override
     @Select("select count(*) from chattingRoom where roomId = #{roomId} and creator = #{memberId}")

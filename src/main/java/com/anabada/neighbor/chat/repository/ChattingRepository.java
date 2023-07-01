@@ -34,7 +34,7 @@ public interface ChattingRepository {
 
     int chatMemberCount(long roomId);
 
-    void chatOutUsed(long roomId, long memberId);
+    void chatOut(long roomId, long memberId);
 
     int checkCreator(long roomId, long memberId);
 

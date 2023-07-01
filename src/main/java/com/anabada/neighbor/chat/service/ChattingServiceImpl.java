@@ -103,10 +103,13 @@ public class ChattingServiceImpl implements ChattingService {
                         .roomId(roomId)
                         .sender(memberId)
                         .senderName(memberName)
-                        .content(memberName + "님 환영합니다.")
+                        .content("x")
                         .messageDate(dateFormat.format(new Date()))
-                        .messageType("ENTER")
+                        .messageType("LINE")
                         .build();
+                chattingRepository.insertMessage(chat);
+                chat.setContent(memberName + "님 환영합니다.");
+                chat.setMessageType("ENTER");
                 chattingRepository.insertMessage(chat);
 
                 chattingRepository.insertChatMember(roomId, memberId);
@@ -294,15 +297,27 @@ public class ChattingServiceImpl implements ChattingService {
     @Override
     public void chatOut(long roomId, String type, PrincipalDetails principalDetails) {
         long memberId = principalDetails.getMember().getMemberId();
+        String memberName = principalDetails.getMember().getMemberName();
+        String key = roomId + "_" + memberId;
+        chatNotificationMap.remove(key);
 
-        if (type.equals("used")) {
-            chattingRepository.insertMessage(Chat.builder()
-                    .roomId(roomId)
-                    .sender(memberId)
-                    .content("x")
-                    .messageType("LINE")
-                    .build());
-            chattingRepository.chatOutUsed(roomId, memberId);
+        Chat chat = Chat.builder()
+                .roomId(roomId)
+                .sender(memberId)
+                .content("x")
+                .messageType("LINE")
+                .build();
+
+        chattingRepository.insertMessage(chat);
+        chattingRepository.chatOut(roomId, memberId);
+
+        if (type.equals("club")) {
+            chat.setSenderName(memberName);
+            chat.setContent(memberName + "님이 퇴장하셨습니다.");
+            chat.setMessageDate(dateFormat.format(new Date()));
+            chat.setMessageType("ENTER");
+            chattingRepository.insertMessage(chat);
+            simpMessagingTemplate.convertAndSend("/topic/message/" + roomId, chat);
         }
     }
 }
