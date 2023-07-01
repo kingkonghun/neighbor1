@@ -107,5 +107,10 @@ public interface ClubRepository {
     void updateNowManMinus(Long clubId);
 
     void updateNowManPlus(Long clubId);
+
+    /**
+     * 셀렉옵션에 넣을 취미 이름 가져오기
+     * @return
+     */
     List<Hobby> findHobbyName();
 }
