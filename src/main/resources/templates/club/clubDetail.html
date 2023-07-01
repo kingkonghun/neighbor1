@@ -21,10 +21,10 @@
     <section class="section">
         <div class="main-section-wrap">
             <div class="slide-box">
-                <div class="content" th:each="image : ${images}">
-                    <img th:src="@{${image.url}}" alt="${image.name}"/>
-                    <a th:href="@{${image.url}}">다운로드</a>
-<!--                    <div class="img-box" th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'"></div>-->
+                <div class="content"  th:each="image : ${images}" >
+<!--                    <img th:src="@{${image.url}}" alt="${image.name}"/>-->
+<!--                    <a th:href="@{${image.url}}">다운로드</a>-->
+                    <div class="img-box" th:style="'background-image: url('+@{${image.url}}+')'"></div>
 <!--                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>-->
                 </div>
             </div>
@@ -42,9 +42,7 @@
             </ul>
 
             <div class="detail_menu"><!--제목-->
-                <span th:text="${club.title}" class="menu_title">
-                    제목 모든일 합니다.
-                </span>
+                <span th:text="${club.title}" class="menu_title"></span>
             </div>
 
             <div class="views"><!--조회수 생성일-->
@@ -53,27 +51,13 @@
 
             <ul class="username"><!--글쓴이 이름 사진-->
                 <li><img th:src="@{/member/findProfileImg(memberId=${club.memberId})}" src="/img/author-4.jpg" alt="프로필 사진"/></li>
-                <li>김김김</li>
+                <li th:text="${club.memberName}"></li>
             </ul>
             <div>
                 <ul>
                     <li class="content">내용
                         <ul>
-                            <li th:text="${club.content}" class="bottom">
-                                와인🍷에 관심이 있으신 회원분들 어서오세용 :)
-                                문토에서 와인소셜링으로 좋은 사람들 많이 만났고,
-                                또 열어달라고 하신분들도 많아서
-                                오랫만에 다시 고고 해봅니다!
-                                가보자고!!ㅋㅋㅋ(feat.맛집/ 합정 스트링비스트로)
-
-                                평소에 궁금했던 와인🍷 마셔보고 싶었던
-                                와인🍷 함께 테이스팅 해보는 소셜링입니다!
-
-                                와인🍷은 데일리 와인🍷 좋은 와인🍷
-                                앞으로 다양하게 마셔보려고 하는데 오셔서
-                                추천해주셔도 너무 좋습니다~!
-                                스타트로 가성비 좋은 데일리와인🍷함께 마셔봐요!
-                            </li>
+                            <li th:text="${club.content}" class="bottom"></li>
                         </ul>
                     </li>
                 </ul>
