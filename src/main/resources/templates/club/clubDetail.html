@@ -21,10 +21,10 @@
     <section class="section">
         <div class="main-section-wrap">
             <div class="slide-box">
-                <div class="content" th:each="image : ${images}">
-                    <img th:src="@{${image.url}}" alt="${image.name}"/>
-                    <a th:href="@{${image.url}}">다운로드</a>
-<!--                    <div class="img-box" th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'"></div>-->
+                <div class="content"  th:each="image : ${images}" >
+<!--                    <img th:src="@{${image.url}}" alt="${image.name}"/>-->
+<!--                    <a th:href="@{${image.url}}">다운로드</a>-->
+                    <div class="img-box" th:style="'background-image: url('+@{${image.url}}+')'"></div>
 <!--                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>-->
                 </div>
             </div>
