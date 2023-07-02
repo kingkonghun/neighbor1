@@ -5,6 +5,7 @@ import com.anabada.neighbor.chat.domain.ChattingMember;
 import com.anabada.neighbor.chat.domain.ChattingMessage;
 import com.anabada.neighbor.chat.domain.ChattingRoom;
 import org.apache.ibatis.annotations.*;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -61,18 +62,34 @@ public interface MbChattingRepository extends ChattingRepository {
     int chatMemberCount(long roomId);
 
     @Override
-    @Update("update chattingMember set chatMemberStatus = 'n' where roomId = #{roomId} and memberId = #{memberId}")
-    void chatOut(@Param("roomId") long roomId, @Param("memberId") long memberId);
+    @Update("update chattingMember set chatMemberStatus = #{status} where roomId = #{roomId} and memberId = #{memberId}")
+    void updateStatus(@Param("roomId") long roomId, @Param("memberId") long memberId, @Param("status") String status);
 
     @Override
     @Select("select chatMemberStatus from chattingMember where roomId = #{roomId} and memberId = #{memberId}")
     String chatMemberStatus(@Param("roomId") long roomId, @Param("memberId") long memberId);
 
     @Override
-    @Update("update chattingMember set chatMemberStatus = 'y' where roomId = #{roomId}")
-    void updateStatus(long roomId);
+    @Update("update chattingMember set chatMemberStatus = #{status} where roomId = #{roomId}")
+    void updateStatusAll(@Param("roomId") long roomId, @Param("status") String status);
 
     @Override
     @Select("select messageId from chattingMessage where writer = #{memberId} and roomId = #{roomId} and messageType = 'LINE' order by messageId desc limit 1")
     long findLineMessageId(@Param("roomId") long roomId, @Param("memberId") long memberId);
+
+    @Override
+    @Select("select roomId from chattingRoom where postId = #{postId}")
+    long findRoomIdByPostId(Long postId);
+
+    @Override
+    @Select("select count(*) from chattingMember where roomId = #{roomId} and memberId = #{memberId}")
+    int checkJoin(ChattingMember build);
+
+    @Override
+    @Select("select memberId from chattingMember where roomId = #{roomId} and chatMemberStatus = 'y'")
+    List<Long> findStatusYMemberIdByRoomId(long roomId);
+
+    @Override
+    @Update("update chattingRoom set type = 'del' where roomId = #{roomId}")
+    void deleteChatRoom(long roomId);
 }

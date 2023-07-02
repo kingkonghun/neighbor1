@@ -37,7 +37,7 @@
                 </div>
 
 
-                <div class="block active" th:if="${row.type} eq 'club'" th:onclick="|location.href='@{chatDetail(roomId=${row.roomId}, type=club)}'|">
+                <div class="block active" th:if="${row.type eq 'club' && row.chatMemberStatus eq 'y'}" th:onclick="|location.href='@{chatDetail(roomId=${row.roomId}, type=club)}'|">
                     <div class="imgbx">
                         <img th:src="@{/used/findImg(postId=${row.postId})}" class="cover">
                     </div>

@@ -34,5 +34,6 @@ public class Chat {
     private int maxMan;
     private int nowMan;
     private String chatMemberStatus;
+    private long clubId;
 
 }

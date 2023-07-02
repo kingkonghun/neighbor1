@@ -275,6 +275,7 @@ body{/*컨테이너 배경*/
 }
 .join{
     justify-content: center;
+    margin-top: 20px;
 }
 .join p{
     background: #d2d2d2;

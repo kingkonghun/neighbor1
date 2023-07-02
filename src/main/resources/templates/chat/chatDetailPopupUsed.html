@@ -23,11 +23,11 @@
             }
         });
         $("#chatOut").click(function(){
-            if(confirm("채팅방을 나가시겠습니까?")){
+            if(confirm("채팅방을 지우시겠습니까?")){
                 $.ajax({
                     type: "post",
                     url: "/chatOut",
-                    data: {"roomId": $("#roomId").val(), "type": "used"},
+                    data: {"postId": $("#postId").val(), "roomId": $("#roomId").val(), "type": "used"},
                     success: function(){
                         location.href = "/chatRoomList";
                     }
@@ -62,7 +62,7 @@
             <i class="bi bi-three-dots-vertical"></i>
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#" id="chatOut">채팅방 나가기</a></li>
+            <li><a class="dropdown-item" href="#" id="chatOut">채팅방 지우기</a></li>
           </ul>
         </li>
       </div>
@@ -101,6 +101,9 @@
           </p><!--시간-->
         </div>
         <div class="message1 join" th:if="${row.messageType} == 'ENTER'"><!--상대가 보낸 부분 왼쪽-->
+          <p th:text="${row.content}"></p>
+        </div>
+        <div class="message1 join" th:if="${row.messageType} == 'EXIT'"><!--상대가 보낸 부분 왼쪽-->
           <p th:text="${row.content}"></p>
         </div>
       </th:block>

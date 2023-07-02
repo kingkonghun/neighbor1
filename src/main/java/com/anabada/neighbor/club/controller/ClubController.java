@@ -1,11 +1,11 @@
 package com.anabada.neighbor.club.controller;
 
+import com.anabada.neighbor.chat.domain.Chat;
 import com.anabada.neighbor.chat.service.ChattingService;
 import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.domain.ImageRequest;
 import com.anabada.neighbor.club.domain.ImageResponse;
-import com.anabada.neighbor.club.domain.*;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.service.ClubService;
 import com.anabada.neighbor.club.service.ImageUtils;
@@ -52,18 +52,18 @@ public class ClubController {
     }
 
 
-    //게시글 작성 페이지
-    @GetMapping("/clubSave")
-    public String clubSave(@RequestParam(value = "postId", required = false) Long postId
-            , HttpSession session, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        if (postId != null) {//postId가 있으면 검색해서 정보 가져오기
-            ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
-            model.addAttribute("club", clubResponse);
-        } else {
-            model.addAttribute("club", new ClubResponse());
-        }
-        return "club/clubSave";
-    }
+//    //게시글 작성 페이지
+//    @GetMapping("/clubSave")
+//    public String clubSave(@RequestParam(value = "postId", required = false) Long postId
+//            , HttpSession session, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+//        if (postId != null) {//postId가 있으면 검색해서 정보 가져오기
+//            ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
+//            model.addAttribute("club", clubResponse);
+//        } else {
+//            model.addAttribute("club", new ClubResponse());
+//        }
+//        return "club/clubSave";
+//    }
 
     @PostMapping("/clubSave")
     public String clubSave(ClubRequest clubRequest, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -117,6 +117,7 @@ public class ClubController {
         model.addAttribute("images", imageInfose);
         model.addAttribute("club", response);
         model.addAttribute("postId", postId);
+        model.addAttribute("roomId", chattingService.findRoomId(postId));
         return "club/clubDetail";
     }
 
@@ -146,7 +147,10 @@ public class ClubController {
         if (clubJoinId == null) {//가입한적 없으면 join 있으면 delete
             if (clubService.joinClubJoin(club, principalDetails) == 1) { //인원이 꽉차 가입실패시 -1 반환
                 clubService.updateNowMan(1, club.getClubId());
-                return clubService.findClub(postId,principalDetails ); // 가입성공시 클럽을 새로 조회
+
+                chattingService.chatJoin(postId, principalDetails);
+
+                return clubService.findClub(postId,principalDetails); // 가입성공시 클럽을 새로 조회
             }else{
                 club.setClubJoinYn(-1);
                 return club; // 가입 실패시 클럽을 새로조회하지않음
@@ -154,6 +158,12 @@ public class ClubController {
         }else{
             if (clubService.deleteClubJoin(club, principalDetails) == 1) {
                 clubService.updateNowMan(0, club.getClubId());
+
+                chattingService.chatOut(Chat.builder()
+                        .roomId(chattingService.findRoomId(postId))
+                        .type("club")
+                        .build(), principalDetails);
+
                 return clubService.findClub(postId, principalDetails);// 탈퇴성공시 클럽을 새로 조회
             }else{
                 return club; // 탈퇴 실패시 클럽을 새로 조회하지않음
