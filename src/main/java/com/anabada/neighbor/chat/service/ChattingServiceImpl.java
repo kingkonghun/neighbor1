@@ -206,7 +206,7 @@ public class ChattingServiceImpl implements ChattingService {
                         .roomId(roomId)
                         .postId(post.getPostId())
                         .title(post.getTitle())
-                        .memberList(memberIdList)
+//                        .memberList(memberIdList)
                         .receiver(memberId)
                         .content(lastMessage)
                         .chatCount(chatNotificationMap.get(roomId + "_" + principalDetails.getMember().getMemberId()) != null ? chatNotificationMap.get(roomId + "_" + principalDetails.getMember().getMemberId()) : 0)
@@ -259,6 +259,7 @@ public class ChattingServiceImpl implements ChattingService {
             } else if (type.equals("club")) { // 동네모임 채팅이면
                 Post post = clubRepository.selectPost(chattingRoom.getPostId()); // postId 로 게시물의 정보를 가져옴
                 Club club = clubRepository.selectClub(post.getPostId()); // postId 로 모임의 정보를 가져옴
+
 
                 chat = Chat.builder()
                         .postId(post.getPostId())
@@ -345,4 +346,19 @@ public class ChattingServiceImpl implements ChattingService {
             simpMessagingTemplate.convertAndSend("/topic/message/" + roomId, chat); // 해당 방에 퇴장 메시지 보내기
         }
     }
+
+    @Override
+    public List<Member> chattingMemberList(long roomId) {
+        List<Long> memberIdList = chattingRepository.findChatMemberIdByRoomId(roomId);
+        List<Member> memberList = new ArrayList<>();
+        for (long memberId : memberIdList) {
+            memberList.add(Member.builder()
+                    .memberId(memberId)
+                    .memberName(memberRepository.findMemberName(memberId))
+                    .build());
+        }
+        return memberList;
+    }
+
+
 }

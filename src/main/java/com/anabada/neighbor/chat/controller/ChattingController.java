@@ -36,7 +36,7 @@ public class ChattingController {
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String chatRoomList(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) { // 채팅방 목록 보기
         model.addAttribute("list", chattingService.chattingRoomList(principalDetails));
-        return "chatEx/chatRoomListPopup";
+        return "chat/chatRoomListPopup";
     }
 
     @GetMapping("/chatDetail")
@@ -45,11 +45,12 @@ public class ChattingController {
         boolean check = chattingService.check(roomId, principalDetails); // 입장 권한 체크
         if (check) {
             model.addAttribute("list", chattingService.chattingMessageList(roomId, principalDetails, type)); // 메시지 리스트
+            model.addAttribute("memberList", chattingService.chattingMemberList(roomId));
             if (type.equals("used")) {
                 model.addAttribute("receiver", chattingService.getReceiver(roomId, principalDetails));
             }
         }
-        return type.equals("used") ? "chatEx/chatDetailPopupUsed" : "chatEx/chatDetailPopupClub";
+        return type.equals("used") ? "chat/chatDetailPopupUsed" : "chat/chatDetailPopupClub";
     }
 
     @MessageMapping("/message")

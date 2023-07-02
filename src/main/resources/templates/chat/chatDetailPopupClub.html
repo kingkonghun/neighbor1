@@ -24,6 +24,13 @@
     function tongkn2_pop(){
         opener.location.href="/clubDetail?postId="+[[${list[0].postId}]];
     }
+    function memberListOpen(){
+        $(".room_sidvar").slideDown();
+        $(".room_sidvar").css("display", "flex");
+    }
+    function memberListClose(){
+        $(".room_sidvar").slideUp();
+    }
 </script>
 </head>
 <body>
@@ -32,6 +39,21 @@
 <input type="hidden" id="roomId" th:value="${list[0].roomId}">
 <input type="hidden" id="sender" th:value="${#authentication.principal.member.memberId}">
 <div class="container3">
+
+  <div class="room_sidvar">
+    <h2 class="py-3" onclick="memberListClose()">참여목록</h2>
+    <div class="block44" th:each="row : ${memberList}">
+      <div class="list_imgbx">
+        <img th:src="@{/member/findProfileImg(memberId=${row.memberId})}" class="user_self">
+      </div>
+      <div class="list_details">
+        <div class="listHead">
+          <h4 th:text="${row.memberName}"></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="rightSide">
     <div class="header"><!--채팅 상대방 창 -->
       <div class="imgText">
@@ -39,7 +61,7 @@
           <div class="userimg">
             <img th:src="@{/used/findImg(postId=${list[0].postId})}" class="cover"><!--상대방 이미지-->
           </div>
-          <h4 th:text="${list[0].receiverName}+'님 외 '+${list[0].memberCount}+'명'"></h4><!--상대 이름-->
+          <h4 th:text="${list[0].receiverName}+'님 외 '+${list[0].memberCount}+'명'" onclick="memberListOpen()"></h4><!--상대 이름-->
         </div>
         <li class="navList nav-item dropdown" style="list-style: none;">
           <a class="nav-link " id="adminT" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">
@@ -98,5 +120,11 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+
 </body>
 </html>

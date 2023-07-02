@@ -2,6 +2,7 @@ package com.anabada.neighbor.chat.service;
 
 import com.anabada.neighbor.chat.domain.Chat;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.member.domain.Member;
 
 import java.security.Principal;
 import java.util.List;
@@ -42,4 +43,6 @@ public interface ChattingService {
      * 채팅방 나가기
      */
     void chatOut(long roomId, String type, PrincipalDetails principalDetails);
+
+    List<Member> chattingMemberList(long roomId);
 }
