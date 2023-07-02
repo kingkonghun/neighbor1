@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>더보기</title>
+  <link rel="stylesheet" th:href="@{/css/clubList.css}">
+  <style>
+    body {
+        background-color: #f4f4f4;
+    }
+</style>
+</head>
+
+<body>
+<article class="col col-xl-6 col-lg-6 col-md-12 col-sm-12 pb-5" th:each="club : ${clubList}">
+    <div class="item p-3" th:onclick="|location.href='@{clubDetail(postId=${club.postId})}'|">
+        <img class="list_img" src="https://cdn.pixabay.com/photo/2015/07/28/22/05/child-865116_1280.jpg">
+        <div class="text">
+            <h5 th:text="${club.title}">제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. </h5>
+            <span class="content" th:text="${club.content}">내용내용ddddddddddd</span><!--내용 10자이내로-->
+            <div class="listdetail"><!--지역 운동 생성일-->
+                <span class="category" th:text="${club.hobbyName}">운동</span>
+                <span class="region"><i class="fa-solid fa-map-location-dot"></i>지역<span> • </span></span>
+                <span class="date">생성일</span>
+            </div>
+            <div class="members">
+                <img src="/img/author-1.jpg" alt="Member 1">
+                <img src="/img/author-2.jpg" alt="Member 2">
+                <img src="/img/author-3.jpg" alt="Member 3">
+                <img src="/img/author-4.jpg" alt="Member 4">
+                <img src="/img/author-5.jpg" alt="Member 5">
+                <img src="/img/author-6.jpg" alt="Member 6">
+
+                <div class="count">
+                    <i class="fa-solid fa-people-group"></i>
+                    <span th:text="${club.nowMan}">6</span>
+                    <span>/</span>
+                    <span th:text="${club.maxMan}">50</span>
+                </div><!--인원수 나타내는-->
+            </div>
+        </div>
+    </div>
+</article>
+</body>
+</html>

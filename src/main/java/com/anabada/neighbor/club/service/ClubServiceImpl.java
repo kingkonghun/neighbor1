@@ -161,7 +161,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public List<ClubResponse> findClubList() {
+    public List<ClubResponse> findClubList(int num, String search) {
         List<ClubResponse> result = new ArrayList<>(); //반환해줄 리스트생성
         List<Post> postList = clubRepository.selectPostList(); //foreach돌릴 postlist생성j
         for (Post p : postList) {
@@ -181,9 +181,17 @@ public class ClubServiceImpl implements ClubService {
                     .maxMan(club.getMaxMan())
                     .nowMan(club.getNowMan())
                     .build();
-            result.add(temp);
+            if (temp.getTitle().indexOf(search) != -1 || temp.getContent().indexOf(search) != -1) {
+                result.add(temp);
+            }
+//            result.add(temp);
         }
-        return result;
+
+        if(num >= result.size()){
+            return null;
+        }
+        return result.subList(num,Math.min(result.size(),num+6));
+//        return result;
     }
 
     @Override

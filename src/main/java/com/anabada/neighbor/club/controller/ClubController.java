@@ -45,10 +45,11 @@ public class ClubController {
 
 
     @GetMapping("/clubList")
-    public String clubList(Model model) {
-        model.addAttribute("clubList", clubService.findClubList());
+    public String clubList(Model model, @RequestParam(value = "num", defaultValue = "0") int num, @RequestParam(value = "search", defaultValue = "") String search) {
+        model.addAttribute("clubList", clubService.findClubList(num, search));
         model.addAttribute("hobby", clubService.findHobbyName());
-        return "club/clubList";
+        model.addAttribute("search", search);
+        return num <= 0 ? "club/clubList" : "club/clubListPlus";
     }
 
 
