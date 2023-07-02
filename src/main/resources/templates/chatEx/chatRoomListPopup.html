@@ -11,7 +11,7 @@
     <div class="leftSide">
         <div class="header">
             <div class="userimg">
-                <img th:src="@{/member/findProfileImg(memberId=${receiver})}" class="cover">
+                <img th:src="@{/member/findProfileImg(memberId=${#authentication.principal.member.memberId})}" class="cover">
             </div>
             <div>
                 <span th:text="'반갑습니다. ' + ${#authentication.principal.member.memberName} + '님'"></span>

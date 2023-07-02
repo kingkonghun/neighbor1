@@ -12,7 +12,7 @@ import java.util.List;
 public interface MbChattingRepository extends ChattingRepository {
 
     @Override
-    @Select("select * from chattingRoom where postId = #{postId} and creator = #{creator} and roomStatus = 'y'")
+    @Select("select * from chattingRoom where postId = #{postId} and creator = #{creator}")
     ChattingRoom roomCheck(ChattingRoom chattingRoom);
 
     @Override
@@ -63,18 +63,6 @@ public interface MbChattingRepository extends ChattingRepository {
     @Override
     @Update("update chattingMember set chatMemberStatus = 'n' where roomId = #{roomId} and memberId = #{memberId}")
     void chatOut(@Param("roomId") long roomId, @Param("memberId") long memberId);
-
-    @Override
-    @Select("select count(*) from chattingRoom where roomId = #{roomId} and creator = #{memberId}")
-    int checkCreator(@Param("roomId") long roomId, @Param("memberId") long memberId);
-
-    @Override
-    @Update("update chattingRoom set roomStatus = 'n' where roomId = #{roomId}")
-    void closeRoom(long roomId);
-
-    @Override
-    @Select("select * from chattingMember where roomId = #{roomId}")
-    List<ChattingMember> findChatMemberByRoomId(long roomId);
 
     @Override
     @Select("select chatMemberStatus from chattingMember where roomId = #{roomId} and memberId = #{memberId}")

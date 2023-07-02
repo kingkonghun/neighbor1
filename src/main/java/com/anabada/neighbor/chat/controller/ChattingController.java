@@ -23,27 +23,28 @@ public class ChattingController {
 
     private final ChattingService chattingService;
 
+
+
     @PostMapping("/openRoom")
-    @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") // 채팅하기 버튼 클릭 시
     public String openRoom(long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        long roomId = chattingService.openRoom(postId, principalDetails, "used");
-        return "redirect:/chatDetail?roomId="+roomId+"&type=used";
+        long roomId = chattingService.openRoom(postId, principalDetails, "used"); // 채팅방 생성
+        return "redirect:/chatDetail?roomId="+roomId+"&type=used"; // 채팅방 입장
     }
 
     @GetMapping("/chatRoomList")
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String chatRoomList(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public String chatRoomList(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) { // 채팅방 목록 보기
         model.addAttribute("list", chattingService.chattingRoomList(principalDetails));
-        model.addAttribute("receiver", principalDetails.getMember().getMemberId());
         return "chatEx/chatRoomListPopup";
     }
 
     @GetMapping("/chatDetail")
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String chatDetail(long roomId, String type, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        boolean check = chattingService.check(roomId, principalDetails);
+    public String chatDetail(long roomId, String type, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) { // 채팅방 입장
+        boolean check = chattingService.check(roomId, principalDetails); // 입장 권한 체크
         if (check) {
-            model.addAttribute("list", chattingService.chattingMessageList(roomId, principalDetails, type));
+            model.addAttribute("list", chattingService.chattingMessageList(roomId, principalDetails, type)); // 메시지 리스트
             if (type.equals("used")) {
                 model.addAttribute("receiver", chattingService.getReceiver(roomId, principalDetails));
             }
@@ -52,13 +53,13 @@ public class ChattingController {
     }
 
     @MessageMapping("/message")
-    public void messageRoom(Chat chat, Principal principal) throws InterruptedException {
+    public void messageRoom(Chat chat, Principal principal) throws InterruptedException { // 메시지 전송
         Thread.sleep(500);
         chattingService.sendMessage(chat, principal);
     }
 
     @PostMapping("/chatOut")
-    public ResponseEntity<Void> chatOutUsed(long roomId, String type, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<Void> chatOut(long roomId, String type, @AuthenticationPrincipal PrincipalDetails principalDetails) { // 채팅방 나가기
         chattingService.chatOut(roomId, type, principalDetails);
         return new ResponseEntity<>(HttpStatus.OK);
     }
