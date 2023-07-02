@@ -109,10 +109,15 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public ClubResponse findClub(long postId, PrincipalDetails principalDetails) {
         Post post = clubRepository.selectPost(postId);
-        Member postMember = clubRepository.selectMember(post.getMemberId()); //글작성자의 정보
-        Member member = principalDetails.getMember(); // 글을 보러온 사용자의 정보
+        Member postMember = clubRepository.selectMember(post.getMemberId());//글작성자의 정보
+        Member member;
+        if(principalDetails != null) {
+             member = principalDetails.getMember(); // 글을 보러온 사용자의 정보
+        }else{
+             member = Member.builder().memberId(-2).build();
+        }
         Club club = clubRepository.selectClub(postId);
-        System.out.println("클럽아이디" + club.getClubId()+ "멤버아이디 : " + member.getMemberId());
+//        System.out.println("클럽아이디" + club.getClubId()+ "멤버아이디 : " + member.getMemberId());
         return ClubResponse.builder()
                 .clubId(club.getClubId())
                 .clubJoinYn(clubRepository.selectClubJoinIdByMemberId(club.getClubId(), member.getMemberId()) == null ? 0 : 1) // 클럽에 가입되어있으면 1 아니면 0
