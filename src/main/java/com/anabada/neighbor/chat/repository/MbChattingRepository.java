@@ -29,7 +29,7 @@ public interface MbChattingRepository extends ChattingRepository {
     void insertMessage(Chat chat);
 
     @Override
-    @Select("select content from chattingMessage where roomId = #{roomId} and type != 'LINE' order by messageId desc limit 1")
+    @Select("select content from chattingMessage where roomId = #{roomId} and messageType != 'LINE' order by messageId desc limit 1")
     String lastMessage(long roomId);
 
     @Override
