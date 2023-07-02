@@ -11,18 +11,32 @@
     <style>
         body{background-color: #f4f4f4; font-family: GangwonEduPowerExtraBoldA;}
         .soldout{
-            opacity: 0.7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            opacity: 0.4;
         }
-        .msg{
+
+        .double-strike {
             position: absolute;
-            top:150px;
-            background-color: #FFFFFF;
-            color: #FF3366;
+            top: 80px;
             font-size: 50px;
-            font-weight: bold;}
+            width: 300px;
+            text-align: center;
+            transform: rotate(-20deg);
+            margin-top: 150px;
+            color: #FF3366;;
+            opacity: 1;
+        }
+
+        .double-strike::before {
+            content: "";
+            position: absolute;
+            left: 40px;
+            top: -20%;
+            right: 40px;
+            bottom: -20%;
+            border-top: 5px solid #FF3366;;
+            border-bottom: 5px solid #FF3366;;
+        }
+
         #modal {
             position: fixed;
             z-index: 1;
@@ -194,7 +208,6 @@
             });
         });
 
-        //OK
         function list() {
             $.ajax({
                 type: "get",
@@ -220,7 +233,6 @@
         }
 
 
-        //OK
         function update(replyId) {
             $(".comment_"+replyId+" p").css("display", "none");
             $(".comment_"+replyId+" .updateComment").show();
@@ -230,7 +242,6 @@
             $(".buttons_"+replyId+" .btnUpdateSubmit").show();
         }
 
-        //OK
         function updateReply(replyId) {
             var comment = $(".comment_"+replyId+" .updateComment");
             if(comment.val() == "") {
@@ -248,7 +259,6 @@
             });
         }
 
-        //OK
         function cancel(replyId) {
             $(".comment_"+replyId+" p").show();
             $(".comment_"+replyId+" .updateComment").css("display", "none");
@@ -260,7 +270,6 @@
             $(".buttons_"+replyId+" .btnReReplySubmit").css("display", "none");
         }
 
-        //OK
         function reReply(replyId) {
             if(checkIsAuthorization()) {
                 location.href="/member/editInfo?message=추가 정보를 입력한 뒤에 사용하세요";
@@ -273,7 +282,6 @@
             $(".buttons_"+replyId+" .btnReReplySubmit").show();
         }
 
-        //OK
         function writeReReply(replyId) {
             var comment =  $(".comment_"+replyId+" .reReplyComment");
             if(comment.val() == "") {
@@ -365,13 +373,14 @@
                 <div class="content" th:each="imgList : ${dto.imgList}">
                     <div class="img-box" style="width: 100%; " th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' " th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'">
                     </div>
-                    <p th:if="${dto.productStatus eq 'n'}" class="msg" style="z-index: 9;">판매된 상품 입니다.</p>
+                    <div class="double-strike">판매 완료</div>
+
 
                 </div>
                 <div class="content" th:if="${#lists.size(dto.imgList)==1}">
                     <div class="img-box" style="width: 100%;" th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' " th:style="'background-image:url('+ @{/used/downFiles(img=${dto.imgList})} +');'">
                     </div>
-                    <p th:if="${dto.productStatus eq 'n'}" class="msg">판매된 상품 입니다.</p>
+                    <div class="double-strike">판매 완료</div>
                 </div>
             </div>
         </div>
@@ -408,21 +417,24 @@
                 <span th:text="'가격 : ' + ${dto.price} + ' 원'"></span>
                 <span th:text="'조회수 : ' + ${dto.postView}"></span>
             </div>
-            <div class="atag" style="display: flex; gap: 20px; justify-content: flex-end;">
-                <div>
-                    <span th:text="${dto.replyCount}"></span>
-                    <a href="javascript:void(0)" id="open-reply" ><i class="bi bi-chat-text"></i></a>
-                    <a href="javascript:void(0)" id="close-reply" style="display: none;"><i class="bi bi-chat-text"></i></a>
-                </div>
-                <div id="likes">
-                    <span class="likesCount">[[${dto.likesCount}]]</span>
-                    <i id="heart" style="color: red"></i>
+            <div style="display: flex; justify-content: space-between;">
+                <span th:text="${dto.address}"></span>
+                <div class="atag" style="display: flex; gap: 20px; justify-content: flex-end;">
+                    <div>
+                        <span th:text="${dto.replyCount}"></span>
+                        <a href="javascript:void(0)" id="open-reply" ><i class="bi bi-chat-text"></i></a>
+                        <a href="javascript:void(0)" id="close-reply" style="display: none;"><i class="bi bi-chat-text"></i></a>
+                    </div>
+                    <div id="likes">
+                        <span class="likesCount">[[${dto.likesCount}]]</span>
+                        <i id="heart" style="color: red"></i>
+                    </div>
                 </div>
             </div>
             <div style="text-align: right; display: flex; justify-content: space-between;">
                 <form method="post" action="/openRoom" name="chatForm">
                     <input type="hidden" th:value="${dto.postId}" name="postId">
-                    <button class="py-1" id="btnChat" type="button" sec:authorize="isAuthenticated()" th:if="${dto.memberId != #authentication.principal.member.memberId}">채팅하기</button>
+                    <button class="py-1" id="btnChat" type="button" sec:authorize="isAuthenticated()" th:if="${dto.productStatus eq 'y' && dto.memberId != #authentication.principal.member.memberId}">채팅하기</button>
                 </form>
                 <a href="#" id="open-modal">신고</a>
             </div>
@@ -556,5 +568,6 @@
 </div>
 
 <!--footer-->
+<div th:replace="footer :: footer"></div>
 </body>
 </html>

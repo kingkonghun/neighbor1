@@ -1,5 +1,3 @@
-
-
 <section>
     <form name="writeForm" class="row g-3" action="/used/post" enctype="multipart/form-data" method="post">
         <div class="container px-4 px-lg-5 my-5" >
@@ -11,7 +9,7 @@
                 <div class="col-md-3">
                     <label for="category" class="form-label">카테고리</label>
                     <select id="category" class="form-select" name="categoryId">
-                        <option value="0" selected>카테고리</option>
+                        <option value="0" selected>상품종류</option>
                         <th:block th:each="category:${category}">
                             <option th:value="${category.categoryId}" th:text="${category.categoryName}"></option>
                         </th:block>
@@ -40,7 +38,3 @@
         </div>
     </form>
 </section>
-
-
-
-

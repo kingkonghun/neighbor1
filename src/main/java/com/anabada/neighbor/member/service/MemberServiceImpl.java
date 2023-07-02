@@ -92,9 +92,8 @@ public class MemberServiceImpl implements MemberService{
      * member 테이블에서 정보 가져오기
      */
     @Override
-    public Member myInfo(PrincipalDetails principalDetails) {//내정보
+    public Member myInfo(long memberId) {//내정보
         Member member = null;
-        long memberId = principalDetails.getMember().getMemberId();
         member = memberRepository.findMyInfo(memberId);
         member.setMyWrite(memberRepository.countMyWrite(memberId));
         member.setMyReply(replyRepository.countMyReply(memberId));

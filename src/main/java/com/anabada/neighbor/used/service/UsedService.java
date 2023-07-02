@@ -87,7 +87,13 @@ public interface UsedService {
      */
     void soldOut(long postId, long receiver, PrincipalDetails principalDetails);
 
-    List<Used> purchase(PrincipalDetails principalDetails);
+    List<Used> purchase(PrincipalDetails principalDetails,Criteria criteria);
 
-    List<Used> sales(PrincipalDetails principalDetails);
+    List<Used> sales(PrincipalDetails principalDetails,Criteria criteria);
+
+    int countPurchase(long memberId);
+
+    int countSales(long memberId);
+
+    int countMyLikePost(long memberId);
 }

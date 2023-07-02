@@ -1,161 +1,43 @@
-<!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="오이마켓" />
-    <meta name="author" content="아나바다" />
-    <title>오이마켓</title>
-    <th:block th:insert="/common/common :: fragment-header"></th:block>
-</head>
-<body>
-<!-- Nav바-->
-<div th:replace="nav::div"></div>
-<div th:text="${result}">no</div>
-<section>
-    <form class="row g-3" action="/clubSave" method="post" enctype="multipart/form-data">
+<!--<div th:text="${result}">no</div>-->
+<div class="write">
+    <form class="row g-3" name="writeForm" action="/clubSave" method="post" enctype="multipart/form-data">
         <div class="container px-4 px-lg-5 my-5" >
             <div class="row">
                 <div class="col-md-6">
                     <label for="inputTitle" class="form-label">제목</label>
-                    <input th:value="${club.title}" type="text" class="form-control" id="inputTitle" name="title">
+                    <input type="text" class="form-control" id="inputTitle" name="title">
                 </div>
-                <div class="col-md-4">
-                    <label for="inputHobby" class="form-label">취미종류</label>
-                    <select th:field="*{club.hobbyName}" id="inputHobby" class="form-select" name="hobbyName">
-                        <option value="운동">운동</option>
-                        <option value="공부">공부</option>
-                        <option value="술">술</option>
+
+                <div class="col-md-3 category">
+                    <label for="inputHobby" class="form-label">모임종류</label>
+                    <select id="inputHobby" class="form-select" name="hobbyName">
+                        <option value="모임종류">모임종류</option>
+                        <th:block th:each="hobby : ${hobby}">
+                            <option th:value="${hobby.hobbyName}" th:text="${hobby.hobbyName}"></option>
+                        </th:block>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label for="inputMaxMan" class="form-label">최대인원수</label>
-                    <input th:value="${club.maxMan}" type="number" class="form-control" id="inputMaxMan" placeholder="2~50" name="maxMan" min="2" max="50">
+                    <input type="number" class="form-control" id="inputMaxMan" placeholder="2~50" name="maxMan" min="2" max="50">
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label for="formFileMultiple" class="form-label">첨부파일</label>
+                    <input class="form-control" type="file" id="formFileMultiple" multiple="multiple" name="images" onchange="selectFile(this);">
                 </div>
                 <div class="col-md-12">
                     <label for="inputContent" class="form-label">내용</label>
                     <div class="form-floating">
-                        <textarea th:text="${club.content}" class="form-control" placeholder="내용" id="inputContent" style="height: 300px" name="content"></textarea>
+                        <textarea class="form-control" placeholder="내용" id="inputContent" style="height: 300px" name="content"></textarea>
                         <label for="inputContent">커뮤니티 매너를 지켜주세요</label>
                     </div>
                 </div>
-                <div class="col-md-12 mb-3">
-                    <label for="formFileMultiple" class="form-label"></label>
-                    <input class="form-control" type="file" id="formFileMultiple" multiple="multiple" name="images" onchange="selectFile(this);">
-                    <button type="button" class="btn btn-primary" onclick="removeFile();">사진삭제</button>
-                </div>
+
                 <div class="col-md-6 my-1">
-                    <button type="submit" class="btn btn-primary">작성완료</button>
+                    <button type="button" class="btn btn-primary" id="btnSubmit">작성완료</button>
+                    <button type="button" class="btn btn-primary" id="returnBtn">뒤로가기</button>
                 </div>
             </div>
         </div>
     </form>
-</section>
-
-<div th:replace="footer::footer"></div>
-
-<script>
-        // 파일 선택
-    function selectFile(element) {
-
-        const file = element.files[0];
-
-        // 파일 크기가 10MB를 초과하는 경우
-        const fileSize = Math.floor(file.size / 1024 / 1024);
-        if (fileSize > 10) {
-            alert('10MB 이하의 파일로 업로드해 주세요.');
-            element.value = '';
-            return false;
-        }
-    }
-
-    function removeFile() {
-        document.getElementById("formFileMultiple").value = '';
-    }
-
-    /**
- * 데이터 조회
- * @param uri - API Request URI
- * @param params - Parameters
- * @returns json - 결과 데이터
- */
-function getJson(uri, params) {
-
-    let json = {}
-
-    $.ajax({
-        url : uri,
-        type : 'get',
-        dataType : 'json',
-        data : params,
-        async : false,
-        success : function (response) {
-            json = response;
-        },
-        error : function (request, status, error) {
-            console.log(error)
-        }
-    })
-
-    return json;
-}
-
-
-/**
- * 데이터 저장/수정/삭제
- * @param uri - API Request URI
- * @param method - API Request Method
- * @param params - Parameters
- * @returns json - 결과 데이터
- */
-function callApi(uri, method, params) {
-
-    let json = {}
-
-     $.ajax({
-        url : uri,
-        type : method,
-        contentType : 'application/json; charset=utf-8',
-        dataType : 'json',
-        data : (params) ? JSON.stringify(params) : {},
-        async : false,
-        success : function (response) {
-            json = response;
-        },
-        error : function (request, status, error) {
-            console.log(error)
-        }
-    })
-
-    return json;
-}
-
-window.onload = () => {
-    findAllFile();
-}
-
-// 전체 파일 조회
-function findAllFile() {
-    // 1. API 호출
-    const postId = [[ ${postId}]];
-    const response = getJson(`/posts/${postId}/images`);
-<!--    console.log(response); // 응답확인-->
-    // 2. 로직 종료
-    if ( !response.length ) {
-        return false;
-    }
-
-    // 3. 파일 영역 추가
-    let fileHtml = '';
-    if(response.length == 1){
-        fileHtml = response[0].origName;
-        return;
-    }else{
-        fileHtml = response.length + '개의 파일';
-    }
-    // 4. 파일 HTML 렌더링
-    document.getElementById('formFileMultiple').value = fileHtml;
-}
-</script>
-</body>
-</html>
+</div>

@@ -63,6 +63,7 @@ public class MemberController {
         int total = memberService.countMember();//멤버의 총 수
         List<Member> member = memberService.findAllMember(criteria);//멤버리스트
         System.out.println("member = " + member);
+        System.out.println(total);
         mav.addObject("member",member);
         mav.addObject("pageMaker", new PageDTO(total, 10, criteria));
         mav.setViewName("admin/memberList");
@@ -86,12 +87,10 @@ public class MemberController {
         return "member/myWrite";
     }
 
-
-
     @GetMapping("/myInfo")//내 개인정보
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String myInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
-        Member member = memberService.myInfo(principalDetails);
+        Member member = memberService.myInfo(principalDetails.getMember().getMemberId());
         model.addAttribute("list", member);
         return "/member/myInfoEx";
     }
@@ -117,7 +116,7 @@ public class MemberController {
     @GetMapping("/editInfo")//수정페이지로 이동
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String editInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model,String message) {
-        Member member = memberService.myInfo(principalDetails);
+        Member member = memberService.myInfo(principalDetails.getMember().getMemberId());
         model.addAttribute("list", member);
         model.addAttribute("message",message);
         return "member/editInfo";
@@ -132,6 +131,7 @@ public class MemberController {
     }
 
     @PostMapping("/editPwd")//비밀번호 수정
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String editPwd(@RequestParam String oldPwd, @RequestParam String memberPWD, long memberId, Model model, RedirectAttributes redirectAttributes){
         String msg= memberService.editPwd(oldPwd,memberPWD,memberId);
         System.out.println("msg = " + msg);
@@ -146,6 +146,7 @@ public class MemberController {
     }
 
     @PostMapping("/editPhoto")
+    @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String editPhoto(Member member,RedirectAttributes redirectAttributes) {
         memberService.editPhoto(member);
         redirectAttributes.addAttribute("msg", "photoSuccess");
@@ -155,13 +156,13 @@ public class MemberController {
     @GetMapping("/slideBar")
     @ResponseBody
     public Member slideBar(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Member member = memberService.myInfo(principalDetails);
+        Member member = memberService.myInfo(principalDetails.getMember().getMemberId());
         return member;
     }
 
     @ResponseBody
     @GetMapping("/noAdmin")
     public String noAdmin() {
-        return "권한이 없습니다. 꺼지세요";
+        return "권한이 없습니다";
     }
 }

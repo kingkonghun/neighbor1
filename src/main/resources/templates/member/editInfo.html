@@ -51,6 +51,13 @@
                         memberName.focus();
                         return false;
                     }
+                    if ($("#address").val() === "") {
+                        alert('주소 입력은 필수 입니다.');
+                        return false;
+                    }else if ($("#addressDetail").val() === "") {
+                        alert('상세 주소 입력은 필수 입니다.');
+                        return false;
+                    }
                     $("#infoForm").submit();
                 }
             });

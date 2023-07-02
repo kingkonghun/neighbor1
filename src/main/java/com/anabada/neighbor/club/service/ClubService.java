@@ -2,6 +2,7 @@ package com.anabada.neighbor.club.service;
 
 import com.anabada.neighbor.club.domain.*;
 import com.anabada.neighbor.club.domain.entity.Club;
+import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.used.domain.Post;
 
@@ -99,4 +100,5 @@ public interface ClubService {
      * @return 성공시 1 실패시 0
      */
     void updateNowMan(int num, Long clubId);
+    List<Hobby> findHobbyName();
 }

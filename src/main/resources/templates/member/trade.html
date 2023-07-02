@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Title</title>
+  <th:block th:insert="/common/common :: fragment-header"></th:block>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/css/editInfo.css">
+
+  <script type="text/javascript">
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const message = urlParams.get('message');
+
+    if (message) {
+      alert(decodeURIComponent(message));
+    }
+  </script>
+  <script th:inline="javascript">
+    window.onload = function() {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const message = urlParams.get('msg');
+
+      if (message === 'fail') {
+        alert("기존 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+        $("#password-tab").click();
+        $("#oldPwd").focus();
+      }else if (message === 'photoSuccess') {
+        alert("프로필 사진이 변경되었습니다.");
+        $("#security-tab").click();
+      }
+    };
+    $(function () {
+
+      // 비밀번호 정규식 패턴
+      const passwordPattern = /^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+
+      // 닉네임 정규식 패턴
+      const nicknamePattern = /^[a-zA-Z가-힣]{2,12}$/;
+
+      const memberName = $("#memberName");
+      const memberPWD = $("#newPWD");
+
+      $("#btnInfo").on('click', function () {
+        if (confirm("개인정보를 수정 하시겠습니까?")) {
+          if (!nicknamePattern.test(memberName.val())) {
+            alert("2~12글자 사이로 입력해주세요.");
+            memberName.focus();
+            return false;
+          }
+          $("#infoForm").submit();
+        }
+      });
+      $("#btnPwd").on('click', function () {
+        const pwdCk = $("#pwdCheck").val();
+        const pwd = $("#newPWD").val();
+        if (confirm("비밀번호를 변경 하시겠습니까?")) {
+          if (pwd !== pwdCk) {
+            alert("비밀번호가 일치하지 않습니다. 다시 입력해주세요");
+            return false;
+          }
+          if (!passwordPattern.test(memberPWD.val())) {
+            alert("8글자 이상, 영어대소문자와 특수문자(!@#$%^&*)를 사용해야 합니다.");
+            memberPWD.focus();
+            return false;
+          }
+
+          $("#pwdForm").submit();
+        }
+      });
+
+      $("#btnPhoto").on('click', function () {
+        if (confirm("프로필 사진을 변경 하시겠습니까?")) {
+          $("#photoForm").submit();
+        }
+      });
+    });
+
+  </script>
+</head>
+<body>
+<div th:replace="nav :: div"></div>
+<section class="py-5 my-5">
+  <div class="container">
+    <h1 class="mb-5 h1">내 정보 수정</h1>
+    <div class="bg-white shadow rounded-lg d-block d-sm-flex">
+      <div class="profile-tab-nav border-right">
+        <div class="p-4 title">
+
+          <h4 class="text-center h4">아나바다</h4>
+        </div>
+        <div class="nav flex-column nav-pills infoList" id="v-pills-tab" role="tablist" aria-orientation="vertical" >
+          <a class="nav-link active1" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
+            <i class="fa fa-home text-center mr-1"></i>
+            개인정보
+          </a>
+
+          <a class="nav-link" id="password-tab" data-toggle="pill" href="#password" role="tab" aria-controls="password" aria-selected="false"
+             th:unless="${list.providerId.startsWith('google') or list.providerId.startsWith('naver') or list.providerId.startsWith('kakao')}">
+            <i class="fa fa-key text-center mr-1"></i>
+            비밀번호
+          </a>
+          <a class="nav-link" id="security-tab" data-toggle="pill" href="#security" role="tab" aria-controls="security" aria-selected="false">
+            <i class="fa fa-user text-center mr-1"></i>
+            프로필 사진
+          </a>
+        </div>
+      </div>
+      <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
+
+
+        <!--첫번째 폼 (단순 개인정보 수정)-->
+        <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+          <form id="infoForm" class="infoForm" method="post" action="/member/editMyInfo">
+            <h3 class="mb-4 h3">개인 정보 수정</h3>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>닉네임</label>
+                  <input id="memberName" type="text" name="memberName" class="form-control" th:value="${list.memberName}" required>
+                  <input type="hidden" name="memberId" class="form-control" th:value="${list.memberId}">
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="text" class="form-control" th:value="${list.memberEmail}" readonly>
+                </div>
+              </div>
+
+              <div class="col-md-11">
+                <div class="form-group">
+                  <label>주소</label>
+                  <input type="text" name="address" class="form-control" id="address" th:value="${list.address}" required readonly>
+                </div>
+              </div>
+
+              <div class="col-md-1">
+                <div class="form-group">
+                  <label>검색</label>
+                  <input type="button" class="btn btn-sm btn-success" onclick="zipcode()" value="검색">
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>상세 주소</label>
+                  <input type="text" name="addressDetail" class="form-control" id="addressDetail" th:value="${list.addressDetail}" required>
+                </div>
+              </div>
+
+            </div>
+            <div style="margin-top: 24px;">
+              <input type="button" class="btn btn-primary" id="btnInfo" value="수정">
+            </div>
+          </form>
+        </div>
+
+
+        <!--두번째 폼 비밀번호 변경(구글로그인등은 못들어옴)-->
+        <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab" th:unless="${list.providerId.startsWith('google') or list.providerId.startsWith('naver') or list.providerId.startsWith('kakao')}">
+          <form action="/member/editPwd" class="pwdForm" method="post" id="pwdForm">
+            <h3 class="mb-4 h3">비밀번호 변경</h3>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>기존 비밀번호</label>
+                  <input type="password" class="form-control" name="oldPwd" required id="oldPwd">
+                  <input type="hidden" class="form-control" name="memberId" th:value="${list.memberId}" required>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>새 비밀번호</label>
+                  <input type="password" id="newPWD" class="form-control" name="memberPWD" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>비밀번호 확인</label>
+                  <input type="password" id="pwdCheck" class="form-control" name="pwdCheck" required>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top: 24px;">
+              <input class="btn btn-primary" type="button" id="btnPwd" value="수정">
+            </div>
+          </form>
+        </div>
+
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<div th:replace="footer :: footer"></div>
+
+
+</body>
+</html>

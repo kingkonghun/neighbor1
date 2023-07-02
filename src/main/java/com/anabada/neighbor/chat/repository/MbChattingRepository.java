@@ -6,7 +6,6 @@ import com.anabada.neighbor.chat.domain.ChattingMessage;
 import com.anabada.neighbor.chat.domain.ChattingRoom;
 import org.apache.ibatis.annotations.*;
 
-import java.sql.Date;
 import java.util.List;
 
 @Mapper
@@ -17,7 +16,7 @@ public interface MbChattingRepository extends ChattingRepository {
     ChattingRoom roomCheck(ChattingRoom chattingRoom);
 
     @Override
-    @Insert("insert into chattingRoom (postId, creator) values (#{postId}, #{creator})")
+    @Insert("insert into chattingRoom (postId, creator, type) values (#{postId}, #{creator}, #{type})")
     @Options(useGeneratedKeys = true, keyProperty = "roomId")
     void insertRoom(ChattingRoom chattingRoom);
 
@@ -30,12 +29,12 @@ public interface MbChattingRepository extends ChattingRepository {
     void insertMessage(Chat chat);
 
     @Override
-    @Select("select content from chattingMessage where roomId = #{roomId} order by messageId desc limit 1")
+    @Select("select content from chattingMessage where roomId = #{roomId} and messageType != 'LINE' order by messageId desc limit 1")
     String lastMessage(long roomId);
 
     @Override
-    @Select("select * from chattingMessage where roomId = #{roomId} order by messageId desc")
-    List<ChattingMessage> chattingMessageList(long roomId);
+    @Select("select * from chattingMessage where roomId = #{roomId} and messageId >= #{messageId} order by messageId desc")
+    List<ChattingMessage> chattingMessageList(@Param("roomId") long roomId, @Param("memberId") long memberId, @Param("messageId") long messageId);
 
     @Override
     @Select("select * from chattingRoom where roomId = #{roomId}")
@@ -50,6 +49,30 @@ public interface MbChattingRepository extends ChattingRepository {
     List<Long> findRoomIdByMemberId(long memberId);
 
     @Override
-    @Select("select count(*) from chattingMember where roomId = #{roomId} and memberId = #{memberId}")
+    @Select("select count(*) from chattingMember where roomId = #{roomId} and memberId = #{memberId} and chatMemberStatus = 'y'")
     int check(ChattingMember chattingMember);
+
+    @Override
+    @Select("select type from chattingRoom where roomId = #{roomId}")
+    String findTypeByRoomId(long roomId);
+
+    @Override
+    @Select("select count(*) from chattingMember where roomId = #{roomId} and chatMemberStatus = 'y'")
+    int chatMemberCount(long roomId);
+
+    @Override
+    @Update("update chattingMember set chatMemberStatus = 'n' where roomId = #{roomId} and memberId = #{memberId}")
+    void chatOut(@Param("roomId") long roomId, @Param("memberId") long memberId);
+
+    @Override
+    @Select("select chatMemberStatus from chattingMember where roomId = #{roomId} and memberId = #{memberId}")
+    String chatMemberStatus(@Param("roomId") long roomId, @Param("memberId") long memberId);
+
+    @Override
+    @Update("update chattingMember set chatMemberStatus = 'y' where roomId = #{roomId}")
+    void updateStatus(long roomId);
+
+    @Override
+    @Select("select messageId from chattingMessage where writer = #{memberId} and roomId = #{roomId} and messageType = 'LINE' order by messageId desc limit 1")
+    long findLineMessageId(@Param("roomId") long roomId, @Param("memberId") long memberId);
 }

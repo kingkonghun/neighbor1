@@ -57,7 +57,7 @@ public class UsedController {
 
 
     @PostMapping("/post") //게시물 작성
-//    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String post(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception {
         usedService.write(used, principalDetails);
         return "redirect:/used/list";
@@ -89,14 +89,12 @@ public class UsedController {
     }
 
     @PostMapping("/likes") //게시물 좋아요
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @ResponseBody
     public Used likes(long postId, int likesCheck, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return usedService.likes(postId, principalDetails, likesCheck);
     }
 
     @PostMapping("/report") //게시물 신고
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> report(Report report, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         usedService.report(report, principalDetails);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -112,17 +110,17 @@ public class UsedController {
         return "admin/reportList";
     }
 
-    @GetMapping("/likePost") //좋아요 누른 게시글
+    @GetMapping("/likePost") // 좋아요 누른 게시글
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String likePost(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails, Criteria criteria) {
       List<Used> usedList=usedService.likePost(principalDetails.getMember().getMemberId(),criteria);
-        int total = usedService.countLikePost(principalDetails.getMember().getMemberId());
+        int total = usedService.countMyLikePost(principalDetails.getMember().getMemberId());
         model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
-      model.addAttribute("list",usedList);
+        model.addAttribute("list",usedList);
         return "member/myLikes";
     }
 
-    @PostMapping("/reportOk")
+    @PostMapping("/reportOk") // 신고 접수
     public ResponseEntity<Void> reportOk(ReportOk reportOk) {
         usedService.reportOk(reportOk);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -135,14 +133,29 @@ public class UsedController {
     }
 
     @GetMapping("/purchase")
-    public String purchase(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        model.addAttribute("list", usedService.purchase(principalDetails));
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public String purchase(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,Criteria criteria) {
+        List<Used> purchase = usedService.purchase(principalDetails,criteria);
+        int total = usedService.countPurchase(principalDetails.getMember().getMemberId());
+
+        model.addAttribute("purchase", purchase);
+        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
+
         return "used/purchaseList";
     }
 
     @GetMapping("/sales")
-    public String sales(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        model.addAttribute("list", usedService.sales(principalDetails));
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public String sales(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,Criteria criteria) {
+        int total = usedService.countSales(principalDetails.getMember().getMemberId());
+        model.addAttribute("sales", usedService.sales(principalDetails,criteria));
+        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
         return "used/salesList";
+    }
+
+    @GetMapping("/trade")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public String trade() {
+        return "used/trade";
     }
 }

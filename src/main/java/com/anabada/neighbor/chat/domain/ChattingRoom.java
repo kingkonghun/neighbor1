@@ -13,4 +13,5 @@ public class ChattingRoom {
     private long roomId;
     private long postId;
     private long creator;
+    private String type;
 }

@@ -28,20 +28,24 @@ public class UsedServiceImpl implements UsedService{
     private final UsedRepository usedRepository;
     private final ImgDownService imgDownService;
     private final MemberRepository memberRepository;
-//    final String UPLOAD_DIR = "C:\\upload_anabada\\";
-    final String UPLOAD_DIR = "/Users/upload_anabada/";
+    final String UPLOAD_DIR = "C:\\upload_anabada\\";
+//    final String UPLOAD_DIR = "/Users/upload_anabada/";
 
     /**
      * 메인페이지 중고상품 리스트
      */
     @Override
-    public List<Used> mainList() {
+    public List<Used> mainList() { // 최근 일주일 내의 상품을 조회수 순으로 6개 가져옴
         List<Post> postList = usedRepository.postList();
         List<Used> usedList = new ArrayList<>();//리스트 담는곳
         for (Post post: postList){
             Product product = usedRepository.findProduct(post.getPostId());//인기있는 제품
             Member member = usedRepository.findMember(post.getMemberId());
             String categoryName = usedRepository.findCategoryName(product.getCategoryId());
+            int replyCount = usedRepository.findReplyCount(post.getPostId());
+            int likesCount = usedRepository.findLikesCount(post.getPostId());
+            String[] splitString = member.getAddress().split(" ");
+            String address = splitString[0] + " " + splitString[1];
             Used used = Used.builder() //used 객체 생성
                     .postId(post.getPostId())
                     .title(post.getTitle())
@@ -56,12 +60,16 @@ public class UsedServiceImpl implements UsedService{
                     .productStatus(product.getProductStatus())
                     .categoryId(product.getCategoryId())
                     .memberId(member.getMemberId())
-                    .address(member.getAddress())
+                    .address(address)
                     .memberName(member.getMemberName())
 //                    .profileImg(member.getProfileImg().getOriginalFilename())
                     .score(member.getScore())
                     .memberStatus(member.getMemberStatus())
+                    .replyCount(replyCount)
+                    .likesCount(likesCount)
                     .build();
+
+
             usedList.add(used);//리턴할 usedList에 used객체 추가
         }
 
@@ -86,6 +94,8 @@ public class UsedServiceImpl implements UsedService{
             String categoryName = usedRepository.findCategoryName(product.getCategoryId()); //product 테이블의 categoryId로 Category 테이블에서 해당하는 categoryName 가져오기
             int replyCount = usedRepository.findReplyCount(post.getPostId());
             int likesCount = usedRepository.findLikesCount(post.getPostId());
+            String[] splitString = member.getAddress().split(" ");
+            String address = splitString[0] + " " + splitString[1];
             Used used = Used.builder() //used 객체 생성
                     .postId(post.getPostId())
                     .title(post.getTitle())
@@ -100,7 +110,7 @@ public class UsedServiceImpl implements UsedService{
                     .productStatus(product.getProductStatus().equals("y") ? "판매중" : "판매 완료")
                     .categoryId(product.getCategoryId())
                     .memberId(member.getMemberId())
-                    .address(member.getAddress())
+                    .address(address)
                     .memberName(member.getMemberName())
 //                    .profileImg(member.getProfileImg().getOriginalFilename())
                     .score(member.getScore())
@@ -242,6 +252,9 @@ public class UsedServiceImpl implements UsedService{
             usedRepository.updatePostView(postId); //postId로 post 테이블에서 해당하는 튜플의 조회수 증가
         }
 
+        String[] splitString = member.getAddress().split(" ");
+        String address = splitString[0] + " " + splitString[1];
+
         return Used.builder() //게시물의 상세정보 리턴
                 .postId(post.getPostId())
                 .imgList(usedRepository.findAllImgUrl(post.getPostId()))
@@ -257,7 +270,7 @@ public class UsedServiceImpl implements UsedService{
                 .productStatus(product.getProductStatus())
                 .categoryId(product.getCategoryId())
                 .memberId(member.getMemberId())
-                .address(member.getAddress())
+                .address(address)
                 .memberName(member.getMemberName())
 //                .profileImg(member.getProfileImg().getOriginalFilename())
                 .score(member.getScore())
@@ -422,9 +435,12 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public List<Used> purchase(PrincipalDetails principalDetails) {
+    public List<Used> purchase(PrincipalDetails principalDetails,Criteria criteria) {
         List<Used> usedList = new ArrayList<>();
-        List<Purchase> purchaseList = usedRepository.findPurchaseByMemberId(principalDetails.getMember().getMemberId());
+        Map<String, Object> map = new HashMap<>();
+        map.put("memberId", principalDetails.getMember().getMemberId());
+        map.put("criteria", criteria);
+        List<Purchase> purchaseList = usedRepository.findPurchaseByMemberId(map);
 
         for (Purchase purchase : purchaseList) {
             Post post = usedRepository.findPost(purchase.getPostId());
@@ -442,10 +458,15 @@ public class UsedServiceImpl implements UsedService{
         return usedList;
     }
 
+
+
     @Override
-    public List<Used> sales(PrincipalDetails principalDetails) {
+    public List<Used> sales(PrincipalDetails principalDetails,Criteria criteria) {
         List<Used> usedList = new ArrayList<>();
-        List<Sales> salesList = usedRepository.findSalesByMemberId(principalDetails.getMember().getMemberId());
+        Map<String, Object> map = new HashMap<>();
+        map.put("memberId", principalDetails.getMember().getMemberId());
+        map.put("criteria",criteria);
+        List<Sales> salesList = usedRepository.findSalesByMemberId(map);
 
         for (Sales sales : salesList) {
             Post post = usedRepository.findPost(sales.getPostId());
@@ -461,6 +482,20 @@ public class UsedServiceImpl implements UsedService{
         }
         System.out.println(usedList);
         return usedList;
+    }
+
+    @Override
+    public int countPurchase(long memberId) {
+        return usedRepository.countPurchase(memberId);
+    }
+    @Override
+    public int countSales(long memberId) {
+        return usedRepository.countSales(memberId);
+    }
+
+    @Override
+    public int countMyLikePost(long memberId) {
+        return usedRepository.countMyLikePost(memberId);
     }
 }
 

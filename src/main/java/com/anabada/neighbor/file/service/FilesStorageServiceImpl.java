@@ -17,8 +17,9 @@ import java.util.stream.Stream;
 
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
-    private final Path root = Paths.get("/Users", "upload_anabada");
-
+//    private final Path root = Paths.get("/Users", "upload_anabada");
+//    private final Path root = Paths.get("C:\\", "upload_anabada");
+    private final Path root = Paths.get(System.getProperty("user.home"), "upload_anabada");
     @Override
     public void init() {
         try {
@@ -42,6 +43,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     @Override
     public Resource load(String fileName, String creaDate) {
+
         Path file = root.resolve(creaDate + File.separator + fileName);//여기서 현재날짜 경로문제 발생 해결해야함
         try {
             Resource resource = new UrlResource(file.toUri());

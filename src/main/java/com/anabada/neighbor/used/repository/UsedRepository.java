@@ -183,7 +183,13 @@ public interface UsedRepository {
 
     void insertPurchase(long postId, long receiver);
 
-    List<Purchase> findPurchaseByMemberId(long memberId);
+    List<Purchase> findPurchaseByMemberId(Map<String, Object> map);
 
-    List<Sales> findSalesByMemberId(long memberId);
+    List<Sales> findSalesByMemberId(Map<String, Object> map);
+
+    int countPurchase(long memberId);
+
+    int countSales(long memberId);
+
+    int countMyLikePost(long memberId);
 }

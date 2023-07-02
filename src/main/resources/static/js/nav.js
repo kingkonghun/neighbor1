@@ -1,20 +1,20 @@
 $(function(){
-    $("#menuicon").on('click', function () {
-        if (checkIsAuthenticated()) {
-            $.ajax({
-                url:"/member/slideBar",
-                type:"get",
-                success: function (data) {
-                    console.log(data);
-                    $("#memberName").text(data.memberName);
-                    $("#countMyWrite").text(data.myWrite);
-                    $("#myScore").text(data.score);
-                    $("#likes").text(data.myLikesCount);
-
-                }
-            });
-        }
-    });
+//    $("#menuicon").on('click', function () {
+//        if (checkIsAuthenticated()) {
+//            $.ajax({
+//                url:"/member/slideBar",
+//                type:"get",
+//                success: function (data) {
+//                    console.log(data);
+//                    $("#memberName").text(data.memberName);
+//                    $("#countMyWrite").text(data.myWrite);
+//                    $("#myScore").text(data.score);
+//                    $("#likes").text(data.myLikesCount);
+//
+//                }
+//            });
+//        }
+//    });
 
     $(".open-search").click(function(){
         $("#searchForm_2").css("top", "0px");
@@ -45,6 +45,7 @@ $(function(){
 
     $(".popupup").click(function(){
         var roomId = $("#popupRoomId").val();
+        var type = $("#popupType").val();
         var _width = 450;
         var _height = 600;
         var dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screen.left;
@@ -53,7 +54,7 @@ $(function(){
         var screenHeight = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : window.screen.height;
         var _left = ((screenWidth / 2) - (_width / 2)) + dualScreenLeft;
         var _top = ((screenHeight / 2) - (_height / 2)) + dualScreenTop;
-        window.open('/chatDetail?roomId='+roomId, 'chatDetailPopup', 'width='+ _width +', height='+ _height +', left=' + _left + ', top='+ _top );
+        window.open('/chatDetail?roomId='+roomId+'&type='+type, 'chatDetailPopup', 'width='+ _width +', height='+ _height +', left=' + _left + ', top='+ _top );
     });
 
     $("#btnChat").click(function(){
@@ -74,9 +75,9 @@ $(function(){
     });
 });
 
-function myWrite(){
-    location.href="/member/myInfo?navMsg=myWrite";
-}
-function myLikes(){
-    location.href="/member/myInfo?navMsg=likes"
-}
+//function myWrite(){
+//    location.href="/member/myInfo?navMsg=myWrite";
+//}
+//function myLikes(){
+//    location.href="/member/myInfo?navMsg=likes"
+//}

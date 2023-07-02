@@ -21,3 +21,4 @@
 }
 
 .pagination .pageNum{list-style: none; display: flex;}
+.page-item{padding: 0!important;}

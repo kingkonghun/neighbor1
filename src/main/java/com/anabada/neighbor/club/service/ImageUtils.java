@@ -23,9 +23,10 @@ import java.util.stream.Stream;
 
 @Service
 public class ImageUtils {
-    private final String uploadPath = Paths.get("/Users", "upload_anabada").toString();
-//    private final String uploadPath = "C:\\upload_anabada\\";
+//    private final String uploadPath = Paths.get("/Users", "upload_anabada").toString();
+//    private final String uploadPath = "C:\\upload_anabada\\"
 
+    private final String uploadPath = Paths.get(System.getProperty("user.home"), "upload_anabada").toString();
     /**
      * 다중 이미지 업로드
      * @param multipartFileList - 이미지 객체 List

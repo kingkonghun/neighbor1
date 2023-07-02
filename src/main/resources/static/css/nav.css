@@ -104,13 +104,11 @@
 
 
 
-
-
-
 a {
     text-decoration: none;
     color: #000;
 }
+
 .search_1 {
     position: relative;
     width: 240px;
@@ -288,13 +286,12 @@ input[id="menuicon"]:checked + label span:nth-child(3) {
 div[class="sidebar"] {
     width: 360px;
     height: 100%;
-    background: #F4F4F4;
+    background-color: lightgoldenrodyellow;
     position: fixed;
     top: 0;
     right: -360px;
     z-index: 1;
     transition:all .35s;
-    border: 1px solid gray;
 }
 input[id="menuicon"]:checked + label + div {
     right: 0;
@@ -556,6 +553,7 @@ top: 270px;
     overflow: hidden;
     text-overflow: ellipsis;/*넘으면 ...*/
     margin-top: 0;
+    font-family: 'omyu_pretty';
 }
 .navbar-item {
     cursor: pointer;

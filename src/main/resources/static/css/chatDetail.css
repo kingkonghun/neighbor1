@@ -169,13 +169,18 @@ body{/*컨테이너 배경*/
 .imgText{
     position: relative;
     display: flex;
-    justify-content: center;
+    width: 100%;
+    justify-content: space-between;
     align-items: center;
 }
 .imgText h4{
     font-weight: 500;
     line-height: 1.2em;
     margin-left: 15px;
+    font-family: 'GangwonEduPowerExtraBoldA';
+}
+#chatOut{
+    font-family: 'omyu_pretty';
 }
 .chatBox{/*채팅 입력창*/
     position: relative;
@@ -191,6 +196,7 @@ body{/*컨테이너 배경*/
     display: flex;
     width: 100%;
     margin:5px 0;
+    font-family: 'omyu_pretty';
 }
 .message p{/*채팅 말풍선*/
     position: relative;
@@ -202,7 +208,9 @@ body{/*컨테이너 배경*/
     border-radius: 10px;
     font-size: 0.9em;
     word-break: break-all;
-}.message1 p{/*참가 말풍선*/
+    font-family: 'omyu_pretty';
+}
+.message1 p{/*참가 말풍선*/
     position: relative;
     right: 0;
     text-align: center;
@@ -211,6 +219,7 @@ body{/*컨테이너 배경*/
     background: #dcf8c6; 
     border-radius: 10px;
     font-size: 0.9em;
+    font-family: 'omyu_pretty';
 }
 .message p::before{
     content: '';
@@ -226,16 +235,19 @@ body{/*컨테이너 배경*/
     margin-top: 5px;
     font-size: 0.85em;
     opacity: 0.5;
+    font-family: 'omyu_pretty';
 }
 .my_message{
     justify-content: flex-end;
+    font-family: 'omyu_pretty';
 }
 .frnd_message{
     display: flex;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        align-content: flex-start;
-        width: 50%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    width: 50%;
+    font-family: 'omyu_pretty';
 }
 .frnd_message p{
 
@@ -250,6 +262,7 @@ body{/*컨테이너 배경*/
     font-size: 0.9em;
     background: #fff;
     text-align: left;
+    font-family: 'omyu_pretty';
 }
 .message.frnd_message p::before{
     content: '';
@@ -279,6 +292,7 @@ body{/*컨테이너 배경*/
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: 'omyu_pretty';
 }.chatbox_input input{
     position: relative;
     width: 90%;
@@ -298,6 +312,7 @@ body{/*컨테이너 배경*/
 }
 .user_profile span{
     margin-top: 8px;
+    font-family: 'GangwonEduPowerExtraBoldA';
 }
 
 /*상품 설명란*/
@@ -344,6 +359,10 @@ body{/*컨테이너 배경*/
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 160px;
+    font-family: 'GangwonEduPowerExtraBoldA';
+}
+.search_chat .room_detail .used_detail .used_cost{
+    font-family: 'omyu_pretty';
 }
 .search_chat .room_used{
     width: 70px;
@@ -357,6 +376,10 @@ body{/*컨테이너 배경*/
     background-color: #FF3366;
     margin-right: 15px;
     color: #FFFFFF;
-
+}
+.imgText > div{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 

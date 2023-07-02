@@ -3,6 +3,7 @@ package com.anabada.neighbor.club.repository;
 import com.anabada.neighbor.club.domain.ImageRequest;
 import com.anabada.neighbor.club.domain.ImageResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
+import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
 import org.springframework.stereotype.Repository;
@@ -106,4 +107,10 @@ public interface ClubRepository {
     void updateNowManMinus(Long clubId);
 
     void updateNowManPlus(Long clubId);
+
+    /**
+     * 셀렉옵션에 넣을 취미 이름 가져오기
+     * @return
+     */
+    List<Hobby> findHobbyName();
 }

@@ -25,12 +25,12 @@ public interface MemberService {
     /**
      *페이징을 위한 내가 쓴 글 총 갯수 가져오기
      */
-    public int getTotal(long principalDetails);//페이징
+    public int getTotal(long memberId);//페이징
 
     /**
      * member 테이블에서 정보 가져오기
      */
-   public Member myInfo(PrincipalDetails principalDetails);//내정보
+   public Member myInfo(long memberId);//내정보
 
 
    public String findProfileImg(long memberId);//프로필사진
