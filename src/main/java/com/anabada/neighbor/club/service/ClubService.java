@@ -1,9 +1,6 @@
 package com.anabada.neighbor.club.service;
 
-import com.anabada.neighbor.club.domain.ClubResponse;
-import com.anabada.neighbor.club.domain.ClubRequest;
-import com.anabada.neighbor.club.domain.ImageRequest;
-import com.anabada.neighbor.club.domain.ImageResponse;
+import com.anabada.neighbor.club.domain.*;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
@@ -60,10 +57,13 @@ public interface ClubService {
 
     /**
      * 게시글 상세정보 조회
-     * @param postId pk
+     *
+     * @param postId           pk
+     * @param principalDetails
      * @return 게시글 상세정보
      */
-    public ClubResponse findClub(long postId);
+    public ClubResponse findClub(long postId, PrincipalDetails principalDetails);
+
 
     public long updatePost(Post post);
 
@@ -81,9 +81,15 @@ public interface ClubService {
 
     public int checkPost(ClubRequest clubRequest);//clubPost객체의 Null값체크
 
+    /**
+     * 모임가입 성공시 1 반환 인원이 꽉차서 실패시 -1반환
+     * @param club 클럽정보
+     * @param principalDetails 로그인한 사용자 정보
+     * @return 성공시 1 인원이꽉차거나 실패시 -1 반환
+     */
     int joinClubJoin(ClubResponse club, PrincipalDetails principalDetails);
 
-    Long findClubJoinIdByMemberId(ClubResponse club, Long memberId);
+    Long findClubJoinByMemberId(ClubResponse club, Long memberId);
 
     int deleteClubJoin(ClubResponse club, PrincipalDetails principalDetails);
 

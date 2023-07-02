@@ -72,7 +72,7 @@
 
             <div class="btns"><!--가입버튼-->
                 <button th:if="${club.clubJoinYn == 0}" class="subscribe"  type="button" onclick="abc();">가입하기</button>
-                <button th:if="${club.clubJoinYn == 1}" class="subscribe" type="button">탈퇴하기</button>
+                <button th:if="${club.clubJoinYn == 1}" class="subscribe" type="button" onclick="abc();">탈퇴하기</button>
                 <button class="unsubscribe" id="unsubscribe">탈퇴하기</button>
             </div>
         </div>
@@ -105,12 +105,20 @@ function abc(){
     {
         type : "post",
         url : "/club/join",
-        data: {postId: [[${club.postId}]]},
+        data: {
+            postId: [[${club.postId}]]
+        },
         success: function(clubJoin){
             if(clubJoin.clubJoinYn == 1){
-                alert("성공");
-            }else{
-                alert("실패");
+                alert("가입에 성공하였습니다.");
+                $('.subscribe').html('탈퇴하기');
+            }else if(clubJoin.clubJoinYn == -1){
+                alert("인원이 가득차서 가입에 실패하였습니다.");
+            }else if(clubJoin.clubJoinYn == 0){
+                alert('탈퇴에 성공하였습니다');
+                $('.subscribe').html('가입하기');
+            }else if(clubJoin === null){
+                alert('글작성자 본인은 가입이나 탈퇴를 할 수 없습니다');
             }
         }
     }
