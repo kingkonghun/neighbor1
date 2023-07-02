@@ -97,7 +97,7 @@ public interface ClubRepository {
      * @param memberId 멤버아이디
      * @return clubJoinId 반환
      */
-    Long selectClubJoinIdByMemberId(long clubId, Long memberId);
+    Long selectClubJoinIdByMemberId(long clubId, long memberId);
 
     int insertClubJoin(Long clubId, Long memberId, Long postId);
 

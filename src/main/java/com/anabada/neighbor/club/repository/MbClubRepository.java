@@ -99,14 +99,14 @@ public interface MbClubRepository extends ClubRepository {
 
     @Override
     @Select("select id from clubJoin where clubId = #{clubId} and memberId = #{memberId} ")
-    Long selectClubJoinIdByMemberId(@Param("clubId") long clubId,@Param("memberId") Long memberId);
-
-    @Override
-    @Update("update club set nowMan = nowMan + 1 where clubId = ${clubId}")
-    void updateNowManMinus(Long clubId);
+    Long selectClubJoinIdByMemberId(@Param("clubId") long clubId,@Param("memberId") long memberId);
 
     @Override
     @Update("update club set nowMan = nowMan - 1 where clubId = ${clubId}")
+    void updateNowManMinus(Long clubId);
+
+    @Override
+    @Update("update club set nowMan = nowMan + 1 where clubId = ${clubId}")
     void updateNowManPlus(Long clubId);
 
     @Override
