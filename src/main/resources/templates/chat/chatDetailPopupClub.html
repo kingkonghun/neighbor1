@@ -14,7 +14,7 @@
                     url: "/chatOut",
                     data: {"postId": $("#postId").val(), "roomId": $("#roomId").val(), "type": "club"},
                     success: function(){
-                        location.href = "/chatRoomList";
+                        window.close();
                     }
                 });
             }
@@ -26,7 +26,7 @@
                     url: "/deleteChatRoom",
                     data: {"postId": $("#postId").val(), "roomId": $("#roomId").val()},
                     success: function(){
-                        location.href = "/chatRoomList";
+                        window.close();
                     }
                 });
             }
