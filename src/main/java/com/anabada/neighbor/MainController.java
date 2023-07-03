@@ -25,7 +25,7 @@ public class MainController {
     public String main(Model model) {
 //        List<ClubResponse> clubList = clubService.findClubList(search);
         model.addAttribute("starList", usedService.mainList());
-//        model.addAttribute("clubList", clubList.subList(0, Math.min(clubList.size(),6)));
+        model.addAttribute("clubList", clubService.mainList());
         return "index";
     }
 

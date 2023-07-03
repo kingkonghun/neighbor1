@@ -322,4 +322,36 @@ public class ClubServiceImpl implements ClubService {
     public void updatePostView(Long postId) {
         usedRepository.updatePostView(postId);
     }
+
+    @Override
+    public List<ClubResponse> mainList() {
+        List<ClubResponse> result = new ArrayList<>();
+        List<Post> postList = clubRepository.selectHotPostList();
+        for (Post post : postList) {
+            Club club = clubRepository.selectClub(post.getPostId());
+            Member member = clubRepository.selectMember(post.getMemberId());
+            int replyCount = usedRepository.findReplyCount(post.getPostId());
+            int likesCount = usedRepository.findLikesCount(post.getPostId());
+            String[] splitString = member.getAddress().split(" ");
+            String address = splitString[0] + " " + splitString[1];
+            ClubResponse temp = ClubResponse.builder()
+                    .postId(post.getPostId())
+                    .memberId(member.getMemberId())
+                    .memberName(member.getMemberName())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .hobbyName(clubRepository.selectHobbyName(club.getHobbyId()))
+                    .score(member.getScore())
+                    .maxMan(club.getMaxMan())
+                    .nowMan(club.getNowMan())
+                    .address(address)
+                    .replyCount(replyCount)
+                    .likesCount(likesCount)
+                    .postView(post.getPostView())
+                    .postUpdate(post.getPostUpdate())
+                    .build();
+            result.add(temp);
+        }
+        return result;
+    }
 }

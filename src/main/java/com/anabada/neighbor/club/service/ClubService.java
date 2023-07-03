@@ -105,4 +105,6 @@ public interface ClubService {
     List<Hobby> findHobbyName();
 
     void updatePostView(Long postId);
+
+    List<ClubResponse> mainList();
 }

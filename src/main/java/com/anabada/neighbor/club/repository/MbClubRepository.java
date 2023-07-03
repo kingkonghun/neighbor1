@@ -124,4 +124,12 @@ public interface MbClubRepository extends ClubRepository {
     @Override
     @Select("select * from club")
     List<Club> selectClubList();
+
+    @Override
+    @Select("SELECT *" +
+            " FROM post" +
+            " WHERE postUpdate >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 week) and postType='club' " +
+            " ORDER BY postView desc" +
+            " LIMIT 6")
+    List<Post> selectHotPostList();
 }
