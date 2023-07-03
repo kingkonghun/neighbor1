@@ -37,8 +37,6 @@ public class UsedController {
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("categoryId", categoryId);
         model.addAttribute("search", search);
-        System.out.println("search = " + search);
-        System.out.println(categoryId);
 
         return num <= 0 ? "used/list" : "used/listPlus";
     }

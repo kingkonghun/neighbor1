@@ -1,9 +1,6 @@
 package com.anabada.neighbor.club.service;
 
-import com.anabada.neighbor.club.domain.ClubResponse;
-import com.anabada.neighbor.club.domain.ClubRequest;
-import com.anabada.neighbor.club.domain.ImageRequest;
-import com.anabada.neighbor.club.domain.ImageResponse;
+import com.anabada.neighbor.club.domain.*;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.club.repository.ClubRepository;
@@ -110,21 +107,27 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public ClubResponse findClub(long postId) {
+    public ClubResponse findClub(long postId, PrincipalDetails principalDetails) {
         Post post = clubRepository.selectPost(postId);
-        Member member = clubRepository.selectMember(post.getMemberId());
+        Member postMember = clubRepository.selectMember(post.getMemberId());//글작성자의 정보
+        Member member;
+        if(principalDetails != null) {
+             member = principalDetails.getMember(); // 글을 보러온 사용자의 정보
+        }else{
+             member = Member.builder().memberId(-2).build();
+        }
         Club club = clubRepository.selectClub(postId);
-        System.out.println(club.getClubId());
+//        System.out.println("클럽아이디" + club.getClubId()+ "멤버아이디 : " + member.getMemberId());
         return ClubResponse.builder()
                 .clubId(club.getClubId())
                 .clubJoinYn(clubRepository.selectClubJoinIdByMemberId(club.getClubId(), member.getMemberId()) == null ? 0 : 1) // 클럽에 가입되어있으면 1 아니면 0
                 .postId(post.getPostId())
-                .memberId(member.getMemberId())
-                .memberName(member.getMemberName())
+                .memberId(postMember.getMemberId())
+                .memberName(postMember.getMemberName())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .hobbyName(clubRepository.selectHobbyName(club.getHobbyId()))
-                .score(member.getScore())
+                .score(postMember.getScore())
                 .postView(post.getPostView())
                 .ImageResponseList(clubRepository.selectImagesByPostId(postId))//여기까지완성
                 .maxMan(club.getMaxMan())
@@ -158,7 +161,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public List<ClubResponse> findClubList() {
+    public List<ClubResponse> findClubList(int num, String search) {
         List<ClubResponse> result = new ArrayList<>(); //반환해줄 리스트생성
         List<Post> postList = clubRepository.selectPostList(); //foreach돌릴 postlist생성j
         for (Post p : postList) {
@@ -179,9 +182,17 @@ public class ClubServiceImpl implements ClubService {
                     .maxMan(club.getMaxMan())
                     .nowMan(club.getNowMan())
                     .build();
-            result.add(temp);
+            if (temp.getTitle().indexOf(search) != -1 || temp.getContent().indexOf(search) != -1) {
+                result.add(temp);
+            }
+//            result.add(temp);
         }
-        return result;
+
+        if(num >= result.size()){
+            return null;
+        }
+        return result.subList(num,Math.min(result.size(),num+6));
+//        return result;
     }
 
     @Override
@@ -196,7 +207,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public Long findClubJoinIdByMemberId(ClubResponse club, Long memberId) {
+    public Long findClubJoinByMemberId(ClubResponse club, Long memberId) {
         return clubRepository.selectClubJoinIdByMemberId(club.getClubId(), memberId);
     }
 

@@ -26,7 +26,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException { // 소셜 로그인
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
 

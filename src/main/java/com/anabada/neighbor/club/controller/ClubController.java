@@ -1,11 +1,11 @@
 package com.anabada.neighbor.club.controller;
 
+import com.anabada.neighbor.chat.domain.Chat;
 import com.anabada.neighbor.chat.service.ChattingService;
 import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.domain.ImageRequest;
 import com.anabada.neighbor.club.domain.ImageResponse;
-import com.anabada.neighbor.club.domain.*;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.service.ClubService;
 import com.anabada.neighbor.club.service.ImageUtils;
@@ -45,17 +45,29 @@ public class ClubController {
 
 
     @GetMapping("/clubList")
-    public String clubList(Model model) {
-        model.addAttribute("clubList", clubService.findClubList());
+    public String clubList(Model model, @RequestParam(value = "num", defaultValue = "0") int num, @RequestParam(value = "search", defaultValue = "") String search) {
+        model.addAttribute("clubList", clubService.findClubList(num, search));
         model.addAttribute("hobby", clubService.findHobbyName());
-        return "club/clubList";
+        model.addAttribute("search", search);
+        return num <= 0 ? "club/clubList" : "club/clubListPlus";
     }
 
 
+//    //게시글 작성 페이지
+//    @GetMapping("/clubSave")
+//    public String clubSave(@RequestParam(value = "postId", required = false) Long postId
+//            , HttpSession session, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+//        if (postId != null) {//postId가 있으면 검색해서 정보 가져오기
+//            ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
+//            model.addAttribute("club", clubResponse);
+//        } else {
+//            model.addAttribute("club", new ClubResponse());
+//        }
+//        return "club/clubSave";
+//    }
 
     @PostMapping("/clubSave")
     public String clubSave(ClubRequest clubRequest, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        clubRequest.setHobbyName("운동");
         Post post = Post.builder()
                 .memberId(principalDetails.getMember().getMemberId())
                 .title(clubRequest.getTitle())
@@ -86,8 +98,9 @@ public class ClubController {
     }
 
     @GetMapping("/clubDetail")
-    public String clubDetail(@RequestParam(value = "postId", required = false) Long postId, Model model) {
-        ClubResponse response = clubService.findClub(postId);
+    public String clubDetail(@RequestParam(value = "postId", required = false) Long postId, Model model,
+                             @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        ClubResponse response = clubService.findClub(postId, principalDetails);
         List<ImageResponse> imageResponses = response.getImageResponseList();
 
         List<ImageInfo> imageInfose = new ArrayList<>();
@@ -105,6 +118,7 @@ public class ClubController {
         model.addAttribute("images", imageInfose);
         model.addAttribute("club", response);
         model.addAttribute("postId", postId);
+        model.addAttribute("roomId", chattingService.findRoomId(postId));
         return "club/clubDetail";
     }
 
@@ -124,23 +138,38 @@ public class ClubController {
     @PostMapping("/club/join")
     @ResponseBody
     public ClubResponse join(Long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Long memberId = principalDetails.getMember().getMemberId();
-        ClubResponse club = clubService.findClub(postId);
-        Long clubJoinId = clubService.findClubJoinIdByMemberId(club, memberId);
+        long memberId = principalDetails.getMember().getMemberId();
+        ClubResponse club = clubService.findClub(postId,principalDetails);
+        if (club.getMemberId() == memberId) {//클럽글을 작성한 본인은 가입탈퇴 불가
+            return null;
+        }
+        Long clubJoinId = clubService.findClubJoinByMemberId(club, memberId);
+
         if (clubJoinId == null) {//가입한적 없으면 join 있으면 delete
-            if (clubService.joinClubJoin(club, principalDetails) == 1) {
+            if (clubService.joinClubJoin(club, principalDetails) == 1) { //인원이 꽉차 가입실패시 -1 반환
                 clubService.updateNowMan(1, club.getClubId());
-                return clubService.findClub(postId); // 가입성공시 클럽을 새로 조회
+
+                chattingService.chatJoin(postId, principalDetails);
+
+                return clubService.findClub(postId,principalDetails); // 가입성공시 클럽을 새로 조회
             }else{
+                club.setClubJoinYn(-1);
                 return club; // 가입 실패시 클럽을 새로조회하지않음
             }
         }else{
             if (clubService.deleteClubJoin(club, principalDetails) == 1) {
                 clubService.updateNowMan(0, club.getClubId());
-                return clubService.findClub(postId);// 탈퇴성공시 클럽을 새로 조회
+
+                chattingService.chatOut(Chat.builder()
+                        .roomId(chattingService.findRoomId(postId))
+                        .type("club")
+                        .build(), principalDetails);
+
+                return clubService.findClub(postId, principalDetails);// 탈퇴성공시 클럽을 새로 조회
             }else{
                 return club; // 탈퇴 실패시 클럽을 새로 조회하지않음
             }
         }
     }
+
 }

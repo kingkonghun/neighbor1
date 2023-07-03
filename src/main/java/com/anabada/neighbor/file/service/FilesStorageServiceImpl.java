@@ -18,8 +18,8 @@ import java.util.stream.Stream;
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
 //    private final Path root = Paths.get("/Users", "upload_anabada");
-    private final Path root = Paths.get("C:\\", "upload_anabada");
-
+//    private final Path root = Paths.get("C:\\", "upload_anabada");
+    private final Path root = Paths.get(System.getProperty("user.home"), "upload_anabada");
     @Override
     public void init() {
         try {

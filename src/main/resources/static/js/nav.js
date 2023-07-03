@@ -75,6 +75,20 @@ $(function(){
     });
 });
 
+function clubChatOpen() {
+    var roomId = $("#clubRoomId").val();
+    var type = 'club';
+    var _width = 450;
+    var _height = 600;
+    var dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screen.left;
+    var dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screen.top;
+    var screenWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : window.screen.width;
+    var screenHeight = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : window.screen.height;
+    var _left = ((screenWidth / 2) - (_width / 2)) + dualScreenLeft;
+    var _top = ((screenHeight / 2) - (_height / 2)) + dualScreenTop;
+    window.open('/chatDetail?roomId='+roomId+'&type='+type, 'chatDetailPopup', 'width='+ _width +', height='+ _height +', left=' + _left + ', top='+ _top );
+}
+
 //function myWrite(){
 //    location.href="/member/myInfo?navMsg=myWrite";
 //}

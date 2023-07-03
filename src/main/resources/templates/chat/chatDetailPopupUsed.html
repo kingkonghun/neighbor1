@@ -22,10 +22,22 @@
                 });
             }
         });
+        $("#chatOut").click(function(){
+            if(confirm("채팅방을 지우시겠습니까?")){
+                $.ajax({
+                    type: "post",
+                    url: "/chatOut",
+                    data: {"postId": $("#postId").val(), "roomId": $("#roomId").val(), "type": "used"},
+                    success: function(){
+                        window.close();
+                    }
+                });
+            }
+        });
     });
 
     function tongkn2_pop(){
-        opener.location.href="/clubDetail?postId="+[[${list[0].postId}]];
+        opener.location.href="/used/detail?postId="+[[${list[0].postId}]];
     }
 </script>
 </head>
@@ -33,6 +45,7 @@
 <input type="hidden" id="type" th:value="${list[0].type}">
 <input type="hidden" id="postId" th:value="${list[0].postId}">
 <input type="hidden" id="roomId" th:value="${list[0].roomId}">
+<input type="hidden" id="receiver" th:value="${receiver.receiver}">
 <input type="hidden" id="sender" th:value="${#authentication.principal.member.memberId}">
 <div class="container3">
   <div class="rightSide">
@@ -40,16 +53,16 @@
       <div class="imgText">
         <div>
           <div class="userimg">
-            <img th:src="@{/used/findImg(postId=${list[0].postId})}" class="cover"><!--상대방 이미지-->
+            <img th:src="@{/member/findProfileImg(memberId=${receiver.receiver})}" class="cover"><!--상대방 이미지-->
           </div>
-          <h4 th:text="${list[0].receiverName}+'님 외 '+${list[0].memberCount}+'명'"></h4><!--상대 이름-->
+          <h4 th:text="${receiver.receiverName}"></h4><!--상대 이름-->
         </div>
         <li class="navList nav-item dropdown" style="list-style: none;">
           <a class="nav-link " id="adminT" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">
             <i class="bi bi-three-dots-vertical"></i>
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#" id="chatOut">채팅방 나가기</a></li>
+            <li><a class="dropdown-item" href="#" id="chatOut">채팅방 지우기</a></li>
           </ul>
         </li>
       </div>
@@ -63,12 +76,11 @@
         <img th:src="@{/used/findImg(postId=${list[0].postId})}">
         <div class="used_detail">
           <span class="used_name" th:text="${list[0].title}"></span>
-          <span class="used_cost" th:text="${list[0].nowMan}+' / '+${list[0].maxMan}"></span>
+          <span class="used_cost" th:text="${list[0].price} + ' 원'"></span>
         </div>
       </div>
+      <button type="button" class="deal_comp py-2 px-4" th:if="${list[0].productStatus == 'y' && list[0].master == #authentication.principal.member.memberId}">판매완료</button>
     </div>
-
-
 
     <div class="chatBox" id="messages">
       <th:block th:each="row : ${list}">
@@ -89,6 +101,9 @@
           </p><!--시간-->
         </div>
         <div class="message1 join" th:if="${row.messageType} == 'ENTER'"><!--상대가 보낸 부분 왼쪽-->
+          <p th:text="${row.content}"></p>
+        </div>
+        <div class="message1 join" th:if="${row.messageType} == 'EXIT'"><!--상대가 보낸 부분 왼쪽-->
           <p th:text="${row.content}"></p>
         </div>
       </th:block>

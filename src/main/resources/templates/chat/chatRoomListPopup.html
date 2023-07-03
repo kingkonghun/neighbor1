@@ -11,7 +11,7 @@
     <div class="leftSide">
         <div class="header">
             <div class="userimg">
-                <img th:src="@{/member/findProfileImg(memberId=${receiver})}" class="cover">
+                <img th:src="@{/member/findProfileImg(memberId=${#authentication.principal.member.memberId})}" class="cover">
             </div>
             <div>
                 <span th:text="'반갑습니다. ' + ${#authentication.principal.member.memberName} + '님'"></span>
@@ -21,7 +21,7 @@
         <!--chat list-->
         <div class="chatlist">
             <div th:each="row : ${list}"><!--호버한 리스트-->
-                <div class="block active" th:if="${row.type} eq 'used'" th:onclick="|location.href='@{chatDetail(roomId=${row.roomId}, type=used)}'|">
+                <div class="block active" th:if="${row.type eq 'used' && row.chatMemberStatus eq 'y'}" th:onclick="|location.href='@{chatDetail(roomId=${row.roomId}, type=used)}'|">
                     <div class="imgbx">
                         <img th:src="@{/member/findProfileImg(memberId=${row.sender})}" class="cover">
                     </div>
@@ -37,7 +37,7 @@
                 </div>
 
 
-                <div class="block active" th:if="${row.type} eq 'club'" th:onclick="|location.href='@{chatDetail(roomId=${row.roomId}, type=club)}'|">
+                <div class="block active" th:if="${row.type eq 'club' && row.chatMemberStatus eq 'y'}" th:onclick="|location.href='@{chatDetail(roomId=${row.roomId}, type=club)}'|">
                     <div class="imgbx">
                         <img th:src="@{/used/findImg(postId=${row.postId})}" class="cover">
                     </div>

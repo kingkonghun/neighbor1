@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class ChattingMember {
     private long roomId;
     private long memberId;
+    private String chatMemberStatus;
 }

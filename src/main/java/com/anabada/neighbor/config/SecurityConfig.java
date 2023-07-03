@@ -24,7 +24,7 @@ public class SecurityConfig {
     private final CustomAuthFailureHandler customAuthFailureHandler;
     private final CustomAuthSuccessHandler customAuthSuccessHandler;
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception { // 시큐리티 기본 설정
         return http
                 .csrf().disable()
                 .formLogin()

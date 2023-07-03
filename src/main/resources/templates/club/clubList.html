@@ -31,6 +31,7 @@
         }
 
         $(function(){
+
             // 글작성 검증
             $("#btnSubmit").click(function(){
                 let title = $("#inputTitle");
@@ -94,6 +95,20 @@
             $("#returnBtn").click(function (){
                 $("#writeForm").slideUp();
             });
+
+            // 게시물 더보기
+            let num = 0;
+            $("#btnPlus").click(function (){
+                num+=6;
+                $.ajax({
+                    type: "get",
+                    url: "/clubList",
+                    data: {num:num, search:$("#search").val()},
+                    success: function(data) {
+                        $("#list").append(data);
+                    }
+                });
+            });
         });
     </script>
 </head>
@@ -107,7 +122,7 @@
 <section class="container mt-2">
     <div class="div_1 py-3">
         <article class="write">
-            <button type="button" class="mb-3" id="btnWrite" onclick="clubWrite()">모임등록</button>
+            <button type="button" class="mb-3" id="btnWrite">모임등록</button>
         </article>
         <article class="category">
             <select id="category_select" name="categoryId">
