@@ -6,6 +6,7 @@ import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
+import com.anabada.neighbor.used.domain.Likes;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,7 +111,18 @@ public class ClubServiceImpl implements ClubService {
     public ClubResponse findClub(long postId, PrincipalDetails principalDetails) {
         Post post = clubRepository.selectPost(postId);
         Member postMember = clubRepository.selectMember(post.getMemberId());//글작성자의 정보
+        int replyCount = usedRepository.findReplyCount(post.getPostId()); // postId 로 댓글 갯수 가져오기
+        int likesCount = usedRepository.findLikesCount(post.getPostId()); // postId 로 좋아요 갯수 가져오기
+        int likesCheck = 0; // 초기화
+        if (principalDetails != null) { // 현재 로그인한 상태라면
+            likesCheck = usedRepository.likesCheck(Likes.builder() // 좋아요를 누른 게시물인지 확인
+                    .postId(postId)
+                    .memberId(principalDetails.getMember().getMemberId())
+                    .build());
+        }
+
         Member member;
+
         if(principalDetails != null) {
              member = principalDetails.getMember(); // 글을 보러온 사용자의 정보
         }else{
@@ -122,6 +134,7 @@ public class ClubServiceImpl implements ClubService {
                 .clubId(club.getClubId())
                 .clubJoinYn(clubRepository.selectClubJoinIdByMemberId(club.getClubId(), member.getMemberId()) == null ? 0 : 1) // 클럽에 가입되어있으면 1 아니면 0
                 .postId(post.getPostId())
+                .postUpdate(post.getPostUpdate())
                 .memberId(postMember.getMemberId())
                 .memberName(postMember.getMemberName())
                 .title(post.getTitle())
@@ -129,6 +142,9 @@ public class ClubServiceImpl implements ClubService {
                 .hobbyName(clubRepository.selectHobbyName(club.getHobbyId()))
                 .score(postMember.getScore())
                 .postView(post.getPostView())
+                .replyCount(replyCount)
+                .likesCount(likesCount)
+                .likesCheck(likesCheck)
                 .ImageResponseList(clubRepository.selectImagesByPostId(postId))//여기까지완성
                 .maxMan(club.getMaxMan())
                 .nowMan(club.getNowMan())

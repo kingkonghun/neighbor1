@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Builder
@@ -28,5 +29,8 @@ public class ClubResponse {
     private List<ImageResponse> ImageResponseList; //이미지 url List
     private List<MultipartFile> images = new ArrayList<>(); // 첨부파일 List
     private int clubJoinYn;
-
+    private Date postUpdate;
+    private int replyCount;
+    private int likesCount;
+    private int likesCheck;
 }

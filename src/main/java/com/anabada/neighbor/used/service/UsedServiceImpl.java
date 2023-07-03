@@ -9,6 +9,7 @@ import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
@@ -90,6 +91,7 @@ public class UsedServiceImpl implements UsedService{
         }
         for (Product product : productList) {
             Post post = usedRepository.findPost(product.getPostId()); //product 테이블의 postId로 post 테이블에서 해당하는 튜플 가져오기
+
             Member member = usedRepository.findMember(post.getMemberId()); //post 테이블의 memberId로 member 테이블에서 해당하는 튜플 가져오기
             String categoryName = usedRepository.findCategoryName(product.getCategoryId()); //product 테이블의 categoryId로 Category 테이블에서 해당하는 categoryName 가져오기
             int replyCount = usedRepository.findReplyCount(post.getPostId());
@@ -129,7 +131,6 @@ public class UsedServiceImpl implements UsedService{
         Collections.sort(usedList, comparator.reversed());
 
         if (listType.equals("similarList")) { //listType이 similarList라면
-            
             return usedList.subList(0, Math.min(usedList.size(), 6)); //usedList에서 앞에 4개만 리턴
         }
 
@@ -186,17 +187,18 @@ public class UsedServiceImpl implements UsedService{
             if (!Files.exists(Paths.get(UPLOAD_DIR))) {//디렉토리가 없다면 디렉토리생성
                 Files.createDirectories(Paths.get(UPLOAD_DIR));
             }
-            if(!formImg.equals("") && formImg != null ) {
-                for (MultipartFile file : used.getFiles()) {
-                    System.out.println("이프문안에:"+formImg);
-                    Files.delete(originImg);//원래 이미지 삭제
-                    String uuid = UUID.randomUUID().toString();
-                    String fileName = uuid + "_" + file.getOriginalFilename();
-                    String filePath = UPLOAD_DIR + File.separator + fileName;
-                    file.transferTo(new File(filePath));
-                    usedRepository.updateImage(used.getPostId(), fileName); // img 테이블 update
-                  }
-            }
+
+//            if(!formImg.equals("") && formImg != null ) {
+//                for (MultipartFile file : used.getFiles()) {
+//                    System.out.println("이프문안에:"+formImg);
+//                    Files.delete(originImg);//원래 이미지 삭제
+//                    String uuid = UUID.randomUUID().toString();
+//                    String fileName = uuid + "_" + file.getOriginalFilename();
+//                    String filePath = UPLOAD_DIR + File.separator + fileName;
+//                    file.transferTo(new File(filePath));
+//                    usedRepository.updateImage(used.getPostId(), fileName); // img 테이블 update
+//                  }
+//            }
 
 
     }
