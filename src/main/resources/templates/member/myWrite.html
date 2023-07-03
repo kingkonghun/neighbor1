@@ -8,15 +8,37 @@
     <style>
         body{background-color: #f4f4f4;}
     </style>
+    <script>
+        $(function () {
+            $("#post_select").on('change', function () {
+                // let postType =  ;
+                $.ajax({
+                   url:"/member/myWrite",
+                   data:{postType:$("#post_select").val()},
+                    type:"get",
+                    success: function (data) {
+                        $(".myWrite").html(data);
+                        console.log(data);
+                    }
+                });
+                // location.href = "/member/myWrite?postType="+postType;
+            });
+        });
+    </script>
 </head>
 <body>
-<!-- Nav바-->
-<!--<div th:replace="nav :: div"></div>-->
-<!--<div th:replace="member/myPageNav :: nav"></div>-->
+
 
 <div class="myWrite">
-    <h2 class="h2">내가 작성한 중고 게시글</h2>
+    <h2 class="h2">내가 작성한 게시글</h2>
+
     <div class="table">
+        <article class="select_post">
+            <select id="post_select" name="postType">
+                <option value="used" th:selected="${postType eq 'used'}">중고거래</option>
+                <option value="club" th:selected="${postType eq 'club'}">동네모임</option>
+            </select>
+        </article>
         <table  style="width: 100%;" class="table table-hover">
             <thead>
                 <th>글번호</th>
@@ -29,7 +51,8 @@
             <tbody th:each="list : ${writeList}">
                 <tr th:onclick="'detail('+${list.postId}+')'" >
                     <td th:text="${list.postId}"></td>
-                    <td th:text="${list.categoryName}"></td>
+                    <td  th:if="${categoryName} eq 'used' " th:text="${list.categoryName}"></td>
+                    <td  th:if="${categoryName} eq 'club' " th:text="${list.hobbyName}"></td>
                     <td> <img class="img"  th:src="@{/used/findImg(postId=${list.postId})}"  alt="실패"></td>
                     <td th:text="${list.title}"></td>
                     <td th:text="${#dates.format(list.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></td>
@@ -62,7 +85,9 @@
             $.ajax({
                 method:"get",
                 url: "/member/myWrite",
-                data: {"pageNum": num},
+                data: {"pageNum": num,
+                        "postType" : $("#post_select").val()
+                },
                 success: function (data) {
                     $(".myWrite").html(data);
                 }

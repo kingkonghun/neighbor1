@@ -1,5 +1,8 @@
 package com.anabada.neighbor.member.service;
 
+import com.anabada.neighbor.club.domain.ClubResponse;
+import com.anabada.neighbor.club.domain.entity.Club;
+import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.repository.MemberRepository;
@@ -33,6 +36,7 @@ public class MemberServiceImpl implements MemberService{
     private final ImgDownService imgDownService;
     private final ReplyRepository replyRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ClubRepository clubRepository;
 
     final String uploadDir = "C:\\upload_anabada\\profile\\";
 
@@ -52,18 +56,47 @@ public class MemberServiceImpl implements MemberService{
      *내가 작성한 게시글 리스트 (Criteria 로 페이징)
      */
     @Override
-    public List<Used> myWrite(PrincipalDetails principalDetails, Criteria criteria) {
+    public List<Used> myUsedWrite(PrincipalDetails principalDetails, Criteria criteria) {
         List<Used> used = new ArrayList<>();
         long memberId = principalDetails.getMember().getMemberId(); // 시큐리티에서 memberId가져오기
         Map<String, Object> map = new HashMap<>();
         map.put("memberId",memberId);
         map.put("criteria",criteria);
         String memberName = principalDetails.getMember().getMemberName();
-        List<Post> postList = memberRepository.findMyPost(map);//내가 작성한 post가져오기
+        List<Post> postList = memberRepository.findMyUsedWrite(map);//내가 작성한 post가져오기
         for (Post post : postList) {
-            Product product = usedRepository.findProduct(post.getPostId());//postId로 product 가져오기
-            String categoryName = usedRepository.findCategoryName(product.getCategoryId());//product로 가져온 카테고리id로 category이름가져오기
-            Used used1 = Used.builder()
+                Product product = usedRepository.findProduct(post.getPostId());//postId로 product 가져오기
+                String categoryName = usedRepository.findCategoryName(product.getCategoryId());//product로 가져온 카테고리id로 category이름가져오기
+                Used used1 = Used.builder()
+                        .postId(post.getPostId())
+                        .memberName(memberName)
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .postType(post.getPostType())
+                        .postDate(post.getPostDate())
+                        .postUpdate(post.getPostUpdate())
+                        .postView(post.getPostView())//작성한 글
+                        .categoryName(categoryName)//카테고리
+                        .build();
+                used.add(used1);
+        }
+        return used;
+    }
+
+    @Override
+    public List<ClubResponse> myClubWrite(PrincipalDetails principalDetails, Criteria criteria) {
+        List<ClubResponse> clubResponse = new ArrayList<>();
+        long memberId = principalDetails.getMember().getMemberId(); // 시큐리티에서 memberId가져오기
+        String memberName = principalDetails.getMember().getMemberName();
+        Map<String, Object> map = new HashMap<>();
+        map.put("memberId",memberId);
+        map.put("criteria",criteria);
+
+        List<Post> postList = memberRepository.findMyClubWrite(map);//내가 작성한 post가져오기
+        for (Post post : postList) {
+            Club club = clubRepository.selectClub(post.getPostId());
+            String hobbyName = clubRepository.selectHobbyName(club.getHobbyId());//product로 가져온 카테고리id로 category이름가져오기
+            ClubResponse clubResponse1 = ClubResponse.builder()
                     .postId(post.getPostId())
                     .memberName(memberName)
                     .title(post.getTitle())
@@ -71,21 +104,32 @@ public class MemberServiceImpl implements MemberService{
                     .postType(post.getPostType())
                     .postDate(post.getPostDate())
                     .postUpdate(post.getPostUpdate())
+                    .hobbyName(hobbyName)
                     .postView(post.getPostView())//작성한 글
-                    .categoryName(categoryName)//카테고리
                     .build();
-            used.add(used1);
+            clubResponse.add(clubResponse1);
         }
-
-        return used;
+        return clubResponse;
     }
+
+
 
     /**
      *페이징을 위한 내가 쓴 글 총 갯수 가져오기
      */
     @Override
-    public int getTotal(long memberId) {//페이징
-        return memberRepository.countMyWrite(memberId);
+    public int getUsedTotal(long memberId) {//페이징
+        return memberRepository.countMyUsedWrite(memberId);
+    }
+
+    @Override
+    public int getClubTotal(long memberId) {
+        return memberRepository.countMyClubWrite(memberId);
+    }
+
+    @Override
+    public int getMyAllTotal(long memberId) {
+        return memberRepository.countMyClubWrite(memberId);
     }
 
     /**
@@ -95,7 +139,7 @@ public class MemberServiceImpl implements MemberService{
     public Member myInfo(long memberId) {//내정보
         Member member = null;
         member = memberRepository.findMyInfo(memberId);
-        member.setMyWrite(memberRepository.countMyWrite(memberId));
+        member.setMyWrite(memberRepository.countMyUsedWrite(memberId)+memberRepository.countMyClubWrite(memberId));
         member.setMyReply(replyRepository.countMyReply(memberId));
         member.setMyLikesCount(memberRepository.countMyLikes(memberId));
 
@@ -157,7 +201,7 @@ public class MemberServiceImpl implements MemberService{
         map.put("criteria", criteria);
         List<Member> member = memberRepository.findAllMember(map);
         for (Member member1 : member) {
-            long total = getTotal(member1.getMemberId());
+            long total = getUsedTotal(member1.getMemberId());
             member1.setMyWrite(total);//사용자가 작성한 글의 숫자 가져오기
         }
         return member;
