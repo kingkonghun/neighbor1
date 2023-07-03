@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -121,7 +120,7 @@ public class ChattingServiceImpl implements ChattingService {
                 chattingRepository.insertMessage(chat); // 나의 환영 메시지 등록
             }
         }else { // 방이 이미 존재한다면
-            chattingRepository.updateStatus(chattingRoomTemp.getRoomId()); // used 일 때만 실행되야 할 수도 있음(수정예정)
+            chattingRepository.updateStatusAll(chattingRoomTemp.getRoomId(), "y"); // used 일 때만 실행되야 할 수도 있음(수정예정)
             return chattingRoomTemp.getRoomId(); // 이미 존재하는 방의 roomId 를 리턴
         }
         return 0;
@@ -131,20 +130,35 @@ public class ChattingServiceImpl implements ChattingService {
      * 메시지 보내기
      */
     @Override
-    public void sendMessage(Chat chat, Principal principal) {
+    public void sendMessage(Chat chat, long memberId) {
 
-        chat.setSender(Long.parseLong(principal.getName()));
+        chat.setSender(memberId);
         chat.setSenderName(memberRepository.findMemberName(chat.getSender()));
 
         chattingRepository.insertMessage(chat); // 메시지 DB 에 insert
 
         chat.setMessageDate(dateFormat.format(new Date())); // 현재 날짜 생성 (DB 에는 default 로 현재 날짜가 생성되지만, 메시지 보낼 용도로 생성)
 
-        List<Long> chatMemberIdList = chattingRepository.findChatMemberIdByRoomId(chat.getRoomId()); // roomId 로 해당 채팅방에 있는 memberId 를 전부 가져옴
+        long roomId = chat.getRoomId();
+
+
+        List<Long> chatMemberIdList = null;
+        if (chat.getType().equals("used")) {
+            chatMemberIdList = chattingRepository.findChatMemberIdByRoomId(roomId);
+            chattingRepository.updateStatusAll(roomId, "y"); // 상대방을 다시 입장시킴
+        } else if (chat.getType().equals("club")) {
+            chatMemberIdList = chattingRepository.findStatusYMemberIdByRoomId(roomId);
+            chat.setMemberCount(chattingRepository.chatMemberCount(roomId));
+            ChattingRoom chattingRoom = chattingRepository.findChatRoomByRoomId(roomId);
+            Club club = clubRepository.selectClub(chattingRoom.getPostId());
+            chat.setNowMan(club.getNowMan());
+            chat.setMaxMan(club.getMaxMan());
+        }
+
         for (long chatMemberId : chatMemberIdList) {
             String key = chat.getRoomId() + "_" + chatMemberId; // map 을 조회할 key
 
-            if (Long.parseLong(principal.getName()) == chatMemberId) { // chatMemberId 가 본인이면
+            if (memberId == chatMemberId) { // chatMemberId 가 본인이면
                 chatNotificationMap.remove(key); // 저장된 알림(ex : 1, 2, 3, 4) 을 지움
                 continue;
             }
@@ -157,8 +171,7 @@ public class ChattingServiceImpl implements ChattingService {
 
             simpMessagingTemplate.convertAndSendToUser(String.valueOf(chatMemberId), "/topic/messageNotification", chat); // 채팅방에 입장중인 member(본인을 제외한) 에게 개인 알림 보내기
         }
-        simpMessagingTemplate.convertAndSend("/topic/message/" + chat.getRoomId(), chat); // 해당 채팅방에 메시지 보내기
-        chattingRepository.updateStatus(chat.getRoomId()); // used 일 때만 실행되야 할 수도 있음(수정예정)
+        simpMessagingTemplate.convertAndSend("/topic/message/" + roomId, chat); // 해당 채팅방에 메시지 보내기
     }
 
     /**
@@ -206,12 +219,15 @@ public class ChattingServiceImpl implements ChattingService {
                         .roomId(roomId)
                         .postId(post.getPostId())
                         .title(post.getTitle())
-                        .memberList(memberIdList)
+//                        .memberList(memberIdList)
                         .receiver(memberId)
                         .content(lastMessage)
                         .chatCount(chatNotificationMap.get(roomId + "_" + principalDetails.getMember().getMemberId()) != null ? chatNotificationMap.get(roomId + "_" + principalDetails.getMember().getMemberId()) : 0)
                         .type(type)
+                        .chatMemberStatus(chatMemberStatus)
                         .build();
+            } else {
+                continue;
             }
             chatList.add(chat); // 리턴할 List 에 저장
         }
@@ -260,6 +276,7 @@ public class ChattingServiceImpl implements ChattingService {
                 Post post = clubRepository.selectPost(chattingRoom.getPostId()); // postId 로 게시물의 정보를 가져옴
                 Club club = clubRepository.selectClub(post.getPostId()); // postId 로 모임의 정보를 가져옴
 
+
                 chat = Chat.builder()
                         .postId(post.getPostId())
                         .master(post.getMemberId())
@@ -277,6 +294,7 @@ public class ChattingServiceImpl implements ChattingService {
                         .nowMan(club.getNowMan())
                         .maxMan(club.getMaxMan())
                         .type(type)
+                        .clubId(club.getClubId())
                         .build();
             }
             chatList.add(chat); // 리턴할 List 에 저장
@@ -320,29 +338,98 @@ public class ChattingServiceImpl implements ChattingService {
      * 채팅방 나가기
      */
     @Override
-    public void chatOut(long roomId, String type, PrincipalDetails principalDetails) {
+    public void chatOut(Chat chat, PrincipalDetails principalDetails) {
         long memberId = principalDetails.getMember().getMemberId();
         String memberName = principalDetails.getMember().getMemberName();
-        String key = roomId + "_" + memberId; // map 을 조회할 key
+        String key = chat.getRoomId() + "_" + memberId; // map 을 조회할 key
         chatNotificationMap.remove(key); // 해당 채팅방의 내 알림 삭제
 
+        chat.setSender(memberId);
+        chat.setContent("x");
+        chat.setMessageType("LINE");
+
+        chattingRepository.insertMessage(chat); // 나의 채팅 시작점을 재정의
+        chattingRepository.updateStatus(chat.getRoomId(), memberId, "n"); // chattingMember 에서 나의 상태를 n 으로 변경
+
+        if (chat.getType().equals("club")) { // 동네모임 채팅이면
+            chat.setContent(memberName + "님이 퇴장하셨습니다.");
+            chat.setMessageType("EXIT");
+            sendMessage(chat, memberId);
+        }
+    }
+
+    /**
+     * 해당 채팅방에 사용자 목록을 가져옴
+     */
+    @Override
+    public List<Member> chattingMemberList(long roomId) {
+        List<Long> memberIdList = chattingRepository.findStatusYMemberIdByRoomId(roomId);
+        List<Member> memberList = new ArrayList<>();
+        for (long memberId : memberIdList) {
+            memberList.add(Member.builder()
+                    .memberId(memberId)
+                    .memberName(memberRepository.findMemberName(memberId))
+                    .build());
+        }
+        return memberList;
+    }
+
+    /**
+     * 채팅방 입장 (모임 가입 시)
+     */
+    @Override
+    public void chatJoin(Long postId, PrincipalDetails principalDetails) {
+
+        long memberId = principalDetails.getMember().getMemberId();
+        String memberName = principalDetails.getMember().getMemberName();
+        long roomId = chattingRepository.findRoomIdByPostId(postId); // postId 로 roomId 를 조회
+
+        int checkJoin = chattingRepository.checkJoin(ChattingMember.builder() // 채팅방에 입장한 적이 있는지 확인
+                .roomId(roomId)
+                .memberId(memberId)
+                .build());
+
+        if (checkJoin <= 0) { // 채팅방에 처음 입장하는 것이라면
+            chattingRepository.insertChatMember(roomId, memberId); // chattingMember 에 insert
+        }else { // 채팅방에 입장한 적이 있다면
+            chattingRepository.updateStatus(roomId, memberId, "y"); // chatMemberStatus 를 'y' 로 변경
+        }
         Chat chat = Chat.builder()
                 .roomId(roomId)
                 .sender(memberId)
                 .content("x")
                 .messageType("LINE")
-                .build(); // 나의 채팅 시작점을 재정의 
+                .type("club")
+                .build();
+        chattingRepository.insertMessage(chat); // 채팅 시작점 만들기
 
-        chattingRepository.insertMessage(chat); // 나의 채팅 시작점을 재정의
-        chattingRepository.chatOut(roomId, memberId); // chattingMember 에서 나의 상태를 n 으로 변경
-
-        if (type.equals("club")) { // 동네모임 채팅이면
-            chat.setSenderName(memberName);
-            chat.setContent(memberName + "님이 퇴장하셨습니다.");
-            chat.setMessageDate(dateFormat.format(new Date()));
-            chat.setMessageType("ENTER"); 
-            chattingRepository.insertMessage(chat); // 퇴장 메시지 저장
-            simpMessagingTemplate.convertAndSend("/topic/message/" + roomId, chat); // 해당 방에 퇴장 메시지 보내기
-        }
+        chat.setContent(memberName + "님이 입장하셨습니다.");
+        chat.setMessageType("ENTER");
+        sendMessage(chat, memberId); // 메시지 전송
     }
+
+    /**
+     * postId 로 roomId 를 가져옴
+     */
+    @Override
+    public long findRoomId(Long postId) {
+        return chattingRepository.findRoomIdByPostId(postId);
+    }
+
+    /**
+     * 채팅방 삭제
+     */
+    @Override
+    public void deleteChatRoom(long roomId) {
+        chattingRepository.deleteChatRoom(roomId); // chattingRoom 의 type 을 'del' 로 변경
+        chattingRepository.updateStatusAll(roomId, "n"); // 해당 채팅방에 모든 사용자 상태를 'n' 으로 변경
+
+        simpMessagingTemplate.convertAndSend("/topic/message/" + roomId, Chat.builder()
+                .roomId(roomId)
+                .content("모임이 종료되었습니다.")
+                .messageType("EXPIRE")
+                .type("club")
+                .build()); // 채팅방에 입장해 있는 사용자에게 메시지를 보냄
+    }
+
 }

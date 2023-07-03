@@ -74,7 +74,7 @@ public interface ChattingRepository {
     /**
      * 채팅방 나가기(chattingMember 의 chatMemberStatus 를 'n' 으로 변경)
      */
-    void chatOut(long roomId, long memberId);
+    void updateStatus(long roomId, long memberId, String status);
 
     /**
      * 채팅방 퇴장 여부(사용자의 chatMemberStatus 확인)
@@ -84,10 +84,30 @@ public interface ChattingRepository {
     /**
      * 해당 채팅방 안에 모든 사용자의 chatMemberStatus 를 'y' 로 변경
      */
-    void updateStatus(long roomId);
+    void updateStatusAll(long roomId, String status);
 
     /**
      * 채팅 시작점 조회
      */
     long findLineMessageId(long roomId, long memberId);
+
+    /**
+     * postId 로 roomId 를 조회
+     */
+    long findRoomIdByPostId(Long postId);
+
+    /**
+     * 채팅방에 원래 참가했었던 사용자인지 확인
+     */
+    int checkJoin(ChattingMember chattingMember);
+
+    /**
+     * chatMemberStatus 가 'y' 인 사용자의 memberId 리스트를 조회
+     */
+    List<Long> findStatusYMemberIdByRoomId(long roomId);
+
+    /**
+     * 채팅방의 type 을 'del' 로 변경
+     */
+    void deleteChatRoom(long roomId);
 }

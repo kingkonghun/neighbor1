@@ -30,22 +30,31 @@ function connect() {
         });
 
         stompClient.subscribe("/topic/message/" + roomId, function (chat) {
-            showMessage(JSON.parse(chat.body).sender, JSON.parse(chat.body).senderName, JSON.parse(chat.body).content, JSON.parse(chat.body).messageDate, JSON.parse(chat.body).messageType);
+            showMessage(JSON.parse(chat.body).sender, JSON.parse(chat.body).senderName, JSON.parse(chat.body).content, JSON.parse(chat.body).messageDate, JSON.parse(chat.body).messageType, JSON.parse(chat.body).memberCount, JSON.parse(chat.body).nowMan, JSON.parse(chat.body).maxMan);
         });
     });
 }
 
-function showMessage(sender, senderName, content, messageDate, messageType) {
+function showMessage(sender, senderName, content, messageDate, messageType, memberCount, nowMan, maxMan) {
     var myId = $("#sender").val();
+    var myName = $("#senderName").val();
     if(messageType == "SEND") {
         if(sender == myId) {
             $("#messages").prepend("<div><div class='message my_message'><p>" + content + "<br><span>" + messageDate + "</span></p></div></div>");
-
         }else {
             $("#messages").prepend("<div class='message frnd_message'><div class='user_profile'><img class='room_cover' src='/member/findProfileImg?memberId="+sender+"'><span>" + senderName + "</span></div><p>" + content + "<br><span>" + messageDate + "</span></p></div>");
         }
     }else if(messageType == "ENTER") {
         $("#messages").prepend("<div class='message1 join'><p>" + content + "</p></div>");
+        $("#clubMember").text(myName + "님 외 " + (memberCount - 1) + "명");
+        $("#clubMan").text(nowMan + " / " + maxMan);
+    }else if(messageType == "EXIT") {
+        $("#messages").prepend("<div class='message1 join'><p>" + content + "</p></div>");
+        $("#clubMember").text(myName + "님 외 " + (memberCount - 1) + "명");
+        $("#clubMan").text(nowMan + " / " + maxMan);
+    }else if(messageType == "EXPIRE") {
+        $("#messages").prepend("<div class='message1 join'><p>" + content + "</p></div>");
+        $("#message").attr("disabled", true);
     }
 
 }

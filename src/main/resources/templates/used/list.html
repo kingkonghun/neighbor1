@@ -15,7 +15,6 @@
         location.href="/used/list";
     }
 
-
     $(function (){
 
         // 게시물 더보기
@@ -25,7 +24,7 @@
             $.ajax({
                 type: "get",
                 url: "/used/list",
-                data: {num:num, categoryId:$("#category_select").val(), search:[[${search}]]},
+                data: {num:num, categoryId:$("#category_select").val(), search:$("#search").val()},
                 success: function(data) {
                     $("#list").append(data);
                 }
@@ -50,7 +49,6 @@
                 title.focus();
                 return;
             }
-
 
             if(category.val() == 0) {
                 alert("상품종류를 선택하세요");

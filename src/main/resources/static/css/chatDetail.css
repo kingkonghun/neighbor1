@@ -275,6 +275,7 @@ body{/*컨테이너 배경*/
 }
 .join{
     justify-content: center;
+    margin-top: 20px;
 }
 .join p{
     background: #d2d2d2;
@@ -381,5 +382,59 @@ body{/*컨테이너 배경*/
     display: flex;
     justify-content: flex-start;
     align-items: center;
+}
+
+
+
+
+
+
+
+
+
+.room_sidvar{/*사이드바 전체*/
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 400px;
+    display: none;
+    flex-direction: column;
+    background-color: antiquewhite;
+    overflow-y: auto;
+    z-index: 9999;
+    text-align: center;
+}
+.room_sidvar > h2{/*사이드바 전체*/
+    font-family: 'GangwonEduPowerExtraBoldA';
+}
+.block44{/*프로필 상자*/
+    position: relative;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    cursor: pointer;
+
+}
+.block44:hover{
+    background-color: lightgray;
+}
+.list_imgbx{
+    position: relative;
+    min-width: 45px;
+    height: 45px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.user_self{/*이미지 조절*/
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 

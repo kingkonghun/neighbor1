@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/css/usedDetail.css">
 </head>
 <body>
+<input type="hidden" id="clubRoomId" th:value="${roomId}">
 <!-- Nav바-->
 <div th:replace="nav :: div"></div>
 
@@ -112,6 +113,7 @@ function abc(){
             if(clubJoin.clubJoinYn == 1){
                 alert("가입에 성공하였습니다.");
                 $('.subscribe').html('탈퇴하기');
+                clubChatOpen(); // 채팅 열기
             }else if(clubJoin.clubJoinYn == -1){
                 alert("인원이 가득차서 가입에 실패하였습니다.");
             }else if(clubJoin.clubJoinYn == 0){

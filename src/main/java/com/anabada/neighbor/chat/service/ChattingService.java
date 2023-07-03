@@ -2,8 +2,8 @@ package com.anabada.neighbor.chat.service;
 
 import com.anabada.neighbor.chat.domain.Chat;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.member.domain.Member;
 
-import java.security.Principal;
 import java.util.List;
 
 public interface ChattingService {
@@ -16,7 +16,7 @@ public interface ChattingService {
     /**
      * 메시지 보내기
      */
-    void sendMessage(Chat chat, Principal principal);
+    void sendMessage(Chat chat, long memberId);
 
     /**
      * 채팅방 목록
@@ -41,5 +41,25 @@ public interface ChattingService {
     /**
      * 채팅방 나가기
      */
-    void chatOut(long roomId, String type, PrincipalDetails principalDetails);
+    void chatOut(Chat chat, PrincipalDetails principalDetails);
+
+    /**
+     * 해당 채팅방에 사용자 목록을 가져옴
+     */
+    List<Member> chattingMemberList(long roomId);
+
+    /**
+     * 채팅방 입장 (모임 가입 시)
+     */
+    void chatJoin(Long postId, PrincipalDetails principalDetails);
+
+    /**
+     * postId 로 roomId 를 가져옴
+     */
+    long findRoomId(Long postId);
+
+    /**
+     * 채팅방 삭제
+     */
+    void deleteChatRoom(long roomId);
 }

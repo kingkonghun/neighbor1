@@ -1,5 +1,6 @@
 package com.anabada.neighbor.chat.domain;
 
+import com.anabada.neighbor.member.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,10 +28,12 @@ public class Chat {
     private String messageType;
     private String productStatus;
     private String type;
-    private List<Long> memberList;
+    private List<Member> memberList;
     private int memberCount;
     private String hobbyName;
     private int maxMan;
     private int nowMan;
     private String chatMemberStatus;
+    private long clubId;
+
 }
