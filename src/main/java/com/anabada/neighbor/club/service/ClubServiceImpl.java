@@ -169,6 +169,7 @@ public class ClubServiceImpl implements ClubService {
             Member member = clubRepository.selectMember(p.getMemberId());//멤버객체가져오기
             ClubResponse temp = ClubResponse.builder()
                     .postId(p.getPostId())
+
                     .memberId(p.getMemberId())
                     .memberName(member.getMemberName())
                     .title(p.getTitle())
