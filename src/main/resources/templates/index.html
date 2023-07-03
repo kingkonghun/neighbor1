@@ -18,15 +18,15 @@
     <link rel="stylesheet" th:href="@{/css/list.css}">
 <!--사이드바 스타일-->
 <link rel="stylesheet" href="/css/sidenav.css">
-<style>
+    <style>
     .usedTitle{font-family: 'GangwonEduPowerExtraBoldA'; }
     .usedTitle{text-align: center;}
-    .section1{background-color: #ffffdf;}
+    .section1{background-image: url('/img/course-bg.png');}
     .container .title ,.subtitle{text-align: right;}
     .container .title{font-size: xxx-large; margin-bottom: 1em;}
     .container .subtitle{font-size: x-large;}
 </style>
-<script th:inline="javascript">
+    <script th:inline="javascript">
     window.onload = function () {
         const message = [[${msg}]];
         console.log(message);
@@ -54,7 +54,7 @@
                 <p class="hero-text body-md">
                     Anytime, anywhere!
                 </p>
-                <a href="#section1" class="btn1 btn1-primary">Let's Start</a>
+                <a href="#target-section" class="btn1 btn1-primary">Let's Start</a>
             </div>
             <figure class="hero-banner">
                 <img th:src="@{/img/hero-banner.png}" width="680" height="400"
@@ -63,46 +63,43 @@
         </div>
     </section>
     <script>
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
+    document.querySelector(".btn1").addEventListener("click", function(e){
+    e.preventDefault();
+    let target = document.querySelector(this.getAttribute('href'));
+    let headerOffset = 80;
+    let elementPosition = target.offsetTop;
+    let offsetPosition = elementPosition - headerOffset;
 
-                let target = document.querySelector(this.getAttribute('href'));
-                let headerOffset = 63;  // 조절위치
-                let elementPosition = target.offsetTop;
-                let offsetPosition = elementPosition - headerOffset;
-
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: "smooth"
-                });
-            });
-        });
+    window.scrollTo({
+    top: offsetPosition,
+    behavior: 'smooth'
+    });
+    });
     </script>
 </header>
 
 
-        <!-- 중고 거래 목록 -->
-        <section class="py-5 section1">
-            <div class="usedTitle" >
-                <h2>아껴쓰고 나눠써요</h2>
-                <p>같은제품 더 저렴하게 중고거래</p>
-            </div>
-            <div class="container px-4 px-lg-5 mt-5" >
+<!-- 중고 거래 목록 -->
+<section class="py-5 section1">
+    <div class="usedTitle" id="target-section">
+        <h2 style="color: hsl(173, 60%, 47%);">아껴쓰고 나눠써요</h2>
+        <p>같은제품 더 저렴하게 <span style="color: hsl(357, 100%, 75%);">중고거래</span></p>
+    </div>
+    <div class="container px-4 px-lg-5 mt-5" >
 
-                    <div id="list" class="row">
-                        <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${starList}">
-                            <div class="item p-3" th:onclick="|location.href='@{used/detail(postId=${row.postId})}'|">
-                                <img class="list_img" th:src="@{/used/findImg(postId=${row.postId})}">
-                                <div class="div_2 mt-3">
-                                    <h5 th:text="${row.title}"></h5>
-                                    <span th:inline="text">
+        <div id="list" class="row">
+            <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${starList}">
+                <div class="item p-3" th:onclick="|location.href='@{used/detail(postId=${row.postId})}'|">
+                    <img class="list_img" th:src="@{/used/findImg(postId=${row.postId})}">
+                    <div class="div_2 mt-3">
+                        <h5 th:text="${row.title}"></h5>
+                        <span th:inline="text">
                             [[${row.postView}]]
                             <i class="bi bi-caret-up-fill"></i>
                         </span>
 
-                                </div>
-                                <div class="div_3">
+                    </div>
+                    <div class="div_3">
                         <span class="price" th:inline="text">
                             [[${row.price}]] 원
                         </span>
@@ -110,67 +107,67 @@
                             [[${row.likesCount}]]
                             <i class="bi bi-heart-fill" style="color: red"></i>
                         </span>
-                                </div>
-                                <div class="div_4">
-                                    <p th:text="${row.content}"></p>
-                                    <span th:inline="text">
+                    </div>
+                    <div class="div_4">
+                        <p th:text="${row.content}"></p>
+                        <span th:inline="text">
                             [[${row.replyCount}]]
                             <i class="bi bi-chat-dots-fill"></i>
                         </span>
-                                </div>
-                                <span th:text="${row.address}"></span>
-                            </div>
-                        </article>
                     </div>
-                <div class="btnUsed" style="text-align: center;"><button class="btn btn-outline-secondary" th:onclick="|location.href='@{/used/list}'|">더 많은 상품 보기</button></div>
-            </div>
-        </section>
-
-
-
-
-        <section class="py-5 section2">
-        <div class="usedTitle">
-            <h3>아껴쓰고 나눠써요</h3>
-            <p>같은제품 더 저렴하게 중고거래</p>
+                    <span th:text="${row.address}"></span>
+                </div>
+            </article>
         </div>
-        <div class="container px-4 px-lg-5 mt-5">
-            <div id="list2" class="row">
-                <article class="col col-xl-6 col-lg-6 col-md-12 col-sm-12 pb-5" th:each="club : ${clubList}">
-                    <div class="item p-3" th:onclick="|location.href='@{clubDetail(postId=${club.postId})}'|">
-                        <img class="list_img" src="https://cdn.pixabay.com/photo/2015/07/28/22/05/child-865116_1280.jpg">
-                        <div class="text">
-                            <h5 th:text="${club.title}">제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. </h5>
-                            <span class="content" th:text="${club.content}">내용내용ddddddddddd</span><!--내용 10자이내로-->
-                            <div class="listdetail"><!--지역 운동 생성일-->
-                                <span class="category" th:text="${club.hobbyName}">운동</span>
-                                <span class="region"><i class="fa-solid fa-map-location-dot"></i>지역<span> • </span></span>
-                                <span class="date">생성일</span>
-                            </div>
-                            <div class="members">
-                                <img src="/img/author-1.jpg" alt="Member 1">
-                                <img src="/img/author-2.jpg" alt="Member 2">
-                                <img src="/img/author-3.jpg" alt="Member 3">
-                                <img src="/img/author-4.jpg" alt="Member 4">
-                                <img src="/img/author-5.jpg" alt="Member 5">
-                                <img src="/img/author-6.jpg" alt="Member 6">
+        <div class="btnUsed" style="text-align: center;"><button class="btn btn-outline-secondary" th:onclick="|location.href='@{/used/list}'|">더 많은 상품 보기</button></div>
+    </div>
+</section>
 
-                                <div class="count">
-                                    <i class="fa-solid fa-people-group"></i>
-                                    <span th:text="${club.nowMan}">6</span>
-                                    <span>/</span>
-                                    <span th:text="${club.maxMan}">50</span>
-                                </div><!--인원수 나타내는-->
-                            </div>
+
+
+
+<section class="py-5 section2">
+    <div class="usedTitle">
+        <h3 style="color: hsl(173, 60%, 47%);">아껴쓰고 나눠써요</h3>
+        <p>같은제품 더 저렴하게 <span style="color: hsl(357, 100%, 75%);">중고거래</span></p>
+    </div>
+    <div class="container px-4 px-lg-5 mt-5">
+        <div id="list2" class="row">
+            <article class="col col-xl-6 col-lg-6 col-md-12 col-sm-12 pb-5" th:each="club : ${clubList}">
+                <div class="item p-3" th:onclick="|location.href='@{clubDetail(postId=${club.postId})}'|">
+                    <img class="list_img" src="https://cdn.pixabay.com/photo/2015/07/28/22/05/child-865116_1280.jpg">
+                    <div class="text">
+                        <h5 th:text="${club.title}">제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. </h5>
+                        <span class="content" th:text="${club.content}">내용내용ddddddddddd</span><!--내용 10자이내로-->
+                        <div class="listdetail"><!--지역 운동 생성일-->
+                            <span class="category" th:text="${club.hobbyName}">운동</span>
+                            <span class="region"><i class="fa-solid fa-map-location-dot"></i>지역<span> • </span></span>
+                            <span class="date">생성일</span>
+                        </div>
+                        <div class="members">
+                            <img src="/img/author-1.jpg" alt="Member 1">
+                            <img src="/img/author-2.jpg" alt="Member 2">
+                            <img src="/img/author-3.jpg" alt="Member 3">
+                            <img src="/img/author-4.jpg" alt="Member 4">
+                            <img src="/img/author-5.jpg" alt="Member 5">
+                            <img src="/img/author-6.jpg" alt="Member 6">
+
+                            <div class="count">
+                                <i class="fa-solid fa-people-group"></i>
+                                <span th:text="${club.nowMan}">6</span>
+                                <span>/</span>
+                                <span th:text="${club.maxMan}">50</span>
+                            </div><!--인원수 나타내는-->
                         </div>
                     </div>
-                </article>
-                <div class="btnUsed" style="text-align: center;">
-                    <button class="btn btn-outline-secondary" th:onclick="|location.href='@{/clubList}'|">더 많은 모임 보기</button>
                 </div>
+            </article>
+            <div class="btnUsed" style="text-align: center;">
+                <button class="btn btn-outline-secondary" th:onclick="|location.href='@{/clubList}'|">더 많은 모임 보기</button>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
         <!-- Footer-->
     <div th:replace="footer :: footer"></div>

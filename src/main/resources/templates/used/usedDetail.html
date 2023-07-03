@@ -398,7 +398,7 @@
                                 <i class="bi bi-three-dots-vertical"></i>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#" id="postUpdateForm" onclick="updatePost()">수정</a></li>
+                                <li><a class="dropdown-item" href="#" id="postUpdateForm" onclick="updatePost()" th:if="${dto.productStatus eq 'y'}">수정</a></li>
                                 <li><a class="dropdown-item" href="#" id="postDelete" onclick="deletePost()">삭제</a></li>
                             </ul>
                         </li>

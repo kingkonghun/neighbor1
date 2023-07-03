@@ -172,31 +172,36 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public long findHobbyId(String hobbyName) {
+    public Long findHobbyId(String hobbyName) {
         return clubRepository.selectHobbyId(hobbyName);
     }
 
     @Override
-    public List<ClubResponse> findClubList(int num, String search) {
+    public List<ClubResponse> findClubList(int num, long hobbyId, String search) {
         List<ClubResponse> result = new ArrayList<>(); //반환해줄 리스트생성
         List<Post> postList = clubRepository.selectPostList(); //foreach돌릴 postlist생성j
-        for (Post p : postList) {
-            Club club = clubRepository.selectClub(p.getPostId());//클럽객체가져오기
-            if (club == null) { //클럽 널체크
-                continue;
-            }
-            Member member = clubRepository.selectMember(p.getMemberId());//멤버객체가져오기
-            ClubResponse temp = ClubResponse.builder()
-                    .postId(p.getPostId())
 
-                    .memberId(p.getMemberId())
+        List<Club> clubList = null;
+        if (hobbyId != 0) {
+            clubList = clubRepository.selectHobbyClubList(hobbyId);
+        }else {
+            clubList = clubRepository.selectClubList();
+        }
+
+        for (Club club : clubList) {
+            Post post = clubRepository.selectPost(club.getPostId());
+            Member member = clubRepository.selectMember(club.getMemberId());
+            ClubResponse temp = ClubResponse.builder()
+                    .postId(post.getPostId())
+                    .memberId(member.getMemberId())
                     .memberName(member.getMemberName())
-                    .title(p.getTitle())
-                    .content(p.getContent())
+                    .title(post.getTitle())
+                    .content(post.getContent())
                     .hobbyName(clubRepository.selectHobbyName(club.getHobbyId()))
                     .score(member.getScore())
                     .maxMan(club.getMaxMan())
                     .nowMan(club.getNowMan())
+
                     .build();
             if (temp.getTitle().indexOf(search) != -1 || temp.getContent().indexOf(search) != -1) {
                 result.add(temp);
@@ -208,7 +213,33 @@ public class ClubServiceImpl implements ClubService {
             return null;
         }
         return result.subList(num,Math.min(result.size(),num+6));
-//        return result;
+
+//        for (Post p : postList) {
+//            Club club = clubRepository.selectClub(p.getPostId());//클럽객체가져오기
+//            if (club == null) { //클럽 널체크
+//                continue;
+//            }
+//            Member member = clubRepository.selectMember(p.getMemberId());//멤버객체가져오기
+//            ClubResponse temp = ClubResponse.builder()
+//                    .postId(p.getPostId())
+//                    .memberId(p.getMemberId())
+//                    .memberName(member.getMemberName())
+//                    .title(p.getTitle())
+//                    .content(p.getContent())
+//                    .hobbyName(clubRepository.selectHobbyName(club.getHobbyId()))
+//                    .score(member.getScore())
+//                    .maxMan(club.getMaxMan())
+//                    .nowMan(club.getNowMan())
+//                    .build();
+//            if (temp.getTitle().indexOf(search) != -1 || temp.getContent().indexOf(search) != -1) {
+//                result.add(temp);
+//            }
+//        }
+//
+//        if(num >= result.size()){
+//            return null;
+//        }
+//        return result.subList(num,Math.min(result.size(),num+6));
     }
 
     @Override
