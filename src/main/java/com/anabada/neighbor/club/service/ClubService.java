@@ -77,7 +77,7 @@ public interface ClubService {
      */
     public Long findHobbyId(String hobbyName);
 
-    public List<ClubResponse> findClubList(int num, long hobbyId, String search);
+    public List<ClubResponse> findClubList(int num, long hobbyId, String search, String listType, long postId);
 
     public int checkPost(ClubRequest clubRequest);//clubPost객체의 Null값체크
 

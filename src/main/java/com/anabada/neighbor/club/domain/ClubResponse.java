@@ -33,4 +33,5 @@ public class ClubResponse {
     private int replyCount;
     private int likesCount;
     private int likesCheck;
+    private String address;
 }

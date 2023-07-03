@@ -13,7 +13,7 @@ public interface UsedService {
     /**
      * 게시물 타입이 used 인 list 조회
      * */
-    public List<Used> list(long categoryId, String listType, int num, String search);
+    public List<Used> list(long categoryId, String listType, int num, String search, long postId);
     /**
      * 게시물 작성
      * */

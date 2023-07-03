@@ -50,9 +50,10 @@ public class ClubController {
         if (hobbyId == null) {
             hobbyId = 0L;
         }
-        model.addAttribute("clubList", clubService.findClubList(num, hobbyId, search));
+        model.addAttribute("clubList", clubService.findClubList(num, hobbyId, search, "list", 0));
         model.addAttribute("hobby", clubService.findHobbyName());
         model.addAttribute("search", search);
+        model.addAttribute("hobbyName", hobbyName);
         return num <= 0 ? "club/clubList" : "club/clubListPlus";
     }
 
@@ -123,6 +124,9 @@ public class ClubController {
         model.addAttribute("club", response);
         model.addAttribute("postId", postId);
         model.addAttribute("hobby", clubService.findHobbyName());
+//        usedService.list(dto.getCategoryId(), "similarList",0, "", postId)
+//        clubService.findClubList(num, hobbyId, search)
+        model.addAttribute("similarList", clubService.findClubList(0, clubService.findHobbyId(response.getHobbyName()), "", "similarList", postId));
         model.addAttribute("roomId", chattingService.findRoomId(postId));
         return "club/clubDetail";
     }
