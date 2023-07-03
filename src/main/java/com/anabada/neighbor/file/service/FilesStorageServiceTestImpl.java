@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 @Service
-public class FilesStorageServiceImpl implements FilesStorageService {
+public class FilesStorageServiceTestImpl implements FilesStorageServiceTest {
 //    private final Path root = Paths.get("/Users", "upload_anabada");
 //    private final Path root = Paths.get("C:\\", "upload_anabada");
     private final Path root = Paths.get(System.getProperty("user.home"), "upload_anabada");
@@ -42,9 +42,9 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public Resource load(String fileName, String creaDate) {
+    public Resource load(String fileName, String createDate) {
 
-        Path file = root.resolve(creaDate + File.separator + fileName);//여기서 현재날짜 경로문제 발생 해결해야함
+        Path file = root.resolve(createDate + File.separator + fileName);//여기서 현재날짜 경로문제 발생 해결해야함
         try {
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {

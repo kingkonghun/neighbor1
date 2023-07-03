@@ -1,7 +1,7 @@
-package com.anabada.neighbor.club.service;
+package com.anabada.neighbor.file.service;
 
-import com.anabada.neighbor.club.domain.ImageRequest;
-import com.anabada.neighbor.club.domain.ImageResponse;
+import com.anabada.neighbor.file.domain.FileRequest;
+import com.anabada.neighbor.file.domain.FileResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -32,8 +32,8 @@ public class ImageUtils {
      * @param multipartFileList - 이미지 객체 List
      * @return db에 저장할 이미지 정보 List
      */
-    public List<ImageRequest> uploadImages(final List<MultipartFile> multipartFileList) {
-        List<ImageRequest> images = new ArrayList<>();
+    public List<FileRequest> uploadImages(final List<MultipartFile> multipartFileList) {
+        List<FileRequest> images = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFileList) {
             if (multipartFile.isEmpty()) {//리스트안의 이미지가 없을경우 건너뛰기
                 continue;
@@ -48,7 +48,7 @@ public class ImageUtils {
      * @param multipartFile - 이미지 객체
      * @return db에 저장할 이미지 정보
      */
-    private ImageRequest uploadImage(MultipartFile multipartFile) {
+    private FileRequest uploadImage(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) { //업로드된 파일이 비어 있는지, 즉 멀티파트 형식에서 파일이 선택되지 않았는지 또는 선택한 파일에 내용이 없는지 여부를 반환한다.
             return null;
         }
@@ -62,8 +62,8 @@ public class ImageUtils {
             throw new RuntimeException(e);
         }
 
-        return  ImageRequest.builder()
-                .origName(multipartFile.getOriginalFilename())
+        return  FileRequest.builder()
+                .originalName(multipartFile.getOriginalFilename())
                 .saveName(saveName)
                 .size(multipartFile.getSize())
                 .build();
@@ -116,8 +116,8 @@ public class ImageUtils {
      * @param file 첨부파일 상세정보
      * @return 첨부파일(리소스)
      */
-    public Resource readFileAsResource(ImageResponse file) {
-        String uploadedDate = file.getCreaDate().toLocalDate().format(DateTimeFormatter.ofPattern("yyMMdd"));
+    public Resource readFileAsResource(FileResponse file) {
+        String uploadedDate = file.getCreatedDate().toLocalDate().format(DateTimeFormatter.ofPattern("yyMMdd"));
         String filename = file.getSaveName();
         Path filePath = Paths.get(uploadPath, uploadedDate, filename);
         try {
@@ -131,8 +131,8 @@ public class ImageUtils {
         }
     }
 
-    public Stream<Path> loadAll(ImageResponse file) {
-        String uploadedDate = file.getCreaDate().toLocalDate().format(DateTimeFormatter.ofPattern("yyMMdd"));
+    public Stream<Path> loadAll(FileResponse file) {
+        String uploadedDate = file.getCreatedDate().toLocalDate().format(DateTimeFormatter.ofPattern("yyMMdd"));
         String filename = file.getSaveName();
         Path filePath = Paths.get(uploadPath, uploadedDate, filename);
         System.out.println(filePath);

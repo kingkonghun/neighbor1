@@ -1,15 +1,11 @@
 package com.anabada.neighbor.file.controller;
 
-import com.anabada.neighbor.file.domain.ImageInfo;
-import com.anabada.neighbor.file.service.FilesStorageService;
+import com.anabada.neighbor.file.domain.FileInfo;
+import com.anabada.neighbor.file.service.FilesStorageServiceTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,10 +15,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-public class ImageController {
+public class FileTestController {
 
     @Autowired
-    FilesStorageService storageService;
+    FilesStorageServiceTest storageService;
 
     @GetMapping("/images/new")
     public String newImage(Model model) {
@@ -47,30 +43,18 @@ public class ImageController {
     @GetMapping("/images")
     public String getListImages(Model model) {
         System.out.println(storageService.loadAll().collect(Collectors.toList()));
-        List<ImageInfo> imageInfos = storageService.loadAll().map(path -> {
+        List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
             String filename = path.getFileName().toString();
             String url = MvcUriComponentsBuilder
-                    .fromMethodName(ImageController.class, "getImage"
+                    .fromMethodName(FileTestController.class, "getImage"
                             , path.getFileName().toString(), "1").build().toString();
-            return new ImageInfo(filename, url);
+            return new FileInfo(filename, url);
         }).collect(Collectors.toList());
-        System.out.println(imageInfos);
+        System.out.println(fileInfos);
 
-        model.addAttribute("images", imageInfos);
+        model.addAttribute("images", fileInfos);
 
         return "images";
     }
 
-    @GetMapping("/images/{filename:.+}")
-    public ResponseEntity<Resource> getImage(@PathVariable String filename, String creaDate) {
-        Resource file;
-        if (creaDate.equals("1")) {
-             file = storageService.load(filename);
-        }else {
-             file = storageService.load(filename, creaDate);
-        }
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""
-                        + file.getFilename() + "\"").body(file);
-    }
 }

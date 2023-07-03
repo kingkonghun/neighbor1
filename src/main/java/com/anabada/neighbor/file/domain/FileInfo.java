@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class ImageInfo {
+public class FileInfo {
     private String name;
     private String url;
 }

@@ -6,12 +6,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-public interface FilesStorageService {
+public interface FilesStorageServiceTest {
     public void init();
 
     public void save(MultipartFile file);
 
-    public Resource load(String fileName, String creaDate);
+    public Resource load(String fileName, String createDate);
 
     public Resource load(String fileName);
 

@@ -5,9 +5,11 @@ import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.domain.FileRequest;
+import com.anabada.neighbor.file.domain.FileResponse;
+import com.anabada.neighbor.file.service.FileService;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
-import com.anabada.neighbor.used.repository.UsedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +22,12 @@ import java.util.List;
 @Service
 public class ClubServiceImpl implements ClubService {
     private final ClubRepository clubRepository;
-    private final UsedRepository usedRepository;
+    private final FileService fileService;
 
     @Autowired
-    public ClubServiceImpl(ClubRepository clubRepository, UsedRepository usedRepository) {
+    public ClubServiceImpl(ClubRepository clubRepository, FileService fileService) {
         this.clubRepository = clubRepository;
-        this.usedRepository = usedRepository;
+        this.fileService = fileService;
     }
 
     @Transactional
@@ -46,13 +48,13 @@ public class ClubServiceImpl implements ClubService {
     }
     @Transactional
     @Override
-    public int saveImages(Long postId, List<ImageRequest> images) {
+    public int saveImages(Long postId, List<FileRequest> images) {
         if (CollectionUtils.isEmpty(images)) {//리스트의 길이가 0이면 0으로 리턴
             return 0;
         }
-        for (ImageRequest image : images) {
+        for (FileRequest image : images) {
             image.setPostId(postId);
-            clubRepository.insertImage(image);
+            clubRepository.insertFile(image);
         }
         return 1;
     }
@@ -63,7 +65,7 @@ public class ClubServiceImpl implements ClubService {
      * @return 이미지 리스트
      */
     @Override
-    public List<ImageResponse> findAllImageByPostId(Long postId) {
+    public List<FileResponse> findAllImageByPostId(Long postId) {
         return clubRepository.selectImagesByPostId(postId);
     }
 
@@ -74,11 +76,11 @@ public class ClubServiceImpl implements ClubService {
      * @return 이미지
      */
     @Override
-    public List<ImageResponse> findAllImageByImgIds(List<Long> imgIds) {
+    public List<FileResponse> findAllImageByImgIds(List<Long> imgIds) {
         if (CollectionUtils.isEmpty(imgIds)){
             return Collections.emptyList();//비어있는 리스트 반환
         }
-        List<ImageResponse> result = new ArrayList<>();
+        List<FileResponse> result = new ArrayList<>();
         for(Long imgId : imgIds) {
             result.add(clubRepository.selectImageByImgId(imgId));
         }
@@ -86,7 +88,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public ImageResponse findImageByImgId(Long imgId) {
+    public FileResponse findImageByImgId(Long imgId) {
         return clubRepository.selectImageByImgId(imgId);
     }
 
@@ -129,7 +131,7 @@ public class ClubServiceImpl implements ClubService {
                 .hobbyName(clubRepository.selectHobbyName(club.getHobbyId()))
                 .score(postMember.getScore())
                 .postView(post.getPostView())
-                .ImageResponseList(clubRepository.selectImagesByPostId(postId))//여기까지완성
+                .fileResponseList(fileService.findAllFileByPostId(postId))//여기까지완성
                 .maxMan(club.getMaxMan())
                 .nowMan(club.getNowMan())
                 .build();

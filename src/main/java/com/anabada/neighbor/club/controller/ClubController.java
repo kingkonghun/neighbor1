@@ -4,24 +4,20 @@ import com.anabada.neighbor.chat.domain.Chat;
 import com.anabada.neighbor.chat.service.ChattingService;
 import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ClubResponse;
-import com.anabada.neighbor.club.domain.ImageRequest;
-import com.anabada.neighbor.club.domain.ImageResponse;
+import com.anabada.neighbor.file.domain.FileRequest;
+import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.service.ClubService;
-import com.anabada.neighbor.club.service.ImageUtils;
+import com.anabada.neighbor.file.service.FileService;
+import com.anabada.neighbor.file.service.FileUtils;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
-import com.anabada.neighbor.file.controller.ImageController;
-import com.anabada.neighbor.file.domain.ImageInfo;
-import com.anabada.neighbor.file.service.FilesStorageService;
+import com.anabada.neighbor.file.domain.FileInfo;
 import com.anabada.neighbor.used.domain.Post;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,20 +25,16 @@ import java.util.List;
 public class ClubController {
 
     private final ClubService clubService;
-    private final ImageUtils imageUtils;
-    private final FilesStorageService storageService;
     private final ChattingService chattingService;
+    private final FileUtils fileUtils;
+    private final FileService fileService;
 
-
-    @Autowired
-    public ClubController(ClubService clubService, ImageUtils imageUtils, FilesStorageService storageService, ChattingService chattingService) {
+    public ClubController(ClubService clubService, ChattingService chattingService, FileUtils fileUtils, FileService fileService) {
         this.clubService = clubService;
-        this.imageUtils = imageUtils;
-        this.storageService = storageService;
         this.chattingService = chattingService;
+        this.fileUtils = fileUtils;
+        this.fileService = fileService;
     }
-
-
 
     @GetMapping("/clubList")
     public String clubList(Model model, @RequestParam(value = "num", defaultValue = "0") int num, @RequestParam(value = "search", defaultValue = "") String search) {
@@ -68,6 +60,7 @@ public class ClubController {
 
     @PostMapping("/clubSave")
     public String clubSave(ClubRequest clubRequest, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        // 게시글 객체에 담기
         Post post = Post.builder()
                 .memberId(principalDetails.getMember().getMemberId())
                 .title(clubRequest.getTitle())
@@ -75,20 +68,24 @@ public class ClubController {
                 .postType("club")
                 .build();
         long postId = clubService.savePost(post);
+        //게시물 작성 실패시 postId가 -1로 반환되어 작성실패 메세지 리턴
         if (postId == -1) {
             model.addAttribute("result", "글 등록실패!");
             return "club/clubSave";
         }
+        //게시물 작성 성공시 모임 등록
         Club club = Club.builder()
                 .postId(postId)
                 .memberId(post.getMemberId())
                 .hobbyId(clubService.findHobbyId(clubRequest.getHobbyName()))
                 .maxMan(clubRequest.getMaxMan())
                 .build();
+        //게시물 작성 성공시 채팅방 생성 및 이미지 작성
         if (clubService.saveClub(club) == 1) {
             chattingService.openRoom(postId, principalDetails, "club");
-            List<ImageRequest> images = imageUtils.uploadImages(clubRequest.getImages());
-            clubService.saveImages(postId, images);
+            List<FileRequest> images = fileUtils.uploadFiles(clubRequest.getImages());
+            //이미지 업로드 성공시 DB에 이미지정보 저장
+            fileService.saveFiles(postId, images);
             model.addAttribute("result", "글 등록성공!");//나중에 삭제
         } else {
             model.addAttribute("result", "글 등록실패!");//나중에 삭제
@@ -101,21 +98,9 @@ public class ClubController {
     public String clubDetail(@RequestParam(value = "postId", required = false) Long postId, Model model,
                              @AuthenticationPrincipal PrincipalDetails principalDetails) {
         ClubResponse response = clubService.findClub(postId, principalDetails);
-        List<ImageResponse> imageResponses = response.getImageResponseList();
-
-        List<ImageInfo> imageInfose = new ArrayList<>();
-        for (ImageResponse image : imageResponses) {
-            ImageInfo imageInfo = ImageInfo.builder()
-                    .name(image.getOrigName())
-                    .url(MvcUriComponentsBuilder
-                            .fromMethodName(ImageController.class, "getImage"
-                            , image.getSaveName(), image.getCreaDate().format(DateTimeFormatter.ofPattern("yyMMdd"))).build().toString())
-                    .build();
-            imageInfose.add(imageInfo);
-        }
-        System.out.println(imageInfose);
-
-        model.addAttribute("images", imageInfose);
+        List<FileResponse> files = response.getFileResponseList();
+        List<FileInfo> fileInfoList = fileUtils.getFileInfo(files);
+        model.addAttribute("images", fileInfoList);
         model.addAttribute("club", response);
         model.addAttribute("postId", postId);
         model.addAttribute("roomId", chattingService.findRoomId(postId));
@@ -124,14 +109,22 @@ public class ClubController {
 
     @GetMapping("/clubRemove")
     public String clubRemove(Long postId) {
+        //게시글삭제
         clubService.deletePost(postId);
+        //이미지 DB 에서 삭제
+        List<FileResponse> fileResponseList = fileService.findAllFileByPostId(postId);
+        List<Long> ids =  new ArrayList<>();
+        for(FileResponse file : fileResponseList){
+            ids.add(file.getId());
+        }
+        fileService.deleteAllFileByIds(ids);
         return "redirect:clubList";
     }
 
     // 파일 리스트 조회
     @GetMapping("/posts/{postId}/images")
     @ResponseBody
-    public List<ImageResponse> clubImage(@PathVariable Long postId) {
+    public List<FileResponse> clubImage(@PathVariable Long postId) {
         return clubService.findAllImageByPostId(postId);
     }
 
