@@ -91,19 +91,19 @@ public class MemberController {
         List<ClubResponse> club = memberService.myClubWrite(principalDetails, criteria);
 
         int total = 0;
-
+        if (postType.equals("used")) {
             total = memberService.getUsedTotal(principalDetails.getMember().getMemberId());
             model.addAttribute("writeList", used);
             model.addAttribute("categoryName", "used");
             model.addAttribute("postType", postType);
             model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
-//        else if (postType.equals("club")) {
-//            total = memberService.getClubTotal(principalDetails.getMember().getMemberId());
-//            model.addAttribute("writeList", club);
-//            model.addAttribute("categoryName", "club");
-//            model.addAttribute("postType", postType);
-//            model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
-//        }
+        } else if (postType.equals("club")) {
+            total = memberService.getClubTotal(principalDetails.getMember().getMemberId());
+            model.addAttribute("writeList", club);
+            model.addAttribute("categoryName", "club");
+            model.addAttribute("postType", postType);
+            model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
+        }
         return "member/myWrite";
     }
 
