@@ -9,80 +9,492 @@
     <script src="https://kit.fontawesome.com/e2064a471f.js" crossorigin="anonymous"></script>
     <th:block th:insert="/common/common :: fragment-header"></th:block>
 
-    <link rel="stylesheet" href="/css/usedDetail.css">
+    <link rel="stylesheet" href="/css/clubDetail.css">
+
+    <style>
+        body{background-color: #f4f4f4; font-family: GangwonEduPowerExtraBoldA;}
+        .soldout{
+            opacity: 0.7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .msg{
+            position: absolute;
+            top:150px;
+            background-color: #FFFFFF;
+            color: #FF3366;
+            font-size: 50px;
+            font-weight: bold;}
+        #modal {
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: none;
+            font-family: omyu_pretty;
+            font-size: 20px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            border: 1px solid #888;
+            width: 360px;
+            border-radius: 12px;
+        }
+        #close-modal {
+            cursor: pointer;
+        }
+        #reportType_select, #content {
+            width: 100%;
+            border-style: none;
+            background-color: #f4f4f4;
+        }
+        #content {
+            height: 120px;
+            border-style: none;
+            resize: none;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            font-family: GangwonEduPowerExtraBoldA;
+        }
+        #btnReport {
+            border-radius: 8px;
+            border-style: none;
+            border-color: #f4f4f4;
+            font-family: omyu_pretty;
+            background-color: #FF3366;
+            color: #f4f4f4;
+        }
+    </style>
+    <script>
+        $(function(){
+            const imgCount = [[${imgCount}]];
+            console.log(imgCount);
+            if(imgCount === 1 ){
+                $(".slick-dots").css('display','none');
+                $(".slick-prev").css('display','none');
+                $(".slick-next").css('display','none');
+            }
+
+
+
+            /**
+             * 신고
+             * @type {*|jQuery|HTMLElement}
+             */
+            const modal = $("#modal");
+            let likesCheck = [[${club.likesCheck}]];
+            heartClass(likesCheck);
+            $("#heart").click(function(){
+                if(checkIsAuthenticated()){
+                    $.ajax({
+                        type: "post",
+                        url: "/used/likes",
+                        data: {postId: [[${club.postId}]], likesCheck: likesCheck},
+                        success: function(likes){
+                            likesCheck = likes.likesCheck;
+                            heartClass(likesCheck);
+                            $(".likesCount").text(likes.likesCount);
+                        }
+                    });
+                }else{
+                    if(confirm("좋아요는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
+                        location.href="/member/loginForm";
+                    }
+                }
+            });
+            $("#open-modal").click(function(){
+                if(checkIsAuthenticated()){
+                    modal.css("display", "block");
+                    $("body").css("overflow", "hidden");
+                }else{
+                    if(confirm("신고는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
+                        location.href="/member/loginForm";
+                    }
+                }
+            });
+            $("#close-modal").click(function(){
+                modal.css("display", "none");
+                $("body").css("overflow", "auto");
+            });
+            $("#btnReport").click(function(){
+                const reportTypeId = $("#reportType_select");
+                const content = $("#content");
+                if(reportTypeId.val() == 0){
+                    alert("신고유형을 선택하세요");
+                    reportTypeId.focus();
+                    return;
+                }
+                if(content.val() == ""){
+                    alert("신고내용을 입력하세요");
+                    content.focus();
+                    return;
+                }
+                $.ajax({
+                    type: "post",
+                    url: "/used/report",
+                    data: {"postId": [[${club.postId}]], "content": content.val(), "reportTypeId": reportTypeId.val()},
+                    success: function(){
+                        alert("신고완료");
+                        modal.css("display", "none");
+                        $("body").css("overflow", "auto");
+                        reportTypeId.val(0);
+                        content.val("");
+                    }
+                });
+            });
+        });
+        function heartClass(likesCheck){
+            if (likesCheck == 0) {
+                $("#heart").removeClass("bi-heart-fill").addClass("bi-suit-heart");
+            } else {
+                $("#heart").removeClass("bi-suit-heart").addClass("bi-heart-fill");
+            }
+        }
+    </script>
+    <script th:inline="javascript">
+        //댓글
+        $(function(){
+            list();
+            $("#btnReplyWrite").click(function(){
+                if(checkIsAuthorization()) {
+                    location.href="/member/editInfo?message=추가 정보를 입력한 뒤에 사용하세요";
+                    return;
+                }
+                var comment = $("#comment");
+                if(comment.val() == ""){
+                    alert("내용을 입력하세요");
+                    comment.focus();
+                    return;
+                }
+                $.ajax({
+                    type: "post",
+                    url: "/reply/write",
+                    data: {postId: [[${club.postId}]], comment: $("#comment").val()},
+                    success: function() {
+                        alert("댓글을 작성했습니다");
+                        $("#comment").val("");
+                        list();
+                    }
+                });
+            });
+            $("#open-reply").click(function(){
+                $("#reply").slideDown();
+                $("#open-reply").css("display", "none");
+                $("#close-reply").show();
+            });
+            $("#close-reply").click(function(){
+                $("#reply").slideUp();
+                $("#open-reply").show();
+                $("#close-reply").css("display", "none");
+            });
+        });
+
+        //OK
+        function list() {
+            $.ajax({
+                type: "get",
+                url: "/reply/list",
+                data: {postId: [[${club.postId}]]},
+                success: function(result) {
+                    $("#replyList").html(result);
+                }
+            });
+        }
+
+        function deleteReply(replyId) {
+            if(confirm("댓글을 삭제하시겠습니까?")) {
+                $.ajax({
+                    type: "post",
+                    url: "/reply/delete",
+                    data: {replyId: replyId},
+                    success: function() {
+                        list();
+                    }
+                });
+            }
+        }
+
+
+        //OK
+        function update(replyId) {
+            $(".comment_"+replyId+" p").css("display", "none");
+            $(".comment_"+replyId+" .updateComment").show();
+            $(".date_"+replyId).css("display", "none");
+            $(".buttons_"+replyId+" .btnReReply").css("display", "none");
+            $(".buttons_"+replyId+" .btnCancel").show();
+            $(".buttons_"+replyId+" .btnUpdateSubmit").show();
+        }
+
+        //OK
+        function updateReply(replyId) {
+            var comment = $(".comment_"+replyId+" .updateComment");
+            if(comment.val() == "") {
+                alert("내용을 입력하세요");
+                comment.focus();
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: "/reply/update",
+                data: {replyId: replyId, comment: comment.val()},
+                success: function() {
+                    list();
+                }
+            });
+        }
+
+        //OK
+        function cancel(replyId) {
+            $(".comment_"+replyId+" p").show();
+            $(".comment_"+replyId+" .updateComment").css("display", "none");
+            $(".comment_"+replyId+" .reReplyComment").css("display", "none");
+            $(".date_"+replyId).show();
+            $(".buttons_"+replyId+" .btnReReply").show();
+            $(".buttons_"+replyId+" .btnCancel").css("display", "none");
+            $(".buttons_"+replyId+" .btnUpdateSubmit").css("display", "none");
+            $(".buttons_"+replyId+" .btnReReplySubmit").css("display", "none");
+        }
+
+        //OK
+        function reReply(replyId) {
+            if(checkIsAuthorization()) {
+                location.href="/member/editInfo?message=추가 정보를 입력한 뒤에 사용하세요";
+                return;
+            }
+            $(".comment_"+replyId+" .reReplyComment").show();
+            $(".date_"+replyId).css("display", "none");
+            $(".buttons_"+replyId+" .btnReReply").css("display", "none");
+            $(".buttons_"+replyId+" .btnCancel").show();
+            $(".buttons_"+replyId+" .btnReReplySubmit").show();
+        }
+
+        //OK
+        function writeReReply(replyId) {
+            var comment =  $(".comment_"+replyId+" .reReplyComment");
+            if(comment.val() == "") {
+                alert("내용을 입력하세요");
+                comment.focus();
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: "/reply/writeReReply",
+                data: {replyId: replyId, comment: comment.val()},
+                success: function() {
+                    list();
+                }
+            });
+        }
+
+        function deletePost() {
+            if(confirm("게시물을 삭제하시겠습니까?")) {
+                document.postForm.submit();
+            }
+        }
+    </script>
+    <script>
+        function updatePost(){
+            $("#updatePost").slideDown()
+            setTimeout(function() {
+                location.href = "#updatePost";
+            }, 500);
+        }
+        function hidePost(){
+            $("#updatePost").slideUp();
+        }
+        $(function () {
+            $("#btnSubmit").click(function(){
+                let category = $("#category");
+                let price = $("#inputPrice");
+                let content = $("#inputContent");
+                let files = $("#files");
+                if(category.val() == 0) {
+                    alert("카테고리를 선택하세요");
+                    category.focus();
+                    return;
+                }
+                if(price.val() == ''){
+                    alert("가격을 입력하세요");
+                    price.focus();
+                    return;
+                }
+                if (content.val() == "") {
+                    alert("내용을 입력하세요");
+                    content.focus();
+                    return;
+                }
+                if (files.val() == "") {
+                    alert("사진을 올려주세요");
+                    files.focus();
+                    return;
+                }
+                document.writeForm.submit();
+            });
+        });
+        const inputPrice = document.getElementById("inputPrice");
+
+        inputPrice.addEventListener("input", function(event) {
+            // 입력된 값에서 숫자 이외의 문자 제거
+            const formattedValue = this.value.replace(/\D/g, "");
+
+            // 3자리마다 컴마 추가
+            const numberWithCommas = formattedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            // 값을 다시 설정하여 숫자 입력 필드에 반영
+            this.value = numberWithCommas;
+        });
+
+
+    </script>
 </head>
 <body>
-<input type="hidden" id="clubRoomId" th:value="${roomId}">
 <!-- Nav바-->
 <div th:replace="nav :: div"></div>
 
 <!--플랙스 박스-->
-<div class="flex-box">
+<div class="flex-box container mt-5">
     <!--1번 박스 사진 나오는곳-->
     <section class="section">
         <div class="main-section-wrap">
             <div class="slide-box">
                 <div class="content"  th:each="image : ${images}" >
-<!--                    <img th:src="@{${image.url}}" alt="${image.name}"/>-->
-<!--                    <a th:href="@{${image.url}}">다운로드</a>-->
                     <div class="img-box" th:style="'background-image: url('+@{${image.url}}+')'"></div>
-<!--                    <div class="img-box" style="background-image: url(/img/recent-1.jpg);"></div>-->
+                </div>
+                <div class="content" th:if="${#lists.size(images)==1}" th:each="image : ${images}">
+                    <div class="img-box" th:style="'background-image:url('+ @{${image.url}} +')'"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="item2 p-4">
+        <div style="display: flex; flex-direction: column; width: 100%;">
+            <div class="flexBox" style="display: flex; justify-content: space-between;">
+                <div class="hash_title">
+                    <ul class="hashtags"><!--해쉬태그 가져오기-->
+                        <li>#운동</li>
+                        <li>#술</li>
+                        <li>#지역 종로</li>
+                    </ul>
+                    <h3 th:text="${club.title}"></h3><!--제목 가져오기-->
+                </div>
+                <th:block sec:authorize="isAuthenticated()"><!--로그인 했을때 수정 삭제 버튼 활성-->
+                    <form action="/used/postDelete" method="post" id="postForm" name="postForm">
+                        <input type="hidden" name="postId" th:value="${club.postId}">
+                        <li class="navList nav-item dropdown" style="list-style: none;" th:if="${club.memberId == #authentication.principal.member.memberId or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                            <a class="nav-link " id="adminT" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#" id="postUpdateForm" onclick="updatePost()">수정</a></li>
+                                <li><a class="dropdown-item" href="#" id="postDelete" onclick="deletePost()">삭제</a></li>
+                            </ul>
+                        </li>
+                    </form>
+                </th:block>
+            </div>
+            <div class="mb-2" style="display: flex; justify-content: space-between;">
+                <ul class="username"><!--유저 사진 이름 가져오기-->
+                    <li><img th:src="@{/member/findProfileImg(memberId=${club.memberId})}" alt="프로필 사진"/></li>
+                    <li th:text="${club.memberName}"></li>
+                </ul>
+                <span class="views pt-2" th:text="${#dates.format(club.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></span>
+            </div>
+            <p th:text="${club.content}" style="height: 60%; overflow: auto; word-break: break-all;"></p><!--내용-->
+            <div style="display: flex; justify-content: space-between;">
+
+                <div class="count_people">
+                    <i class="fa-solid fa-people-group"></i>
+                    <span th:text="${club.nowMan} + ' / ' + ${club.maxMan}" class="margin_people"></span><!--모임 인원수 /앞에 현재 명수, /뒤에 최대 명수-->
+                </div>
+
+                <span th:text="'조회수 : ' + ${club.postView}"></span>
+            </div>
+            <div class="atag" style="display: flex; justify-content: space-between;">
+
+                <div class="people_butn"><!--가입버튼-->
+                    <button type="button" class="inandout_butn" sec:authorize="isAuthenticated()" th:if="${club.memberId != #authentication.principal.member.memberId}">가입하기</button>
+                    <button type="button" class="inandout_butn" >탈퇴하기</button>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; width: auto;"><!--텍스트와 좋아요-->
+                    <div style="margin-right: 8px;">
+                        <span th:text="${club.replyCount}"></span>
+                        <a href="javascript:void(0)" id="open-reply"><i class="bi bi-chat-text"></i></a>
+                        <a href="javascript:void(0)" id="close-reply" style="display: none;"><i class="bi bi-chat-text"></i></a>
+                    </div>
+                    <div id="likes">
+                        <span class="likesCount">[[${club.likesCount}]]</span>
+                        <i id="heart" style="color: red"></i>
+                    </div>
                 </div>
             </div>
 
         </div>
     </section>
-    <!--2번 박스 제목 작성자 뷰 등등-->
-    <section class="item2">
-        <div class="metadata">
 
-            <ul class="hashtags"><!--포스트 타입-->
-                <li>#운동</li>
-                <li>#술</li>
-                <li>#지역</li>
-            </ul>
 
-            <div class="detail_menu"><!--제목-->
-                <span th:text="${club.title}" class="menu_title"></span>
+    <!--게시글 수정-->
+    <section id="updatePost" style="display: none;">
+        <form name="writeForm" class="row g-3" action="/used/post" enctype="multipart/form-data" method="post">
+            <div class="container px-4 px-lg-5 my-5" >
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="inputTitle" class="form-label">제목</label>
+                        <input type="text" class="form-control" id="inputTitle" name="title" th:value="${club.title}">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="category" class="form-label">카테고리</label>
+                        <select id="category" class="form-select" name="categoryId">
+<!---->
+                            <th:block th:each="hobby:${hobby}">
+                                <option th:value="${hobby.hobbyName}" th:text="${hobby.hobbyName}" th:selected="${hobby.hobbyName eq hobby.hobbyName}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="inputPrice" class="form-label">인원</label>
+                        <input type="text" class="form-control" id="inputPrice" name="price" th:value="${club.maxMan}">
+                    </div>
+                    <div class="col-md-12">
+                        <label for="files" class="form-label">첨부파일</label>
+                        <input type="file" id="files" name="files" class="form-control" multiple accept="image/jpeg,image/png">
+                    </div>
+                    <div class="col-md-12">
+                        <label for="inputContent" class="form-label">내용</label>
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="내용" id="inputContent" style="height: 300px" name="content">[[${club.content}]]</textarea>
+                            <label for="inputContent">커뮤니티 매너를 지켜주세요</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 my-1">
+                        <button type="button" class="btn btn-primary" id="btnSubmit">수정완료</button>
+                        <button type="button" class="btn btn-primary" id="returnBtn" onclick="hidePost()">뒤로가기</button>
+                    </div>
+                </div>
             </div>
+        </form>
+    </section>
 
-            <div class="views"><!--조회수 생성일-->
-                <span class="views">view 1M   1month ago</span>
+    <section id="reply">
+        <article class="mt-2" id="replyList"></article>
+        <article id="contentBlock" class="p-3" style="width: 100%;" sec:authorize="isAuthenticated()">
+            <textarea class="p-3" rows="2" id="comment" placeholder="댓글 작성"></textarea>
+            <div id="button_div">
+                <button class="py-1 px-2" type="button" id="btnReplyWrite">작성</button>
             </div>
-
-            <ul class="username"><!--글쓴이 이름 사진-->
-                <li><img th:src="@{/member/findProfileImg(memberId=${club.memberId})}" src="/img/author-4.jpg" alt="프로필 사진"/></li>
-                <li th:text="${club.memberName}"></li>
-            </ul>
-            <div>
-                <ul>
-                    <li class="content">내용
-                        <ul>
-                            <li th:text="${club.content}" class="bottom"></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="info">
-                <!-- 인원수 받는 곳 -->
-                <i class="fa-solid fa-users"></i>
-                <span class="current-members">현재 인원: <span th:text="${club.nowMan}"></span>명</span>
-                <span class="max-members" >모집 인원: <span th:text="${club.maxMan}"></span>명</span>
-            </div>
-
-            <div class="btns"><!--가입버튼-->
-                <button th:if="${club.clubJoinYn == 0}" class="subscribe"  type="button" onclick="abc();">가입하기</button>
-                <button th:if="${club.clubJoinYn == 1}" class="subscribe" type="button" onclick="abc();">탈퇴하기</button>
-                <button class="unsubscribe" id="unsubscribe">탈퇴하기</button>
-            </div>
-        </div>
-
+        </article>
     </section>
     <!--3번 박스 포스트 내용 보는곳-->
-    <section class="item3">
 
-    </section>
     <!--4번 박스 클럽 추천 사진-->
     <div class="item4">
 
@@ -95,75 +507,9 @@
     $('.slide-box').slick({
         slidesToShow:1,
         swipeToSlide: true,
-        arrows:true,
+        arrow:true,
         dots:true,
-
-});
-
-function abc(){
-    alert("hi");
- $.ajax(
-    {
-        type : "post",
-        url : "/club/join",
-        data: {
-            postId: [[${club.postId}]]
-        },
-        success: function(clubJoin){
-            if(clubJoin.clubJoinYn == 1){
-                alert("가입에 성공하였습니다.");
-                $('.subscribe').html('탈퇴하기');
-                clubChatOpen(); // 채팅 열기
-            }else if(clubJoin.clubJoinYn == -1){
-                alert("인원이 가득차서 가입에 실패하였습니다.");
-            }else if(clubJoin.clubJoinYn == 0){
-                alert('탈퇴에 성공하였습니다');
-                $('.subscribe').html('가입하기');
-            }else if(clubJoin === null){
-                alert('글작성자 본인은 가입이나 탈퇴를 할 수 없습니다');
-            }
-        }
-    }
- )
-}
-
-//가입하기 ajax
-// $(".subscribe").click(function(){
-//     alert([[${club.postId}]]);
-//    $.ajax({
-//         type: "post",
-//         url :" /club/join",
-//         data: {postId: [[${club.postId}]]},
-//         success: function(clubJoin){
-//             if(clubJoin.clubJoinYn == 1){
-//                 $(".subscribe").html('탈퇴하기');
-//                 alert("가입성공");
-//             }else{
-//                 $(".subscribe").html('가입하기');
-//                 alert("탈퇴성공");
-//             }
-//         }
-//    });
-//    });
-
-<!--function abc(){-->
-<!--    alert([[${club.postId}]]);-->
-<!--   $.ajax({-->
-<!--        type: "post",-->
-<!--        url " /club/join",-->
-<!--        data: {postId: [[${club.postId}]]},-->
-<!--        success: function(clubJoin){-->
-<!--            if(clubJoin.clubJoinYn == 1){-->
-<!--                $(".subscribe").html('탈퇴하기');-->
-<!--                alert("가입성공");-->
-<!--            }else{-->
-<!--                $(".subscribe").html('가입하기');-->
-<!--                alert("탈퇴성공");-->
-<!--            }-->
-<!--        }-->
-<!--   });-->
-
-<!--}-->
+    });
 </script>
 
 

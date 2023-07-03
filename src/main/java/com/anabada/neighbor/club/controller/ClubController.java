@@ -122,6 +122,7 @@ public class ClubController {
         model.addAttribute("images", imageInfose);
         model.addAttribute("club", response);
         model.addAttribute("postId", postId);
+        model.addAttribute("hobby", clubService.findHobbyName());
         model.addAttribute("roomId", chattingService.findRoomId(postId));
         return "club/clubDetail";
     }
