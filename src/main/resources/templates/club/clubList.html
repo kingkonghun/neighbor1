@@ -103,11 +103,18 @@
                 $.ajax({
                     type: "get",
                     url: "/clubList",
-                    data: {num:num, search:$("#search").val()},
+                    data: {num:num, hobbyName:$("#category_select").val(), search:$("#search").val()},
                     success: function(data) {
                         $("#list").append(data);
                     }
                 });
+            });
+
+            $("#category_select").change(function(){
+                let hobbyName = $("#category_select").val();
+                let search = $("#search").val();
+
+                location.href="/clubList?hobbyName=" + hobbyName + "&search=" + search;
             });
         });
     </script>

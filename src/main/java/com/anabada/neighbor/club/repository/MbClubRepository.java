@@ -80,7 +80,7 @@ public interface MbClubRepository extends ClubRepository {
 
     @Override
     @Select("select hobbyId from hobby where hobbyName = #{hobbyName}")
-    long selectHobbyId(String hobbyName);
+    Long selectHobbyId(String hobbyName);
 
     @Override
     @Select("select hobbyName from hobby where hobbyId = #{hobbyId}")
@@ -116,4 +116,12 @@ public interface MbClubRepository extends ClubRepository {
     @Override
     @Select("select * from hobby")
     List<Hobby> findHobbyName();
+
+    @Override
+    @Select("select * from club where hobbyId = #{hobbyId}")
+    List<Club> selectHobbyClubList(long hobbyId);
+
+    @Override
+    @Select("select * from club")
+    List<Club> selectClubList();
 }

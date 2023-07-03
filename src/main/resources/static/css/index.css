@@ -69,7 +69,7 @@
   text-transform: uppercase;
   max-width: max-content;
   letter-spacing: 2px;
-  padding: 10px 22px;
+  padding: 21px 22px;
   box-shadow: 6px 6px 0 -1px var(--shadow-color, var(--jet));
   transition: var(--transition-1);
   text-decoration: none;

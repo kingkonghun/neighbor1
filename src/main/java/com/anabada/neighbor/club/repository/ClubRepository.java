@@ -70,7 +70,7 @@ public interface ClubRepository {
      * @param hobbyName 취미이름
      * @return hobbyId
      */
-    public long selectHobbyId(String hobbyName);
+    public Long selectHobbyId(String hobbyName);
 
     /**
      *
@@ -113,4 +113,8 @@ public interface ClubRepository {
      * @return
      */
     List<Hobby> findHobbyName();
+
+    List<Club> selectHobbyClubList(long hobbyId);
+
+    List<Club> selectClubList();
 }
