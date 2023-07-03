@@ -1,5 +1,6 @@
 package com.anabada.neighbor.member.service;
 
+import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.page.Criteria;
@@ -20,12 +21,12 @@ public interface MemberService {
     /**
      *내가 작성한 게시글 리스트 (Criteria 로 페이징)
      */
-   public List<Used> myWrite(PrincipalDetails principalDetails, Criteria criteria);//내가 쓴 글
+   public List<Used> myUsedWrite(PrincipalDetails principalDetails, Criteria criteria);//내가 쓴 글
 
     /**
      *페이징을 위한 내가 쓴 글 총 갯수 가져오기
      */
-    public int getTotal(long memberId);//페이징
+    public int getUsedTotal(long memberId);//페이징
 
     /**
      * member 테이블에서 정보 가져오기
@@ -70,4 +71,9 @@ public interface MemberService {
     void editPhoto(Member member);
 
 
+    List<ClubResponse> myClubWrite(PrincipalDetails principalDetails, Criteria criteria);
+
+    int getClubTotal(long memberId);
+
+    public int getMyAllTotal(long memberId);
 }

@@ -1,5 +1,6 @@
 package com.anabada.neighbor.member.controller;
 
+import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.service.EmailService;
@@ -19,7 +20,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequestMapping("/member")
 @RequiredArgsConstructor
@@ -79,11 +84,27 @@ public class MemberController {
 
     @GetMapping("/myWrite")//내가 작성한 글
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String myWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria) {
-        List<Used> used = memberService.myWrite(principalDetails, criteria);
-        int total = memberService.getTotal(principalDetails.getMember().getMemberId());
-        model.addAttribute("writeList", used);
-        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
+    public String myWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria,
+                          @RequestParam(defaultValue = "used" ,value = "postType") String postType) {
+        List<Used> used = memberService.myUsedWrite(principalDetails, criteria);
+        System.out.println("aaa:"+postType);
+        List<ClubResponse> club = memberService.myClubWrite(principalDetails, criteria);
+
+        int total = 0;
+
+        if (postType.equals("used")) {
+            total = memberService.getUsedTotal(principalDetails.getMember().getMemberId());
+            model.addAttribute("writeList", used);
+            model.addAttribute("categoryName", "used");
+            model.addAttribute("postType", postType);
+            model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
+        } else if (postType.equals("club")) {
+            total = memberService.getClubTotal(principalDetails.getMember().getMemberId());
+            model.addAttribute("writeList", club);
+            model.addAttribute("categoryName", "club");
+            model.addAttribute("postType", postType);
+            model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
+        }
         return "member/myWrite";
     }
 

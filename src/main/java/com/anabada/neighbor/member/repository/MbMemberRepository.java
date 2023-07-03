@@ -3,7 +3,6 @@ package com.anabada.neighbor.member.repository;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
 import org.apache.ibatis.annotations.*;
-import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 import java.util.Map;
@@ -13,11 +12,17 @@ public interface MbMemberRepository extends MemberRepository{
 
     @Override
     @Select("SELECT * FROM post" +
-            " WHERE memberId=#{memberId} and postType='used' " +
+            " WHERE memberId=#{memberId} AND postType = 'used' " +
             " ORDER BY postId desc" +
             " LIMIT #{criteria.amount} OFFSET #{criteria.offset}")
-    List<Post> findMyPost(Map<String,Object> map);
+    List<Post> findMyUsedWrite(Map<String,Object> map);
 
+    @Override
+    @Select("SELECT * FROM post" +
+            " WHERE memberId=#{memberId} AND postType = 'club' " +
+            " ORDER BY postId desc" +
+            " LIMIT #{criteria.amount} OFFSET #{criteria.offset}")
+    List<Post> findMyClubWrite(Map<String, Object> map);
 
     @Override
     @Insert("insert into member (memberEmail, memberName, memberPWD, address, addressDetail, providerId, role) values (#{memberEmail}, #{memberName}, #{memberPWD}, #{address}, #{addressDetail}, #{providerId}, #{role})")
@@ -48,9 +53,16 @@ public interface MbMemberRepository extends MemberRepository{
 
 
     @Override
-    @Select("SELECT count(*) FROM post WHERE memberId=#{memberId} and postType='used' ")
-    int countMyWrite(long memberId);
+    @Select("SELECT count(*) FROM post WHERE memberId=#{memberId} and postType='used'")
+    int countMyUsedWrite(long memberId);
 
+    @Override
+    @Select("SELECT count(*) FROM post WHERE memberId=#{memberId} and postType='club'")
+    int countMyClubWrite(long memberId);
+
+    @Override
+    @Select("SELECT count(*) FROM post WHERE memberId=#{memberId} and postType!='del'")
+    int countMyAllWrite(long memberId);
 
     @Override
     @Select("SELECT * FROM post WHERE memberId=#{memberId} and postType='used' ORDER BY postUpdate DESC  LIMIT 5")

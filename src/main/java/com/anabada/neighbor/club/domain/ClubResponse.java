@@ -29,9 +29,11 @@ public class ClubResponse {
     private List<ImageResponse> ImageResponseList; //이미지 url List
     private List<MultipartFile> images = new ArrayList<>(); // 첨부파일 List
     private int clubJoinYn;
+    private Date postDate;
     private Date postUpdate;
     private int replyCount;
     private int likesCount;
     private int likesCheck;
     private String address;
+    private String postType;
 }

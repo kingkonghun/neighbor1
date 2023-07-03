@@ -422,8 +422,8 @@
             <div class="atag" style="display: flex; justify-content: space-between;">
 
                 <div class="people_butn"><!--가입버튼-->
-                    <button type="button" class="inandout_butn" sec:authorize="isAuthenticated()" th:if="${club.memberId != #authentication.principal.member.memberId}">가입하기</button>
-                    <button type="button" class="inandout_butn" >탈퇴하기</button>
+                    <button type="button" onclick="clubJoin()" class="inandout_butn" sec:authorize="isAuthenticated()" th:if="${club.memberId != #authentication.principal.member.memberId && club.clubJoinYn == 0}">가입하기</button>
+                    <button type="button" onclick="clubJoin()" class="inandout_butn"  th:if="${club.clubJoinYn == 1}">탈퇴하기</button>
                 </div>
 
                 <div style="display: flex; justify-content: space-between; width: auto;"><!--텍스트와 좋아요-->
@@ -540,12 +540,37 @@
 <!--footer-->
 <div th:replace="footer :: footer"></div>
 <script>
+    function clubJoin(){
+        $.ajax({
+            type : "post",
+            url : "/club/join",
+            data: {
+                postId: [[${club.postId}]]
+            },
+            success: function(clubJoin){
+                if(clubJoin.clubJoinYn == 1){
+                    alert("가입에 성공하였습니다.");
+                    $('.subscribe').html('탈퇴하기');
+                }else if(clubJoin.clubJoinYn == -1){
+                    alert("인원이 가득차서 가입에 실패하였습니다.");
+                }else if(clubJoin.clubJoinYn == 0){
+                    alert('탈퇴에 성공하였습니다');
+                    $('.subscribe').html('가입하기');
+                }else if(clubJoin === null){
+                    alert('글작성자 본인은 가입이나 탈퇴를 할 수 없습니다');
+                }
+            }
+        });
+    }
+
+
     $('.slide-box').slick({
         slidesToShow:1,
         swipeToSlide: true,
         arrow:true,
         dots:true,
     });
+
 </script>
 
 

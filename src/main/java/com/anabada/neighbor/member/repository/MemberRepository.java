@@ -35,7 +35,7 @@ public interface MemberRepository {
      * 내가 작성한 글 List
      * 페이징 처리를 위해 memberId와 Criteria 객체를 map에 넣음
      */
-    List<Post> findMyPost(Map<String,Object> map);//내가 쓴 글
+    List<Post> findMyUsedWrite(Map<String,Object> map);//내가 쓴 글
 
 
 
@@ -50,7 +50,7 @@ public interface MemberRepository {
     /**
      * 내가 작성한 글 총 갯수 확인
      */
-    int countMyWrite(long memberId);
+    int countMyUsedWrite(long memberId);
 
     /**
      * 내가 작성한 게시글 5개
@@ -119,4 +119,10 @@ public interface MemberRepository {
      * @param memberId
      */
     void editPwd(String memberPWD, long memberId);
+
+    List<Post> findMyClubWrite(Map<String, Object> map);
+
+    int countMyClubWrite(long memberId);
+
+    int countMyAllWrite(long memberId);
 }
