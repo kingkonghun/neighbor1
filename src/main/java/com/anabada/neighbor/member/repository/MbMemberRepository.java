@@ -61,7 +61,7 @@ public interface MbMemberRepository extends MemberRepository{
     int countMyClubWrite(long memberId);
 
     @Override
-    @Select("SELECT count(*) FROM post WHERE memberId=#{memberId}")
+    @Select("SELECT count(*) FROM post WHERE memberId=#{memberId} and postType!='del'")
     int countMyAllWrite(long memberId);
 
     @Override

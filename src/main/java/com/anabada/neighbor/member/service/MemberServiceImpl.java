@@ -139,7 +139,7 @@ public class MemberServiceImpl implements MemberService{
     public Member myInfo(long memberId) {//내정보
         Member member = null;
         member = memberRepository.findMyInfo(memberId);
-        member.setMyWrite(memberRepository.countMyUsedWrite(memberId)+memberRepository.countMyClubWrite(memberId));
+        member.setMyWrite(memberRepository.countMyAllWrite(memberId));
         member.setMyReply(replyRepository.countMyReply(memberId));
         member.setMyLikesCount(memberRepository.countMyLikes(memberId));
 
