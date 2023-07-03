@@ -6,6 +6,8 @@ import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.used.domain.Post;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface ClubService {
@@ -101,4 +103,6 @@ public interface ClubService {
      */
     void updateNowMan(int num, Long clubId);
     List<Hobby> findHobbyName();
+
+    void updatePostView(Long postId);
 }
