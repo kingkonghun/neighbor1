@@ -92,21 +92,43 @@ public class MemberController {
 
         int total = 0;
 
-        if (postType.equals("used")) {
             total = memberService.getUsedTotal(principalDetails.getMember().getMemberId());
             model.addAttribute("writeList", used);
             model.addAttribute("categoryName", "used");
             model.addAttribute("postType", postType);
             model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
-        } else if (postType.equals("club")) {
-            total = memberService.getClubTotal(principalDetails.getMember().getMemberId());
-            model.addAttribute("writeList", club);
-            model.addAttribute("categoryName", "club");
-            model.addAttribute("postType", postType);
-            model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
-        }
+//        else if (postType.equals("club")) {
+//            total = memberService.getClubTotal(principalDetails.getMember().getMemberId());
+//            model.addAttribute("writeList", club);
+//            model.addAttribute("categoryName", "club");
+//            model.addAttribute("postType", postType);
+//            model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
+//        }
         return "member/myWrite";
     }
+
+    @GetMapping("/myClubWrite")//내가 작성한 글
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public String myClubWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria,
+                          @RequestParam(defaultValue = "club" ,value = "postType") String postType) {
+        System.out.println("aaa:"+postType);
+        List<ClubResponse> club = memberService.myClubWrite(principalDetails, criteria);
+
+        int total = 0;
+        total = memberService.getClubTotal(principalDetails.getMember().getMemberId());
+        model.addAttribute("writeList", club);
+        model.addAttribute("categoryName", "club");
+        model.addAttribute("postType", postType);
+        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
+        return "member/myClubWrite";
+    }
+
+
+
+
+
+
+
 
     @GetMapping("/myInfo")//내 개인정보
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")

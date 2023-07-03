@@ -128,8 +128,8 @@
 
 <section class="py-5 section2">
     <div class="usedTitle">
-        <h3 style="color: hsl(173, 60%, 47%);">아껴쓰고 나눠써요</h3>
-        <p>같은제품 더 저렴하게 <span style="color: hsl(357, 100%, 75%);">중고거래</span></p>
+        <h3 style="color: hsl(173, 60%, 47%);">동네모임 즐겨봐요</h3>
+        <p>주민들과 재미있는 <span style="color: hsl(357, 100%, 75%);">동네모임</span></p>
     </div>
     <div class="container px-4 px-lg-5 mt-5">
         <div id="list2" class="row">
@@ -141,8 +141,10 @@
                         <span class="content" th:text="${club.content}">내용내용ddddddddddd</span><!--내용 10자이내로-->
                         <div class="listdetail"><!--지역 운동 생성일-->
                             <span class="category" th:text="${club.hobbyName}">운동</span>
-                            <span class="region"><i class="fa-solid fa-map-location-dot"></i>지역<span> • </span></span>
-                            <span class="date">생성일</span>
+                            <span class="region" th:inline="text">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                                [[${club.address}]]
+                            </span>
                         </div>
                         <div class="members">
                             <img src="/img/author-1.jpg" alt="Member 1">
