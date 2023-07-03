@@ -131,8 +131,8 @@ public class ClubServiceImpl implements ClubService {
             member = Member.builder().memberId(-2).build();
         }
 
-//        String[] splitString = postMember.getAddress().split(" ");
-//        String address = splitString[0] + " " + splitString[1];
+        String[] splitString = postMember.getAddress().split(" ");
+        String address = splitString[0] + " " + splitString[1];
 
         Club club = clubRepository.selectClub(postId);
 //        System.out.println("클럽아이디" + club.getClubId()+ "멤버아이디 : " + member.getMemberId());
@@ -154,7 +154,7 @@ public class ClubServiceImpl implements ClubService {
                 .ImageResponseList(clubRepository.selectImagesByPostId(postId))//여기까지완성
                 .maxMan(club.getMaxMan())
                 .nowMan(club.getNowMan())
-//                .address(address)
+                .address(address)
                 .build();
     }
 
@@ -234,7 +234,6 @@ public class ClubServiceImpl implements ClubService {
         if (listType.equals("similarList")) {
             return result.subList(0, Math.min(result.size(), 4));
         }
-
         if(num >= result.size()){
             return null;
         }

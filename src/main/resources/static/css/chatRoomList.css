@@ -118,7 +118,7 @@ body{/*컨테이너 배경*/
 }
 .chatlist{
     position: relative;
-    height: calc(100% - 110px);/*60+50px*/
+    height: calc(100% - 60px);/*60+50px*/
     overflow-y: auto;
     background: #fff;
 }

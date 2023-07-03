@@ -5,8 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>club Details Page</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://kit.fontawesome.com/e2064a471f.js" crossorigin="anonymous"></script>
     <th:block th:insert="/common/common :: fragment-header"></th:block>
 
     <link rel="stylesheet" href="/css/clubDetail.css">
@@ -74,7 +72,7 @@
             color: #f4f4f4;
         }
     </style>
-    <script>
+    <script th:inline="javascript">
         $(function(){
             const imgCount = [[${imgCount}]];
             console.log(imgCount);
@@ -357,6 +355,7 @@
     </script>
 </head>
 <body>
+<input type="hidden" id="clubRoomId" th:value="${roomId}">
 <!-- Nav바-->
 <div th:replace="nav :: div"></div>
 
@@ -381,9 +380,8 @@
             <div class="flexBox" style="display: flex; justify-content: space-between;">
                 <div class="hash_title">
                     <ul class="hashtags"><!--해쉬태그 가져오기-->
-                        <li>#운동</li>
-                        <li>#술</li>
-                        <li>#지역 종로</li>
+                        <li th:text="'#'+${club.hobbyName}"></li>
+                        <li th:text="'#'+${club.address}"></li>
                     </ul>
                     <h3 th:text="${club.title}"></h3><!--제목 가져오기-->
                 </div>
@@ -419,13 +417,7 @@
 
                 <span th:text="'조회수 : ' + ${club.postView}"></span>
             </div>
-            <div class="atag" style="display: flex; justify-content: space-between;">
-
-                <div class="people_butn"><!--가입버튼-->
-                    <button type="button" onclick="clubJoin()" class="inandout_butn" sec:authorize="isAuthenticated()" th:if="${club.memberId != #authentication.principal.member.memberId && club.clubJoinYn == 0}">가입하기</button>
-                    <button type="button" onclick="clubJoin()" class="inandout_butn"  th:if="${club.clubJoinYn == 1}">탈퇴하기</button>
-                </div>
-
+            <div class="atag" style="display: flex; justify-content: flex-end;">
                 <div style="display: flex; justify-content: space-between; width: auto;"><!--텍스트와 좋아요-->
                     <div style="margin-right: 8px;">
                         <span th:text="${club.replyCount}"></span>
@@ -438,7 +430,13 @@
                     </div>
                 </div>
             </div>
-
+            <div style="text-align: right; display: flex; justify-content: space-between;">
+                <div class="people_butn"><!--가입버튼-->
+                    <button type="button" onclick="clubJoin()" class="inandout_butn subscribe" sec:authorize="isAuthenticated()" th:if="${club.memberId != #authentication.principal.member.memberId && club.clubJoinYn == 0}">가입하기</button>
+                    <button type="button" onclick="clubJoin()" class="inandout_butn subscribe" sec:authorize="isAuthenticated()" th:if="${club.memberId != #authentication.principal.member.memberId && club.clubJoinYn == 1}">탈퇴하기</button>
+                </div>
+                <a href="#" id="open-modal">신고</a>
+            </div>
         </div>
     </section>
 
@@ -537,10 +535,42 @@
 
     </div>
 </div>
+
+<!--신고모달-->
+<div id="modal">
+    <div class="modal-content p-4">
+        <div class="modal-header">
+            <div style="display: flex;">
+                <img th:src="@{/img/siren.png}" style="width: 50px; height: 44px;">
+                <h3 class="pt-3">신고하기</h3>
+            </div>
+            <i id="close-modal" class="bi bi-x-lg" style="font-size: 32px;"></i>
+        </div>
+        <select id="reportType_select" name="reportTypeId">
+            <option value="0" class="pb-1">신고유형</option>
+            <th:block th:each="reportType:${reportType}">
+                <option th:value="${reportType.reportTypeId}" th:text="${reportType.reportTypeName}"></option>
+            </th:block>
+        </select>
+        <label for="content">내용</label>
+        <textarea id="content" name="content" class="px-2 mb-3"></textarea>
+        <button type="button" id="btnReport">신고</button>
+    </div>
+</div>
+
+
 <!--footer-->
 <div th:replace="footer :: footer"></div>
 <script>
+    $('.slide-box').slick({
+        slidesToShow:1,
+        swipeToSlide: true,
+        arrows:true,
+        dots:true,
+    });
+
     function clubJoin(){
+        alert("hi");
         $.ajax({
             type : "post",
             url : "/club/join",
@@ -551,6 +581,7 @@
                 if(clubJoin.clubJoinYn == 1){
                     alert("가입에 성공하였습니다.");
                     $('.subscribe').html('탈퇴하기');
+                    clubChatOpen(); // 채팅 열기
                 }else if(clubJoin.clubJoinYn == -1){
                     alert("인원이 가득차서 가입에 실패하였습니다.");
                 }else if(clubJoin.clubJoinYn == 0){
@@ -563,16 +594,43 @@
         });
     }
 
+//가입하기 ajax
+// $(".subscribe").click(function(){
+//     alert([[${club.postId}]]);
+//    $.ajax({
+//         type: "post",
+//         url :" /club/join",
+//         data: {postId: [[${club.postId}]]},
+//         success: function(clubJoin){
+//             if(clubJoin.clubJoinYn == 1){
+//                 $(".subscribe").html('탈퇴하기');
+//                 alert("가입성공");
+//             }else{
+//                 $(".subscribe").html('가입하기');
+//                 alert("탈퇴성공");
+//             }
+//         }
+//    });
+//    });
 
-    $('.slide-box').slick({
-        slidesToShow:1,
-        swipeToSlide: true,
-        arrow:true,
-        dots:true,
-    });
+<!--function abc(){-->
+<!--    alert([[${club.postId}]]);-->
+<!--   $.ajax({-->
+<!--        type: "post",-->
+<!--        url " /club/join",-->
+<!--        data: {postId: [[${club.postId}]]},-->
+<!--        success: function(clubJoin){-->
+<!--            if(clubJoin.clubJoinYn == 1){-->
+<!--                $(".subscribe").html('탈퇴하기');-->
+<!--                alert("가입성공");-->
+<!--            }else{-->
+<!--                $(".subscribe").html('가입하기');-->
+<!--                alert("탈퇴성공");-->
+<!--            }-->
+<!--        }-->
+<!--   });-->
 
+<!--}-->
 </script>
-
-
 </body>
 </html>

@@ -30,7 +30,6 @@ public class UsedController {
 
     private final UsedService usedService;
 
-
     @GetMapping("/list") //게시물 리스트
     public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model, @RequestParam(value = "num", defaultValue = "0") int num, @RequestParam(value = "search", defaultValue = "") String search) {
         model.addAttribute("list", usedService.list(categoryId, "list", num, search, 0));
@@ -52,7 +51,6 @@ public class UsedController {
 
         return "/used/usedDetail";
     }
-
 
     @PostMapping("/post") //게시물 작성
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
