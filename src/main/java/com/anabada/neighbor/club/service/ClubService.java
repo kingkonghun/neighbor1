@@ -6,6 +6,8 @@ import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.used.domain.Post;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface ClubService {
@@ -77,7 +79,7 @@ public interface ClubService {
      */
     public Long findHobbyId(String hobbyName);
 
-    public List<ClubResponse> findClubList(int num, long hobbyId, String search);
+    public List<ClubResponse> findClubList(int num, long hobbyId, String search, String listType, long postId);
 
     public int checkPost(ClubRequest clubRequest);//clubPost객체의 Null값체크
 
@@ -101,4 +103,8 @@ public interface ClubService {
      */
     void updateNowMan(int num, Long clubId);
     List<Hobby> findHobbyName();
+
+    void updatePostView(Long postId);
+
+    List<ClubResponse> mainList();
 }

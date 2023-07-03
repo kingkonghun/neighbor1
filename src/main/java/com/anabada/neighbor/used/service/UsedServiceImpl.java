@@ -9,7 +9,6 @@ import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
@@ -81,7 +80,7 @@ public class UsedServiceImpl implements UsedService{
      * 게시물 타입이 used 인 list 조회
      * */
     @Override
-    public List<Used> list(long categoryId, String listType, int num, String search) {
+    public List<Used> list(long categoryId, String listType, int num, String search, long postId) {
         List<Used> usedList = new ArrayList<>(); //리턴할 값
         List<Product> productList = null;
         if (categoryId != 0) { //파라미터로 받은 categoryId가 0이 아니면
@@ -91,7 +90,9 @@ public class UsedServiceImpl implements UsedService{
         }
         for (Product product : productList) {
             Post post = usedRepository.findPost(product.getPostId()); //product 테이블의 postId로 post 테이블에서 해당하는 튜플 가져오기
-
+            if (post.getPostId() == postId) {
+                continue;
+            }
             Member member = usedRepository.findMember(post.getMemberId()); //post 테이블의 memberId로 member 테이블에서 해당하는 튜플 가져오기
             String categoryName = usedRepository.findCategoryName(product.getCategoryId()); //product 테이블의 categoryId로 Category 테이블에서 해당하는 categoryName 가져오기
             int replyCount = usedRepository.findReplyCount(post.getPostId());

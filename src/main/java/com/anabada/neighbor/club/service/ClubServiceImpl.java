@@ -8,14 +8,19 @@ import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Likes;
 import com.anabada.neighbor.used.domain.Post;
+import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -114,20 +119,21 @@ public class ClubServiceImpl implements ClubService {
         int replyCount = usedRepository.findReplyCount(post.getPostId()); // postId 로 댓글 갯수 가져오기
         int likesCount = usedRepository.findLikesCount(post.getPostId()); // postId 로 좋아요 갯수 가져오기
         int likesCheck = 0; // 초기화
+
+        Member member;
         if (principalDetails != null) { // 현재 로그인한 상태라면
             likesCheck = usedRepository.likesCheck(Likes.builder() // 좋아요를 누른 게시물인지 확인
                     .postId(postId)
                     .memberId(principalDetails.getMember().getMemberId())
                     .build());
+            member = principalDetails.getMember(); // 글을 보러온 사용자의 정보
+        }else {
+            member = Member.builder().memberId(-2).build();
         }
 
-        Member member;
+//        String[] splitString = postMember.getAddress().split(" ");
+//        String address = splitString[0] + " " + splitString[1];
 
-        if(principalDetails != null) {
-             member = principalDetails.getMember(); // 글을 보러온 사용자의 정보
-        }else{
-             member = Member.builder().memberId(-2).build();
-        }
         Club club = clubRepository.selectClub(postId);
 //        System.out.println("클럽아이디" + club.getClubId()+ "멤버아이디 : " + member.getMemberId());
         return ClubResponse.builder()
@@ -148,6 +154,7 @@ public class ClubServiceImpl implements ClubService {
                 .ImageResponseList(clubRepository.selectImagesByPostId(postId))//여기까지완성
                 .maxMan(club.getMaxMan())
                 .nowMan(club.getNowMan())
+//                .address(address)
                 .build();
     }
 
@@ -177,7 +184,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public List<ClubResponse> findClubList(int num, long hobbyId, String search) {
+    public List<ClubResponse> findClubList(int num, long hobbyId, String search, String listType, long postId) {
         List<ClubResponse> result = new ArrayList<>(); //반환해줄 리스트생성
         List<Post> postList = clubRepository.selectPostList(); //foreach돌릴 postlist생성j
 
@@ -190,7 +197,14 @@ public class ClubServiceImpl implements ClubService {
 
         for (Club club : clubList) {
             Post post = clubRepository.selectPost(club.getPostId());
+            if (post.getPostId() == postId) {
+                continue;
+            }
             Member member = clubRepository.selectMember(club.getMemberId());
+            int replyCount = usedRepository.findReplyCount(post.getPostId());
+            int likesCount = usedRepository.findLikesCount(post.getPostId());
+            String[] splitString = member.getAddress().split(" ");
+            String address = splitString[0] + " " + splitString[1];
             ClubResponse temp = ClubResponse.builder()
                     .postId(post.getPostId())
                     .memberId(member.getMemberId())
@@ -201,12 +215,24 @@ public class ClubServiceImpl implements ClubService {
                     .score(member.getScore())
                     .maxMan(club.getMaxMan())
                     .nowMan(club.getNowMan())
-
+                    .address(address)
+                    .replyCount(replyCount)
+                    .likesCount(likesCount)
+                    .postView(post.getPostView())
+                    .postUpdate(post.getPostUpdate())
                     .build();
             if (temp.getTitle().indexOf(search) != -1 || temp.getContent().indexOf(search) != -1) {
                 result.add(temp);
             }
 //            result.add(temp);
+        }
+        Comparator<ClubResponse> comparator = (use1, use2) -> Long.valueOf(
+                        use1.getPostUpdate().getTime())
+                .compareTo(use2.getPostUpdate().getTime());
+        Collections.sort(result, comparator.reversed());
+
+        if (listType.equals("similarList")) {
+            return result.subList(0, Math.min(result.size(), 4));
         }
 
         if(num >= result.size()){
@@ -291,5 +317,42 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public List<Hobby> findHobbyName() {
         return clubRepository.findHobbyName();
+    }
+
+    @Override
+    public void updatePostView(Long postId) {
+        usedRepository.updatePostView(postId);
+    }
+
+    @Override
+    public List<ClubResponse> mainList() {
+        List<ClubResponse> result = new ArrayList<>();
+        List<Post> postList = clubRepository.selectHotPostList();
+        for (Post post : postList) {
+            Club club = clubRepository.selectClub(post.getPostId());
+            Member member = clubRepository.selectMember(post.getMemberId());
+            int replyCount = usedRepository.findReplyCount(post.getPostId());
+            int likesCount = usedRepository.findLikesCount(post.getPostId());
+            String[] splitString = member.getAddress().split(" ");
+            String address = splitString[0] + " " + splitString[1];
+            ClubResponse temp = ClubResponse.builder()
+                    .postId(post.getPostId())
+                    .memberId(member.getMemberId())
+                    .memberName(member.getMemberName())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .hobbyName(clubRepository.selectHobbyName(club.getHobbyId()))
+                    .score(member.getScore())
+                    .maxMan(club.getMaxMan())
+                    .nowMan(club.getNowMan())
+                    .address(address)
+                    .replyCount(replyCount)
+                    .likesCount(likesCount)
+                    .postView(post.getPostView())
+                    .postUpdate(post.getPostUpdate())
+                    .build();
+            result.add(temp);
+        }
+        return result;
     }
 }

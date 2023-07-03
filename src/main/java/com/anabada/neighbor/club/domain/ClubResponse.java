@@ -35,4 +35,5 @@ public class ClubResponse {
     private int likesCount;
     private int likesCheck;
     private String postType;
+    private String address;
 }

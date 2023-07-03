@@ -117,4 +117,6 @@ public interface ClubRepository {
     List<Club> selectHobbyClubList(long hobbyId);
 
     List<Club> selectClubList();
+
+    List<Post> selectHotPostList();
 }

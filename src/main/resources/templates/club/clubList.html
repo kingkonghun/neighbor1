@@ -135,7 +135,7 @@
             <select id="category_select" name="categoryId">
                 <option value="0">전체모임</option>
                 <th:block th:each="hobby : ${hobby}">
-                    <option th:value="${hobby.hobbyName}" th:text="${hobby.hobbyName}"></option>
+                    <option th:value="${hobby.hobbyName}" th:text="${hobby.hobbyName}" th:selected="${hobby.hobbyName eq hobbyName}"></option>
                 </th:block>
             </select>
         </article>
@@ -152,8 +152,10 @@
 
                     <div class="listdetail"><!--지역 운동 생성일-->
                         <span class="category" th:text="${club.hobbyName}">운동</span>
-                        <span class="region"><i class="fa-solid fa-map-location-dot"></i>지역<span> • </span></span>
-                        <span class="date">생성일</span>
+                        <span class="region" th:inline="text">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            [[${club.address}]]
+                        </span>
                     </div>
                     <div class="members">
                         <img src="/img/author-1.jpg" alt="Member 1">

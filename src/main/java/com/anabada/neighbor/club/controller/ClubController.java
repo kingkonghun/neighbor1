@@ -21,6 +21,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +53,10 @@ public class ClubController {
         if (hobbyId == null) {
             hobbyId = 0L;
         }
-        model.addAttribute("clubList", clubService.findClubList(num, hobbyId, search));
+        model.addAttribute("clubList", clubService.findClubList(num, hobbyId, search, "list", 0));
         model.addAttribute("hobby", clubService.findHobbyName());
         model.addAttribute("search", search);
+        model.addAttribute("hobbyName", hobbyName);
         return num <= 0 ? "club/clubList" : "club/clubListPlus";
     }
 
@@ -103,9 +107,10 @@ public class ClubController {
 
     @GetMapping("/clubDetail")
     public String clubDetail(@RequestParam(value = "postId", required = false) Long postId, Model model,
+                             HttpServletRequest request, HttpServletResponse response,
                              @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        ClubResponse response = clubService.findClub(postId, principalDetails);
-        List<ImageResponse> imageResponses = response.getImageResponseList();
+        ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
+        List<ImageResponse> imageResponses = clubResponse.getImageResponseList();
 
         List<ImageInfo> imageInfose = new ArrayList<>();
         for (ImageResponse image : imageResponses) {
@@ -119,10 +124,28 @@ public class ClubController {
         }
         System.out.println(imageInfose);
 
+        Cookie[] cookies = request.getCookies(); //쿠키 가져오기
+
+        Cookie viewCookie = null;
+
+        if (cookies != null && cookies.length > 0) { //가져온 쿠키가 있으면
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("cookie" + postId)) { //해당하는 게시물의 쿠키가 있으면
+                    viewCookie = cookie; //viewCookie에 저장
+                }
+            }
+        }
+        if (viewCookie == null) { //쿠키가 없으면
+            Cookie newCookie = new Cookie("cookie" + postId, String.valueOf(postId)); //해당하는 게시물의 새로운 쿠키 생성
+            response.addCookie(newCookie); //쿠키 등록
+            clubService.updatePostView(postId); //postId로 post 테이블에서 해당하는 튜플의 조회수 증가
+        }
+
         model.addAttribute("images", imageInfose);
-        model.addAttribute("club", response);
+        model.addAttribute("club", clubResponse);
         model.addAttribute("postId", postId);
         model.addAttribute("hobby", clubService.findHobbyName());
+        model.addAttribute("similarList", clubService.findClubList(0, clubService.findHobbyId(clubResponse.getHobbyName()), "", "similarList", postId));
         model.addAttribute("roomId", chattingService.findRoomId(postId));
         return "club/clubDetail";
     }

@@ -32,8 +32,8 @@ public class UsedController {
 
 
     @GetMapping("/list") //게시물 리스트
-    public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model, @RequestParam(value = "num", defaultValue = "0") int num, @RequestParam(value = "search", defaultValue = "") String search){
-        model.addAttribute("list", usedService.list(categoryId, "list", num, search));
+    public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model, @RequestParam(value = "num", defaultValue = "0") int num, @RequestParam(value = "search", defaultValue = "") String search) {
+        model.addAttribute("list", usedService.list(categoryId, "list", num, search, 0));
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("categoryId", categoryId);
         model.addAttribute("search", search);
@@ -47,7 +47,7 @@ public class UsedController {
         model.addAttribute("dto", dto);
         model.addAttribute("imgCount", dto.getImgList().size());
         model.addAttribute("category",usedService.categoryList());
-        model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0, ""));
+        model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0, "", postId));
         model.addAttribute("reportType", usedService.reportType());
 
         return "/used/usedDetail";
