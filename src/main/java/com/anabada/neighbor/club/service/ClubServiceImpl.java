@@ -114,7 +114,7 @@ public class ClubServiceImpl implements ClubService {
         if(principalDetails != null) {
              member = principalDetails.getMember(); // 글을 보러온 사용자의 정보
         }else{
-             member = Member.builder().memberId(-2).build();
+             member = Member.builder().memberId(-2).build(); // 로그인 안한 사용자일때 (나중에 가입하기같은기능일때 메세지 보내는 기능 만들어야함)
         }
         Club club = clubRepository.selectClub(postId);
 //        System.out.println("클럽아이디" + club.getClubId()+ "멤버아이디 : " + member.getMemberId());
