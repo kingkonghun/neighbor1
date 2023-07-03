@@ -14,6 +14,7 @@ import com.anabada.neighbor.file.controller.ImageController;
 import com.anabada.neighbor.file.domain.ImageInfo;
 import com.anabada.neighbor.file.service.FilesStorageService;
 import com.anabada.neighbor.used.domain.Post;
+import com.anabada.neighbor.used.service.UsedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -35,17 +36,15 @@ public class ClubController {
     private final ImageUtils imageUtils;
     private final FilesStorageService storageService;
     private final ChattingService chattingService;
+    private final UsedService usedService;
 
-
-    @Autowired
-    public ClubController(ClubService clubService, ImageUtils imageUtils, FilesStorageService storageService, ChattingService chattingService) {
+    public ClubController(ClubService clubService, ImageUtils imageUtils, FilesStorageService storageService, ChattingService chattingService, UsedService usedService) {
         this.clubService = clubService;
         this.imageUtils = imageUtils;
         this.storageService = storageService;
         this.chattingService = chattingService;
+        this.usedService = usedService;
     }
-
-
 
     @GetMapping("/clubList")
     public String clubList(Model model, @RequestParam(value = "num", defaultValue = "0") int num, @RequestParam(value = "hobbyName", defaultValue = "전체모임") String hobbyName, @RequestParam(value = "search", defaultValue = "") String search) {
@@ -147,6 +146,7 @@ public class ClubController {
         model.addAttribute("hobby", clubService.findHobbyName());
         model.addAttribute("similarList", clubService.findClubList(0, clubService.findHobbyId(clubResponse.getHobbyName()), "", "similarList", postId));
         model.addAttribute("roomId", chattingService.findRoomId(postId));
+        model.addAttribute("reportType", usedService.reportType());
         return "club/clubDetail";
     }
 
