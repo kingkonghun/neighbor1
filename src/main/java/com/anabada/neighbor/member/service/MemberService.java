@@ -36,12 +36,7 @@ public interface MemberService {
 
    public String findProfileImg(long memberId);//프로필사진
 
-   public void downProfileImg(HttpServletResponse response, String profileImg) throws IOException;
-
-    /**
-     * 내가 작성한 중고게시글 5개 .. 나중에 클럽도 포함 해야 할듯 함
-     */
-   public List<Used> myWriteFive(long memberId);//내가 작성한 글(중고게시글) 5개만
+   public void downProfileImg(HttpServletResponse response, String profileImg) throws IOException;//프로필사진 헤더에보내기 (다운)
 
 
     /**
@@ -68,14 +63,26 @@ public interface MemberService {
      */
     String editPwd(String oldPwd, String memberPWD,long memberId);
 
-    void editPhoto(Member member);
+
+    void editPhoto(Member member);//사진 수정 아마 삭제
 
 
+    /**
+     *
+     * @param principalDetails 내 멤버아이디
+     * @param criteria 페이징처리
+     * @return 내가 쓴 동네모임 글 목록
+     */
     List<ClubResponse> myClubWrite(PrincipalDetails principalDetails, Criteria criteria);
 
+    /**
+     *
+     * @param memberId 내 멤버아이디
+     * @return 페이징을 위한 동네모임글 총 수
+     */
     int getClubTotal(long memberId);
 
-    public int getMyAllTotal(long memberId);
+
 
     /**
      * 이메일 중복체크
