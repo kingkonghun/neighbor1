@@ -71,13 +71,12 @@ public class ChattingController {
                 clubService.updateNowMan(0, club.getClubId());
             }
         }
-        chattingService.chatOut(chat, principalDetails); // 채팅방 나가기
+        chattingService.chatOut(chat, principalDetails.getMember().getMemberId()); // 채팅방 나가기
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/deleteChatRoom")
     public ResponseEntity<Void> deleteChatRoom(Chat chat) { // 채팅방 삭제(동네모임 채팅방만 가능)
-        System.out.println("삭제 입장");
         long roomId = chat.getRoomId();
         long postId = chat.getPostId();
 
@@ -97,8 +96,16 @@ public class ChattingController {
     }
 
     @PostMapping("/chatKick")
-    public ResponseEntity<Void> chatKick(long memberId) {
-        System.out.println(memberId);
+    public ResponseEntity<Void> chatKick(Chat chat, long memberId) {
+        chattingService.chatOut(chat, memberId);
+
+        PrincipalDetails principalDetailsTemp = new PrincipalDetails(Member.builder()
+                .memberId(memberId)
+                .build());
+        ClubResponse club = clubService.findClub(chat.getPostId(),principalDetailsTemp);
+        if (clubService.deleteClubJoin(club, principalDetailsTemp) == 1) {
+            clubService.updateNowMan(0, club.getClubId());
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -49,17 +49,24 @@ function showMessage(sender, senderName, content, messageDate, messageType, memb
         $("#clubMember").text(myName + "님 외 " + (memberCount - 1) + "명");
         $("#clubMan").text(nowMan + " / " + maxMan);
         $(".listBlock").load(location.href+' .listBlock');
-
     }else if(messageType == "EXIT") {
         $("#messages").prepend("<div class='message1 join'><p>" + content + "</p></div>");
         $("#clubMember").text(myName + "님 외 " + (memberCount - 1) + "명");
         $("#clubMan").text(nowMan + " / " + maxMan);
         $(".listBlock").load(location.href+' .listBlock');
-
-
     }else if(messageType == "EXPIRE") {
         $("#messages").prepend("<div class='message1 join'><p>" + content + "</p></div>");
         $("#message").attr("disabled", true);
+    }else if(messageType == "KICK") {
+        $("#messages").prepend("<div class='message1 join'><p>" + content + "</p></div>");
+        $("#clubMember").text(myName + "님 외 " + (memberCount - 1) + "명");
+        $("#clubMan").text(nowMan + " / " + maxMan);
+        $(".listBlock").load(location.href+' .listBlock');
+        if(myId == sender) {
+            alert("추방당하셨습니다");
+            window.close();
+        }
+
     }
 
 }

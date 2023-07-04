@@ -240,7 +240,7 @@ public class ClubController {
                 chattingService.chatOut(Chat.builder()
                         .roomId(chattingService.findRoomId(postId))
                         .type("club")
-                        .build(), principalDetails);
+                        .build(), principalDetails.getMember().getMemberId());
 
                 return clubService.findClub(postId, principalDetails);// 탈퇴성공시 클럽을 새로 조회
             }else{
