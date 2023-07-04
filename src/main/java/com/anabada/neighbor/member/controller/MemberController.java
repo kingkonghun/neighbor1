@@ -74,8 +74,8 @@ public class MemberController {
     @ResponseBody
     @PostMapping("/emailConfirm")//이메일인증
     public String emailConfirm(String memberEmail) throws Exception {
-//        String confirm = emailService.sendSimpleMessage(memberEmail);
-        return "confirm";
+        String confirm = emailService.sendSimpleMessage(memberEmail);
+        return confirm;
     }
     @ResponseBody
     @GetMapping("/emailCheck")//이메일 중복체크

@@ -48,10 +48,12 @@ function showMessage(sender, senderName, content, messageDate, messageType, memb
         $("#messages").prepend("<div class='message1 join'><p>" + content + "</p></div>");
         $("#clubMember").text(myName + "님 외 " + (memberCount - 1) + "명");
         $("#clubMan").text(nowMan + " / " + maxMan);
+        $(".room_sidvar").append("<div class='block44' id='member_"+sender+"'><div class='list_imgbx'><img src='/member/findProfileImg?memberId="+sender+"' class='user_self'></div><div class='list_details'><div class='listHead'><h4>"+senderName+"</h4></div></div></div>");
     }else if(messageType == "EXIT") {
         $("#messages").prepend("<div class='message1 join'><p>" + content + "</p></div>");
         $("#clubMember").text(myName + "님 외 " + (memberCount - 1) + "명");
         $("#clubMan").text(nowMan + " / " + maxMan);
+        $("#member_"+sender).remove();
     }else if(messageType == "EXPIRE") {
         $("#messages").prepend("<div class='message1 join'><p>" + content + "</p></div>");
         $("#message").attr("disabled", true);

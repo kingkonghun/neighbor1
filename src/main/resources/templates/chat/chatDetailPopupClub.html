@@ -56,7 +56,7 @@
 
   <div class="room_sidvar">
     <h2 class="py-3" onclick="memberListClose()">참여목록</h2>
-    <div class="block44" th:each="row : ${memberList}">
+    <div class="block44" id="member_" th:attr="id='member_' + ${row.memberId}" th:each="row : ${memberList}" >
       <div class="list_imgbx">
         <img th:src="@{/member/findProfileImg(memberId=${row.memberId})}" class="user_self">
       </div>

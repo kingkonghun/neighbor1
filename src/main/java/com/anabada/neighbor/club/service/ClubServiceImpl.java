@@ -1,6 +1,7 @@
 package com.anabada.neighbor.club.service;
 
-import com.anabada.neighbor.club.domain.*;
+import com.anabada.neighbor.club.domain.ClubRequest;
+import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.club.repository.ClubRepository;
@@ -11,16 +12,11 @@ import com.anabada.neighbor.file.service.FileService;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Likes;
 import com.anabada.neighbor.used.domain.Post;
-import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.repository.UsedRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -193,22 +189,27 @@ public class ClubServiceImpl implements ClubService {
         List<Post> postList = clubRepository.selectPostList(); //foreach돌릴 postlist생성j
 
         List<Club> clubList = null;
-        if (hobbyId != 0) {
-            clubList = clubRepository.selectHobbyClubList(hobbyId);
-        }else {
-            clubList = clubRepository.selectClubList();
+        if (hobbyId != 0) { // hobbyId 가 0이 아니면 즉 카테고리를 선택했다면
+            clubList = clubRepository.selectHobbyClubList(hobbyId); // 해당 취미 리스트 가져오기
+        }else { // hobbyId 가 0 즉 전체모임이라면
+            clubList = clubRepository.selectClubList(); // 전체 리스트 가져오기
         }
 
         for (Club club : clubList) {
-            Post post = clubRepository.selectPost(club.getPostId());
-            if (post.getPostId() == postId) {
+            Post post = clubRepository.selectPost(club.getPostId()); // postId 로 해당하는 post 튜플 가져오기
+
+            // 비슷한 모임 리스트를 가져올 때 현재 보고있는 게시물은 빼고 가져오기 위함
+            if (post.getPostId() == postId || !post.getPostType().equals("club")) { // 가져온 post 의 postId 가 파라미터로 받은 postId 와 같거나 postType 이 club이 아니라면
                 continue;
             }
+
             Member member = clubRepository.selectMember(club.getMemberId());
-            int replyCount = usedRepository.findReplyCount(post.getPostId());
-            int likesCount = usedRepository.findLikesCount(post.getPostId());
+            int replyCount = usedRepository.findReplyCount(post.getPostId()); // 게시물의 댓글 갯수
+            int likesCount = usedRepository.findLikesCount(post.getPostId()); // 게시물의 좋아요 갯수
+
             String[] splitString = member.getAddress().split(" ");
-            String address = splitString[0] + " " + splitString[1];
+            String address = splitString[0] + " " + splitString[1]; // 주소를 원하는 만큼 자르기
+
             ClubResponse temp = ClubResponse.builder()
                     .postId(post.getPostId())
                     .memberId(member.getMemberId())
@@ -225,23 +226,24 @@ public class ClubServiceImpl implements ClubService {
                     .postView(post.getPostView())
                     .postUpdate(post.getPostUpdate())
                     .build();
-            if (temp.getTitle().indexOf(search) != -1 || temp.getContent().indexOf(search) != -1) {
+            if (temp.getTitle().indexOf(search) != -1 || temp.getContent().indexOf(search) != -1) { // 검색 조건
                 result.add(temp);
             }
 //            result.add(temp);
         }
-        Comparator<ClubResponse> comparator = (use1, use2) -> Long.valueOf(
+        Comparator<ClubResponse> comparator = (use1, use2) -> Long.valueOf( // 정렬
                         use1.getPostUpdate().getTime())
                 .compareTo(use2.getPostUpdate().getTime());
         Collections.sort(result, comparator.reversed());
 
-        if (listType.equals("similarList")) {
-            return result.subList(0, Math.min(result.size(), 4));
+        if (listType.equals("similarList")) {  // listType 이 similarList 라면(비슷한 모임 보기)
+            return result.subList(0, Math.min(result.size(), 4)); // 같은 hobbyId 를 가지고 있는 게시물 목록을 4개만 자르기
         }
-        if(num >= result.size()){
+
+        if(num >= result.size()){ // 게시물 더보기 처리
             return null;
         }
-        return result.subList(num,Math.min(result.size(),num+6));
+        return result.subList(num,Math.min(result.size(),num+6)); // 6개씩 끊어서 목록으로 가져가기
 //        return result;
     }
 
@@ -302,7 +304,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public List<ClubResponse> mainList() {
+    public List<ClubResponse> mainList() { // 메인화면 리스트(최근 일주일 조회수 기준)
         List<ClubResponse> result = new ArrayList<>();
         List<Post> postList = clubRepository.selectHotPostList();
         for (Post post : postList) {
