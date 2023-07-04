@@ -78,8 +78,8 @@ public class MemberController {
     @ResponseBody
     @PostMapping("/emailConfirm")//이메일인증
     public String emailConfirm(String memberEmail) throws Exception {
-//        String confirm = emailService.sendSimpleMessage(memberEmail);
-        return "confirm";
+        String confirm = emailService.sendSimpleMessage(memberEmail);
+        return confirm;
     }
 
     @GetMapping("/myWrite")//내가 작성한 글
