@@ -4,6 +4,7 @@ import com.anabada.neighbor.chat.domain.Chat;
 import com.anabada.neighbor.chat.service.ChattingService;
 import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ClubResponse;
+import com.anabada.neighbor.club.domain.Message;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.service.ClubService;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
@@ -46,6 +47,34 @@ public class ClubController {
         this.fileService = fileService;
     }
 
+    @PostMapping("/clubSave")
+    public String clubSave(ClubRequest clubRequest, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        // 게시글 객체에 담기
+        Post post = clubService.clubRequestToPost(clubRequest, principalDetails);
+        // 포스트 저장하고 postId clubRequest 에 저장
+        long postId = clubService.savePost(post);
+        clubRequest.setPostId(postId);
+        //게시물 작성 실패시 postId가 -1로 반환되어 작성실패 메세지 리턴
+        if (postId == -1) {
+            model.addAttribute("result", "글 등록실패!");
+            return "redirect:clubList";
+        }
+        //게시물 작성 성공시 모임 등록
+        Club club = clubService.clubRequestToClub(clubRequest, principalDetails);
+        //게시물 작성 성공시 채팅방 생성 및 이미지 작성
+        if (clubService.saveClub(club) == 1) {
+            chattingService.openRoom(postId, principalDetails, "club");
+            // Disk 에 이미지 저장
+            List<FileRequest> images = fileUtils.uploadFiles(clubRequest.getImages());
+            //이미지 업로드 성공시 DB에 이미지정보 저장
+            fileService.saveFiles(postId, images);
+            model.addAttribute("result", "글 등록성공!");//나중에 삭제
+        } else {
+            model.addAttribute("result", "글 등록실패!");//나중에 삭제
+        }
+        return "redirect:clubList";
+    }
+
     @GetMapping("/clubList")
     public String clubList(Model model, @RequestParam(value = "num", defaultValue = "0") int num, @RequestParam(value = "hobbyName", defaultValue = "전체모임") String hobbyName, @RequestParam(value = "search", defaultValue = "") String search) {
         Long hobbyId = clubService.findHobbyId(hobbyName);
@@ -57,42 +86,6 @@ public class ClubController {
         model.addAttribute("search", search);
         model.addAttribute("hobbyName", hobbyName);
         return num <= 0 ? "club/clubList" : "club/clubListPlus";
-    }
-
-    @PostMapping("/clubSave")
-    public String clubSave(ClubRequest clubRequest, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        // 게시글 객체에 담기
-        Post post = Post.builder()
-                .memberId(principalDetails.getMember().getMemberId())
-                .title(clubRequest.getTitle())
-                .content(clubRequest.getContent())
-                .postType("club")
-                .build();
-        long postId = clubService.savePost(post);
-        //게시물 작성 실패시 postId가 -1로 반환되어 작성실패 메세지 리턴
-        if (postId == -1) {
-            model.addAttribute("result", "글 등록실패!");
-            return "club/clubSave";
-        }
-        //게시물 작성 성공시 모임 등록
-        Club club = Club.builder()
-                .postId(postId)
-                .memberId(post.getMemberId())
-                .hobbyId(clubService.findHobbyId(clubRequest.getHobbyName()))
-                .maxMan(clubRequest.getMaxMan())
-                .build();
-        //게시물 작성 성공시 채팅방 생성 및 이미지 작성
-        if (clubService.saveClub(club) == 1) {
-            chattingService.openRoom(postId, principalDetails, "club");
-            List<FileRequest> images = fileUtils.uploadFiles(clubRequest.getImages());
-            //이미지 업로드 성공시 DB에 이미지정보 저장
-            fileService.saveFiles(postId, images);
-            model.addAttribute("result", "글 등록성공!");//나중에 삭제
-        } else {
-            model.addAttribute("result", "글 등록실패!");//나중에 삭제
-        }
-
-        return "redirect:clubList";
     }
 
     @GetMapping("/clubDetail")
@@ -164,11 +157,16 @@ public class ClubController {
         if (principalDetails.getMember().getMemberId() != clubResponse.getMemberId()) {
             return "redirect:clubDetail?postId=" + clubRequest.getPostId();
         }
-        Post post = clubService.clubRequestToPost(clubRequest, principalDetails);
-        clubService.updatePost(post);
+        // 클럽으로 반환 후 업데이트
         Club club = clubService.clubRequestToClub(clubRequest, principalDetails);
-        clubService.updateClub(club);
-        return "redirect:clubDetail?postId=" + post.getPostId();
+        Message messageClub = clubService.updateClub(club, clubService.findClub(clubRequest.getPostId(), principalDetails));
+        // 클럽 업데이트 성공 했을 때
+        if (messageClub.getSuccess() == 1) {
+            // 포스트로 변환 후 업데이트
+            Post post = clubService.clubRequestToPost(clubRequest,clubRequest.getPostId(), principalDetails);
+            clubService.updatePost(post);
+        }
+        return "redirect:clubDetail?postId=" + clubRequest.getPostId();
     }
 
     @GetMapping("/clubRemove")

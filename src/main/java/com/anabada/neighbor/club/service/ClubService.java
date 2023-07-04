@@ -36,13 +36,37 @@ public interface ClubService {
      */
     public ClubResponse findClub(long postId, PrincipalDetails principalDetails);
 
+    /**
+     * clubRequest -> Post 로 변환
+     * *** PostId 자동으로 들어가지않음 업데이트시 PostId 세팅 따로 해줘야함 ***
+     * @param clubRequest 사용자가 보낸 게시글
+     * @param principalDetails 사용자 정보
+     * @return Post 객체
+     */
     public Post clubRequestToPost(ClubRequest clubRequest, PrincipalDetails principalDetails);
 
+    /**
+     * clubRequest -> Post 로 변환
+     * 게시글 수정이라 postId가 이미 있을때 사용
+     * @param clubRequest clubRequest 사용자가 보낸 게시글
+     * @param postId PK
+     * @param principalDetails 사용자 정보
+     * @return post 객체
+     */
+    public Post clubRequestToPost(ClubRequest clubRequest,Long postId, PrincipalDetails principalDetails);
+
+    /**
+     * clubRequest -> Club 으로 변환
+     * @param clubRequest 사용자가 보낸 게시글
+     * @param principalDetails 사용자 정보
+     * @return Club 객체
+     */
     public Club clubRequestToClub(ClubRequest clubRequest, PrincipalDetails principalDetails);
 
-    public long updatePost(Post post);
 
-    public long updateClub(Club club);
+    public Message updatePost(Post post);
+
+    public Message updateClub(Club club, ClubResponse clubResponse);
 
     public long deletePost(long postId);
     /**

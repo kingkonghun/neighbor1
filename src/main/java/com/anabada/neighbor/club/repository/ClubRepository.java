@@ -29,11 +29,19 @@ public interface ClubRepository {
 
     /**
      * 업데이트 포스트
+     *
      * @param post 업데이트한 포스트
+     * @return 성공여부
      */
-    public void updatePost(Post post);
+    public int updatePost(Post post);
 
-    public void updateClub(Club club);
+    /**
+     * 업데이트 클럽
+     *
+     * @param club 업데이트한 포스트
+     * @return 성공여부
+     */
+    public int updateClub(Club club);
 
     public void deletePost(long postId);
 
