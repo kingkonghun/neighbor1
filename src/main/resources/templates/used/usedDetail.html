@@ -370,17 +370,18 @@
     <section class="section">
         <div class="main-section-wrap">
             <div class="slide-box">
+                <!--사진-->
                 <div class="content" th:each="imgList : ${dto.imgList}">
                     <div class="img-box" style="width: 100%; " th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' " th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'">
                     </div>
-                    <div class="double-strike">판매 완료</div>
+                    <div class="double-strike" th:if="${dto.productStatus eq 'n'}">판매 완료</div>
 
 
                 </div>
                 <div class="content" th:if="${#lists.size(dto.imgList)==1}">
                     <div class="img-box" style="width: 100%;" th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' " th:style="'background-image:url('+ @{/used/downFiles(img=${dto.imgList})} +');'">
                     </div>
-                    <div class="double-strike">판매 완료</div>
+                    <div class="double-strike" th:if="${dto.productStatus eq 'n'}">판매 완료</div>
                 </div>
             </div>
         </div>
