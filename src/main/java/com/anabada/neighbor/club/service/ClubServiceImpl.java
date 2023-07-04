@@ -30,11 +30,12 @@ import java.util.List;
 public class ClubServiceImpl implements ClubService {
     private final ClubRepository clubRepository;
     private final FileService fileService;
+    private final UsedRepository usedRepository;
 
-    @Autowired
-    public ClubServiceImpl(ClubRepository clubRepository, FileService fileService) {
+    public ClubServiceImpl(ClubRepository clubRepository, FileService fileService, UsedRepository usedRepository) {
         this.clubRepository = clubRepository;
         this.fileService = fileService;
+        this.usedRepository = usedRepository;
     }
 
     @Transactional
@@ -154,7 +155,6 @@ public class ClubServiceImpl implements ClubService {
                 .replyCount(replyCount)
                 .likesCount(likesCount)
                 .likesCheck(likesCheck)
-                .ImageResponseList(clubRepository.selectImagesByPostId(postId))//여기까지완성
                 .fileResponseList(fileService.findAllFileByPostId(postId))//여기까지완성
                 .maxMan(club.getMaxMan())
                 .nowMan(club.getNowMan())

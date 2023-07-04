@@ -4,21 +4,23 @@ import com.anabada.neighbor.chat.domain.Chat;
 import com.anabada.neighbor.chat.service.ChattingService;
 import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ClubResponse;
-import com.anabada.neighbor.file.domain.FileRequest;
-import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.service.ClubService;
-import com.anabada.neighbor.file.service.FileService;
-import com.anabada.neighbor.file.service.FileUtils;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.file.domain.FileInfo;
+import com.anabada.neighbor.file.domain.FileRequest;
+import com.anabada.neighbor.file.domain.FileResponse;
+import com.anabada.neighbor.file.service.FileService;
+import com.anabada.neighbor.file.service.FileUtils;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.service.UsedService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -36,8 +38,7 @@ public class ClubController {
     private final FileUtils fileUtils;
     private final FileService fileService;
 
-    public ClubController(ClubService clubService, ImageUtils imageUtils, FilesStorageService storageService, ChattingService chattingService, UsedService usedService) {
-    public ClubController(ClubService clubService, ChattingService chattingService, FileUtils fileUtils, FileService fileService) {
+    public ClubController(ClubService clubService, ChattingService chattingService, UsedService usedService, FileUtils fileUtils, FileService fileService) {
         this.clubService = clubService;
         this.chattingService = chattingService;
         this.usedService = usedService;
@@ -112,44 +113,13 @@ public class ClubController {
     public String clubDetail(@RequestParam(value = "postId", required = false) Long postId, Model model,
                              HttpServletRequest request, HttpServletResponse response,
                              @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        ClubResponse response = clubService.findClub(postId, principalDetails);
-        List<FileResponse> files = response.getFileResponseList();
+        ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
+        List<FileResponse> files = clubResponse.getFileResponseList();
         List<FileInfo> fileInfoList = fileUtils.getFileInfo(files);
         model.addAttribute("images", fileInfoList);
-        model.addAttribute("club", response);
-        ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
-        List<ImageResponse> imageResponses = clubResponse.getImageResponseList();
+        model.addAttribute("club", clubResponse);
 
-        List<ImageInfo> imageInfose = new ArrayList<>();
-        for (ImageResponse image : imageResponses) {
-            ImageInfo imageInfo = ImageInfo.builder()
-                    .name(image.getOrigName())
-                    .url(MvcUriComponentsBuilder
-                            .fromMethodName(ImageController.class, "getImage"
-                            , image.getSaveName(), image.getCreaDate().format(DateTimeFormatter.ofPattern("yyMMdd"))).build().toString())
-                    .build();
-            imageInfose.add(imageInfo);
-        }
-        System.out.println(imageInfose);
-
-        Cookie[] cookies = request.getCookies(); //쿠키 가져오기
-
-        Cookie viewCookie = null;
-
-        if (cookies != null && cookies.length > 0) { //가져온 쿠키가 있으면
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("cookie" + postId)) { //해당하는 게시물의 쿠키가 있으면
-                    viewCookie = cookie; //viewCookie에 저장
-                }
-            }
-        }
-        if (viewCookie == null) { //쿠키가 없으면
-            Cookie newCookie = new Cookie("cookie" + postId, String.valueOf(postId)); //해당하는 게시물의 새로운 쿠키 생성
-            response.addCookie(newCookie); //쿠키 등록
-            clubService.updatePostView(postId); //postId로 post 테이블에서 해당하는 튜플의 조회수 증가
-        }
-
-        model.addAttribute("images", imageInfose);
+        model.addAttribute("images", fileInfoList);
         model.addAttribute("club", clubResponse);
         model.addAttribute("postId", postId);
         model.addAttribute("hobby", clubService.findHobbyName());
