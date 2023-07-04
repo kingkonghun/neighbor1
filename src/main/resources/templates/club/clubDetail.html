@@ -386,7 +386,7 @@
                     <h3 th:text="${club.title}"></h3><!--제목 가져오기-->
                 </div>
                 <th:block sec:authorize="isAuthenticated()"><!--로그인 했을때 수정 삭제 버튼 활성-->
-                    <form action="/used/postDelete" method="post" id="postForm" name="postForm">
+                    <form action="/clubRemove" method="post" id="postForm" name="postForm">
                         <input type="hidden" name="postId" th:value="${club.postId}">
                         <li class="navList nav-item dropdown" style="list-style: none;" th:if="${club.memberId == #authentication.principal.member.memberId or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
                             <a class="nav-link " id="adminT" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">
