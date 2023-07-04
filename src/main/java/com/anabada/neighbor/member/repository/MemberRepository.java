@@ -125,4 +125,6 @@ public interface MemberRepository {
     int countMyClubWrite(long memberId);
 
     int countMyAllWrite(long memberId);
+
+    int emailCheck(String memberEmail);
 }

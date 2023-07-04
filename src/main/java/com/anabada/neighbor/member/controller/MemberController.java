@@ -20,11 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RequestMapping("/member")
 @RequiredArgsConstructor
@@ -81,6 +77,14 @@ public class MemberController {
 //        String confirm = emailService.sendSimpleMessage(memberEmail);
         return "confirm";
     }
+    @ResponseBody
+    @GetMapping("/emailCheck")//이메일 중복체크
+    public boolean emailCheck(String memberEmail){
+        boolean emailCk = memberService.emailCk(memberEmail);
+        return emailCk;
+    }
+
+
 
     @GetMapping("/myWrite")//내가 작성한 글
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")

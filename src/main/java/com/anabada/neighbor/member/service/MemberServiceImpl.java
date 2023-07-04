@@ -132,6 +132,17 @@ public class MemberServiceImpl implements MemberService{
         return memberRepository.countMyClubWrite(memberId);
     }
 
+    @Override
+    public boolean emailCk(String memberEmail) {
+        System.out.println("memberEmail = " + memberEmail);
+        boolean check=false;
+        int emailCheck = memberRepository.emailCheck(memberEmail);
+        if (emailCheck != 1) {
+            check = true;
+        }
+        return check;
+    }
+
     /**
      * member 테이블에서 정보 가져오기
      */
