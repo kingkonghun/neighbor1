@@ -119,6 +119,23 @@ public class ClubController {
         model.addAttribute("images", fileInfoList);
         model.addAttribute("club", clubResponse);
 
+        Cookie[] cookies = request.getCookies(); //쿠키 가져오기
+
+        Cookie viewCookie = null;
+
+        if (cookies != null && cookies.length > 0) { //가져온 쿠키가 있으면
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("cookie" + postId)) { //해당하는 게시물의 쿠키가 있으면
+                    viewCookie = cookie; //viewCookie에 저장
+                }
+            }
+        }
+        if (viewCookie == null) { //쿠키가 없으면
+            Cookie newCookie = new Cookie("cookie" + postId, String.valueOf(postId)); //해당하는 게시물의 새로운 쿠키 생성
+            response.addCookie(newCookie); //쿠키 등록
+            clubService.updatePostView(postId); //postId로 post 테이블에서 해당하는 튜플의 조회수 증가
+        }
+
         model.addAttribute("images", fileInfoList);
         model.addAttribute("club", clubResponse);
         model.addAttribute("postId", postId);
