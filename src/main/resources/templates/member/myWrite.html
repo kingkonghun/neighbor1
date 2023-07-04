@@ -69,7 +69,11 @@
         });
         function detail(postId) {
             if (confirm("작성한 게시글로 가시겠습니까?")) {
-                location.href="/used/detail?postId="+postId;
+                if ($("#post_select").val() == 'used') {
+                    location.href="/used/detail?postId="+postId;
+                }else if ($("#post_select").val() == 'club') {
+                    location.href="/clubDetail?postId="+postId;
+                }
             }
         }
 
