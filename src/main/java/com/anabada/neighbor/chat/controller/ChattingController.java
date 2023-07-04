@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -92,6 +93,12 @@ public class ChattingController {
         chattingService.deleteChatRoom(roomId);
         clubService.deletePost(postId); // 해당 게시물까지 같이 삭제
 
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/chatKick")
+    public ResponseEntity<Void> chatKick(long memberId) {
+        System.out.println(memberId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
