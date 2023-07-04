@@ -91,8 +91,11 @@ public class ClubController {
                              HttpServletRequest request, HttpServletResponse response,
                              @AuthenticationPrincipal PrincipalDetails principalDetails) {
         ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
+
         List<FileResponse> files = clubResponse.getFileResponseList();
+
         List<FileInfo> fileInfoList = fileUtils.getFileInfo(files);
+
         model.addAttribute("images", fileInfoList);
         model.addAttribute("club", clubResponse);
 

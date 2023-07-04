@@ -204,7 +204,7 @@ body{/*컨테이너 배경*/
     text-align: right;
     max-width: 65%;
     padding: 12px;
-    background: #dcf8c6; 
+    background: #dcf8c6;
     border-radius: 10px;
     font-size: 0.9em;
     word-break: break-all;
@@ -216,7 +216,7 @@ body{/*컨테이너 배경*/
     text-align: center;
     max-width: 65%;
     padding: 12px;
-    background: #dcf8c6; 
+    background: #dcf8c6;
     border-radius: 10px;
     font-size: 0.9em;
     font-family: 'omyu_pretty';
@@ -412,6 +412,7 @@ body{/*컨테이너 배경*/
     width: 100%;
     height: 60px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     padding: 15px;
     border-bottom: 1px solid rgba(0,0,0,0.06);

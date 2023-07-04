@@ -452,17 +452,16 @@
                         <input type="text" class="form-control" id="inputTitle" name="title" th:value="${club.title}">
                     </div>
                     <div class="col-md-3">
-                        <label for="category" class="form-label">카테고리</label>
-                        <select id="category" class="form-select" name="categoryId">
-<!---->
+                        <label for="category" class="form-label">동네모임</label>
+                        <select id="category" class="form-select" name="hobbyName">
                             <th:block th:each="hobby:${hobby}">
-                                <option th:value="${hobby.hobbyName}" th:text="${hobby.hobbyName}" th:selected="${hobby.hobbyName eq hobby.hobbyName}"></option>
+                                <option th:value="${hobby.hobbyName}" th:text="${hobby.hobbyName}" th:selected="${club.hobbyName eq hobby.hobbyName}"></option>
                             </th:block>
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label for="inputPrice" class="form-label">인원</label>
-                        <input type="text" class="form-control" id="inputPrice" name="price" th:value="${club.maxMan}">
+                        <input type="text" class="form-control" id="inputPrice" name="maxMan" th:value="${club.maxMan}">
                     </div>
                     <div class="col-md-12">
                         <label for="files" class="form-label">첨부파일</label>

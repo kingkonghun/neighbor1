@@ -453,9 +453,8 @@
                         <input type="text" class="form-control" id="inputTitle" name="title" th:value="${dto.title}">
                     </div>
                     <div class="col-md-3">
-                        <label for="category" class="form-label">카테고리</label>
+                        <label for="category" class="form-label">중고거래</label>
                         <select id="category" class="form-select" name="categoryId">
-
                             <th:block th:each="category:${category}">
                                 <option th:value="${category.categoryId}" th:text="${category.categoryName}" th:selected="${dto.categoryId eq category.categoryId}"></option>
                             </th:block>

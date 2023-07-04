@@ -2,6 +2,7 @@ package com.anabada.neighbor.club.service;
 
 import com.anabada.neighbor.club.domain.ClubRequest;
 import com.anabada.neighbor.club.domain.ClubResponse;
+import com.anabada.neighbor.club.domain.Message;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.club.repository.ClubRepository;
