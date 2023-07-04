@@ -14,12 +14,16 @@
         <div class="int-area">
             <div class="email">
                 <input type="email" name="memberEmail" id="memberEmail" autocomplete="off" required>
+
                 <label for="memberEmail">이메일</label>
                 <button type="button" class="btn btn-sm" id="btnAuthentication">
                     인증
                 </button>
             </div>
         </div>
+
+        <div id="check" class="int-area" style="margin: 0px"></div>
+
         <div class="int-area">
             <input style="display: none;" type="text" name="random" id="random" required placeholder="메일에 전송된 문자 열을 입력 해 주세요.">
             <input type="hidden" name="random" id="authentication" required>
@@ -77,19 +81,43 @@
     let btnAuthentication = $('#btnAuthentication');
     let authentication = $('#authentication');
     let random = $('#random');
-
+    let email_ck = false;
     memberEmail.on("change",function (){
         $('.confirm').removeClass('confirm');
-        alert("이메일 인증 버튼을 눌러 주세요");
-        memberEmail.focus();
+        // alert("이메일 인증 버튼을 눌러 주세요");
     });
 
+    memberEmail.on("keyup", function () {
+        $.ajax({
+            type:"get",
+            data:{"memberEmail":memberEmail.val()},
+            url:"/member/emailCheck",
+            success: function (emailCk) {
+                if (emailCk) {
+                    console.log("사용가능");
+                    const emailCkDiv = $('<div class="emailCk_true"><span>사용 가능한 이메일 입니다.</span></div>');
+                    $("#check").empty().append(emailCkDiv);
+                    email_ck = emailCk;
+                } else {
+                    console.log("사용불가");
+                    const emailCkDiv = $('<div class="emailCk_false"><span>중복된 이메일 입니다.</span></div>');
+                    $("#check").empty().append(emailCkDiv);
+                    email_ck = false;
+                }
+            }
+        });
+    });
     $(btnAuthentication).on('click', function () {
+        console.log(email_ck);
+        if (email_ck == false) {
+            alert("중복된 이메일입니다. 다른 이메일을 사용해주세요.");
+            return false;
+        }
         if(memberEmail.val() != '') {
             $.ajax({
                 type: "post",
                 url: "/member/emailConfirm",
-                data: {memberEmail: memberEmail.val()},
+                data: {"memberEmail": memberEmail.val()},
                 success: function (data) {
                     alert('메일이 전송 되었습니다.\n 메일을 확인해 주세요');
                     random.css({
@@ -122,7 +150,7 @@
                 $('label').removeClass('warning');
             },1500);
             return false;
-        }else if (!document.getElementsByClassName('confirm')) {
+        }else if (!document.getElementsByClassName('confirm').length) {
             alert('이메일 인증 버튼을 눌러주세요');
             memberEmail.focus();
             return false;

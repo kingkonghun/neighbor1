@@ -18,7 +18,7 @@ public class EmailServiceImpl implements EmailService{
     
     private final JavaMailSender javaMailSender;
 
-    public static final String ePw = createKey();
+    private final String ePw = createKey();
 
     /**
      * 이메일 인증 코드 메시지 만들기
@@ -54,7 +54,7 @@ public class EmailServiceImpl implements EmailService{
     /**
      * 이메일 인증코드 만드는 로직 랜덤 함수 사용
      */
-    private static String createKey() {//암호키만들기
+    private String createKey() {//암호키만들기
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
 

@@ -114,5 +114,9 @@ public interface MbMemberRepository extends MemberRepository{
     @Override
     @Update("UPDATE member SET memberPWD=#{memberPWD} WHERE memberId=#{memberId} ")
     void editPwd(@Param("memberPWD") String memberPWD, @Param("memberId") long memberId);
+
+    @Override
+    @Select("SELECT count(*) FROM member WHERE providerId = #{memberEmail}")
+    int emailCheck(String memberEmail);
 }
 

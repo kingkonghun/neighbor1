@@ -76,4 +76,11 @@ public interface MemberService {
     int getClubTotal(long memberId);
 
     public int getMyAllTotal(long memberId);
+
+    /**
+     * 이메일 중복체크
+     * @param memberEmail
+     * @return
+     */
+    boolean emailCk(String memberEmail);
 }
