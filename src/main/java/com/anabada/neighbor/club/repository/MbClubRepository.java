@@ -1,7 +1,7 @@
 package com.anabada.neighbor.club.repository;
 
-import com.anabada.neighbor.club.domain.ImageRequest;
-import com.anabada.neighbor.club.domain.ImageResponse;
+import com.anabada.neighbor.file.domain.FileRequest;
+import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.member.domain.Member;
@@ -29,7 +29,7 @@ public interface MbClubRepository extends ClubRepository {
     @Insert("insert into file(" +
             "imgId, postId, origName, saveName, size, deleteYn, creaDate, deleDate)" +
             "values(#{imgId}, #{postId}, #{origName}, #{saveName}, #{size}, 0, now(), null)")
-    void insertImage(ImageRequest imageRequest);
+    void insertFile(FileRequest fileRequest);
 
     @Override
     @Update("update post" +
@@ -66,12 +66,12 @@ public interface MbClubRepository extends ClubRepository {
 
     @Override
     @Select("select * from file where deleteYn = 0 and postId = #{postId} order by imgId")
-    List<ImageResponse> selectImagesByPostId(Long postId);
+    List<FileResponse> selectImagesByPostId(Long postId);
 
     @Override
     @Select("select * from file" +
             " where deleteYn = 0 and imgId = #{imgId} order by imgId")
-    ImageResponse selectImageByImgId(Long imgId);
+    FileResponse selectImageByImgId(Long imgId);
 
     @Override
     @Delete("update file set deleteYn = 1, deleDate = NOW()" +

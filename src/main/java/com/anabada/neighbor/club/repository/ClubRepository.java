@@ -1,7 +1,7 @@
 package com.anabada.neighbor.club.repository;
 
-import com.anabada.neighbor.club.domain.ImageRequest;
-import com.anabada.neighbor.club.domain.ImageResponse;
+import com.anabada.neighbor.file.domain.FileRequest;
+import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.member.domain.Member;
@@ -23,9 +23,9 @@ public interface ClubRepository {
 
     /**
      * 요청받은 이미지 정보 db에 넣기
-     * @param imageRequest 이미지요청
+     * @param fileRequest 이미지요청
      */
-    public void insertImage(ImageRequest imageRequest);
+    public void insertFile(FileRequest fileRequest);
 
     /**
      * 업데이트 포스트
@@ -50,14 +50,14 @@ public interface ClubRepository {
      * @param postId 게시글 번호 FK
      * @return 이미지 리스트
      */
-    public List<ImageResponse> selectImagesByPostId(Long postId);
+    public List<FileResponse> selectImagesByPostId(Long postId);
 
     /**
      * 이미지 리스트 조회
      * @param imgId PK
      * @return 이미지 정보
      */
-    public ImageResponse selectImageByImgId(Long imgId);
+    public FileResponse selectImageByImgId(Long imgId);
 
     /**
      * 이미지 삭제

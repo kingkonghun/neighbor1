@@ -1,7 +1,6 @@
 package com.anabada.neighbor.club;
 
-import com.anabada.neighbor.club.domain.ClubResponse;
-import com.anabada.neighbor.club.domain.ImageResponse;
+import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.used.domain.Post;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -80,8 +79,8 @@ public class ClubTest {
     }
 
     @Test
-    public Stream<Path> loadAll(ImageResponse file) {
-        String uploadedDate = file.getCreaDate().toLocalDate().format(DateTimeFormatter.ofPattern("yyMMdd"));
+    public Stream<Path> loadAll(FileResponse file) {
+        String uploadedDate = file.getCreatedDate().toLocalDate().format(DateTimeFormatter.ofPattern("yyMMdd"));
         String filename = file.getSaveName();
         Path filePath = Paths.get(uploadPath, uploadedDate, filename);
         System.out.println("update : " + uploadedDate);

@@ -1,6 +1,9 @@
 package com.anabada.neighbor.used.service;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.domain.FileRequest;
+import com.anabada.neighbor.file.service.FileService;
+import com.anabada.neighbor.file.service.FileUtils;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.repository.MemberRepository;
 import com.anabada.neighbor.page.Criteria;
@@ -28,6 +31,9 @@ public class UsedServiceImpl implements UsedService{
     private final UsedRepository usedRepository;
     private final ImgDownService imgDownService;
     private final MemberRepository memberRepository;
+    private final FileService fileService;
+    private final FileUtils fileUtils;
+
     final String UPLOAD_DIR = "C:\\upload_anabada\\";
 //    final String UPLOAD_DIR = "/Users/upload_anabada/";
 
@@ -158,20 +164,23 @@ public class UsedServiceImpl implements UsedService{
         used.setMemberId(principalDetails.getMember().getMemberId()); // security 에 있는 memberId를 used에 넣음
         usedRepository.writePost(used); // post 테이블에 insert
         usedRepository.writeProduct(used); //product 테이블에 insert
-        try { // 이미지 업로드 관련
-            if (!Files.exists(Paths.get(UPLOAD_DIR))) {
-                Files.createDirectories(Paths.get(UPLOAD_DIR));
-            }
-            for (MultipartFile file : used.getFiles()) {
-                String uuid = UUID.randomUUID().toString();
-                String fileName = uuid + "_" + file.getOriginalFilename();
-                String filePath = UPLOAD_DIR + File.separator + fileName;
-                file.transferTo(new File(filePath));
-                usedRepository.writeImage(used.getPostId(),fileName); // img 테이블에 insert
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        List<FileRequest> images = fileUtils.uploadFiles(used.getFiles());
+        fileService.saveFiles(used.getPostId(), images);
+//        try { // 이미지 업로드 관련
+//            if (!Files.exists(Paths.get(UPLOAD_DIR))) {
+//                Files.createDirectories(Paths.get(UPLOAD_DIR));
+//            }
+//            for (MultipartFile file : used.getFiles()) {
+//                String uuid = UUID.randomUUID().toString();
+//                String fileName = uuid + "_" + file.getOriginalFilename();
+//                String filePath = UPLOAD_DIR + File.separator + fileName;
+//                file.transferTo(new File(filePath));
+//                usedRepository.writeImage(used.getPostId(),fileName); // img 테이블에 insert
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**

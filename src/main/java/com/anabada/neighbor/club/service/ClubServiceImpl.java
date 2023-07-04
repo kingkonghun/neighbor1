@@ -5,6 +5,9 @@ import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.domain.FileRequest;
+import com.anabada.neighbor.file.domain.FileResponse;
+import com.anabada.neighbor.file.service.FileService;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Likes;
 import com.anabada.neighbor.used.domain.Post;
@@ -26,12 +29,12 @@ import java.util.List;
 @Service
 public class ClubServiceImpl implements ClubService {
     private final ClubRepository clubRepository;
-    private final UsedRepository usedRepository;
+    private final FileService fileService;
 
     @Autowired
-    public ClubServiceImpl(ClubRepository clubRepository, UsedRepository usedRepository) {
+    public ClubServiceImpl(ClubRepository clubRepository, FileService fileService) {
         this.clubRepository = clubRepository;
-        this.usedRepository = usedRepository;
+        this.fileService = fileService;
     }
 
     @Transactional
@@ -52,13 +55,13 @@ public class ClubServiceImpl implements ClubService {
     }
     @Transactional
     @Override
-    public int saveImages(Long postId, List<ImageRequest> images) {
+    public int saveImages(Long postId, List<FileRequest> images) {
         if (CollectionUtils.isEmpty(images)) {//리스트의 길이가 0이면 0으로 리턴
             return 0;
         }
-        for (ImageRequest image : images) {
+        for (FileRequest image : images) {
             image.setPostId(postId);
-            clubRepository.insertImage(image);
+            clubRepository.insertFile(image);
         }
         return 1;
     }
@@ -69,7 +72,7 @@ public class ClubServiceImpl implements ClubService {
      * @return 이미지 리스트
      */
     @Override
-    public List<ImageResponse> findAllImageByPostId(Long postId) {
+    public List<FileResponse> findAllImageByPostId(Long postId) {
         return clubRepository.selectImagesByPostId(postId);
     }
 
@@ -80,11 +83,11 @@ public class ClubServiceImpl implements ClubService {
      * @return 이미지
      */
     @Override
-    public List<ImageResponse> findAllImageByImgIds(List<Long> imgIds) {
+    public List<FileResponse> findAllImageByImgIds(List<Long> imgIds) {
         if (CollectionUtils.isEmpty(imgIds)){
             return Collections.emptyList();//비어있는 리스트 반환
         }
-        List<ImageResponse> result = new ArrayList<>();
+        List<FileResponse> result = new ArrayList<>();
         for(Long imgId : imgIds) {
             result.add(clubRepository.selectImageByImgId(imgId));
         }
@@ -92,7 +95,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public ImageResponse findImageByImgId(Long imgId) {
+    public FileResponse findImageByImgId(Long imgId) {
         return clubRepository.selectImageByImgId(imgId);
     }
 
@@ -152,6 +155,7 @@ public class ClubServiceImpl implements ClubService {
                 .likesCount(likesCount)
                 .likesCheck(likesCheck)
                 .ImageResponseList(clubRepository.selectImagesByPostId(postId))//여기까지완성
+                .fileResponseList(fileService.findAllFileByPostId(postId))//여기까지완성
                 .maxMan(club.getMaxMan())
                 .nowMan(club.getNowMan())
                 .address(address)
@@ -238,33 +242,7 @@ public class ClubServiceImpl implements ClubService {
             return null;
         }
         return result.subList(num,Math.min(result.size(),num+6));
-
-//        for (Post p : postList) {
-//            Club club = clubRepository.selectClub(p.getPostId());//클럽객체가져오기
-//            if (club == null) { //클럽 널체크
-//                continue;
-//            }
-//            Member member = clubRepository.selectMember(p.getMemberId());//멤버객체가져오기
-//            ClubResponse temp = ClubResponse.builder()
-//                    .postId(p.getPostId())
-//                    .memberId(p.getMemberId())
-//                    .memberName(member.getMemberName())
-//                    .title(p.getTitle())
-//                    .content(p.getContent())
-//                    .hobbyName(clubRepository.selectHobbyName(club.getHobbyId()))
-//                    .score(member.getScore())
-//                    .maxMan(club.getMaxMan())
-//                    .nowMan(club.getNowMan())
-//                    .build();
-//            if (temp.getTitle().indexOf(search) != -1 || temp.getContent().indexOf(search) != -1) {
-//                result.add(temp);
-//            }
-//        }
-//
-//        if(num >= result.size()){
-//            return null;
-//        }
-//        return result.subList(num,Math.min(result.size(),num+6));
+//        return result;
     }
 
     @Override

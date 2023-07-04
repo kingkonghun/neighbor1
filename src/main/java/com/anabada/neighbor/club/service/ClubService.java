@@ -4,6 +4,8 @@ import com.anabada.neighbor.club.domain.*;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.domain.FileRequest;
+import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.used.domain.Post;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,14 +34,14 @@ public interface ClubService {
      * @param images 요청받은 이미지리스트
      * @return 성공하면 1, 실패 or 이미지가없으면 0 리턴
      */
-    public int saveImages(final Long postId, final List<ImageRequest> images);//이미지저장
+    public int saveImages(final Long postId, final List<FileRequest> images);//이미지저장
 
     /**
      * 이미지 리스트 조회
      * @param postId 게시글 번호 FK
      * @return 파일 리스트
      */
-    public List<ImageResponse> findAllImageByPostId(Long postId);
+    public List<FileResponse> findAllImageByPostId(Long postId);
 
     /**
      * 이미지 리스트 조회
@@ -47,9 +49,9 @@ public interface ClubService {
      * @param imgIds PK 리스트
      * @return 이미지 리스트
      */
-    public List<ImageResponse> findAllImageByImgIds(List<Long> imgIds);
+    public List<FileResponse> findAllImageByImgIds(List<Long> imgIds);
 
-    public ImageResponse findImageByImgId(Long imgId);
+    public FileResponse findImageByImgId(Long imgId);
     /**
      * 이미지 삭제 (from DateBase)
      *
