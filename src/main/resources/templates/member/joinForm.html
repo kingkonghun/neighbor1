@@ -5,7 +5,43 @@
     <title>join</title>
     <th:block th:insert="/common/common :: fragment-header"></th:block>
     <link th:href="@{/css/join.css}" rel="stylesheet" type="text/css">
-
+    <style>
+    body{
+            height: 95vh;
+            display: grid;
+            place-content: center;
+        }
+        .save-btn{
+            font-size: 16px;
+            color: #fff;
+            background: #19ca8e;
+            width: 68px;
+            height: 30px;
+            cursor: pointer;
+            border-radius: 3px;
+border: none;
+            display: grid;
+            place-content: center;
+            transition: 10; 원하는 시간 조절
+        }
+        .loader{/*돌아가는거*/
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #fff;
+            animation: anl 1s ease infinite;
+        }
+        @keyframes anl{
+            0%{
+                transform: rotate(0turn);
+            }
+            100%{
+                transform: rotate(1turn);
+            }
+        }
+</style>
 </head>
 <body>
 <section class="login-form">
@@ -14,13 +50,19 @@
         <div class="int-area">
             <div class="email">
                 <input type="email" name="memberEmail" id="memberEmail" autocomplete="off" required>
-
                 <label for="memberEmail">이메일</label>
-                <button type="button" class="btn btn-sm" id="btnAuthentication">
+                <button type="button" class="save-btn btn-sm" id="btnAuthentication">
                     인증
                 </button>
             </div>
         </div>
+        <script>/*인증용 버튼 정훈*/
+        save_btn = document.querySelector(".save-btn");
+
+        save_btn.onclick = function(){
+
+        }
+    </script>
 
         <div id="check" class="int-area" style="margin: 0px"></div>
 
@@ -108,11 +150,19 @@
         });
     });
     $(btnAuthentication).on('click', function () {
+
+
+
         console.log(email_ck);
         if (email_ck == false) {
             alert("중복된 이메일입니다. 다른 이메일을 사용해주세요.");
             return false;
         }
+        this.innerHTML = "<div class = 'loader'></div>";
+        setTimeout(() => {/*로딩완료시*/
+            this.style = "background: #f1f5f4; color: #333; pointer-events=none";
+        }, 10000)
+
         if(memberEmail.val() != '') {
             $.ajax({
                 type: "post",
@@ -126,6 +176,7 @@
                     authentication.val(data);
                     random.focus();
                     memberEmail.addClass('confirm');//이메일 인증완료 클래스
+                    $("#btnAuthentication").html("인증");
                 }
             });
         }else alert('이메일을 입력해 주세요');
