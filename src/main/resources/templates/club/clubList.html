@@ -145,7 +145,7 @@
     <div id="list" class="row">
         <article class="col col-xl-6 col-lg-6 col-md-12 col-sm-12 pb-5" th:each="club : ${clubList}">
             <div class="item p-3" th:onclick="|location.href='@{clubDetail(postId=${club.postId})}'|">
-                <img class="list_img" src="https://cdn.pixabay.com/photo/2015/07/28/22/05/child-865116_1280.jpg">
+                <img class="list_img" th:src="@{${club.fileInfo.url}}">
                 <div class="text">
                     <h5 th:text="${club.title}"></h5>
                     <span class="content" th:text="${club.content}"></span><!--내용 10자이내로-->

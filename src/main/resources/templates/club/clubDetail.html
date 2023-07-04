@@ -453,7 +453,6 @@
                     <div class="col-md-3">
                         <label for="category" class="form-label">카테고리</label>
                         <select id="category" class="form-select" name="categoryId">
-<!---->
                             <th:block th:each="hobby:${hobby}">
                                 <option th:value="${hobby.hobbyName}" th:text="${hobby.hobbyName}" th:selected="${hobby.hobbyName eq hobby.hobbyName}"></option>
                             </th:block>

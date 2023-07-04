@@ -220,6 +220,7 @@ public class ClubServiceImpl implements ClubService {
                     .score(member.getScore())
                     .maxMan(club.getMaxMan())
                     .nowMan(club.getNowMan())
+                    .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))//여기까지완성
                     .address(address)
                     .replyCount(replyCount)
                     .likesCount(likesCount)
