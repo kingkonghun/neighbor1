@@ -35,12 +35,13 @@ public interface MbClubRepository extends ClubRepository {
     @Update("update post" +
             " set title = #{title}, content=#{content}, postUpdate= now()" +
             " where postId = #{postId}")
-    void updatePost(Post post);
+    int updatePost(Post post);
 
     @Override
     @Update("update club" +
-            " set hobbyId = #{hobbyId}, maxMan = #{maxMan}")
-    void updateClub(Club club);
+            " set hobbyId = #{hobbyId}, maxMan = #{maxMan}" +
+            " where postId = #{postId}")
+    int updateClub(Club club);
 
     @Override
     @Delete("update post" +
