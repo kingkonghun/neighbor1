@@ -1,6 +1,7 @@
 package com.anabada.neighbor.used.controller;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.domain.FileInfo;
 import com.anabada.neighbor.file.service.FileService;
 import com.anabada.neighbor.file.service.FileUtils;
 import com.anabada.neighbor.page.Criteria;
@@ -37,7 +38,10 @@ public class UsedController {
     @GetMapping("/list") //게시물 리스트
     public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model, @RequestParam(value = "num", defaultValue = "0") int num, @RequestParam(value = "search", defaultValue = "") String search) {
         List<Used> list = usedService.list(categoryId, "list", num, search, 0);
-
+        for (Used used : list) {
+            List<FileInfo> fileInfoList = fileUtils.getFileInfo(used.getFileResponseList());
+            used.setFileInfo(fileInfoList.get(0));
+        }
 
         model.addAttribute("list", list);
         model.addAttribute("category",usedService.categoryList());
