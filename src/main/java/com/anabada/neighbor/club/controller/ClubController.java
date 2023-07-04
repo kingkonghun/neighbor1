@@ -81,10 +81,13 @@ public class ClubController {
             hobbyId = 0L;
         }
         List<ClubResponse> list = clubService.findClubList(num, hobbyId, search, "list", 0);
-        for (ClubResponse clubResponse : list) {
-            List<FileInfo> fileInfoList = fileUtils.getFileInfo(clubResponse.getFileResponseList());
-            clubResponse.setFileInfo(fileInfoList.get(0));
+        if (list != null) {
+            for (ClubResponse clubResponse : list) {
+                List<FileInfo> fileInfoList = fileUtils.getFileInfo(clubResponse.getFileResponseList());
+                clubResponse.setFileInfo(fileInfoList.get(0));
+            }
         }
+
 
         model.addAttribute("clubList", list);
         model.addAttribute("hobby", clubService.findHobbyName());
