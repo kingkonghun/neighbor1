@@ -68,7 +68,7 @@ public class UsedServiceImpl implements UsedService{
                     .memberId(member.getMemberId())
                     .address(address)
                     .memberName(member.getMemberName())
-//                    .profileImg(member.getProfileImg().getOriginalFilename())
+                    .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                     .score(member.getScore())
                     .memberStatus(member.getMemberStatus())
                     .replyCount(replyCount)
@@ -165,8 +165,8 @@ public class UsedServiceImpl implements UsedService{
         usedRepository.writePost(used); // post 테이블에 insert
         usedRepository.writeProduct(used); //product 테이블에 insert
 
-//        List<FileRequest> images = fileUtils.uploadFiles(used.getFiles());
-//        fileService.saveFiles(used.getPostId(), images);
+        List<FileRequest> images = fileUtils.uploadFiles(used.getFiles());
+        fileService.saveFiles(used.getPostId(), images);
 //        try { // 이미지 업로드 관련
 //            if (!Files.exists(Paths.get(UPLOAD_DIR))) {
 //                Files.createDirectories(Paths.get(UPLOAD_DIR));
@@ -284,12 +284,12 @@ public class UsedServiceImpl implements UsedService{
                 .memberId(member.getMemberId())
                 .address(address)
                 .memberName(member.getMemberName())
-//                .profileImg(member.getProfileImg().getOriginalFilename())
                 .score(member.getScore())
                 .memberStatus(member.getMemberStatus())
                 .replyCount(replyCount)
                 .likesCount(likesCount)
                 .likesCheck(likesCheck)
+                .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                 .build();
     }
 

@@ -98,13 +98,16 @@ public class ClubController {
                              HttpServletRequest request, HttpServletResponse response,
                              @AuthenticationPrincipal PrincipalDetails principalDetails) {
         ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
-
+        List<ClubResponse> similarList = clubService.findClubList(0, clubService.findHobbyId(clubResponse.getHobbyName()), "", "similarList", postId);
         List<FileResponse> files = clubResponse.getFileResponseList();
-
         List<FileInfo> fileInfoList = fileUtils.getFileInfo(files);
 
-        model.addAttribute("images", fileInfoList);
-        model.addAttribute("club", clubResponse);
+        if (similarList != null) {
+            for (ClubResponse clubResponse1 : similarList) {
+                List<FileInfo> fileInfoList1 = fileUtils.getFileInfo(clubResponse1.getFileResponseList());
+                clubResponse1.setFileInfo(fileInfoList1.get(0));
+            }
+        }
 
         Cookie[] cookies = request.getCookies(); //쿠키 가져오기
 
@@ -127,7 +130,7 @@ public class ClubController {
         model.addAttribute("club", clubResponse);
         model.addAttribute("postId", postId);
         model.addAttribute("hobby", clubService.findHobbyName());
-        model.addAttribute("similarList", clubService.findClubList(0, clubService.findHobbyId(clubResponse.getHobbyName()), "", "similarList", postId));
+        model.addAttribute("similarList", similarList );
         model.addAttribute("roomId", chattingService.findRoomId(postId));
         model.addAttribute("reportType", usedService.reportType());
         return "club/clubDetail";

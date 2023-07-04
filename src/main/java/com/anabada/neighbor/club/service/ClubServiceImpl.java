@@ -313,6 +313,7 @@ public class ClubServiceImpl implements ClubService {
                     .title(post.getTitle())
                     .content(post.getContent())
                     .hobbyName(clubRepository.selectHobbyName(club.getHobbyId()))
+                    .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                     .score(member.getScore())
                     .maxMan(club.getMaxMan())
                     .nowMan(club.getNowMan())
