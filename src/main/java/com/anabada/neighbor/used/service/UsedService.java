@@ -79,21 +79,46 @@ public interface UsedService {
 
     void reportOk(ReportOk reportOk);
 
-    int countLikePost(long memberId);
-
     /**
      * 판매완료
      * @param postId
      */
     void soldOut(long postId, long receiver, PrincipalDetails principalDetails);
 
+    /**
+     * 구매목록
+     * @param principalDetails
+     * @param criteria 페이징
+     * @return
+     */
     List<Used> purchase(PrincipalDetails principalDetails,Criteria criteria);
 
+    /**
+     * 판매목록
+     * @param principalDetails
+     * @param criteria 페이징
+     * @return
+     */
     List<Used> sales(PrincipalDetails principalDetails,Criteria criteria);
 
+    /**
+     * 페이징처리를 위한 총 갯수
+     * @param memberId
+     * @return
+     */
     int countPurchase(long memberId);
 
+    /**
+     * 페이징처리를 위한 총 갯수
+     * @param memberId
+     * @return
+     */
     int countSales(long memberId);
 
+    /**
+     * 페이징처리를 위한 총 갯수
+     * @param memberId
+     * @return
+     */
     int countMyLikePost(long memberId);
 }

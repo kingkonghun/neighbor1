@@ -104,9 +104,23 @@ public interface ClubService {
      * @return 성공시 1 실패시 0
      */
     void updateNowMan(int num, Long clubId);
+
+    /**
+     * 취미 이름 가져오기
+     * @return
+     */
     List<Hobby> findHobbyName();
 
+    /**
+     * 조회수 늘리기
+     * @param postId 글ID
+     *
+     */
     void updatePostView(Long postId);
 
+    /**
+     *
+     * @return 인덱스페이지에 뿌리는 동네모임 글
+     */
     List<ClubResponse> mainList();
 }

@@ -429,10 +429,7 @@ public class UsedServiceImpl implements UsedService{
         usedRepository.deletePost(report.getPostId()); // post 삭제처리(postType 을 'del' 로 update)
     }
 
-    @Override
-    public int countLikePost(long memberId) {
-        return usedRepository.findLikesCount(memberId);
-    }
+
 
 
     /**
