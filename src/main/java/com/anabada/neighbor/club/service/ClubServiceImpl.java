@@ -14,6 +14,7 @@ import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.domain.Used;
 import com.anabada.neighbor.used.repository.UsedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -53,67 +54,6 @@ public class ClubServiceImpl implements ClubService {
             return post.getPostId();
         }//게시글이 성공적으로 등록되었으면 postId 반환 실패하였으면 -1반환
         return -1;
-    }
-    @Transactional
-    @Override
-    public int saveImages(Long postId, List<FileRequest> images) {
-        if (CollectionUtils.isEmpty(images)) {//리스트의 길이가 0이면 0으로 리턴
-            return 0;
-        }
-        for (FileRequest image : images) {
-            image.setPostId(postId);
-            clubRepository.insertFile(image);
-        }
-        return 1;
-    }
-
-    /**
-     * 이미지 리스트 조회
-     * @param postId 게시글 번호 FK
-     * @return 이미지 리스트
-     */
-    @Override
-    public List<FileResponse> findAllImageByPostId(Long postId) {
-        return clubRepository.selectImagesByPostId(postId);
-    }
-
-    /**
-     * 이미지 조회
-     *
-     * @param imgIds PK
-     * @return 이미지
-     */
-    @Override
-    public List<FileResponse> findAllImageByImgIds(List<Long> imgIds) {
-        if (CollectionUtils.isEmpty(imgIds)){
-            return Collections.emptyList();//비어있는 리스트 반환
-        }
-        List<FileResponse> result = new ArrayList<>();
-        for(Long imgId : imgIds) {
-            result.add(clubRepository.selectImageByImgId(imgId));
-        }
-        return result;
-    }
-
-    @Override
-    public FileResponse findImageByImgId(Long imgId) {
-        return clubRepository.selectImageByImgId(imgId);
-    }
-
-    /**
-     * 이미지 삭제(from DataBase)
-     *
-     * @param imgIds PK
-     */
-    @Transactional
-    @Override
-    public void deleteAllImageByImgIds(List<Long> imgIds) {
-        if (CollectionUtils.isEmpty(imgIds)) {
-            return;
-        }
-        for (Long imgId : imgIds) {
-            clubRepository.deleteImageByImgId(imgId);
-        }
     }
 
     @Override
@@ -160,6 +100,42 @@ public class ClubServiceImpl implements ClubService {
                 .nowMan(club.getNowMan())
                 .address(address)
                 .build();
+    }
+
+    /**
+     * clubRequest -> Post 로 변환
+     * @param clubRequest 사용자가 보낸 게시글
+     * @param principalDetails 사용자 정보
+     * @return Post 객체
+     */
+    @Override
+    public Post clubRequestToPost(ClubRequest clubRequest
+            , @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Post post = Post.builder()
+                .memberId(principalDetails.getMember().getMemberId())
+                .title(clubRequest.getTitle())
+                .content(clubRequest.getContent())
+                .postType("club")
+                .build();
+        return post;
+    }
+
+    /**
+     * clubRequest -> Club 으로 변환
+     * @param clubRequest 사용자가 보낸 게시글
+     * @param principalDetails 사용자 정보
+     * @return Club 객체
+     */
+    @Override
+    public Club clubRequestToClub(ClubRequest clubRequest
+            , @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Club club = Club.builder()
+                .postId(clubRequest.getPostId())
+                .memberId(principalDetails.getMember().getMemberId())
+                .hobbyId(findHobbyId(clubRequest.getHobbyName()))
+                .maxMan(clubRequest.getMaxMan())
+                .build();
+        return club;
     }
 
     @Transactional

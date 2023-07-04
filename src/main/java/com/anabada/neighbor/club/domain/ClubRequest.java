@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 @Builder
 public class ClubRequest {
+    private Long postId;
     private Long memberId; //Long 으로 하는이유는 프론트에서 null 값으로 들어올 수 있기 때문
     private String title;//제목
     private String content;//내용

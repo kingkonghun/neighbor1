@@ -29,45 +29,16 @@ public interface ClubService {
     public long savePost(Post post);//생성된 게시글의 postId 반환
 
     /**
-     * 이미지 정보 db저장
-     * @param postId 게시물아이디 pk
-     * @param images 요청받은 이미지리스트
-     * @return 성공하면 1, 실패 or 이미지가없으면 0 리턴
-     */
-    public int saveImages(final Long postId, final List<FileRequest> images);//이미지저장
-
-    /**
-     * 이미지 리스트 조회
-     * @param postId 게시글 번호 FK
-     * @return 파일 리스트
-     */
-    public List<FileResponse> findAllImageByPostId(Long postId);
-
-    /**
-     * 이미지 리스트 조회
-     *
-     * @param imgIds PK 리스트
-     * @return 이미지 리스트
-     */
-    public List<FileResponse> findAllImageByImgIds(List<Long> imgIds);
-
-    public FileResponse findImageByImgId(Long imgId);
-    /**
-     * 이미지 삭제 (from DateBase)
-     *
-     * @param imgIds PK 리스트
-     */
-    public void deleteAllImageByImgIds(List<Long> imgIds);
-
-    /**
      * 게시글 상세정보 조회
-     *
-     * @param postId           pk
-     * @param principalDetails
+     * @param postId PK
+     * @param principalDetails 현재 사용자 정보
      * @return 게시글 상세정보
      */
     public ClubResponse findClub(long postId, PrincipalDetails principalDetails);
 
+    public Post clubRequestToPost(ClubRequest clubRequest, PrincipalDetails principalDetails);
+
+    public Club clubRequestToClub(ClubRequest clubRequest, PrincipalDetails principalDetails);
 
     public long updatePost(Post post);
 

@@ -59,20 +59,6 @@ public class ClubController {
         return num <= 0 ? "club/clubList" : "club/clubListPlus";
     }
 
-
-//    //게시글 작성 페이지
-//    @GetMapping("/clubSave")
-//    public String clubSave(@RequestParam(value = "postId", required = false) Long postId
-//            , HttpSession session, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-//        if (postId != null) {//postId가 있으면 검색해서 정보 가져오기
-//            ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
-//            model.addAttribute("club", clubResponse);
-//        } else {
-//            model.addAttribute("club", new ClubResponse());
-//        }
-//        return "club/clubSave";
-//    }
-
     @PostMapping("/clubSave")
     public String clubSave(ClubRequest clubRequest, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         // 게시글 객체에 담기
@@ -146,39 +132,44 @@ public class ClubController {
         return "club/clubDetail";
     }
 
-    @GetMapping("/club/update")
-    @ResponseBody
-    public ClubResponse update(@RequestParam(value = "postId") Long postId, Model model
-            , @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        //  로그인 안했을때
-        if (principalDetails == null) {
-//            return "redirect:clubDetail?postId=" + postId;
-            return null;
-        }
-        ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
-        //  게시글 작성자가 아닐때
-        if (principalDetails.getMember().getMemberId() != clubResponse.getMemberId()) {
-//            return "redirect:clubDetail?postId=" + postId;
-            return null;
-        }
-        model.addAttribute("club", clubResponse);
-        return clubResponse;
-    }
-
-//    @PostMapping("/club/update")
-//    public String update(ClubRequest clubRequest, Model model
+//    @GetMapping("/club/update")
+//    @ResponseBody
+//    public ClubResponse update(@RequestParam(value = "postId") Long postId, Model model
 //            , @AuthenticationPrincipal PrincipalDetails principalDetails) {
 //        //  로그인 안했을때
 //        if (principalDetails == null) {
-//            return "redirect:clubDetail?postId=" + postId;
+////            return "redirect:clubDetail?postId=" + postId;
+//            return null;
 //        }
 //        ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
 //        //  게시글 작성자가 아닐때
 //        if (principalDetails.getMember().getMemberId() != clubResponse.getMemberId()) {
-//            return "redirect:clubDetail?postId=" + postId;
+////            return "redirect:clubDetail?postId=" + postId;
+//            return null;
 //        }
-//        clubService.updatePost()
+//        model.addAttribute("club", clubResponse);
+//        System.out.println(clubResponse.getFileResponseList());
+//        return clubResponse;
 //    }
+
+    @PostMapping("/club/update")
+    public String update(ClubRequest clubRequest, Model model
+            , @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        //  로그인 안했을때
+        if (principalDetails == null) {
+            return "redirect:clubDetail?postId=" + clubRequest.getPostId();
+        }
+        ClubResponse clubResponse = clubService.findClub(clubRequest.getPostId(), principalDetails);
+        //  게시글 작성자가 아닐때
+        if (principalDetails.getMember().getMemberId() != clubResponse.getMemberId()) {
+            return "redirect:clubDetail?postId=" + clubRequest.getPostId();
+        }
+        Post post = clubService.clubRequestToPost(clubRequest, principalDetails);
+        clubService.updatePost(post);
+        Club club = clubService.clubRequestToClub(clubRequest, principalDetails);
+        clubService.updateClub(club);
+        return "redirect:clubDetail?postId=" + post.getPostId();
+    }
 
     @GetMapping("/clubRemove")
     public String clubRemove(@RequestParam(value = "postId") Long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
