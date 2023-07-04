@@ -38,7 +38,7 @@ public interface FileService {
 
     /**
      * 이미지 삭제 (from DateBase)
-     * @param ids PK 리스트
+     * @param fileResponses 파일정보 리스트
      */
-    public void deleteAllFileByIds(List<Long> ids);
+    public void deleteAllFileByIds(List<FileResponse> fileResponses);
 }

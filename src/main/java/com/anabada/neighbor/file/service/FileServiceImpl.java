@@ -57,12 +57,12 @@ public class FileServiceImpl implements FileService {
 
     @Transactional
     @Override
-    public void deleteAllFileByIds(List<Long> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
+    public void deleteAllFileByIds(List<FileResponse> fileResponses) {
+        if (CollectionUtils.isEmpty(fileResponses)) {
             return;
         }
-        for (Long id : ids) {
-            fileRepository.deleteFileById(id);
+        for (FileResponse file : fileResponses) {
+            fileRepository.deleteFileById(file.getId());
         }
     }
 

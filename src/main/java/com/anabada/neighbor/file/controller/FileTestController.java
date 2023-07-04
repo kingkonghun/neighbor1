@@ -40,21 +40,21 @@ public class FileTestController {
         return "upload_form";
     }
 
-    @GetMapping("/images")
-    public String getListImages(Model model) {
-        System.out.println(storageService.loadAll().collect(Collectors.toList()));
-        List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
-            String filename = path.getFileName().toString();
-            String url = MvcUriComponentsBuilder
-                    .fromMethodName(FileTestController.class, "getImage"
-                            , path.getFileName().toString(), "1").build().toString();
-            return new FileInfo(filename, url);
-        }).collect(Collectors.toList());
-        System.out.println(fileInfos);
-
-        model.addAttribute("images", fileInfos);
-
-        return "images";
-    }
+//    @GetMapping("/images")
+//    public String getListImages(Model model) {
+//        System.out.println(storageService.loadAll().collect(Collectors.toList()));
+//        List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
+//            String filename = path.getFileName().toString();
+//            String url = MvcUriComponentsBuilder
+//                    .fromMethodName(FileTestController.class, "getImage"
+//                            , path.getFileName().toString(), "1").build().toString();
+//            return new FileInfo(filename, url);
+//        }).collect(Collectors.toList());
+//        System.out.println(fileInfos);
+//
+//        model.addAttribute("images", fileInfos);
+//
+//        return "images";
+//    }
 
 }

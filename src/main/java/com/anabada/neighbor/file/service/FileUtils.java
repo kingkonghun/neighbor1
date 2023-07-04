@@ -7,6 +7,8 @@ import com.anabada.neighbor.file.domain.FileResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -77,7 +80,7 @@ public class FileUtils {
      * @return 이미지 리소스
      */
     public Resource load(String saveName, String addPath) {
-        Path file = Paths.get(uploadPath + File.separator + addPath + File.separator + saveName);//여기서 현재날짜 경로문제 발생 해결해야함
+        Path file = Paths.get(uploadPath + File.separator + addPath + File.separator + saveName);
         try {
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
@@ -86,6 +89,51 @@ public class FileUtils {
                 throw new RuntimeException("파일을 찾을 수 없습니다.");
             }
         } catch (MalformedURLException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 파일 삭제 (from Disk)
+     * @param files - 삭제할 파일 정보 List
+     */
+    public void deleteFiles(final List<FileResponse> files) {
+        if (CollectionUtils.isEmpty(files)) {
+            return ;    // 리스트가 비어있으면 그냥 리턴
+        }
+        for (FileResponse file : files) {
+            String uploadedDate = file.getCreatedDate().toLocalDate()
+                    .format(DateTimeFormatter.ofPattern("yyMMdd"));
+            deleteFile(uploadedDate, file.getSaveName());
+        }
+    }
+
+    /**
+     * 파일 삭제 (from Disk)
+     * @param addPath  추가 경로
+     * @param fileName  파일명
+     */
+    private void deleteFile(final String addPath, final String fileName) {
+        String filePath = Paths.get(uploadPath, addPath, fileName).toString();
+        deleteFile(filePath);
+    }
+
+    /**
+     * 파일 삭제 (from Disk)
+     * @param filePath 파일 경로
+     */
+    private void deleteFile(String filePath) {
+        File file = new File(filePath);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
+    public boolean delete(String saveName, String addPath){
+        Path file = Paths.get(uploadPath + File.separator + addPath + File.separator + saveName);
+        try {
+            return Files.deleteIfExists(file);
+        } catch (IOException e) {
             throw new RuntimeException("Error: " + e.getMessage());
         }
     }
@@ -147,6 +195,8 @@ public class FileUtils {
             FileInfo fileInfo = FileInfo.builder()
                     // 파일원본이름
                     .name(file.getOriginalName())
+                    .id(file.getId())
+                    .originalName(file.getOriginalName())
                     // 실제 저장된 이름과 디렉토리 이름을 보내 가상의 url 을 생성
                     .url(MvcUriComponentsBuilder
                             .fromMethodName(FileController.class, "getImage"

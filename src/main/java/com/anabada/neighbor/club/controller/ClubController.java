@@ -107,27 +107,69 @@ public class ClubController {
         return "club/clubDetail";
     }
 
+    @GetMapping("/club/update")
+    @ResponseBody
+    public ClubResponse update(@RequestParam(value = "postId") Long postId, Model model
+            , @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        //  로그인 안했을때
+        if (principalDetails == null) {
+//            return "redirect:clubDetail?postId=" + postId;
+            return null;
+        }
+        ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
+        //  게시글 작성자가 아닐때
+        if (principalDetails.getMember().getMemberId() != clubResponse.getMemberId()) {
+//            return "redirect:clubDetail?postId=" + postId;
+            return null;
+        }
+        model.addAttribute("club", clubResponse);
+        return clubResponse;
+    }
+
+//    @PostMapping("/club/update")
+//    public String update(ClubRequest clubRequest, Model model
+//            , @AuthenticationPrincipal PrincipalDetails principalDetails) {
+//        //  로그인 안했을때
+//        if (principalDetails == null) {
+//            return "redirect:clubDetail?postId=" + postId;
+//        }
+//        ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
+//        //  게시글 작성자가 아닐때
+//        if (principalDetails.getMember().getMemberId() != clubResponse.getMemberId()) {
+//            return "redirect:clubDetail?postId=" + postId;
+//        }
+//        clubService.updatePost()
+//    }
+
     @GetMapping("/clubRemove")
-    public String clubRemove(Long postId) {
+    public String clubRemove(@RequestParam(value = "postId") Long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails == null) {
+            return "redirect:clubDetail?postId=" + postId;
+        }
         //게시글삭제
         clubService.deletePost(postId);
-        //이미지 DB 에서 삭제
+        //파일 리스트 가져오기
         List<FileResponse> fileResponseList = fileService.findAllFileByPostId(postId);
-        List<Long> ids =  new ArrayList<>();
-        for(FileResponse file : fileResponseList){
-            ids.add(file.getId());
-        }
-        fileService.deleteAllFileByIds(ids);
+        //이미지 Disk 에서 삭제
+        fileUtils.deleteFiles(fileResponseList);
+        //이미지 DB 에서 삭제
+        fileService.deleteAllFileByIds(fileResponseList);
         return "redirect:clubList";
     }
 
-    // 파일 리스트 조회
-    @GetMapping("/posts/{postId}/images")
-    @ResponseBody
-    public List<FileResponse> clubImage(@PathVariable Long postId) {
-        return clubService.findAllImageByPostId(postId);
-    }
+//    // 파일 리스트 조회
+//    @GetMapping("/posts/{postId}/images")
+//    @ResponseBody
+//    public List<FileResponse> clubImage(@PathVariable Long postId) {
+//        return clubService.findAllImageByPostId(postId);
+//    }
 
+    /**
+     * 모임가입
+     * @param postId 게시글아이디
+     * @param principalDetails 사용자 정보
+     * @return ResponseBody(Ajax)
+     */
     @PostMapping("/club/join")
     @ResponseBody
     public ClubResponse join(Long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
