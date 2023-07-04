@@ -73,6 +73,38 @@ public class FileUtils {
                 .build();
     }
 
+//    /**
+//     * 프로필 사진 업로드
+//     * @param multipartFile - 파일 객체
+//     * @return DB에 저장할 파일 정보
+//     */
+//    private FileRequest uploadProfileFile(MultipartFile multipartFile) {
+//        if (multipartFile.isEmpty()) {
+//            return null; //업로드된 파일이 비어 있는지, 즉 멀티파트 형식에서 파일이 선택되지 않았는지 또는 선택한 파일에 내용이 없는지 여부를 반환한다.
+//        }
+//        //getOriginalFilename 클라이언트 파일시스템의 원래 파일 이름을 반환한다.
+//        String saveName = generateSaveFilename(multipartFile.getOriginalFilename());
+//        //현재 컴퓨터의 날짜형식을 yyMMdd 로 String 변환해 가져온다.
+//        String profile = "profile";
+//        String uploadPath = getUploadPath(profile) + File.separator + saveName;
+//        File uploadFile = new File(uploadPath);
+//        try {
+//            multipartFile.transferTo(uploadFile);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        return  FileRequest.builder()
+//                .originalName(multipartFile.getOriginalFilename())
+//                .saveName(saveName)
+//                .size(multipartFile.getSize())
+//                .build();
+//    }
+
+
+
+
+
     /**
      * 컴퓨터에 저장된 실제 이미지 로드
      * @param saveName 실제 저장된 파일명
@@ -168,6 +200,7 @@ public class FileUtils {
         return makeDirectories(uploadPath + File.separator + addPath);
     }
 
+
     /**
      * 업로드 폴더(디렉토리) 생성
      * @param path - 업로드경로
@@ -206,4 +239,7 @@ public class FileUtils {
         }
         return result;
     }
+
+
+
 }

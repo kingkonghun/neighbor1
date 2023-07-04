@@ -211,6 +211,7 @@ public class ClubServiceImpl implements ClubService {
                     .score(member.getScore())
                     .maxMan(club.getMaxMan())
                     .nowMan(club.getNowMan())
+                    .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))//여기까지완성
                     .address(address)
                     .replyCount(replyCount)
                     .likesCount(likesCount)
@@ -312,6 +313,7 @@ public class ClubServiceImpl implements ClubService {
                     .title(post.getTitle())
                     .content(post.getContent())
                     .hobbyName(clubRepository.selectHobbyName(club.getHobbyId()))
+                    .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                     .score(member.getScore())
                     .maxMan(club.getMaxMan())
                     .nowMan(club.getNowMan())

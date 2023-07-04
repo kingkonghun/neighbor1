@@ -1,5 +1,6 @@
 package com.anabada.neighbor.club.domain;
 
+import com.anabada.neighbor.file.domain.FileInfo;
 import com.anabada.neighbor.file.domain.FileResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +29,8 @@ public class ClubResponse {
     private int nowMan; //현재인원수
     private long postView;//조회수
     private List<FileResponse> fileResponseList; //이미지 url List
+    private FileInfo fileInfo;
+    private FileResponse fileResponse;
     private List<MultipartFile> images = new ArrayList<>(); // 첨부파일 List
     private int clubJoinYn;
     private Date postDate;

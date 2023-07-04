@@ -1,6 +1,8 @@
 package com.anabada.neighbor.used.controller;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.domain.FileInfo;
+import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.file.service.FileService;
 import com.anabada.neighbor.file.service.FileUtils;
 import com.anabada.neighbor.page.Criteria;
@@ -36,7 +38,15 @@ public class UsedController {
 
     @GetMapping("/list") //게시물 리스트
     public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model, @RequestParam(value = "num", defaultValue = "0") int num, @RequestParam(value = "search", defaultValue = "") String search) {
-        model.addAttribute("list", usedService.list(categoryId, "list", num, search, 0));
+        List<Used> list = usedService.list(categoryId, "list", num, search, 0);
+        if (list != null) {
+            for (Used used : list) {
+                List<FileInfo> fileInfoList = fileUtils.getFileInfo(used.getFileResponseList());
+                used.setFileInfo(fileInfoList.get(0));
+            }
+        }
+
+        model.addAttribute("list", list);
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("categoryId", categoryId);
         model.addAttribute("search", search);
@@ -47,10 +57,22 @@ public class UsedController {
     @GetMapping("/detail") //게시물 상세보기
     public String detail(long postId, Model model, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Used dto = usedService.detail(postId, request, response, principalDetails);
+        List<Used> similarList = usedService.list(dto.getCategoryId(), "similarList", 0, "", postId);
+        List<FileResponse> files = dto.getFileResponseList();
+        List<FileInfo> fileInfoList = fileUtils.getFileInfo(files);
+
+        if (similarList != null) {
+            for (Used used : similarList) {
+                List<FileInfo> fileInfoList2 = fileUtils.getFileInfo(used.getFileResponseList());
+                used.setFileInfo(fileInfoList2.get(0));
+            }
+        }
+
         model.addAttribute("dto", dto);
+        model.addAttribute("images", fileInfoList);
         model.addAttribute("imgCount", dto.getImgList().size());
         model.addAttribute("category",usedService.categoryList());
-        model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0, "", postId));
+        model.addAttribute("similarList",similarList);
         model.addAttribute("reportType", usedService.reportType());
 
         return "/used/usedDetail";

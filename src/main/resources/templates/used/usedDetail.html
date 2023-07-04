@@ -371,15 +371,16 @@
         <div class="main-section-wrap">
             <div class="slide-box">
                 <!--사진-->
-                <div class="content" th:each="imgList : ${dto.imgList}">
-                    <div class="img-box" style="width: 100%; " th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' " th:style="'background-image:url('+ @{/used/downFiles(img=${imgList})} +');'">
+                <div class="content" th:each="image : ${images}">
+                    <div class="img-box" style="width: 100%; " th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' "
+                         th:style="'background-image:url('+ @{${image.url}} +')'">
                     </div>
                     <div class="double-strike" th:if="${dto.productStatus eq 'n'}">판매 완료</div>
-
-
                 </div>
-                <div class="content" th:if="${#lists.size(dto.imgList)==1}">
-                    <div class="img-box" style="width: 100%;" th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' " th:style="'background-image:url('+ @{/used/downFiles(img=${dto.imgList})} +');'">
+
+                <div class="content" th:if="${#lists.size(images)==1}" th:each="image : ${images}">
+                    <div class="img-box" style="width: 100%; " th:classappend="${dto.productStatus eq 'n'} ? 'soldout' : '' "
+                         th:style="'background-image:url('+ @{${image.url}} +')'">
                     </div>
                     <div class="double-strike" th:if="${dto.productStatus eq 'n'}">판매 완료</div>
                 </div>
@@ -500,14 +501,13 @@
         <h2 class="similarTitle">비슷한 상품들</h2>
         <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${similarList}">
             <div class="item p-3" th:onclick="|location.href='@{detail(postId=${row.postId})}'|">
-                <img class="list_img" th:src="@{/used/findImg(postId=${row.postId})}">
+                <img class="list_img" th:src="@{${row.fileInfo.url}}">
                 <div class="div_2 mt-3">
                     <h5 th:text="${row.title}"></h5>
                     <span th:inline="text">
                         [[${row.postView}]]
                         <i class="bi bi-caret-up-fill"></i>
                     </span>
-
                 </div>
                 <div class="div_3">
                     <span class="price" th:inline="text">

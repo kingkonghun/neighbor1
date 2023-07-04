@@ -68,7 +68,7 @@ public class UsedServiceImpl implements UsedService{
                     .memberId(member.getMemberId())
                     .address(address)
                     .memberName(member.getMemberName())
-//                    .profileImg(member.getProfileImg().getOriginalFilename())
+                    .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                     .score(member.getScore())
                     .memberStatus(member.getMemberStatus())
                     .replyCount(replyCount)
@@ -121,7 +121,7 @@ public class UsedServiceImpl implements UsedService{
                     .memberId(member.getMemberId())
                     .address(address)
                     .memberName(member.getMemberName())
-//                    .profileImg(member.getProfileImg().getOriginalFilename())
+                    .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                     .score(member.getScore())
                     .memberStatus(member.getMemberStatus())
                     .replyCount(replyCount)
@@ -189,7 +189,7 @@ public class UsedServiceImpl implements UsedService{
     @Override
     public void update(Used used, PrincipalDetails principalDetails) throws Exception{//게시글수정
         used.setMemberId(principalDetails.getMember().getMemberId()); // security 에 있는 memberId를 used 에 넣음
-        String formImg = used.getFiles().get(0).getOriginalFilename();
+//        String formImg = used.getFiles().get(0).getOriginalFilename();
         usedRepository.updatePost(used); // post 테이블 update
         usedRepository.updateProduct(used); // product 테이블 update
 
@@ -284,12 +284,12 @@ public class UsedServiceImpl implements UsedService{
                 .memberId(member.getMemberId())
                 .address(address)
                 .memberName(member.getMemberName())
-//                .profileImg(member.getProfileImg().getOriginalFilename())
                 .score(member.getScore())
                 .memberStatus(member.getMemberStatus())
                 .replyCount(replyCount)
                 .likesCount(likesCount)
                 .likesCheck(likesCheck)
+                .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                 .build();
     }
 
