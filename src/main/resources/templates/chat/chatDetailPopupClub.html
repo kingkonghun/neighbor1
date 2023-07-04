@@ -54,19 +54,32 @@
 <input type="hidden" id="clubId" th:value="${list[0].clubId}">
 <div class="container3">
 
-  <div class="room_sidvar">
-    <h2 class="py-3" onclick="memberListClose()">참여목록</h2>
-    <div class="block44" id="member_" th:attr="id='member_' + ${row.memberId}" th:each="row : ${memberList}" >
-      <div class="list_imgbx">
-        <img th:src="@{/member/findProfileImg(memberId=${row.memberId})}" class="user_self">
-      </div>
-      <div class="list_details">
-        <div class="listHead">
-          <h4 th:text="${row.memberName}"></h4>
+    <div class="room_sidvar">
+        <h2 class="py-3" onclick="memberListClose()">참여목록</h2>
+        <div class="block44" id="member_" th:attr="id='member_' + ${row.memberId}" th:each="row : ${memberList}" >
+            <div style="display: flex; justify-content: flex-start;">
+                <div class="list_imgbx">
+                    <img th:src="@{/member/findProfileImg(memberId=${row.memberId})}" class="user_self">
+                </div>
+                <div class="list_details">
+                    <div class="listHead">
+                        <h4 th:text="${row.memberName}" style="font-family: 'GangwonEduPowerExtraBoldA';"></h4>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${list[0].master == #authentication.principal.member.memberId}">
+                <li class="navList nav-item dropdown" style="list-style: none;">
+                    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">추방</a></li>
+                    </ul>
+                </li>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
   <div class="rightSide">
     <div class="header"><!--채팅 상대방 창 -->

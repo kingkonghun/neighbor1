@@ -29,49 +29,44 @@ public interface ClubService {
     public long savePost(Post post);//생성된 게시글의 postId 반환
 
     /**
-     * 이미지 정보 db저장
-     * @param postId 게시물아이디 pk
-     * @param images 요청받은 이미지리스트
-     * @return 성공하면 1, 실패 or 이미지가없으면 0 리턴
-     */
-    public int saveImages(final Long postId, final List<FileRequest> images);//이미지저장
-
-    /**
-     * 이미지 리스트 조회
-     * @param postId 게시글 번호 FK
-     * @return 파일 리스트
-     */
-    public List<FileResponse> findAllImageByPostId(Long postId);
-
-    /**
-     * 이미지 리스트 조회
-     *
-     * @param imgIds PK 리스트
-     * @return 이미지 리스트
-     */
-    public List<FileResponse> findAllImageByImgIds(List<Long> imgIds);
-
-    public FileResponse findImageByImgId(Long imgId);
-    /**
-     * 이미지 삭제 (from DateBase)
-     *
-     * @param imgIds PK 리스트
-     */
-    public void deleteAllImageByImgIds(List<Long> imgIds);
-
-    /**
      * 게시글 상세정보 조회
-     *
-     * @param postId           pk
-     * @param principalDetails
+     * @param postId PK
+     * @param principalDetails 현재 사용자 정보
      * @return 게시글 상세정보
      */
     public ClubResponse findClub(long postId, PrincipalDetails principalDetails);
 
+    /**
+     * clubRequest -> Post 로 변환
+     * *** PostId 자동으로 들어가지않음 업데이트시 PostId 세팅 따로 해줘야함 ***
+     * @param clubRequest 사용자가 보낸 게시글
+     * @param principalDetails 사용자 정보
+     * @return Post 객체
+     */
+    public Post clubRequestToPost(ClubRequest clubRequest, PrincipalDetails principalDetails);
 
-    public long updatePost(Post post);
+    /**
+     * clubRequest -> Post 로 변환
+     * 게시글 수정이라 postId가 이미 있을때 사용
+     * @param clubRequest clubRequest 사용자가 보낸 게시글
+     * @param postId PK
+     * @param principalDetails 사용자 정보
+     * @return post 객체
+     */
+    public Post clubRequestToPost(ClubRequest clubRequest,Long postId, PrincipalDetails principalDetails);
 
-    public long updateClub(Club club);
+    /**
+     * clubRequest -> Club 으로 변환
+     * @param clubRequest 사용자가 보낸 게시글
+     * @param principalDetails 사용자 정보
+     * @return Club 객체
+     */
+    public Club clubRequestToClub(ClubRequest clubRequest, PrincipalDetails principalDetails);
+
+
+    public Message updatePost(Post post);
+
+    public Message updateClub(Club club, ClubResponse clubResponse);
 
     public long deletePost(long postId);
     /**
