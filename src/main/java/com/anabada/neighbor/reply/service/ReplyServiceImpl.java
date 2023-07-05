@@ -110,14 +110,26 @@ public class ReplyServiceImpl implements ReplyService {
         for (Reply reply : replyList) {
             long postId = reply.getPostId();
             Post post = usedRepository.findReplyPost(postId);
-            CarryReply carryReply = CarryReply.builder()
-                    .postId(postId)
-                    .title(post.getTitle())//게시글 제목
-                    .replyUpdate(reply.getReplyUpdate())//작성,수정 날짜
-                    .comment(reply.getComment())//댓글 내용
-                    .postType(post.getPostType().equals("used")  ? "중고거래" : "동네모임")//게시글 유형
-                    .build();
-            carryReplyList.add(carryReply);
+            if (!post.getPostType().equals("del")) {
+                CarryReply carryReply = CarryReply.builder()
+                        .postId(postId)
+                        .title(post.getTitle())//게시글 제목
+                        .replyUpdate(reply.getReplyUpdate())//작성,수정 날짜
+                        .comment(reply.getComment())//댓글 내용
+                        .postType(post.getPostType().equals("used")  ? "중고거래" : "동네모임")//게시글 유형
+                        .build();
+                carryReplyList.add(carryReply);
+            }else{
+                CarryReply carryReply = CarryReply.builder()
+                        .postId(postId)
+                        .title(post.getTitle())//게시글 제목
+                        .replyUpdate(reply.getReplyUpdate())//작성,수정 날짜
+                        .comment(reply.getComment())//댓글 내용
+                        .postType("삭제된 게시글입니다.")//게시글 유형
+                        .build();
+                carryReplyList.add(carryReply);
+            }
+
         }
         return carryReplyList;
     }
