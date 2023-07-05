@@ -110,9 +110,9 @@ function showNavNotification() {
         success: function(result){
             if(result) {
                 $("#navNotification").show();
-                $("#sideNotification").css("display", "inline-block");
+                $("#sideNotification").css("display", "flex");
                 $("#navNotification", opener.document).show();
-                $("#sideNotification", opener.document).css("display", "inline-block");
+                $("#sideNotification", opener.document).css("display", "flex");
             }else {
                 $("#navNotification").css("display", "none");
                 $("#sideNotification").css("display", "none");
