@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
 import java.util.List;
@@ -106,6 +107,23 @@ public class ChattingController {
         if (clubService.deleteClubJoin(club, principalDetailsTemp) == 1) {
             clubService.updateNowMan(0, club.getClubId());
         }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/chatNotification")
+    @ResponseBody
+    public boolean chatNotification(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        boolean result = false;
+
+        if (principalDetails != null) {
+            result = chattingService.chatNotification(principalDetails.getMember().getMemberId());
+        }
+        return result;
+    }
+
+    @PostMapping("/chatNotificationRemove")
+    public ResponseEntity<Void> chatNotificationRemove(long roomId, long memberId) {
+        chattingService.chatNotificationRemove(roomId, memberId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

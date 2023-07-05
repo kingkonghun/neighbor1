@@ -62,4 +62,8 @@ public interface ChattingService {
      * 채팅방 삭제
      */
     void deleteChatRoom(long roomId);
+
+    boolean chatNotification(long memberId);
+
+    void chatNotificationRemove(long roomId, long memberId);
 }

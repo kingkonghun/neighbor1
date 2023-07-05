@@ -36,6 +36,7 @@
                     <span></span>
                     <span></span>
                     <span></span>
+                    <span class="notification" id="navNotification"></span>
                 </label>
 
                 <div class="sidebar">
@@ -49,7 +50,10 @@
                             <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-info-square"></i> 내정보</a>
                         </li>
                         <li class="navbar-item" sec:authorize="isAuthenticated()" id="open-popup">
-                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="fa-regular fa-envelope"></i> 채팅</a>
+                            <a href="#" class="navbar-link title-sm" data-nav-link>
+                                <i class="fa-regular fa-envelope"></i> 채팅
+                                <span class="notification" id="sideNotification" style=" "></span>
+                            </a>
                         </li>
                         <li class="navbar-item hideItem" onclick="location.href='/used/list'">
                             <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-cart"></i> 중고거래</a>
