@@ -215,7 +215,8 @@ public class ClubController {
         //파일 리스트 가져오기
         List<FileResponse> fileResponseList = fileService.findAllFileByPostId(postId);
         //이미지 Disk 에서 삭제
-        fileUtils.deleteFiles(fileResponseList);
+        // 모임에서 이미지 삭제하면 안되기때문에 주석처리
+//        fileUtils.deleteFiles(fileResponseList);
         //이미지 DB 에서 삭제
         fileService.deleteAllFileByIds(fileResponseList);
         return "redirect:clubList";
