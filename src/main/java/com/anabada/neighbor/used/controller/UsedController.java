@@ -2,6 +2,7 @@ package com.anabada.neighbor.used.controller;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.file.domain.FileInfo;
+import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.file.service.FileService;
 import com.anabada.neighbor.file.service.FileUtils;
 import com.anabada.neighbor.page.Criteria;
@@ -38,9 +39,11 @@ public class UsedController {
     @GetMapping("/list") //게시물 리스트
     public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model, @RequestParam(value = "num", defaultValue = "0") int num, @RequestParam(value = "search", defaultValue = "") String search) {
         List<Used> list = usedService.list(categoryId, "list", num, search, 0);
-        for (Used used : list) {
-            List<FileInfo> fileInfoList = fileUtils.getFileInfo(used.getFileResponseList());
-            used.setFileInfo(fileInfoList.get(0));
+        if (list != null) {
+            for (Used used : list) {
+                List<FileInfo> fileInfoList = fileUtils.getFileInfo(used.getFileResponseList());
+                used.setFileInfo(fileInfoList.get(0));
+            }
         }
 
         model.addAttribute("list", list);
@@ -54,13 +57,25 @@ public class UsedController {
     @GetMapping("/detail") //게시물 상세보기
     public String detail(long postId, Model model, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Used dto = usedService.detail(postId, request, response, principalDetails);
+        List<Used> similarList = usedService.list(dto.getCategoryId(), "similarList", 0, "", postId);
+        List<FileResponse> files = dto.getFileResponseList();
+        List<FileInfo> fileInfoList = fileUtils.getFileInfo(files);
+
+        if (similarList != null) {
+            for (Used used : similarList) {
+                List<FileInfo> fileInfoList2 = fileUtils.getFileInfo(used.getFileResponseList());
+                used.setFileInfo(fileInfoList2.get(0));
+            }
+        }
+
         model.addAttribute("dto", dto);
+        model.addAttribute("images", fileInfoList);
         model.addAttribute("imgCount", dto.getImgList().size());
         model.addAttribute("category",usedService.categoryList());
-        model.addAttribute("similarList", usedService.list(dto.getCategoryId(), "similarList",0, "", postId));
+        model.addAttribute("similarList",similarList);
         model.addAttribute("reportType", usedService.reportType());
 
-        return "/used/usedDetail";
+        return dto.getPostType().equals("del") ? "redirect:/used/postDel" : "/used/usedDetail";
     }
 
     @PostMapping("/post") //게시물 작성
@@ -70,20 +85,13 @@ public class UsedController {
         return "redirect:/used/list";
     }
 
-    @GetMapping("/findImg") //이미지 찾기
-    public void findImg(long postId, HttpServletResponse response) throws IOException {
-        String filenames = usedService.findImgUrl(postId);
-//        System.out.println("filenames = " + filenames);
-        downFiles(filenames,response);
-    }
-    @GetMapping("/downFiles")//이미지 다운
-    public void downFiles(String img,HttpServletResponse response) throws IOException{
-        usedService.downloadFiles(img,response);
-    }
+
+
 
     @PostMapping("/postEdit") //게시물 수정
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String postEdit(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception {
+        System.out.println("used = " + used);
         usedService.update(used, principalDetails);
         return "redirect:/used/list";
     }
@@ -117,15 +125,7 @@ public class UsedController {
         return "admin/reportList";
     }
 
-    @GetMapping("/likePost") // 좋아요 누른 게시글
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String likePost(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails, Criteria criteria) {
-      List<Used> usedList=usedService.likePost(principalDetails.getMember().getMemberId(),criteria);
-        int total = usedService.countMyLikePost(principalDetails.getMember().getMemberId());
-        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
-        model.addAttribute("list",usedList);
-        return "member/myLikes";
-    }
+
 
     @PostMapping("/reportOk") // 신고 접수
     public ResponseEntity<Void> reportOk(ReportOk reportOk) {
@@ -164,5 +164,11 @@ public class UsedController {
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String trade() {
         return "used/trade";
+    }
+
+    @GetMapping("/postDel")
+    @ResponseBody
+    public String postDel() {
+        return "<h1>삭제된 게시물입니다.</h1>";
     }
 }

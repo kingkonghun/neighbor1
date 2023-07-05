@@ -12,10 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
 import java.util.List;
@@ -70,13 +72,12 @@ public class ChattingController {
                 clubService.updateNowMan(0, club.getClubId());
             }
         }
-        chattingService.chatOut(chat, principalDetails); // 채팅방 나가기
+        chattingService.chatOut(chat, principalDetails.getMember().getMemberId()); // 채팅방 나가기
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/deleteChatRoom")
     public ResponseEntity<Void> deleteChatRoom(Chat chat) { // 채팅방 삭제(동네모임 채팅방만 가능)
-        System.out.println("삭제 입장");
         long roomId = chat.getRoomId();
         long postId = chat.getPostId();
 
@@ -92,6 +93,37 @@ public class ChattingController {
         chattingService.deleteChatRoom(roomId);
         clubService.deletePost(postId); // 해당 게시물까지 같이 삭제
 
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/chatKick")
+    public ResponseEntity<Void> chatKick(Chat chat, long memberId) {
+        chattingService.chatOut(chat, memberId);
+
+        PrincipalDetails principalDetailsTemp = new PrincipalDetails(Member.builder()
+                .memberId(memberId)
+                .build());
+        ClubResponse club = clubService.findClub(chat.getPostId(),principalDetailsTemp);
+        if (clubService.deleteClubJoin(club, principalDetailsTemp) == 1) {
+            clubService.updateNowMan(0, club.getClubId());
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/chatNotification")
+    @ResponseBody
+    public boolean chatNotification(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        boolean result = false;
+
+        if (principalDetails != null) {
+            result = chattingService.chatNotification(principalDetails.getMember().getMemberId());
+        }
+        return result;
+    }
+
+    @PostMapping("/chatNotificationRemove")
+    public ResponseEntity<Void> chatNotificationRemove(long roomId, long memberId) {
+        chattingService.chatNotificationRemove(roomId, memberId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

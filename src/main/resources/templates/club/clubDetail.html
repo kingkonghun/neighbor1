@@ -492,12 +492,13 @@
             </div>
         </article>
     </section>
+
     <!--3번 박스 포스트 내용 보는곳-->
     <section class="item3 row ">
         <h2 class="similarTitle">비슷한 모임들</h2>
         <article class="col col-xl-6 col-lg-6 col-md-12 col-sm-12 pb-5" th:each="club : ${similarList}">
             <div class="item p-3" th:onclick="|location.href='@{clubDetail(postId=${club.postId})}'|">
-                <img class="list_img" src="https://cdn.pixabay.com/photo/2015/07/28/22/05/child-865116_1280.jpg">
+                <img class="list_img" th:src="@{${club.fileInfo.url}}">
                 <div class="text">
                     <h5 th:text="${club.title}"></h5>
                     <span class="content" th:text="${club.content}"></span><!--내용 10자이내로-->

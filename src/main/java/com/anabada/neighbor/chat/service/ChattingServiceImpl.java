@@ -99,6 +99,12 @@ public class ChattingServiceImpl implements ChattingService {
 
                 simpMessagingTemplate.convertAndSendToUser(String.valueOf(chat.getReceiver()), "/topic/messageNotification", chat); // 상대방에게 개인 알림 보내기
 
+                String key = chat.getRoomId() + "_" + receiver; // map 을 조회할 key
+                if (chatNotificationMap.get(key) == null || chatNotificationMap.get(key) == 0) { // value 가 null, 0 이면
+                    chatNotificationMap.put(key, 1); // value 를 1 로 update
+                } else { // 이미 value 가 1 이상이라면
+                    chatNotificationMap.put(key, chatNotificationMap.get(key) + 1); // value 에 +1 을 함
+                }
                 return roomId; // 생성한 채팅방의 roomId 를 리턴
             } else if (type.equals("club")) { // 동네모임 채팅이라면
                 chat = Chat.builder()
@@ -146,7 +152,7 @@ public class ChattingServiceImpl implements ChattingService {
         if (chat.getType().equals("used")) {
             chatMemberIdList = chattingRepository.findChatMemberIdByRoomId(roomId);
             chattingRepository.updateStatusAll(roomId, "y"); // 상대방을 다시 입장시킴
-        } else if (chat.getType().equals("club")) {
+        } else if (chat.getType().equals("club") || chat.getType().equals("kick")) {
             chatMemberIdList = chattingRepository.findStatusYMemberIdByRoomId(roomId);
             chat.setMemberCount(chattingRepository.chatMemberCount(roomId));
             ChattingRoom chattingRoom = chattingRepository.findChatRoomByRoomId(roomId);
@@ -157,11 +163,6 @@ public class ChattingServiceImpl implements ChattingService {
 
         for (long chatMemberId : chatMemberIdList) {
             String key = chat.getRoomId() + "_" + chatMemberId; // map 을 조회할 key
-
-            if (memberId == chatMemberId) { // chatMemberId 가 본인이면
-                chatNotificationMap.remove(key); // 저장된 알림(ex : 1, 2, 3, 4) 을 지움
-                continue;
-            }
 
             if (chatNotificationMap.get(key) == null || chatNotificationMap.get(key) == 0) { // value 가 null, 0 이면
                 chatNotificationMap.put(key, 1); // value 를 1 로 update
@@ -179,7 +180,7 @@ public class ChattingServiceImpl implements ChattingService {
      */
     @Override
     public List<Chat> chattingRoomList(PrincipalDetails principalDetails) {
-        List<Chat> chatList = new ArrayList<>(); // 채턴할 객체 생성
+        List<Chat> chatList = new ArrayList<>(); // 리턴할 객체 생성
 
         long memberId = principalDetails.getMember().getMemberId();
 
@@ -338,9 +339,8 @@ public class ChattingServiceImpl implements ChattingService {
      * 채팅방 나가기
      */
     @Override
-    public void chatOut(Chat chat, PrincipalDetails principalDetails) {
-        long memberId = principalDetails.getMember().getMemberId();
-        String memberName = principalDetails.getMember().getMemberName();
+    public void chatOut(Chat chat, long memberId) {
+        String memberName = memberRepository.findMemberName(memberId);
         String key = chat.getRoomId() + "_" + memberId; // map 을 조회할 key
         chatNotificationMap.remove(key); // 해당 채팅방의 내 알림 삭제
 
@@ -354,6 +354,10 @@ public class ChattingServiceImpl implements ChattingService {
         if (chat.getType().equals("club")) { // 동네모임 채팅이면
             chat.setContent(memberName + "님이 퇴장하셨습니다.");
             chat.setMessageType("EXIT");
+            sendMessage(chat, memberId);
+        } else if (chat.getType().equals("kick")) {
+            chat.setContent(memberName + "님이 추방당하셨습니다.");
+            chat.setMessageType("KICK");
             sendMessage(chat, memberId);
         }
     }
@@ -432,4 +436,26 @@ public class ChattingServiceImpl implements ChattingService {
                 .build()); // 채팅방에 입장해 있는 사용자에게 메시지를 보냄
     }
 
+    @Override
+    public boolean chatNotification(long memberId) {
+        boolean result = false;
+
+        int count = 0;
+        for (String key : chatNotificationMap.keySet()) {
+            if (key.endsWith("_" + memberId)) {
+                count += chatNotificationMap.get(key);
+            }
+        }
+        if (count != 0) {
+            result = true;
+        }
+
+        return result;
+    }
+
+    @Override
+    public void chatNotificationRemove(long roomId, long memberId) {
+        String key = roomId + "_" + memberId;
+        chatNotificationMap.remove(key);
+    }
 }

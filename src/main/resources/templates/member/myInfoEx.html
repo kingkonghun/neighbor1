@@ -122,7 +122,7 @@
     function likePost(memberId){
         $.ajax({
             type: "get",
-            url: "/used/likePost",
+            url: "/member/likePost",
             data: {"memberId":memberId },
             success: function (data) {
                 $("#memberDetail").hide().html(data).slideDown();

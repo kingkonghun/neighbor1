@@ -559,6 +559,32 @@ top: 270px;
     cursor: pointer;
 }
 
+.notification {
+    position: absolute;
+    top: -10px; /* 위치를 조절하세요 */
+    right: -10px; /* 위치를 조절하세요 */
+    background: red; !important
+    color: white;
+}
+#navNotification {
+    background:red;
+    width:12px;
+    height:12px;
+    border-radius: 50%;
+    padding: 5px 5px;
+    display: none;
+}
+
+#sideNotification {
+    top: 90px;
+    right: 265px;
+    background-color: red;
+    width:16px;
+    height:16px;
+    border-radius: 50%;
+    display: none;
+}
+
 
 
 

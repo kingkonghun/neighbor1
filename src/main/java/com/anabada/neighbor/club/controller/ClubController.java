@@ -81,10 +81,13 @@ public class ClubController {
             hobbyId = 0L;
         }
         List<ClubResponse> list = clubService.findClubList(num, hobbyId, search, "list", 0);
-        for (ClubResponse clubResponse : list) {
-            List<FileInfo> fileInfoList = fileUtils.getFileInfo(clubResponse.getFileResponseList());
-            clubResponse.setFileInfo(fileInfoList.get(0));
+        if (list != null) {
+            for (ClubResponse clubResponse : list) {
+                List<FileInfo> fileInfoList = fileUtils.getFileInfo(clubResponse.getFileResponseList());
+                clubResponse.setFileInfo(fileInfoList.get(0));
+            }
         }
+
 
         model.addAttribute("clubList", list);
         model.addAttribute("hobby", clubService.findHobbyName());
@@ -98,13 +101,16 @@ public class ClubController {
                              HttpServletRequest request, HttpServletResponse response,
                              @AuthenticationPrincipal PrincipalDetails principalDetails) {
         ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
-
+        List<ClubResponse> similarList = clubService.findClubList(0, clubService.findHobbyId(clubResponse.getHobbyName()), "", "similarList", postId);
         List<FileResponse> files = clubResponse.getFileResponseList();
-
         List<FileInfo> fileInfoList = fileUtils.getFileInfo(files);
 
-        model.addAttribute("images", fileInfoList);
-        model.addAttribute("club", clubResponse);
+        if (similarList != null) {
+            for (ClubResponse clubResponse1 : similarList) {
+                List<FileInfo> fileInfoList1 = fileUtils.getFileInfo(clubResponse1.getFileResponseList());
+                clubResponse1.setFileInfo(fileInfoList1.get(0));
+            }
+        }
 
         Cookie[] cookies = request.getCookies(); //쿠키 가져오기
 
@@ -127,10 +133,10 @@ public class ClubController {
         model.addAttribute("club", clubResponse);
         model.addAttribute("postId", postId);
         model.addAttribute("hobby", clubService.findHobbyName());
-        model.addAttribute("similarList", clubService.findClubList(0, clubService.findHobbyId(clubResponse.getHobbyName()), "", "similarList", postId));
+        model.addAttribute("similarList", similarList );
         model.addAttribute("roomId", chattingService.findRoomId(postId));
         model.addAttribute("reportType", usedService.reportType());
-        return "club/clubDetail";
+        return clubResponse.getPostType().equals("del") ? "redirect:club/delPost" : "club/clubDetail";
     }
 
 //    @GetMapping("/club/update")
@@ -177,7 +183,7 @@ public class ClubController {
         return "redirect:clubList";
     }
 
-    @GetMapping("/clubRemove")
+    @PostMapping("/clubRemove")
     public String clubRemove(@RequestParam(value = "postId") Long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         if (principalDetails == null) {
             return "redirect:clubDetail?postId=" + postId;
@@ -234,7 +240,7 @@ public class ClubController {
                 chattingService.chatOut(Chat.builder()
                         .roomId(chattingService.findRoomId(postId))
                         .type("club")
-                        .build(), principalDetails);
+                        .build(), principalDetails.getMember().getMemberId());
 
                 return clubService.findClub(postId, principalDetails);// 탈퇴성공시 클럽을 새로 조회
             }else{
@@ -243,4 +249,9 @@ public class ClubController {
         }
     }
 
+    @GetMapping("club/delPost")
+    @ResponseBody
+    public String delPost() {
+        return "<h1>삭제된 게시물입니다.</h1>";
+    }
 }

@@ -31,6 +31,7 @@
                 });
             }
         });
+
     });
 
     function tongkn2_pop(){
@@ -42,6 +43,19 @@
     }
     function memberListClose(){
         $(".room_sidvar").slideUp();
+    }
+    function chatKick(memberId){
+        if(confirm("정말로 추방하시겠습니까?")){
+            $.ajax({
+                type: "post",
+                url: "/chatKick",
+                data: {"postId": $("#postId").val(), "roomId": $("#roomId").val(), "type": "kick", "memberId": memberId},
+                success: function(data){
+                    alert("추방을 완료했습니다");
+                }
+            });
+        }
+
     }
 </script>
 </head>
@@ -56,6 +70,7 @@
 
     <div class="room_sidvar">
         <h2 class="py-3" onclick="memberListClose()">참여목록</h2>
+        <div class="listBlock">
         <div class="block44" id="member_" th:attr="id='member_' + ${row.memberId}" th:each="row : ${memberList}" >
             <div style="display: flex; justify-content: flex-start;">
                 <div class="list_imgbx">
@@ -63,21 +78,22 @@
                 </div>
                 <div class="list_details">
                     <div class="listHead">
-                        <h4 th:text="${row.memberName}" style="font-family: 'GangwonEduPowerExtraBoldA';"></h4>
+                        <h4 th:text="${row.memberName}"></h4>
                     </div>
                 </div>
             </div>
 
-            <div th:if="${list[0].master == #authentication.principal.member.memberId}">
+            <div th:if="${list[0].master == #authentication.principal.member.memberId && row.memberId != #authentication.principal.member.memberId}" class="kick">
                 <li class="navList nav-item dropdown" style="list-style: none;">
                     <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">
                         <i class="bi bi-three-dots-vertical"></i>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">추방</a></li>
+                        <li><a class="dropdown-item" href="#" th:onclick="chatKick([[${row.memberId}]])">추방</a></li>
                     </ul>
                 </li>
             </div>
+        </div>
         </div>
     </div>
 
@@ -127,7 +143,7 @@
         </div>
         <div class="message frnd_message" th:if="${row.messageType == 'SEND' && row.sender != #authentication.principal.member.memberId}"><!--상대가 보낸 부분 왼쪽-->
           <div class="user_profile"><!--상대 대화 위에 이미지와 이름 생성-->
-            <img th:src="@{/member/findProfileImg(memberId=${row.receiver})}" class="room_cover"><!--상대 사진-->
+            <img th:src="@{/member/findProfileImg(memberId=${row.sender})}" class="room_cover"><!--상대 사진-->
             <span th:text="${row.receiverName}"></span><!--상대 이름-->
           </div>
           <p th:inline="text">

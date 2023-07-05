@@ -38,7 +38,7 @@ public class Used {
     private int replyCount;
     private int likesCount;
     private int likesCheck;
-
+    private List<MultipartFile> files;
     private List<FileResponse> fileResponseList; //이미지 url List
     private FileInfo fileInfo;
     private FileResponse fileResponse;

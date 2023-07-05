@@ -4,6 +4,9 @@ import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.domain.FileInfo;
+import com.anabada.neighbor.file.domain.FileResponse;
+import com.anabada.neighbor.file.service.FileService;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.repository.MemberRepository;
 import com.anabada.neighbor.page.Criteria;
@@ -23,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -33,12 +37,13 @@ public class MemberServiceImpl implements MemberService{
     private final UsedRepository usedRepository;
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final FileService fileService;
     private final ImgDownService imgDownService;
     private final ReplyRepository replyRepository;
     private final PasswordEncoder passwordEncoder;
     private final ClubRepository clubRepository;
 
-    final String uploadDir = "C:\\upload_anabada\\profile\\";
+    final String uploadPath = Paths.get(System.getProperty("user.home"), "upload_anabada","profile").toString();
 
 
     /**
@@ -77,6 +82,7 @@ public class MemberServiceImpl implements MemberService{
                         .postUpdate(post.getPostUpdate())
                         .postView(post.getPostView())//작성한 글
                         .categoryName(categoryName)//카테고리
+                        .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                         .build();
                 used.add(used1);
         }
@@ -105,6 +111,7 @@ public class MemberServiceImpl implements MemberService{
                     .postDate(post.getPostDate())
                     .postUpdate(post.getPostUpdate())
                     .hobbyName(hobbyName)
+                    .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                     .postView(post.getPostView())//작성한 글
                     .build();
             clubResponse.add(clubResponse1);
@@ -225,15 +232,24 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public void editPhoto(Member member) {
+        System.out.println("member = " + member);
         try {
-            if (Files.exists(Paths.get(uploadDir))) {
-                Files.createDirectories(Paths.get(uploadDir));
+            File folderPath = new File(uploadPath);
+
+            if (!folderPath.exists()) {
+                try {
+                    folderPath.mkdir();
+                    System.out.println("폴더가 생성되었습니다.");
+                } catch (Exception e) {
+                    System.out.println("폴더를 생성할 수 없습니다: " + e.getMessage());
+                }
             }
+
             MultipartFile file = member.getProfileImg();
             String uuid = UUID.randomUUID().toString();
             String profileImg = uuid+"_"+file.getOriginalFilename();
 
-            String filePath = uploadDir+File.separator+profileImg;
+            String filePath = uploadPath+File.separator+profileImg;
             file.transferTo(new File(filePath));
 
             Map<String, Object> map = new HashMap<>();

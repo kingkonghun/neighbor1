@@ -1,7 +1,9 @@
 package com.anabada.neighbor.used.service;
 
+import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.file.domain.FileRequest;
+import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.file.service.FileService;
 import com.anabada.neighbor.file.service.FileUtils;
 import com.anabada.neighbor.member.domain.Member;
@@ -12,12 +14,10 @@ import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,12 +29,12 @@ import java.util.*;
 public class UsedServiceImpl implements UsedService{
 
     private final UsedRepository usedRepository;
-    private final ImgDownService imgDownService;
     private final MemberRepository memberRepository;
     private final FileService fileService;
     private final FileUtils fileUtils;
+    private final ClubRepository clubRepository;
 
-    final String UPLOAD_DIR = "C:\\upload_anabada\\";
+//    final String UPLOAD_DIR = "C:\\upload_anabada\\";
 //    final String UPLOAD_DIR = "/Users/upload_anabada/";
 
     /**
@@ -68,7 +68,7 @@ public class UsedServiceImpl implements UsedService{
                     .memberId(member.getMemberId())
                     .address(address)
                     .memberName(member.getMemberName())
-//                    .profileImg(member.getProfileImg().getOriginalFilename())
+                    .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                     .score(member.getScore())
                     .memberStatus(member.getMemberStatus())
                     .replyCount(replyCount)
@@ -96,7 +96,7 @@ public class UsedServiceImpl implements UsedService{
         }
         for (Product product : productList) {
             Post post = usedRepository.findPost(product.getPostId()); //product 테이블의 postId로 post 테이블에서 해당하는 튜플 가져오기
-            if (post.getPostId() == postId) {
+            if (post.getPostId() == postId || !post.getPostType().equals("used")) { // 가져온 post 의 postId 가 파라미터로 받은 postId 와 같거나 postType 이 club이 아니라면
                 continue;
             }
             Member member = usedRepository.findMember(post.getMemberId()); //post 테이블의 memberId로 member 테이블에서 해당하는 튜플 가져오기
@@ -165,22 +165,9 @@ public class UsedServiceImpl implements UsedService{
         usedRepository.writePost(used); // post 테이블에 insert
         usedRepository.writeProduct(used); //product 테이블에 insert
 
-//        List<FileRequest> images = fileUtils.uploadFiles(used.getFiles());
-//        fileService.saveFiles(used.getPostId(), images);
-//        try { // 이미지 업로드 관련
-//            if (!Files.exists(Paths.get(UPLOAD_DIR))) {
-//                Files.createDirectories(Paths.get(UPLOAD_DIR));
-//            }
-//            for (MultipartFile file : used.getFiles()) {
-//                String uuid = UUID.randomUUID().toString();
-//                String fileName = uuid + "_" + file.getOriginalFilename();
-//                String filePath = UPLOAD_DIR + File.separator + fileName;
-//                file.transferTo(new File(filePath));
-//                usedRepository.writeImage(used.getPostId(),fileName); // img 테이블에 insert
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        List<FileRequest> images = fileUtils.uploadFiles(used.getFiles());
+        fileService.saveFiles(used.getPostId(), images);
+
     }
 
     /**
@@ -189,28 +176,13 @@ public class UsedServiceImpl implements UsedService{
     @Override
     public void update(Used used, PrincipalDetails principalDetails) throws Exception{//게시글수정
         used.setMemberId(principalDetails.getMember().getMemberId()); // security 에 있는 memberId를 used 에 넣음
-//        String formImg = used.getFiles().get(0).getOriginalFilename();
         usedRepository.updatePost(used); // post 테이블 update
         usedRepository.updateProduct(used); // product 테이블 update
-
-        Path originImg = Path.of(UPLOAD_DIR+"\\"+usedRepository.findImgUrl(used.getPostId()));//원래 이미지 url찾아오기
-            if (!Files.exists(Paths.get(UPLOAD_DIR))) {//디렉토리가 없다면 디렉토리생성
-                Files.createDirectories(Paths.get(UPLOAD_DIR));
-            }
-
-//            if(!formImg.equals("") && formImg != null ) {
-//                for (MultipartFile file : used.getFiles()) {
-//                    System.out.println("이프문안에:"+formImg);
-//                    Files.delete(originImg);//원래 이미지 삭제
-//                    String uuid = UUID.randomUUID().toString();
-//                    String fileName = uuid + "_" + file.getOriginalFilename();
-//                    String filePath = UPLOAD_DIR + File.separator + fileName;
-//                    file.transferTo(new File(filePath));
-//                    usedRepository.updateImage(used.getPostId(), fileName); // img 테이블 update
-//                  }
-//            }
-
-
+        List<FileResponse> allFileByPostId = fileService.findAllFileByPostId(used.getPostId());
+        fileUtils.deleteFiles(allFileByPostId);
+        fileService.deleteAllFileByIds(allFileByPostId);
+        List<FileRequest> fileRequests = fileUtils.uploadFiles(used.getFiles());
+        fileService.saveFiles(used.getPostId(), fileRequests);
     }
     /**
      * 게시물 삭제
@@ -218,10 +190,10 @@ public class UsedServiceImpl implements UsedService{
     @Override
     public void delete(long postId) { // 추후에 변경예정
         try {
-            Path uploadDirPath = Path.of(UPLOAD_DIR+usedRepository.findImgUrl(postId));
-            Files.delete(uploadDirPath);
-            usedRepository.deleteReply(postId);
-            usedRepository.deleteImg(postId);
+//            Path uploadDirPath = Path.of(UPLOAD_DIR+usedRepository.findImgUrl(postId));
+//            Files.delete(uploadDirPath);
+//            usedRepository.deleteReply(postId);
+//            usedRepository.deleteImg(postId);
             usedRepository.deleteProduct(postId);
             usedRepository.deletePost(postId);
         }catch (Exception e){
@@ -284,25 +256,17 @@ public class UsedServiceImpl implements UsedService{
                 .memberId(member.getMemberId())
                 .address(address)
                 .memberName(member.getMemberName())
-//                .profileImg(member.getProfileImg().getOriginalFilename())
                 .score(member.getScore())
                 .memberStatus(member.getMemberStatus())
                 .replyCount(replyCount)
                 .likesCount(likesCount)
                 .likesCheck(likesCheck)
+                .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                 .build();
     }
 
-    @Override
-    public String findImgUrl(long postId) { // 삭제 예정(?)
-        String fileName = usedRepository.findImgUrl(postId);
-        return fileName;
-    }
 
-    @Override
-    public void downloadFiles(String filename, HttpServletResponse response) throws IOException { // 삭제 예정(?)
-        imgDownService.imgDown(filename,response);
-    }
+
 
     /**
      * 게시물 좋아요 업, 다운
@@ -390,18 +354,23 @@ public class UsedServiceImpl implements UsedService{
         map.put("memberId", memberId);
         map.put("criteria", criteria);
         List<Likes> likesList = usedRepository.findLikePosts(map);//좋아요 누른 게시글 긁어오기
+
         for (Likes likes : likesList) {//좋아요누른 게시글만큼 반복
             long postId = likes.getPostId();//좋아요 누른 게시글id
             Post post = usedRepository.findPost(postId);
-            Used used = Used.builder()
-                    .postId(postId)
-                    .title(post.getTitle())
-                    .content(post.getContent())
-                    .postView(post.getPostView())
-                    .likesCount(usedRepository.findLikesCount(postId))
-                    .build();
-            /*제목, 내용, 조회수,좋아요 수*/
-            usedList.add(used);
+            if (post == null) {
+                continue;
+            }
+                Used used = Used.builder()
+                        .postId(postId)
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .postView(post.getPostView())
+                        .likesCount(usedRepository.findLikesCount(postId))
+                        .build();
+                /*제목, 내용, 조회수,좋아요 수*/
+                usedList.add(used);
+
         }
         return usedList;
     }
@@ -503,8 +472,18 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public int countMyLikePost(long memberId) {
-        return usedRepository.countMyLikePost(memberId);
+    public int countMyUsedLikePost(long memberId) {
+        List<Post> postList = clubRepository.findPostId(memberId);
+        List<String> postTypeList = new ArrayList<>();
+        for (Post post : postList) {
+            long postId = post.getPostId();
+            String postType = clubRepository.findMyClubLikePostType(postId);
+            if (postType.equals("used")) {
+                postTypeList.add(postType);
+            }
+        }
+        int total = postTypeList.size();
+        return total;
     }
 }
 

@@ -109,13 +109,13 @@ public class ReplyServiceImpl implements ReplyService {
         List<Reply> replyList=replyRepository.findMyReply(map);//댓글목록 긁어오기
         for (Reply reply : replyList) {
             long postId = reply.getPostId();
-            Post post = usedRepository.findPost(postId);
+            Post post = usedRepository.findReplyPost(postId);
             CarryReply carryReply = CarryReply.builder()
                     .postId(postId)
                     .title(post.getTitle())//게시글 제목
                     .replyUpdate(reply.getReplyUpdate())//작성,수정 날짜
                     .comment(reply.getComment())//댓글 내용
-                    .postType(post.getPostType().equals("used")  ? "중고 상품" : "클럽 게시글")//게시글 유형
+                    .postType(post.getPostType().equals("used")  ? "중고거래" : "동네모임")//게시글 유형
                     .build();
             carryReplyList.add(carryReply);
         }

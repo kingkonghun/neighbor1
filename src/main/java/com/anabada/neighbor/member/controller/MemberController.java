@@ -1,13 +1,17 @@
 package com.anabada.neighbor.member.controller;
 
 import com.anabada.neighbor.club.domain.ClubResponse;
+import com.anabada.neighbor.club.service.ClubService;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.domain.FileInfo;
+import com.anabada.neighbor.file.service.FileUtils;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.service.EmailService;
 import com.anabada.neighbor.member.service.MemberService;
 import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.page.PageDTO;
 import com.anabada.neighbor.used.domain.Used;
+import com.anabada.neighbor.used.service.UsedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +32,10 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final UsedService usedService;
     private final EmailService emailService;
+    private final FileUtils fileUtils;
+    private final ClubService clubService;
 
     @GetMapping("/joinForm")
     public String joinForm() { // 회원가입 폼으로 이동
@@ -91,17 +98,28 @@ public class MemberController {
     public String myWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria,
                           @RequestParam(defaultValue = "used" ,value = "postType") String postType) {
         List<Used> used = memberService.myUsedWrite(principalDetails, criteria);
-        System.out.println("aaa:"+postType);
         List<ClubResponse> club = memberService.myClubWrite(principalDetails, criteria);
 
         int total = 0;
         if (postType.equals("used")) {
+            if (used != null) {
+                for (Used used1 : used) {
+                    List<FileInfo> fileInfoList = fileUtils.getFileInfo(used1.getFileResponseList());
+                    used1.setFileInfo(fileInfoList.get(0));
+                }
+            }
             total = memberService.getUsedTotal(principalDetails.getMember().getMemberId());
             model.addAttribute("writeList", used);
             model.addAttribute("categoryName", "used");
             model.addAttribute("postType", postType);
             model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
         } else if (postType.equals("club")) {
+            if (club != null) {
+                for (ClubResponse clubResponse : club) {
+                    List<FileInfo> fileInfoList = fileUtils.getFileInfo(clubResponse.getFileResponseList());
+                    clubResponse.setFileInfo(fileInfoList.get(0));
+                }
+            }
             total = memberService.getClubTotal(principalDetails.getMember().getMemberId());
             model.addAttribute("writeList", club);
             model.addAttribute("categoryName", "club");
@@ -110,29 +128,6 @@ public class MemberController {
         }
         return "member/myWrite";
     }
-
-    @GetMapping("/myClubWrite")//내가 작성한 글
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String myClubWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria,
-                          @RequestParam(defaultValue = "club" ,value = "postType") String postType) {
-        System.out.println("aaa:"+postType);
-        List<ClubResponse> club = memberService.myClubWrite(principalDetails, criteria);
-
-        int total = 0;
-        total = memberService.getClubTotal(principalDetails.getMember().getMemberId());
-        model.addAttribute("writeList", club);
-        model.addAttribute("categoryName", "club");
-        model.addAttribute("postType", postType);
-        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
-        return "member/myClubWrite";
-    }
-
-
-
-
-
-
-
 
     @GetMapping("/myInfo")//내 개인정보
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
@@ -167,6 +162,28 @@ public class MemberController {
         model.addAttribute("list", member);
         model.addAttribute("message",message);
         return "member/editInfo";
+    }
+    @GetMapping("/likePost") // 좋아요 누른 게시글
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public String likePost(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails, Criteria criteria,
+                           @RequestParam(defaultValue = "used", value = "postType")String postType) {
+        List<Used> usedList=usedService.likePost(principalDetails.getMember().getMemberId(),criteria);
+        List<ClubResponse> clubList = clubService.likePost(principalDetails.getMember().getMemberId(), criteria);
+        int total = 0;
+
+        if (postType.equals("used")) {
+            total = usedService.countMyUsedLikePost(principalDetails.getMember().getMemberId());
+            model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
+            model.addAttribute("postType", postType);
+            model.addAttribute("list",usedList);
+        } else if (postType.equals("club")) {
+            total = clubService.countMyClubLikePost(principalDetails.getMember().getMemberId());
+            model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
+            model.addAttribute("postType", postType);
+            model.addAttribute("list",clubList);
+        }
+
+        return "member/myLikes";
     }
     @PostMapping("/editMyInfo")//정보수정
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")

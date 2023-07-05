@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta name="description" content="오이마켓" />
 <meta name="author" content="아나바다" />
-<title>오이마켓</title>
+<title>아나바다</title>
 <th:block th:insert="/common/common :: fragment-header"></th:block>
 
 <!--헤더 스타일-->
@@ -37,7 +37,6 @@
             alert("개인정보가 수정되었습니다. 다시 로그인 해 주세요.");
             location.href = "/logout";
         }
-
     };
 </script>
 </head>
@@ -50,11 +49,11 @@
         <div class="container">
             <div class="hero-content">
                 <p class="hero-subtitle">👋, My name is 아나바다</p>
-                <h1 class="headline-lg">저와 일상의 소소한 즐거움을 함께 나눠요.</h1>
+                <h1 class="headline-lg">동네 주민들과 소소한 즐거움을 함께 나눠요</h1>
                 <p class="hero-text body-md">
-                    Anytime, anywhere!
+                    아나바다에 오신 것을 환영합니다
                 </p>
-                <a href="#target-section" class="btn1 btn1-primary">Let's Start</a>
+                <a href="#target-section" class="btn1 btn1-primary">시작하기</a>
             </div>
             <figure class="hero-banner">
                 <img th:src="@{/img/hero-banner.png}" width="680" height="400"
@@ -90,7 +89,7 @@
         <div id="list" class="row">
             <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${starList}">
                 <div class="item p-3" th:onclick="|location.href='@{used/detail(postId=${row.postId})}'|">
-                    <img class="list_img" th:src="@{/used/findImg(postId=${row.postId})}">
+                    <img class="list_img" th:src="@{${row.fileInfo.url}}">
                     <div class="div_2 mt-3">
                         <h5 th:text="${row.title}"></h5>
                         <span th:inline="text">
@@ -135,30 +134,28 @@
         <div id="list2" class="row">
             <article class="col col-xl-6 col-lg-6 col-md-12 col-sm-12 pb-5" th:each="club : ${clubList}">
                 <div class="item p-3" th:onclick="|location.href='@{clubDetail(postId=${club.postId})}'|">
-                    <img class="list_img" src="https://cdn.pixabay.com/photo/2015/07/28/22/05/child-865116_1280.jpg">
+                    <img class="list_img" th:src="@{${club.fileInfo.url}}">
                     <div class="text">
-                        <h5 th:text="${club.title}">제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. 제목입니다. </h5>
-                        <span class="content" th:text="${club.content}">내용내용ddddddddddd</span><!--내용 10자이내로-->
+                        <h5 th:text="${club.title}"></h5>
+                        <span class="content" th:text="${club.content}"></span><!--내용 10자이내로-->
                         <div class="listdetail"><!--지역 운동 생성일-->
-                            <span class="category" th:text="${club.hobbyName}">운동</span>
+                            <span class="category" th:text="${club.hobbyName}"></span>
                             <span class="region" th:inline="text">
                                 <i class="fa-solid fa-map-location-dot"></i>
                                 [[${club.address}]]
                             </span>
                         </div>
                         <div class="members">
-                            <img src="/img/author-1.jpg" alt="Member 1">
-                            <img src="/img/author-2.jpg" alt="Member 2">
-                            <img src="/img/author-3.jpg" alt="Member 3">
-                            <img src="/img/author-4.jpg" alt="Member 4">
-                            <img src="/img/author-5.jpg" alt="Member 5">
-                            <img src="/img/author-6.jpg" alt="Member 6">
+                            <img th:src="@{/member/findProfileImg(memberId=${club.memberId})}" alt="fail">
+                            <th:block th:each="man : ${club.memberIdList}">
+                                <img th:src="@{/member/findProfileImg(memberId=${man})}" alt="fail">
+                            </th:block>
 
                             <div class="count">
                                 <i class="fa-solid fa-people-group"></i>
-                                <span th:text="${club.nowMan}">6</span>
+                                <span th:text="${club.nowMan}"></span>
                                 <span>/</span>
-                                <span th:text="${club.maxMan}">50</span>
+                                <span th:text="${club.maxMan}"></span>
                             </div><!--인원수 나타내는-->
                         </div>
                     </div>

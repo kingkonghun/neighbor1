@@ -34,9 +34,16 @@
             <tbody th:each="list : ${writeList}">
             <tr th:onclick="'detail('+${list.postId}+')'" >
                 <td th:text="${list.postId}"></td>
-                <td  th:if="${categoryName} eq 'used' " th:text="${list.categoryName}"></td>
-                <td  th:if="${categoryName} eq 'club' " th:text="${list.hobbyName}"></td>
-                <td>사진</td>
+                <th:block th:if="${categoryName} eq 'used' ">
+                    <td th:text="${list.categoryName}"></td>
+                    <td><img class="img" th:src="@{${list.fileInfo.url}}" alt="fail"></td>
+                </th:block>
+                <th:block th:if="${categoryName} eq 'club' ">
+                    <td th:text="${list.hobbyName}"></td>
+                    <td><img class="img" th:src="@{${list.fileInfo.url}}" alt="fail"></td>
+                </th:block>
+
+
                 <td th:text="${list.title}"></td>
                 <td th:text="${#dates.format(list.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></td>
                 <td th:text="${list.postView}"></td>
@@ -55,7 +62,6 @@
 <script th:inline="javascript">
             $(function () {
             $("#post_select").change(function (){
-                console.log($("#post_select").val());
                 paging(1);
                 $.ajax({
                     url:"/member/myWrite",
