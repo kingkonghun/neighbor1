@@ -438,4 +438,7 @@ body{/*컨테이너 배경*/
     height: 100%;
     object-fit: cover;
 }
+@media screen and (max-width: 1400px) {
+    #reply{width: 600px; margin-top: 24px;}
+}
 

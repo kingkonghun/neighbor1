@@ -407,7 +407,7 @@
                 </ul>
                 <span class="views pt-2" th:text="${#dates.format(club.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></span>
             </div>
-            <p th:text="${club.content}" style="height: 60%; overflow: auto; word-break: break-all;"></p><!--내용-->
+            <pre th:text="${club.content}" style="height: 60%; overflow: auto; word-break: break-all;"></pre><!--내용-->
             <div style="display: flex; justify-content: space-between;">
 
                 <div class="count_people">
@@ -511,12 +511,10 @@
                         </span>
                     </div>
                     <div class="members">
-                        <img src="/img/author-1.jpg" alt="Member 1">
-                        <img src="/img/author-2.jpg" alt="Member 2">
-                        <img src="/img/author-3.jpg" alt="Member 3">
-                        <img src="/img/author-4.jpg" alt="Member 4">
-                        <img src="/img/author-5.jpg" alt="Member 5">
-                        <img src="/img/author-6.jpg" alt="Member 6">
+                        <img th:src="@{/member/findProfileImg(memberId=${club.memberId})}" alt="fail">
+                        <th:block th:each="man : ${club.memberIdList}">
+                            <img th:src="@{/member/findProfileImg(memberId=${man})}" alt="fail">
+                        </th:block>
 
                         <div class="count">
                             <i class="fa-solid fa-people-group"></i>
@@ -524,6 +522,20 @@
                             <span>/</span>
                             <span th:text="${club.maxMan}">50</span>
                         </div><!--인원수 나타내는-->
+                    </div>
+                    <div style="justify-content: flex-end; display: flex; gap: 20px;">
+                        <span th:inline="text">
+                            [[${club.postView}]]
+                            <i class="bi bi-caret-up-fill"></i>
+                        </span>
+                        <span th:inline="text">
+                            [[${club.likesCount}]]
+                            <i class="bi bi-heart-fill" style="color: red"></i>
+                        </span>
+                        <span th:inline="text">
+                            [[${club.replyCount}]]
+                            <i class="bi bi-chat-dots-fill"></i>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -571,7 +583,6 @@
     });
 
     function clubJoin(){
-        alert("hi");
         $.ajax({
             type : "post",
             url : "/club/join",

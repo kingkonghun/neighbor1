@@ -37,6 +37,20 @@
                     <span th:text="${club.maxMan}"></span>
                 </div><!--인원수 나타내는-->
             </div>
+            <div style="justify-content: flex-end; display: flex; gap: 20px;">
+                <span th:inline="text">
+                    [[${club.postView}]]
+                    <i class="bi bi-caret-up-fill"></i>
+                </span>
+                <span th:inline="text">
+                    [[${club.likesCount}]]
+                    <i class="bi bi-heart-fill" style="color: red"></i>
+                </span>
+                <span th:inline="text">
+                    [[${club.replyCount}]]
+                    <i class="bi bi-chat-dots-fill"></i>
+                </span>
+            </div>
         </div>
     </div>
 </article>

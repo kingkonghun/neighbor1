@@ -24,6 +24,10 @@ header {
 }
 .text {
     width: 320px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    word-break:break-all;
 }
 .list_img {
     flex-shrink: 0;
@@ -94,6 +98,9 @@ header {
     color: #383535;
 }
 .text .content{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: 20px;
     line-height: 24px;
     letter-spacing: -.4px;
@@ -101,12 +108,12 @@ header {
     margin-bottom: 5px;
 
     /* 이 세 줄이 '...' 설정을 적용하는 데 필요 */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 width: 100%;
 }
 .text .listdetail{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     font-size: 20px;
     line-height: 24px;
     letter-spacing: -.4px;
@@ -115,9 +122,6 @@ width: 100%;
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
     font-family: Pretendard;
     width: 100%;
 }
@@ -180,11 +184,13 @@ width: 100%;
 }
 @media screen and (max-width: 768px) {
     .text{width: 316px;}
-    .text h5{font-size: 18px;}
+    .text h5{font-size: 18px; margin-bottom: 0px;}
     .text .content{font-size: 14px;}
+    .text .listdetail {margin-bottom: 0px;}
     .text .listdetail span, .text .members .count span {font-size: 14px;}
     .text .listdetail .category {font-size: 14px;}
     .text .members img {width: 26px!important; height: 26px!important;}
+    .text .members {margin-top: 0px;}
     .list_img {width: 120px;}
     .item{height: 140px;}
     .content {display: none;}
