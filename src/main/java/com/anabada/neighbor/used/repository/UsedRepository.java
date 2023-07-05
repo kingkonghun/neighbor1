@@ -192,4 +192,5 @@ public interface UsedRepository {
     int countSales(long memberId);
 
     int countMyLikePost(long memberId);
+
 }

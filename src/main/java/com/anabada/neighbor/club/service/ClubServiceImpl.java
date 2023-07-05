@@ -91,6 +91,7 @@ public class ClubServiceImpl implements ClubService {
                 .maxMan(club.getMaxMan())
                 .nowMan(club.getNowMan())
                 .address(address)
+                .postType(post.getPostType())
                 .build();
     }
 

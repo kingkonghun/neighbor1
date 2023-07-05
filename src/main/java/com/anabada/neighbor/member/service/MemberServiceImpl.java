@@ -152,6 +152,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public Member myInfo(long memberId) {//내정보
         Member member = null;
+
         member = memberRepository.findMyInfo(memberId);
         member.setMyWrite(memberRepository.countMyAllWrite(memberId));
         member.setMyReply(replyRepository.countMyReply(memberId));

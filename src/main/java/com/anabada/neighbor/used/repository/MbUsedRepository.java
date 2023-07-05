@@ -24,7 +24,7 @@ public interface MbUsedRepository extends UsedRepository {
     List<Category> categoryList();
 
     @Override
-    @Select("select * from product where postId = #{postId} and (productStatus = 'y' or productStatus = 'n')")
+    @Select("select * from product where postId = #{postId}")
     public Product findProduct(long postId);
 
     @Override
@@ -36,7 +36,7 @@ public interface MbUsedRepository extends UsedRepository {
     public Member findMember(long memberId);
 
     @Override
-    @Select("select * from post where postId = #{postId} and postType = 'used'")
+    @Select("select * from post where postId = #{postId} and postType != 'club'")
     public Post findPost(long postId);
 
     @Override
@@ -90,11 +90,11 @@ public interface MbUsedRepository extends UsedRepository {
     public void updatePostView(long postId);
 
     @Override
-    @Select("select * from product where productStatus = 'y' or productStatus = 'n'")
+    @Select("select * from product")
     public List<Product> productList();
 
     @Override
-    @Select("select * from product where categoryId = #{categoryId} and productStatus = 'y'")
+    @Select("select * from product where categoryId = #{categoryId}")
     public List<Product> productCategoryList(long categoryId);
 
     @Override
@@ -188,4 +188,5 @@ public interface MbUsedRepository extends UsedRepository {
     @Override
     @Select("select count(*) from likes where memberId = #{memberId}")
     int countMyLikePost(long memberId);
+
 }
