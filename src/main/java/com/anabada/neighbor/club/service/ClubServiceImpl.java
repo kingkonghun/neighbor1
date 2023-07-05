@@ -7,7 +7,9 @@ import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.file.service.FileService;
+import com.anabada.neighbor.file.service.FileUtils;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.used.domain.Likes;
@@ -24,11 +26,13 @@ public class ClubServiceImpl implements ClubService {
     private final ClubRepository clubRepository;
     private final FileService fileService;
     private final UsedRepository usedRepository;
+    private final FileUtils fileUtils;
 
-    public ClubServiceImpl(ClubRepository clubRepository, FileService fileService, UsedRepository usedRepository) {
+    public ClubServiceImpl(ClubRepository clubRepository, FileService fileService, UsedRepository usedRepository, FileUtils fileUtils) {
         this.clubRepository = clubRepository;
         this.fileService = fileService;
         this.usedRepository = usedRepository;
+        this.fileUtils = fileUtils;
     }
 
     @Transactional
@@ -131,7 +135,6 @@ public class ClubServiceImpl implements ClubService {
         return club;
     }
 
-    @Transactional
     @Override
     public Message updatePost(Post post) {
         Message message = new Message();
@@ -139,19 +142,19 @@ public class ClubServiceImpl implements ClubService {
             message.setMessage("게시물 업데이트 성공");
             message.setSuccess(1);
         }
+
         return message;
     }
 
-    @Transactional
     @Override
-    public Message updateClub(Club club, ClubResponse clubResponse) {
+    public Message updateClub(Club clubRequest, ClubResponse clubResponse) {
         Message message = new Message();
-        if (club.getMaxMan() > clubResponse.getNowMan()) {
+        if (clubRequest.getMaxMan() < clubResponse.getNowMan()) {
             message.setMessage("현재 가입한 인원보다 최대 인원수를 내릴 수 없습니다.");
             message.setSuccess(0);
             return message;
         }
-        if(clubRepository.updateClub(club) == 1){
+        if(clubRepository.updateClub(clubRequest) == 1){
             message.setMessage("모임 업데이트 성공.");
             message.setSuccess(1);
         }
