@@ -85,16 +85,8 @@ public class UsedController {
         return "redirect:/used/list";
     }
 
-    @GetMapping("/findImg") //이미지 찾기
-    public void findImg(long postId, HttpServletResponse response) throws IOException {
-        String filenames = usedService.findImgUrl(postId);
-//        System.out.println("filenames = " + filenames);
-        downFiles(filenames,response);
-    }
-    @GetMapping("/downFiles")//이미지 다운
-    public void downFiles(String img,HttpServletResponse response) throws IOException{
-        usedService.downloadFiles(img,response);
-    }
+
+
 
     @PostMapping("/postEdit") //게시물 수정
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")

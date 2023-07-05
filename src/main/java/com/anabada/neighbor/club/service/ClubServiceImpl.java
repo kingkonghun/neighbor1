@@ -334,19 +334,17 @@ public class ClubServiceImpl implements ClubService {
         for (Likes likes : likesList) {
             long postId = likes.getPostId();//좋아요 누른 게시글 ID
             Post post = clubRepository.selectPost(postId);
-            if (post == null) {
-                continue;
+            if (!post.getPostType().equals("used")) {
+                ClubResponse clubResponse = ClubResponse.builder()
+                        .postId(postId)
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .postView(post.getPostView())
+                        .likesCount(usedRepository.findLikesCount(postId))
+                        .build();
+                clubList.add(clubResponse);
             }
-            ClubResponse clubResponse = ClubResponse.builder()
-                    .postId(postId)
-                    .title(post.getTitle())
-                    .content(post.getContent())
-                    .postView(post.getPostView())
-                    .likesCount(usedRepository.findLikesCount(postId))
-                    .build();
-            clubList.add(clubResponse);
         }
-
         return clubList;
     }
 

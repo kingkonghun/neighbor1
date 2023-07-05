@@ -50,8 +50,10 @@ public interface MbClubRepository extends ClubRepository {
     void deletePost(long postId);
 
     @Override
-    @Select("select * from post where postId = #{postId} and postType = 'club'")
+    @Select("select * from post where postId = #{postId}")
     Post selectPost(long postId);
+
+
 
     @Override
     @Select("select * from club where postId = #{postId}")

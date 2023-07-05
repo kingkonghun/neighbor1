@@ -28,7 +28,6 @@ import java.util.*;
 public class UsedServiceImpl implements UsedService{
 
     private final UsedRepository usedRepository;
-    private final ImgDownService imgDownService;
     private final MemberRepository memberRepository;
     private final FileService fileService;
     private final FileUtils fileUtils;
@@ -280,16 +279,8 @@ public class UsedServiceImpl implements UsedService{
                 .build();
     }
 
-    @Override
-    public String findImgUrl(long postId) { // 삭제 예정(?)
-        String fileName = usedRepository.findImgUrl(postId);
-        return fileName;
-    }
 
-    @Override
-    public void downloadFiles(String filename, HttpServletResponse response) throws IOException { // 삭제 예정(?)
-        imgDownService.imgDown(filename,response);
-    }
+
 
     /**
      * 게시물 좋아요 업, 다운
@@ -384,16 +375,16 @@ public class UsedServiceImpl implements UsedService{
             if (post == null) {
                 continue;
             }
+                Used used = Used.builder()
+                        .postId(postId)
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .postView(post.getPostView())
+                        .likesCount(usedRepository.findLikesCount(postId))
+                        .build();
+                /*제목, 내용, 조회수,좋아요 수*/
+                usedList.add(used);
 
-            Used used = Used.builder()
-                    .postId(postId)
-                    .title(post.getTitle())
-                    .content(post.getContent())
-                    .postView(post.getPostView())
-                    .likesCount(usedRepository.findLikesCount(postId))
-                    .build();
-            /*제목, 내용, 조회수,좋아요 수*/
-            usedList.add(used);
         }
         return usedList;
     }

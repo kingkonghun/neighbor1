@@ -31,12 +31,6 @@ public interface UsedService {
      * */
     public Used detail(long postId, HttpServletRequest request, HttpServletResponse response, PrincipalDetails principalDetails);
 
-
-    public String findImgUrl(long postId);//이미지 이름가져오기
-
-
-    public void downloadFiles(String filenames, HttpServletResponse response) throws IOException;
-
     /**
      * 카테고리 리스트
      */
