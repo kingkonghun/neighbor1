@@ -41,7 +41,7 @@ public interface ChattingService {
     /**
      * 채팅방 나가기
      */
-    void chatOut(Chat chat, PrincipalDetails principalDetails);
+    void chatOut(Chat chat, long memberId);
 
     /**
      * 해당 채팅방에 사용자 목록을 가져옴

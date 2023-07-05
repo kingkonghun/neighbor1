@@ -146,7 +146,7 @@ public class ChattingServiceImpl implements ChattingService {
         if (chat.getType().equals("used")) {
             chatMemberIdList = chattingRepository.findChatMemberIdByRoomId(roomId);
             chattingRepository.updateStatusAll(roomId, "y"); // 상대방을 다시 입장시킴
-        } else if (chat.getType().equals("club")) {
+        } else if (chat.getType().equals("club") || chat.getType().equals("kick")) {
             chatMemberIdList = chattingRepository.findStatusYMemberIdByRoomId(roomId);
             chat.setMemberCount(chattingRepository.chatMemberCount(roomId));
             ChattingRoom chattingRoom = chattingRepository.findChatRoomByRoomId(roomId);
@@ -338,9 +338,8 @@ public class ChattingServiceImpl implements ChattingService {
      * 채팅방 나가기
      */
     @Override
-    public void chatOut(Chat chat, PrincipalDetails principalDetails) {
-        long memberId = principalDetails.getMember().getMemberId();
-        String memberName = principalDetails.getMember().getMemberName();
+    public void chatOut(Chat chat, long memberId) {
+        String memberName = memberRepository.findMemberName(memberId);
         String key = chat.getRoomId() + "_" + memberId; // map 을 조회할 key
         chatNotificationMap.remove(key); // 해당 채팅방의 내 알림 삭제
 
@@ -354,6 +353,10 @@ public class ChattingServiceImpl implements ChattingService {
         if (chat.getType().equals("club")) { // 동네모임 채팅이면
             chat.setContent(memberName + "님이 퇴장하셨습니다.");
             chat.setMessageType("EXIT");
+            sendMessage(chat, memberId);
+        } else if (chat.getType().equals("kick")) {
+            chat.setContent(memberName + "님이 추방당하셨습니다.");
+            chat.setMessageType("KICK");
             sendMessage(chat, memberId);
         }
     }
