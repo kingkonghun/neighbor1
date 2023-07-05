@@ -2,6 +2,8 @@ package com.anabada.neighbor.member.controller;
 
 import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.domain.FileInfo;
+import com.anabada.neighbor.file.service.FileUtils;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.service.EmailService;
 import com.anabada.neighbor.member.service.MemberService;
@@ -29,6 +31,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final EmailService emailService;
+    private final FileUtils fileUtils;
 
     @GetMapping("/joinForm")
     public String joinForm() { // 회원가입 폼으로 이동
@@ -91,17 +94,28 @@ public class MemberController {
     public String myWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria,
                           @RequestParam(defaultValue = "used" ,value = "postType") String postType) {
         List<Used> used = memberService.myUsedWrite(principalDetails, criteria);
-        System.out.println("aaa:"+postType);
         List<ClubResponse> club = memberService.myClubWrite(principalDetails, criteria);
 
         int total = 0;
         if (postType.equals("used")) {
+            if (used != null) {
+                for (Used used1 : used) {
+                    List<FileInfo> fileInfoList = fileUtils.getFileInfo(used1.getFileResponseList());
+                    used1.setFileInfo(fileInfoList.get(0));
+                }
+            }
             total = memberService.getUsedTotal(principalDetails.getMember().getMemberId());
             model.addAttribute("writeList", used);
             model.addAttribute("categoryName", "used");
             model.addAttribute("postType", postType);
             model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
         } else if (postType.equals("club")) {
+            if (club != null) {
+                for (ClubResponse clubResponse : club) {
+                    List<FileInfo> fileInfoList = fileUtils.getFileInfo(clubResponse.getFileResponseList());
+                    clubResponse.setFileInfo(fileInfoList.get(0));
+                }
+            }
             total = memberService.getClubTotal(principalDetails.getMember().getMemberId());
             model.addAttribute("writeList", club);
             model.addAttribute("categoryName", "club");
@@ -111,21 +125,7 @@ public class MemberController {
         return "member/myWrite";
     }
 
-    @GetMapping("/myClubWrite")//내가 작성한 글
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String myClubWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria,
-                          @RequestParam(defaultValue = "club" ,value = "postType") String postType) {
-        System.out.println("aaa:"+postType);
-        List<ClubResponse> club = memberService.myClubWrite(principalDetails, criteria);
 
-        int total = 0;
-        total = memberService.getClubTotal(principalDetails.getMember().getMemberId());
-        model.addAttribute("writeList", club);
-        model.addAttribute("categoryName", "club");
-        model.addAttribute("postType", postType);
-        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
-        return "member/myClubWrite";
-    }
 
 
 

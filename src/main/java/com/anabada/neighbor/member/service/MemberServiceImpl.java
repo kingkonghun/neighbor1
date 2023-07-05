@@ -4,6 +4,9 @@ import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.domain.FileInfo;
+import com.anabada.neighbor.file.domain.FileResponse;
+import com.anabada.neighbor.file.service.FileService;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.repository.MemberRepository;
 import com.anabada.neighbor.page.Criteria;
@@ -33,6 +36,7 @@ public class MemberServiceImpl implements MemberService{
     private final UsedRepository usedRepository;
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final FileService fileService;
     private final ImgDownService imgDownService;
     private final ReplyRepository replyRepository;
     private final PasswordEncoder passwordEncoder;
@@ -77,6 +81,7 @@ public class MemberServiceImpl implements MemberService{
                         .postUpdate(post.getPostUpdate())
                         .postView(post.getPostView())//작성한 글
                         .categoryName(categoryName)//카테고리
+                        .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                         .build();
                 used.add(used1);
         }
@@ -105,6 +110,7 @@ public class MemberServiceImpl implements MemberService{
                     .postDate(post.getPostDate())
                     .postUpdate(post.getPostUpdate())
                     .hobbyName(hobbyName)
+                    .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                     .postView(post.getPostView())//작성한 글
                     .build();
             clubResponse.add(clubResponse1);

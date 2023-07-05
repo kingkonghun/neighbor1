@@ -167,20 +167,7 @@ public class UsedServiceImpl implements UsedService{
 
         List<FileRequest> images = fileUtils.uploadFiles(used.getFiles());
         fileService.saveFiles(used.getPostId(), images);
-//        try { // 이미지 업로드 관련
-//            if (!Files.exists(Paths.get(UPLOAD_DIR))) {
-//                Files.createDirectories(Paths.get(UPLOAD_DIR));
-//            }
-//            for (MultipartFile file : used.getFiles()) {
-//                String uuid = UUID.randomUUID().toString();
-//                String fileName = uuid + "_" + file.getOriginalFilename();
-//                String filePath = UPLOAD_DIR + File.separator + fileName;
-//                file.transferTo(new File(filePath));
-//                usedRepository.writeImage(used.getPostId(),fileName); // img 테이블에 insert
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+
     }
 
     /**
