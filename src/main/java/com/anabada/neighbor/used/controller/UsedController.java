@@ -91,6 +91,7 @@ public class UsedController {
     @PostMapping("/postEdit") //게시물 수정
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String postEdit(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception {
+        System.out.println("used = " + used);
         usedService.update(used, principalDetails);
         return "redirect:/used/list";
     }

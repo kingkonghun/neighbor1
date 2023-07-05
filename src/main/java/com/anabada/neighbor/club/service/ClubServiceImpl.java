@@ -206,6 +206,7 @@ public class ClubServiceImpl implements ClubService {
                     .score(member.getScore())
                     .maxMan(club.getMaxMan())
                     .nowMan(club.getNowMan())
+                    .memberIdList(clubRepository.findMemberIdInClub(club.getClubId()))
                     .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))//여기까지완성
                     .address(address)
                     .replyCount(replyCount)
@@ -303,6 +304,7 @@ public class ClubServiceImpl implements ClubService {
             String address = splitString[0] + " " + splitString[1];
             ClubResponse temp = ClubResponse.builder()
                     .postId(post.getPostId())
+                    .memberIdList(clubRepository.findMemberIdInClub(club.getClubId()))
                     .memberId(member.getMemberId())
                     .memberName(member.getMemberName())
                     .title(post.getTitle())

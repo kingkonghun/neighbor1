@@ -3,6 +3,7 @@ package com.anabada.neighbor.used.service;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.file.domain.FileRequest;
+import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.file.service.FileService;
 import com.anabada.neighbor.file.service.FileUtils;
 import com.anabada.neighbor.member.domain.Member;
@@ -175,28 +176,13 @@ public class UsedServiceImpl implements UsedService{
     @Override
     public void update(Used used, PrincipalDetails principalDetails) throws Exception{//게시글수정
         used.setMemberId(principalDetails.getMember().getMemberId()); // security 에 있는 memberId를 used 에 넣음
-//        String formImg = used.getFiles().get(0).getOriginalFilename();
         usedRepository.updatePost(used); // post 테이블 update
         usedRepository.updateProduct(used); // product 테이블 update
-
-//        Path originImg = Path.of(UPLOAD_DIR+"\\"+usedRepository.findImgUrl(used.getPostId()));//원래 이미지 url찾아오기
-//            if (!Files.exists(Paths.get(UPLOAD_DIR))) {//디렉토리가 없다면 디렉토리생성
-//                Files.createDirectories(Paths.get(UPLOAD_DIR));
-//            }
-
-//            if(!formImg.equals("") && formImg != null ) {
-//                for (MultipartFile file : used.getFiles()) {
-//                    System.out.println("이프문안에:"+formImg);
-//                    Files.delete(originImg);//원래 이미지 삭제
-//                    String uuid = UUID.randomUUID().toString();
-//                    String fileName = uuid + "_" + file.getOriginalFilename();
-//                    String filePath = UPLOAD_DIR + File.separator + fileName;
-//                    file.transferTo(new File(filePath));
-//                    usedRepository.updateImage(used.getPostId(), fileName); // img 테이블 update
-//                  }
-//            }
-
-
+        List<FileResponse> allFileByPostId = fileService.findAllFileByPostId(used.getPostId());
+        fileUtils.deleteFiles(allFileByPostId);
+        fileService.deleteAllFileByIds(allFileByPostId);
+        List<FileRequest> fileRequests = fileUtils.uploadFiles(used.getFiles());
+        fileService.saveFiles(used.getPostId(), fileRequests);
     }
     /**
      * 게시물 삭제

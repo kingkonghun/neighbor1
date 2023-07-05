@@ -136,4 +136,6 @@ public interface ClubRepository {
      * @return
      */
     List<Post> findPostId(long memberId);
+
+    List<Long> findMemberIdInClub(long clubId);
 }

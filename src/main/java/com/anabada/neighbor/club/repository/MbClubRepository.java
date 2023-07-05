@@ -143,4 +143,8 @@ public interface MbClubRepository extends ClubRepository {
     @Override
     @Select("SELECT postId FROM likes WHERE memberId = #{memberId}")
     List<Post> findPostId(long memberId);
+
+    @Override
+    @Select("select memberId from clubJoin where clubId = #{clubId} LIMIT 5")
+    List<Long> findMemberIdInClub(long clubId);
 }

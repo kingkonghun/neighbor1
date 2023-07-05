@@ -147,12 +147,10 @@
                             </span>
                         </div>
                         <div class="members">
-                            <img src="/img/author-1.jpg" alt="Member 1">
-                            <img src="/img/author-2.jpg" alt="Member 2">
-                            <img src="/img/author-3.jpg" alt="Member 3">
-                            <img src="/img/author-4.jpg" alt="Member 4">
-                            <img src="/img/author-5.jpg" alt="Member 5">
-                            <img src="/img/author-6.jpg" alt="Member 6">
+                            <img th:src="@{/member/findProfileImg(memberId=${club.memberId})}" alt="fail">
+                            <th:block th:each="man : ${club.memberIdList}">
+                                <img th:src="@{/member/findProfileImg(memberId=${man})}" alt="fail">
+                            </th:block>
 
                             <div class="count">
                                 <i class="fa-solid fa-people-group"></i>

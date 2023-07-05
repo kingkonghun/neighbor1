@@ -54,7 +54,7 @@ public interface MbUsedRepository extends UsedRepository {
     public void writeImage(@Param("postId") long postId, @Param("imgUrl") String imgUrl);
 
     @Override
-    @Update("UPDATE  product SET categoryId=#{categoryId},price=#{price} WHERE postId=46")
+    @Update("UPDATE product SET categoryId=#{categoryId},price=#{price} WHERE postId=#{postId}")
     public void updateProduct(Used used);
 
     @Override
