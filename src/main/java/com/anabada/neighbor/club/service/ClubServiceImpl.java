@@ -7,23 +7,17 @@ import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
-import com.anabada.neighbor.file.domain.FileRequest;
-import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.file.service.FileService;
 import com.anabada.neighbor.member.domain.Member;
+import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.used.domain.Likes;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.repository.UsedRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ClubServiceImpl implements ClubService {
@@ -212,6 +206,7 @@ public class ClubServiceImpl implements ClubService {
                     .score(member.getScore())
                     .maxMan(club.getMaxMan())
                     .nowMan(club.getNowMan())
+                    .memberIdList(clubRepository.findMemberIdInClub(club.getClubId()))
                     .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))//여기까지완성
                     .address(address)
                     .replyCount(replyCount)
@@ -309,6 +304,7 @@ public class ClubServiceImpl implements ClubService {
             String address = splitString[0] + " " + splitString[1];
             ClubResponse temp = ClubResponse.builder()
                     .postId(post.getPostId())
+                    .memberIdList(clubRepository.findMemberIdInClub(club.getClubId()))
                     .memberId(member.getMemberId())
                     .memberName(member.getMemberName())
                     .title(post.getTitle())
@@ -327,5 +323,45 @@ public class ClubServiceImpl implements ClubService {
             result.add(temp);
         }
         return result;
+    }
+
+    @Override
+    public List<ClubResponse> likePost(long memberId, Criteria criteria) {
+        List<ClubResponse> clubList = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
+        map.put("memberId", memberId);
+        map.put("criteria", criteria);
+        List<Likes> likesList = usedRepository.findLikePosts(map);//좋아요 누른 게시글 긁기
+
+        for (Likes likes : likesList) {
+            long postId = likes.getPostId();//좋아요 누른 게시글 ID
+            Post post = clubRepository.selectPost(postId);
+            if (!post.getPostType().equals("used")) {
+                ClubResponse clubResponse = ClubResponse.builder()
+                        .postId(postId)
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .postView(post.getPostView())
+                        .likesCount(usedRepository.findLikesCount(postId))
+                        .build();
+                clubList.add(clubResponse);
+            }
+        }
+        return clubList;
+    }
+
+    @Override
+    public int countMyClubLikePost(long memberId) {
+        List<Post> postList = clubRepository.findPostId(memberId);
+        List<String> postTypeList = new ArrayList<>();
+        for (Post post : postList) {
+            long postId = post.getPostId();
+            String postType = clubRepository.findMyClubLikePostType(postId);//포스트타입
+            if (postType.equals("club")) {
+                postTypeList.add(postType);
+            }
+        }
+        int total = postTypeList.size();
+        return total;
     }
 }

@@ -13,7 +13,7 @@
 <body>
 <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${list}">
     <div class="item p-3" th:onclick="|location.href='@{detail(postId=${row.postId})}'|">
-        <img class="list_img" th:src="@{/used/findImg(postId=${row.postId})}">
+        <img class="list_img" th:src="@{${row.fileInfo.url}}">
         <div class="div_2 mt-3">
             <h5 th:text="${row.title}"></h5>
             <span th:inline="text">

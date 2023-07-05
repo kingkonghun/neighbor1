@@ -40,4 +40,5 @@ public class ClubResponse {
     private int likesCheck;
     private String postType;
     private String address;
+    private List<Long> memberIdList;
 }

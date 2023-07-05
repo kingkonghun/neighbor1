@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -42,7 +43,7 @@ public class MemberServiceImpl implements MemberService{
     private final PasswordEncoder passwordEncoder;
     private final ClubRepository clubRepository;
 
-    final String uploadDir = "C:\\upload_anabada\\profile\\";
+    final String uploadPath = Paths.get(System.getProperty("user.home"), "upload_anabada","profile").toString();
 
 
     /**
@@ -152,7 +153,6 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public Member myInfo(long memberId) {//내정보
         Member member = null;
-
         member = memberRepository.findMyInfo(memberId);
         member.setMyWrite(memberRepository.countMyAllWrite(memberId));
         member.setMyReply(replyRepository.countMyReply(memberId));
@@ -232,15 +232,24 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public void editPhoto(Member member) {
+        System.out.println("member = " + member);
         try {
-            if (Files.exists(Paths.get(uploadDir))) {
-                Files.createDirectories(Paths.get(uploadDir));
+            File folderPath = new File(uploadPath);
+
+            if (!folderPath.exists()) {
+                try {
+                    folderPath.mkdir();
+                    System.out.println("폴더가 생성되었습니다.");
+                } catch (Exception e) {
+                    System.out.println("폴더를 생성할 수 없습니다: " + e.getMessage());
+                }
             }
+
             MultipartFile file = member.getProfileImg();
             String uuid = UUID.randomUUID().toString();
             String profileImg = uuid+"_"+file.getOriginalFilename();
 
-            String filePath = uploadDir+File.separator+profileImg;
+            String filePath = uploadPath+File.separator+profileImg;
             file.transferTo(new File(filePath));
 
             Map<String, Object> map = new HashMap<>();

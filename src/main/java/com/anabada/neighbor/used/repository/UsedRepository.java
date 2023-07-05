@@ -60,10 +60,7 @@ public interface UsedRepository {
      */
     public void updatePostView(long postId);
 
-    /**
-     * 삭제예정
-     */
-    public String findImgUrl(long postId);
+
 
     /**
      * 삭제예정
@@ -193,4 +190,5 @@ public interface UsedRepository {
 
     int countMyLikePost(long memberId);
 
+    Post findReplyPost(long postId);
 }

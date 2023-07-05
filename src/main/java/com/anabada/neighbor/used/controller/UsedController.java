@@ -85,20 +85,13 @@ public class UsedController {
         return "redirect:/used/list";
     }
 
-    @GetMapping("/findImg") //이미지 찾기
-    public void findImg(long postId, HttpServletResponse response) throws IOException {
-        String filenames = usedService.findImgUrl(postId);
-//        System.out.println("filenames = " + filenames);
-        downFiles(filenames,response);
-    }
-    @GetMapping("/downFiles")//이미지 다운
-    public void downFiles(String img,HttpServletResponse response) throws IOException{
-        usedService.downloadFiles(img,response);
-    }
+
+
 
     @PostMapping("/postEdit") //게시물 수정
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String postEdit(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception {
+        System.out.println("used = " + used);
         usedService.update(used, principalDetails);
         return "redirect:/used/list";
     }
@@ -132,15 +125,7 @@ public class UsedController {
         return "admin/reportList";
     }
 
-    @GetMapping("/likePost") // 좋아요 누른 게시글
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String likePost(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails, Criteria criteria) {
-      List<Used> usedList=usedService.likePost(principalDetails.getMember().getMemberId(),criteria);
-        int total = usedService.countMyLikePost(principalDetails.getMember().getMemberId());
-        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
-        model.addAttribute("list",usedList);
-        return "member/myLikes";
-    }
+
 
     @PostMapping("/reportOk") // 신고 접수
     public ResponseEntity<Void> reportOk(ReportOk reportOk) {

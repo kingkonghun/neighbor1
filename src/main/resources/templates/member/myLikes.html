@@ -5,18 +5,37 @@
     <title>Title</title>
 
     <script>
+        $(function () {
+            $("#post_select").change(function () {
+                console.log(123)
+                paging(1);
+                $.ajax({
+                    url:"/member/likePost",
+                    data:{postType:$("#post_select").val()},
+                    type:"get",
+                    success: function (data) {
+                        $(".memberDetail").html(data);
+                    }
+                });
+            });
+        });
         function detail(postId){
             if (confirm("게시글 확인하러 가시겠습니까?")) {
-                location.href="/used/detail?postId="+postId;
+                if ($("#post_select").val() == 'used') {
+                    location.href="/used/detail?postId="+postId;
+                }else if ($("#post_select").val() == 'club') {
+                    location.href="/clubDetail?postId="+postId;
+                }
             }
         }
         function paging(num) {
             $.ajax({
                 method:"get",
-                url: "/used/likePost",
-                data: {"pageNum": num},
+                url: "/member/likePost",
+                data: {"pageNum": num,
+                    "postType" : $("#post_select").val()},
                 success: function (data) {
-                    $(".myLike_div").html(data);
+                    $(".memberDetail").html(data);
                 }
             });
         }
@@ -27,9 +46,14 @@
     <link rel="stylesheet" th:href="@{/css/myPage.css}">
 </head>
 <body>
-<div class="myLike_div">
     <h2 class="h2">관심 있는 게시글</h2>
     <div class="table">
+        <article class="select_post">
+            <select name="postType" id="post_select">
+                <option value="used" th:selected="${postType eq 'used'}">중고거래</option>
+                <option value="club" th:selected="${postType eq 'club'}">동네모임</option>
+            </select>
+        </article>
         <table  style="width: 100%;" class="table table-hover">
             <thead>
             <th>제목</th>
@@ -52,6 +76,5 @@
             <button class="btn btn-outline-danger" type="button" id="btnBack" onclick="removeHTML()">뒤로가기</button>
         </div>
     </div>
-</div>
 </body>
 </html>

@@ -28,7 +28,6 @@ public class MainController {
 
     @GetMapping("/")
     public String main(Model model) {
-//        List<ClubResponse> clubList = clubService.findClubList(search);
         List<Used> usedList = usedService.mainList();
         List<ClubResponse> clubResponses = clubService.mainList();
 

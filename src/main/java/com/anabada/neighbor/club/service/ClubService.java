@@ -6,6 +6,7 @@ import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.file.domain.FileRequest;
 import com.anabada.neighbor.file.domain.FileResponse;
+import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.used.domain.Post;
 
 import javax.servlet.http.HttpServletRequest;
@@ -118,4 +119,19 @@ public interface ClubService {
      * @return 인덱스페이지에 뿌리는 동네모임 글
      */
     List<ClubResponse> mainList();
+
+    /**
+     *
+     * @param memberId 내 멤버아이디
+     * @param criteria 페이징
+     * @return 좋아요 누른 게시글목록
+     */
+    List<ClubResponse> likePost(long memberId, Criteria criteria);
+
+    /**
+     *
+     * @param memberId
+     * @return 페이징을 위한 동네모임에서 누른 총 좋아요 수
+     */
+    int countMyClubLikePost(long memberId);
 }

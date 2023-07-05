@@ -54,7 +54,7 @@ public interface MbUsedRepository extends UsedRepository {
     public void writeImage(@Param("postId") long postId, @Param("imgUrl") String imgUrl);
 
     @Override
-    @Update("UPDATE  product SET categoryId=#{categoryId},price=#{price} WHERE postId=46")
+    @Update("UPDATE product SET categoryId=#{categoryId},price=#{price} WHERE postId=#{postId}")
     public void updateProduct(Used used);
 
     @Override
@@ -65,9 +65,7 @@ public interface MbUsedRepository extends UsedRepository {
     @Update("UPDATE img SET imgUrl=#{imgUrl} WHERE postId=#{postId}")
     public void updateImage(long postId,String imgUrl);
 
-    @Override
-    @Select("SELECT imgUrl FROM img WHERE postId=#{postId} ORDER BY imgId LIMIT 1")
-    public String findImgUrl(long postId);
+
 
     @Override
     @Delete("DELETE FROM reply WHERE postId=#{postId}")
@@ -189,4 +187,7 @@ public interface MbUsedRepository extends UsedRepository {
     @Select("select count(*) from likes where memberId = #{memberId}")
     int countMyLikePost(long memberId);
 
+    @Override
+    @Select("select * from post where postId = #{postId}")
+    Post findReplyPost(long postId);
 }
