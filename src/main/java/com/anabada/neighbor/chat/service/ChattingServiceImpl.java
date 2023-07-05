@@ -164,6 +164,9 @@ public class ChattingServiceImpl implements ChattingService {
         for (long chatMemberId : chatMemberIdList) {
             String key = chat.getRoomId() + "_" + chatMemberId; // map 을 조회할 key
 
+            if (memberId == chatMemberId) { // chatMemberId 가 본인이면
+                continue;
+            }
             if (chatNotificationMap.get(key) == null || chatNotificationMap.get(key) == 0) { // value 가 null, 0 이면
                 chatNotificationMap.put(key, 1); // value 를 1 로 update
             } else { // 이미 value 가 1 이상이라면
