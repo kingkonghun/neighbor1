@@ -69,7 +69,6 @@ body{background-color: #f4f4f4;}
         $("#btnOk").click(function(){
             let reportedMemberScore = $("#memberScore");
             const reportId = $("#reportId").val();
-            alert(reportId);
             if(reportedMemberScore.val() <  0){
                 alert("사용자 점수는 0 점 밑으로 내릴 수 없습니다");
                 reportedMemberScore.val(0);
@@ -81,7 +80,9 @@ body{background-color: #f4f4f4;}
                 url: "/used/reportOk",
                 data: {reportId : reportId, reportedMemberScore : reportedMemberScore.val()},
                 success: function(){
-                    alert('성공');
+                    alert('신고접수가 완료되었습니다');
+                    modal.css("display", "none");
+                    $("body").css("overflow", "auto");
                 }
             });
             

@@ -193,6 +193,8 @@ content{
 
 /*반응형 조절*/
 
+
+
 @media screen and (max-width: 768px) {
     .section{/*이미지 틀*/
         width: 100%;
@@ -250,5 +252,7 @@ content{
     border-radius: 8px;
     border-style: none;
 }
-
+@media screen and (max-width: 1400px) {
+    #reply{width: 600px; margin-top: 24px;}
+}
 
