@@ -339,7 +339,7 @@ public class ClubServiceImpl implements ClubService {
         for (Likes likes : likesList) {
             long postId = likes.getPostId();//좋아요 누른 게시글 ID
             Post post = clubRepository.selectPost(postId);
-            if (!post.getPostType().equals("used")) {
+            if (post.getPostType().equals("club")) {
                 ClubResponse clubResponse = ClubResponse.builder()
                         .postId(postId)
                         .title(post.getTitle())

@@ -64,7 +64,10 @@
             <tbody th:each="likes : ${list}">
             <tr th:onclick="'detail('+${likes.postId}+')'">
                 <td th:text="${likes.title}"></td>
-                <td th:text="${likes.content}"></td>
+                <th:block >
+                    <td th:if="${likes.postType ne 'del'}" th:text="${likes.content}"></td>
+                    <td th:if="${likes.postType eq 'del'}">삭제된 게시글입니다.</td>
+                </th:block>
                 <td th:text="${likes.postView}"></td>
                 <td th:text="${likes.likesCount}"></td>
             </tr>

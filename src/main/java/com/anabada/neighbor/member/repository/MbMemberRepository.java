@@ -64,10 +64,6 @@ public interface MbMemberRepository extends MemberRepository{
     @Select("SELECT count(*) FROM post WHERE memberId=#{memberId} and postType!='del'")
     int countMyAllWrite(long memberId);
 
-    @Override
-    @Select("SELECT * FROM post WHERE memberId=#{memberId} and postType='used' ORDER BY postUpdate DESC  LIMIT 5")
-    List<Post> findMyPostFive(long memberId);
-
 
     @Override
     @Update("UPDATE member SET memberName=#{memberName},address=#{address}, addressDetail=#{addressDetail}, role='ROLE_USER' WHERE memberId=#{memberId}")
@@ -91,9 +87,7 @@ public interface MbMemberRepository extends MemberRepository{
     @Select("SELECT memberId,title,postType FROM post WHERE postId=#{postId}")
     Post findReportedMember(long postId);
 
-    @Override
-    @Select("SELECT count(*) FROM likes WHERE memberId=#{memberId}")
-    long countMyLikes(long memberId);//좋아요 누른 게시글 양 확인
+
 
     @Override
     @Select("select * from member where memberId = #{memberId}")
@@ -118,5 +112,9 @@ public interface MbMemberRepository extends MemberRepository{
     @Override
     @Select("SELECT count(*) FROM member WHERE providerId = #{memberEmail}")
     int emailCheck(String memberEmail);
+
+    @Override
+    @Select("SELECT count(*) FROM likes WHERE memberId = #{memberId}")
+    long countMyLikes(long memberId);
 }
 

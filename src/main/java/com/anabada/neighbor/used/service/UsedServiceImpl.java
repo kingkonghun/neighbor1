@@ -362,6 +362,7 @@ public class UsedServiceImpl implements UsedService{
                         .title(post.getTitle())
                         .content(post.getContent())
                         .postView(post.getPostView())
+                        .postType(post.getPostType())
                         .likesCount(usedRepository.findLikesCount(postId))
                         .build();
                 /*제목, 내용, 조회수,좋아요 수*/
