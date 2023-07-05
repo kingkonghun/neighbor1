@@ -190,10 +190,6 @@ public class UsedServiceImpl implements UsedService{
     @Override
     public void delete(long postId) { // 추후에 변경예정
         try {
-//            Path uploadDirPath = Path.of(UPLOAD_DIR+usedRepository.findImgUrl(postId));
-//            Files.delete(uploadDirPath);
-//            usedRepository.deleteReply(postId);
-//            usedRepository.deleteImg(postId);
             usedRepository.deleteProduct(postId);
             usedRepository.deletePost(postId);
         }catch (Exception e){
