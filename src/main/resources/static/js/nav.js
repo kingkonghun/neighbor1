@@ -1,4 +1,5 @@
 $(function(){
+//    showNavNotification();
 //    $("#menuicon").on('click', function () {
 //        if (checkIsAuthenticated()) {
 //            $.ajax({
@@ -88,6 +89,8 @@ function clubChatOpen() {
     var _top = ((screenHeight / 2) - (_height / 2)) + dualScreenTop;
     window.open('/chatDetail?roomId='+roomId+'&type='+type, 'chatDetailPopup', 'width='+ _width +', height='+ _height +', left=' + _left + ', top='+ _top );
 }
+
+
 
 //function myWrite(){
 //    location.href="/member/myInfo?navMsg=myWrite";
