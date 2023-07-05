@@ -136,7 +136,6 @@ public class ClubServiceImpl implements ClubService {
         return club;
     }
 
-    @Transactional
     @Override
     public Message updatePost(Post post) {
         Message message = new Message();
@@ -147,16 +146,15 @@ public class ClubServiceImpl implements ClubService {
         return message;
     }
 
-    @Transactional
     @Override
-    public Message updateClub(Club club, ClubResponse clubResponse) {
+    public Message updateClub(Club clubRequest, ClubResponse clubResponse) {
         Message message = new Message();
-        if (club.getMaxMan() > clubResponse.getNowMan()) {
+        if (clubRequest.getMaxMan() < clubResponse.getNowMan()) {
             message.setMessage("현재 가입한 인원보다 최대 인원수를 내릴 수 없습니다.");
             message.setSuccess(0);
             return message;
         }
-        if(clubRepository.updateClub(club) == 1){
+        if(clubRepository.updateClub(clubRequest) == 1){
             message.setMessage("모임 업데이트 성공.");
             message.setSuccess(1);
         }

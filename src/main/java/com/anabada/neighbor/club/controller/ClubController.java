@@ -170,11 +170,11 @@ public class ClubController {
         Message messageClub = clubService.updateClub(club, clubService.findClub(clubRequest.getPostId(), principalDetails));
         // 클럽 업데이트 성공 했을 때
         if (messageClub.getSuccess() == 1) {
-            // 포스트로 변환 후 업데이트
             Post post = clubService.clubRequestToPost(clubRequest,clubRequest.getPostId(), principalDetails);
             clubService.updatePost(post);
+            // 포스트로 변환 후 업데이트
         }
-        return "redirect:clubDetail?postId=" + clubRequest.getPostId();
+        return "redirect:clubList";
     }
 
     @GetMapping("/clubRemove")
