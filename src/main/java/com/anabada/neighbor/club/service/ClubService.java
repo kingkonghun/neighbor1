@@ -67,7 +67,7 @@ public interface ClubService {
 
     public Message updatePost(Post post);
 
-    public Message updateClub(Club club, ClubResponse clubResponse);
+    public Message updateClub(Club clubRequest, ClubResponse clubResponse);
 
     public long deletePost(long postId);
     /**
