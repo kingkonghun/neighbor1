@@ -143,7 +143,7 @@
         </div>
         <div class="message frnd_message" th:if="${row.messageType == 'SEND' && row.sender != #authentication.principal.member.memberId}"><!--상대가 보낸 부분 왼쪽-->
           <div class="user_profile"><!--상대 대화 위에 이미지와 이름 생성-->
-            <img th:src="@{/member/findProfileImg(memberId=${row.receiver})}" class="room_cover"><!--상대 사진-->
+            <img th:src="@{/member/findProfileImg(memberId=${row.sender})}" class="room_cover"><!--상대 사진-->
             <span th:text="${row.receiverName}"></span><!--상대 이름-->
           </div>
           <p th:inline="text">
