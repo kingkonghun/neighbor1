@@ -75,7 +75,7 @@ public class UsedController {
         model.addAttribute("similarList",similarList);
         model.addAttribute("reportType", usedService.reportType());
 
-        return "/used/usedDetail";
+        return dto.getPostType().equals("del") ? "redirect:/used/postDel" : "/used/usedDetail";
     }
 
     @PostMapping("/post") //게시물 작성
@@ -179,5 +179,11 @@ public class UsedController {
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String trade() {
         return "used/trade";
+    }
+
+    @GetMapping("/postDel")
+    @ResponseBody
+    public String postDel() {
+        return "<h1>삭제된 게시물입니다.</h1>";
     }
 }

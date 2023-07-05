@@ -136,7 +136,7 @@ public class ClubController {
         model.addAttribute("similarList", similarList );
         model.addAttribute("roomId", chattingService.findRoomId(postId));
         model.addAttribute("reportType", usedService.reportType());
-        return "club/clubDetail";
+        return clubResponse.getPostType().equals("del") ? "redirect:club/delPost" : "club/clubDetail";
     }
 
 //    @GetMapping("/club/update")
@@ -183,7 +183,7 @@ public class ClubController {
         return "redirect:clubDetail?postId=" + clubRequest.getPostId();
     }
 
-    @GetMapping("/clubRemove")
+    @PostMapping("/clubRemove")
     public String clubRemove(@RequestParam(value = "postId") Long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         if (principalDetails == null) {
             return "redirect:clubDetail?postId=" + postId;
@@ -249,4 +249,9 @@ public class ClubController {
         }
     }
 
+    @GetMapping("club/delPost")
+    @ResponseBody
+    public String delPost() {
+        return "<h1>삭제된 게시물입니다.</h1>";
+    }
 }

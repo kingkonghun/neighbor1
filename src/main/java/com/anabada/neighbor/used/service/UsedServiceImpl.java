@@ -34,7 +34,7 @@ public class UsedServiceImpl implements UsedService{
     private final FileService fileService;
     private final FileUtils fileUtils;
 
-    final String UPLOAD_DIR = "C:\\upload_anabada\\";
+//    final String UPLOAD_DIR = "C:\\upload_anabada\\";
 //    final String UPLOAD_DIR = "/Users/upload_anabada/";
 
     /**
@@ -96,7 +96,7 @@ public class UsedServiceImpl implements UsedService{
         }
         for (Product product : productList) {
             Post post = usedRepository.findPost(product.getPostId()); //product 테이블의 postId로 post 테이블에서 해당하는 튜플 가져오기
-            if (post.getPostId() == postId) {
+            if (post.getPostId() == postId || !post.getPostType().equals("used")) { // 가져온 post 의 postId 가 파라미터로 받은 postId 와 같거나 postType 이 club이 아니라면
                 continue;
             }
             Member member = usedRepository.findMember(post.getMemberId()); //post 테이블의 memberId로 member 테이블에서 해당하는 튜플 가져오기
@@ -180,10 +180,10 @@ public class UsedServiceImpl implements UsedService{
         usedRepository.updatePost(used); // post 테이블 update
         usedRepository.updateProduct(used); // product 테이블 update
 
-        Path originImg = Path.of(UPLOAD_DIR+"\\"+usedRepository.findImgUrl(used.getPostId()));//원래 이미지 url찾아오기
-            if (!Files.exists(Paths.get(UPLOAD_DIR))) {//디렉토리가 없다면 디렉토리생성
-                Files.createDirectories(Paths.get(UPLOAD_DIR));
-            }
+//        Path originImg = Path.of(UPLOAD_DIR+"\\"+usedRepository.findImgUrl(used.getPostId()));//원래 이미지 url찾아오기
+//            if (!Files.exists(Paths.get(UPLOAD_DIR))) {//디렉토리가 없다면 디렉토리생성
+//                Files.createDirectories(Paths.get(UPLOAD_DIR));
+//            }
 
 //            if(!formImg.equals("") && formImg != null ) {
 //                for (MultipartFile file : used.getFiles()) {
@@ -205,10 +205,10 @@ public class UsedServiceImpl implements UsedService{
     @Override
     public void delete(long postId) { // 추후에 변경예정
         try {
-            Path uploadDirPath = Path.of(UPLOAD_DIR+usedRepository.findImgUrl(postId));
-            Files.delete(uploadDirPath);
-            usedRepository.deleteReply(postId);
-            usedRepository.deleteImg(postId);
+//            Path uploadDirPath = Path.of(UPLOAD_DIR+usedRepository.findImgUrl(postId));
+//            Files.delete(uploadDirPath);
+//            usedRepository.deleteReply(postId);
+//            usedRepository.deleteImg(postId);
             usedRepository.deleteProduct(postId);
             usedRepository.deletePost(postId);
         }catch (Exception e){
@@ -380,6 +380,7 @@ public class UsedServiceImpl implements UsedService{
         for (Likes likes : likesList) {//좋아요누른 게시글만큼 반복
             long postId = likes.getPostId();//좋아요 누른 게시글id
             Post post = usedRepository.findPost(postId);
+
             Used used = Used.builder()
                     .postId(postId)
                     .title(post.getTitle())
@@ -493,6 +494,8 @@ public class UsedServiceImpl implements UsedService{
     public int countMyLikePost(long memberId) {
         return usedRepository.countMyLikePost(memberId);
     }
+
+
 }
 
 
