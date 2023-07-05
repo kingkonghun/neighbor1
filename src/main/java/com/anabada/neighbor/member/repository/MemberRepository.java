@@ -52,10 +52,7 @@ public interface MemberRepository {
      */
     int countMyUsedWrite(long memberId);
 
-    /**
-     * 내가 작성한 게시글 5개
-     */
-    List<Post> findMyPostFive(long memberId);//내가작성한글5개만
+
 
     /**
      * 개인 정보 수정
@@ -87,10 +84,6 @@ public interface MemberRepository {
      */
     Post findReportedMember(long postId);
 
-    /**
-     * memberId로 좋아요 누른 게시글의 갯수 확인
-     */
-    long countMyLikes(long memberId);
 
     /**
      *  신고한 사람의 id로
@@ -127,4 +120,8 @@ public interface MemberRepository {
     int countMyAllWrite(long memberId);
 
     int emailCheck(String memberEmail);
+
+
+
+    long countMyLikes(long memberId);
 }

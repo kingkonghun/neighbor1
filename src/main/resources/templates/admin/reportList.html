@@ -106,8 +106,12 @@ body{background-color: #f4f4f4;}
             }
         });
     }
-    function detail(postId){
+    function usedDetail(postId){
+        location.href="/used/detail?postId="+postId;
+    }
 
+    function clubDetail(postId) {
+        location.href="/clubDetail?postId="+postId;
     }
 </script>
 </head>
@@ -130,7 +134,18 @@ body{background-color: #f4f4f4;}
             <td th:text="${report.reporterName}"></td>
             <td th:text="${report.reportedName}"></td>
             <td th:text="${report.reportTypeName}"></td>
-            <td><a class="reportTitle" href="#" th:onclick="'detail('+${report.postId}+')'" th:text="${report.title}"></a></td>
+            <td>
+                <th:block th:if="${report.postType eq 'used'}">
+                    <a class="reportTitle" href="#" th:onclick="'usedDetail('+${report.postId}+')'" th:text="${report.title}"></a>
+                </th:block>
+                <th:block th:if="${report.postType eq 'club'}">
+                    <a class="reportTitle" href="#" th:onclick="'clubDetail('+${report.postId}+')'" th:text="${report.title}"></a>
+                </th:block>
+                <th:block th:if="${report.postType ne 'used' and report.postType ne 'club'}">
+                    <a class="reportTitle" href="#" th:onclick="'detail('+${report.postId}+')'">삭제된 게시글입니다.</a>
+                </th:block>
+
+            </td>
             <td id="open-modal" class="reportContent" th:onclick="openModal([[${report.reportId}]], [[${report.reportedMemberScore}]], [[${report.reportedName}]])" th:text="${report.content}"></td>
         </tr>
         </tbody>
