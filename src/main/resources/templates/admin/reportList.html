@@ -12,7 +12,7 @@ body{background-color: #f4f4f4;}
 .reportTitle{color:#FF3366;}
 
 .reportContent{color:#FF3366;}
-
+#open-modal{cursor: pointer;}
 #modal {
     position: fixed;
     z-index: 3;
@@ -106,6 +106,9 @@ body{background-color: #f4f4f4;}
             }
         });
     }
+    function detail(postId){
+
+    }
 </script>
 </head>
 <body>
@@ -127,7 +130,7 @@ body{background-color: #f4f4f4;}
             <td th:text="${report.reporterName}"></td>
             <td th:text="${report.reportedName}"></td>
             <td th:text="${report.reportTypeName}"></td>
-            <td><a class="reportTitle" href="#" th:onclick="|location.href='@{detail(postId=${report.postId})}'|" th:text="${report.title}"></a></td>
+            <td><a class="reportTitle" href="#" th:onclick="'detail('+${report.postId}+')'" th:text="${report.title}"></a></td>
             <td id="open-modal" class="reportContent" th:onclick="openModal([[${report.reportId}]], [[${report.reportedMemberScore}]], [[${report.reportedName}]])" th:text="${report.content}"></td>
         </tr>
         </tbody>

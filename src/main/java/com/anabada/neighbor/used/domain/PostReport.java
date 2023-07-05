@@ -21,4 +21,5 @@ public class PostReport {
     private String title;
     private int reportedMemberScore;
     private long reportedId;
+    private String postType;
 }

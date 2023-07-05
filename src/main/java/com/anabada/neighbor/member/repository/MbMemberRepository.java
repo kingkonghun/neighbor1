@@ -88,7 +88,7 @@ public interface MbMemberRepository extends MemberRepository{
     String findMemberName(long memberId);//신고당한사람,신고자 이름가져오기
 
     @Override
-    @Select("SELECT memberId,title FROM post WHERE postId=#{postId}")
+    @Select("SELECT memberId,title,postType FROM post WHERE postId=#{postId}")
     Post findReportedMember(long postId);
 
     @Override

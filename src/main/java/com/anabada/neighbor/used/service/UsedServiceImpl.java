@@ -319,12 +319,12 @@ public class UsedServiceImpl implements UsedService{
 
             long postId=report.getPostId();//요놈으로 포스트갔다가 멤버갔다가 포스트제목과 신고당한사람 이름 가져옴
             Post post=memberRepository.findReportedMember(postId);
-//            String reportedName = memberRepository.findMemberName(post.getMemberId());
 
             Member reportedMember = memberRepository.findByMemberId(post.getMemberId());
 
             PostReport postReport = PostReport.builder()
                     .postId(report.getPostId())//신고 당한 게시글
+                    .postType(post.getPostType())
                     .reportTypeName(reportTypeName)//신고 타입..
                     .reporterId(report.getReporterId())//신고자
                     .reporterName(memberRepository.findMemberName(report.getReporterId()))//신고자 이름
