@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -166,21 +167,42 @@ public class ClubController {
         if (principalDetails == null) {
             return "redirect:clubDetail?postId=" + clubRequest.getPostId();
         }
+        // postId 가져오기
+        long postId = clubRequest.getPostId();
+        // 저장되어있는 클럽가져오기
         ClubResponse clubResponse = clubService.findClub(clubRequest.getPostId(), principalDetails);
-        //  게시글 작성자가 아닐때
+        //  게시글 작성자가 아닐때 리턴
         if (principalDetails.getMember().getMemberId() != clubResponse.getMemberId()) {
             return "redirect:clubDetail?postId=" + clubRequest.getPostId();
         }
         // 클럽으로 반환 후 업데이트
         Club club = clubService.clubRequestToClub(clubRequest, principalDetails);
-        Message messageClub = clubService.updateClub(club, clubService.findClub(clubRequest.getPostId(), principalDetails));
+        Message message = clubService.updateClub(club, clubResponse);
         // 클럽 업데이트 성공 했을 때
-        if (messageClub.getSuccess() == 1) {
-            Post post = clubService.clubRequestToPost(clubRequest,clubRequest.getPostId(), principalDetails);
-            clubService.updatePost(post);
+        if (message.getSuccess() == 1) {
+            message.setSuccess(0); // 성공 0으로 초기화
+            Post post = clubService.clubRequestToPost(clubRequest,postId, principalDetails);
+            message = clubService.updatePost(post);
             // 포스트로 변환 후 업데이트
         }
-        return "redirect:clubList";
+        // 포스트 업데이트 성공했을 때
+        if (message.getSuccess() == 1) {
+            message.setSuccess(0);
+            List<FileResponse> filResponse = fileService.findAllFileByPostId(clubResponse.getPostId());
+            // 이미지 Disk 삭제
+            fileUtils.deleteFiles(filResponse);
+            // 이미지 DB 삭제
+            fileService.deleteAllFileByIds(filResponse);
+            // 사용자가 업로드한 이미지
+            List<MultipartFile> multipartFileList = clubRequest.getImages();
+            // 이미지 Disk 저장
+            List<FileRequest> fileRequests = fileUtils.uploadFiles(multipartFileList);
+            // 이미지 DB 저장
+            fileService.saveFiles(clubRequest.getPostId(), fileRequests);
+
+
+        }
+        return "redirect:/clubList";
     }
 
     @PostMapping("/clubRemove")
