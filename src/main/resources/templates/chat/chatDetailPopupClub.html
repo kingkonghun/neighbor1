@@ -102,7 +102,7 @@
       <div class="imgText">
         <div>
           <div class="userimg">
-            <img th:src="@{/used/findImg(postId=${list[0].postId})}" class="cover"><!--상대방 이미지-->
+            <img th:src="@{${list[0].fileInfo.url}}" class="cover"><!--상대방 이미지-->
           </div>
           <h4 id="clubMember" th:text="${list[0].receiverName}+'님 외 '+${list[0].memberCount}+'명'" onclick="memberListOpen()" style="cursor: pointer;"></h4><!--상대 이름-->
         </div>
@@ -123,7 +123,7 @@
 
     <div class="search_chat" onclick="tongkn2_pop();" style="cursor: pointer;">
       <div class="room_detail">
-        <img th:src="@{/used/findImg(postId=${list[0].postId})}">
+        <img th:src="@{${list[0].fileInfo.url}}">
         <div class="used_detail">
           <span class="used_name" th:text="${list[0].title}"></span>
           <span id="clubMan" class="used_cost" th:text="${list[0].nowMan}+' / '+${list[0].maxMan}"></span>

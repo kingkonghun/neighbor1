@@ -5,6 +5,9 @@ import com.anabada.neighbor.chat.service.ChattingService;
 import com.anabada.neighbor.club.domain.ClubResponse;
 import com.anabada.neighbor.club.service.ClubService;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.domain.FileInfo;
+import com.anabada.neighbor.file.domain.FileResponse;
+import com.anabada.neighbor.file.service.FileUtils;
 import com.anabada.neighbor.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,7 @@ public class ChattingController {
 
     private final ChattingService chattingService;
     private final ClubService clubService;
+    private final FileUtils fileUtils;
 
     @PostMapping("/openRoom")
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") // 채팅하기 버튼 클릭 시
@@ -39,7 +43,19 @@ public class ChattingController {
     @GetMapping("/chatRoomList")
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String chatRoomList(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) { // 채팅방 목록 보기
-        model.addAttribute("list", chattingService.chattingRoomList(principalDetails));
+        List<Chat> chatList = chattingService.chattingRoomList(principalDetails);
+
+        if (chatList != null) {
+            for (Chat chat : chatList) {
+                if (chat.getFileResponseList() != null) {
+                    List<FileInfo> fileInfoList = fileUtils.getFileInfo(chat.getFileResponseList());
+                    chat.setFileInfo(fileInfoList.get(0));
+                }
+            }
+        }
+
+        model.addAttribute("list", chatList);
+
         return "chat/chatRoomListPopup";
     }
 
@@ -48,7 +64,16 @@ public class ChattingController {
     public String chatDetail(long roomId, String type, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) { // 채팅방 입장
         boolean check = chattingService.check(roomId, principalDetails); // 입장 권한 체크
         if (check) {
-            model.addAttribute("list", chattingService.chattingMessageList(roomId, principalDetails, type)); // 메시지 리스트
+            List<Chat> chatList = chattingService.chattingMessageList(roomId, principalDetails, type);
+
+            if (chatList != null) {
+                for (Chat chat : chatList) {
+                    List<FileInfo> fileInfoList = fileUtils.getFileInfo(chat.getFileResponseList());
+                    chat.setFileInfo(fileInfoList.get(0));
+                }
+            }
+
+            model.addAttribute("list", chatList); // 메시지 리스트
             model.addAttribute("memberList", chattingService.chattingMemberList(roomId));
             if (type.equals("used")) {
                 model.addAttribute("receiver", chattingService.getReceiver(roomId, principalDetails));

@@ -73,7 +73,7 @@
 
     <div class="search_chat" onclick="tongkn2_pop();" style="cursor: pointer;">
       <div class="room_detail">
-        <img th:src="@{/used/findImg(postId=${list[0].postId})}">
+        <img th:src="@{${list[0].fileInfo.url}}">
         <div class="used_detail">
           <span class="used_name" th:text="${list[0].title}"></span>
           <span class="used_cost" th:text="${list[0].price} + ' 원'"></span>
