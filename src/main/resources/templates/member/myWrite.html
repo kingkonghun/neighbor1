@@ -62,7 +62,6 @@
 <script th:inline="javascript">
             $(function () {
             $("#post_select").change(function (){
-                console.log($("#post_select").val());
                 paging(1);
                 $.ajax({
                     url:"/member/myWrite",

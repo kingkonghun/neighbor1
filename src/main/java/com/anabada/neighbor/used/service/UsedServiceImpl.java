@@ -1,5 +1,6 @@
 package com.anabada.neighbor.used.service;
 
+import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
 import com.anabada.neighbor.file.domain.FileRequest;
 import com.anabada.neighbor.file.service.FileService;
@@ -12,12 +13,10 @@ import com.anabada.neighbor.used.repository.UsedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,6 +32,7 @@ public class UsedServiceImpl implements UsedService{
     private final MemberRepository memberRepository;
     private final FileService fileService;
     private final FileUtils fileUtils;
+    private final ClubRepository clubRepository;
 
     final String UPLOAD_DIR = "C:\\upload_anabada\\";
 //    final String UPLOAD_DIR = "/Users/upload_anabada/";
@@ -377,9 +377,13 @@ public class UsedServiceImpl implements UsedService{
         map.put("memberId", memberId);
         map.put("criteria", criteria);
         List<Likes> likesList = usedRepository.findLikePosts(map);//좋아요 누른 게시글 긁어오기
+
         for (Likes likes : likesList) {//좋아요누른 게시글만큼 반복
             long postId = likes.getPostId();//좋아요 누른 게시글id
             Post post = usedRepository.findPost(postId);
+            if (post == null) {
+                continue;
+            }
             Used used = Used.builder()
                     .postId(postId)
                     .title(post.getTitle())
@@ -490,8 +494,18 @@ public class UsedServiceImpl implements UsedService{
     }
 
     @Override
-    public int countMyLikePost(long memberId) {
-        return usedRepository.countMyLikePost(memberId);
+    public int countMyUsedLikePost(long memberId) {
+        List<Post> postList = clubRepository.findPostId(memberId);
+        List<String> postTypeList = new ArrayList<>();
+        for (Post post : postList) {
+            long postId = post.getPostId();
+            String postType = clubRepository.findMyClubLikePostType(postId);
+            if (postType.equals("used")) {
+                postTypeList.add(postType);
+            }
+        }
+        int total = postTypeList.size();
+        return total;
     }
 }
 

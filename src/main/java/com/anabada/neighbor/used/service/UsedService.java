@@ -120,5 +120,5 @@ public interface UsedService {
      * @param memberId
      * @return
      */
-    int countMyLikePost(long memberId);
+    int countMyUsedLikePost(long memberId);
 }

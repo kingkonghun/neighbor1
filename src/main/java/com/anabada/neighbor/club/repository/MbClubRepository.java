@@ -50,7 +50,7 @@ public interface MbClubRepository extends ClubRepository {
     void deletePost(long postId);
 
     @Override
-    @Select("select * from post where postId = #{postId}")
+    @Select("select * from post where postId = #{postId} and postType = 'club'")
     Post selectPost(long postId);
 
     @Override
@@ -133,4 +133,12 @@ public interface MbClubRepository extends ClubRepository {
             " ORDER BY postView desc" +
             " LIMIT 6")
     List<Post> selectHotPostList();
+
+    @Override
+    @Select("SELECT postType FROM post WHERE postId = #{postId}")
+    String findMyClubLikePostType(long postId);
+
+    @Override
+    @Select("SELECT postId FROM likes WHERE memberId = #{memberId}")
+    List<Post> findPostId(long memberId);
 }

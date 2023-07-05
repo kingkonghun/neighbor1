@@ -132,15 +132,7 @@ public class UsedController {
         return "admin/reportList";
     }
 
-    @GetMapping("/likePost") // 좋아요 누른 게시글
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String likePost(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails, Criteria criteria) {
-      List<Used> usedList=usedService.likePost(principalDetails.getMember().getMemberId(),criteria);
-        int total = usedService.countMyLikePost(principalDetails.getMember().getMemberId());
-        model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
-        model.addAttribute("list",usedList);
-        return "member/myLikes";
-    }
+
 
     @PostMapping("/reportOk") // 신고 접수
     public ResponseEntity<Void> reportOk(ReportOk reportOk) {

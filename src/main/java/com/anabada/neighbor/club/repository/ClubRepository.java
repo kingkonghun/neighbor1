@@ -127,4 +127,13 @@ public interface ClubRepository {
     List<Club> selectClubList();
 
     List<Post> selectHotPostList();
+
+    String findMyClubLikePostType(long postId);
+
+    /**
+     * memberId로 like테이블에서 postId찾기
+     * @param memberId
+     * @return
+     */
+    List<Post> findPostId(long memberId);
 }
