@@ -8,6 +8,7 @@ import com.anabada.neighbor.chat.repository.ChattingRepository;
 import com.anabada.neighbor.club.domain.entity.Club;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.service.FileService;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.member.repository.MemberRepository;
 import com.anabada.neighbor.used.domain.Post;
@@ -29,6 +30,7 @@ public class ChattingServiceImpl implements ChattingService {
     private final MemberRepository memberRepository;
     private final UsedRepository usedRepository;
     private final ClubRepository clubRepository;
+    private final FileService fileService;
     private Map<String, Integer> chatNotificationMap = new HashMap<>(); // 새로운 채팅 갯수
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -229,6 +231,7 @@ public class ChattingServiceImpl implements ChattingService {
                         .chatCount(chatNotificationMap.get(roomId + "_" + principalDetails.getMember().getMemberId()) != null ? chatNotificationMap.get(roomId + "_" + principalDetails.getMember().getMemberId()) : 0)
                         .type(type)
                         .chatMemberStatus(chatMemberStatus)
+                        .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                         .build();
             } else {
                 continue;
@@ -275,11 +278,11 @@ public class ChattingServiceImpl implements ChattingService {
                         .messageType(message.getMessageType())
                         .productStatus(product.getProductStatus())
                         .type(type)
+                        .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                         .build();
             } else if (type.equals("club")) { // 동네모임 채팅이면
                 Post post = clubRepository.selectPost(chattingRoom.getPostId()); // postId 로 게시물의 정보를 가져옴
                 Club club = clubRepository.selectClub(post.getPostId()); // postId 로 모임의 정보를 가져옴
-
 
                 chat = Chat.builder()
                         .postId(post.getPostId())
@@ -299,6 +302,7 @@ public class ChattingServiceImpl implements ChattingService {
                         .maxMan(club.getMaxMan())
                         .type(type)
                         .clubId(club.getClubId())
+                        .fileResponseList(fileService.findAllFileByPostId(post.getPostId()))
                         .build();
             }
             chatList.add(chat); // 리턴할 List 에 저장

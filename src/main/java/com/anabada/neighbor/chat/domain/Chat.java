@@ -1,5 +1,7 @@
 package com.anabada.neighbor.chat.domain;
 
+import com.anabada.neighbor.file.domain.FileInfo;
+import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.member.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,5 +37,7 @@ public class Chat {
     private int nowMan;
     private String chatMemberStatus;
     private long clubId;
+    private List<FileResponse> fileResponseList;
+    private FileInfo fileInfo;
 
 }
