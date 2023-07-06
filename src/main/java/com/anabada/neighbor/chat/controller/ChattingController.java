@@ -61,7 +61,7 @@ public class ChattingController {
 
     @GetMapping("/chatDetail")
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String chatDetail(long roomId, String type, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) { // 채팅방 입장
+    public String chatDetail(long roomId, String type, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) { //채팅방 입장
         boolean check = chattingService.check(roomId, principalDetails); // 입장 권한 체크
         if (check) {
             List<Chat> chatList = chattingService.chattingMessageList(roomId, principalDetails, type);
