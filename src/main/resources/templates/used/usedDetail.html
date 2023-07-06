@@ -391,7 +391,13 @@
     <section class="item2 p-4">
         <div style="display: flex; flex-direction: column; width: 100%;">
             <div class="flexBox" style="display: flex; justify-content: space-between;">
-                <h3 th:text="${dto.title}"></h3>
+                <div class="hash_title">
+                    <ul class="hashtags"><!--해쉬태그 가져오기-->
+                        <li th:text="'#'+${dto.categoryName}"></li>
+                        <li th:text="'#'+${dto.address}"></li>
+                    </ul>
+                    <h3 th:text="${dto.title}"></h3><!--제목 가져오기-->
+                </div>
                 <th:block sec:authorize="isAuthenticated()">
                     <form action="/used/postDelete" method="post" id="postForm" name="postForm">
                         <input type="hidden" name="postId" th:value="${dto.postId}">

@@ -124,4 +124,6 @@ public interface MemberRepository {
 
 
     long countMyLikes(long memberId);
+
+
 }

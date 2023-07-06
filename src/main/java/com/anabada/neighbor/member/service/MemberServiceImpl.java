@@ -153,6 +153,8 @@ public class MemberServiceImpl implements MemberService{
         member = memberRepository.findMyInfo(memberId);
         member.setMyWrite(memberRepository.countMyAllWrite(memberId));
         member.setMyReply(replyRepository.countMyReply(memberId));
+
+
         member.setMyLikesCount(memberRepository.countMyLikes(memberId));
 
         return  member;

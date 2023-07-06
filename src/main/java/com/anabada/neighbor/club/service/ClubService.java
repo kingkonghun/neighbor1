@@ -120,13 +120,6 @@ public interface ClubService {
      */
     List<ClubResponse> mainList();
 
-    /**
-     *
-     * @param memberId 내 멤버아이디
-     * @param criteria 페이징
-     * @return 좋아요 누른 게시글목록
-     */
-    List<ClubResponse> likePost(long memberId, Criteria criteria);
 
     /**
      *

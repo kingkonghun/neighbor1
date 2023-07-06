@@ -5,27 +5,15 @@
     <title>Title</title>
 
     <script>
-        $(function () {
-            $("#post_select").change(function () {
-                console.log(123)
-                paging(1);
-                $.ajax({
-                    url:"/member/likePost",
-                    data:{postType:$("#post_select").val()},
-                    type:"get",
-                    success: function (data) {
-                        $(".memberDetail").html(data);
-                    }
-                });
-            });
-        });
-        function detail(postId){
-            if (confirm("게시글 확인하러 가시겠습니까?")) {
-                if ($("#post_select").val() == 'used') {
-                    location.href="/used/detail?postId="+postId;
-                }else if ($("#post_select").val() == 'club') {
-                    location.href="/clubDetail?postId="+postId;
-                }
+
+        function usedDetail(postId){
+            if (confirm("작성된 게시글을 확인 하시겠습니까?")) {
+                location.href="/used/detail?postId="+postId;
+            }
+        }
+        function clubDetail(postId){
+            if (confirm("작성된 게시글을 확인 하시겠습니까?")) {
+                location.href="/clubDetail?postId="+postId;
             }
         }
         function paging(num) {
@@ -48,12 +36,6 @@
 <body>
     <h2 class="h2">관심 있는 게시글</h2>
     <div class="table">
-        <article class="select_post">
-            <select name="postType" id="post_select">
-                <option value="used" th:selected="${postType eq 'used'}">중고거래</option>
-                <option value="club" th:selected="${postType eq 'club'}">동네모임</option>
-            </select>
-        </article>
         <table  style="width: 100%;" class="table table-hover">
             <thead>
             <th>제목</th>
@@ -62,10 +44,17 @@
             <th>좋아요</th>
             </thead>
             <tbody th:each="likes : ${list}">
-            <tr th:onclick="'detail('+${likes.postId}+')'">
+            <th:block th:if="${likes.postType eq 'club'}" >
+              <tr th:onclick="'clubDetail('+${likes.postId}+')'">
+            </th:block>
+            <th:block th:if="${likes.postType eq 'used'}" >
+                <tr th:onclick="'usedDetail('+${likes.postId}+')'">
+            </th:block>
+
                 <td th:text="${likes.title}"></td>
                 <th:block >
                     <td th:if="${likes.postType ne 'del'}" th:text="${likes.content}"></td>
+                    <td th:if="${likes.postType eq 'del'}">삭제된 게시글 입니다.</td>
                 </th:block>
                 <td th:text="${likes.postView}"></td>
                 <td th:text="${likes.likesCount}"></td>

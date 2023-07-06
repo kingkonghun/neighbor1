@@ -165,23 +165,13 @@ public class MemberController {
     }
     @GetMapping("/likePost") // 좋아요 누른 게시글
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String likePost(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails, Criteria criteria,
-                           @RequestParam(defaultValue = "used", value = "postType")String postType) {
+    public String likePost(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails, Criteria criteria) {
         List<Used> usedList=usedService.likePost(principalDetails.getMember().getMemberId(),criteria);
-        List<ClubResponse> clubList = clubService.likePost(principalDetails.getMember().getMemberId(), criteria);
-        int total = 0;
-
-        if (postType.equals("used")) {
-            total = usedService.countMyUsedLikePost(principalDetails.getMember().getMemberId());
+        int total = usedService.countMyUsedLikePost(principalDetails.getMember().getMemberId());
+        System.out.println("total = " + total);
             model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
-            model.addAttribute("postType", postType);
             model.addAttribute("list",usedList);
-        } else if (postType.equals("club")) {
-            total = clubService.countMyClubLikePost(principalDetails.getMember().getMemberId());
-            model.addAttribute("pageMaker", new PageDTO(total, 10, criteria));
-            model.addAttribute("postType", postType);
-            model.addAttribute("list",clubList);
-        }
+
 
         return "member/myLikes";
     }
