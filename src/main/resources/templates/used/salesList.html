@@ -26,12 +26,12 @@
 
     </thead>
     <tbody th:each="list : ${sales}">
-    <tr>
-      <td th:text="${list.postId}"></td>
-      <td th:text="${list.title}"></td>
-      <td th:text="${list.categoryName}"></td>
-      <td th:text="${list.price}"></td>
-    </tr>
+      <tr th:onclick="'detail('+${list.postId}+')'">
+        <td th:text="${list.postId}"></td>
+        <td th:text="${list.title}"></td>
+        <td th:text="${list.categoryName}"></td>
+        <td th:text="${list.price}"></td>
+      </tr>
     </tbody>
   </table>
 
@@ -39,6 +39,11 @@
   <div th:replace="pagination/paging :: div"></div>
 </div>
 <script th:inline="javascript">
+  function detail(postId) {
+    if (confirm("판매한 게시글을 확인하시겠습니까?")) {
+      location.href = "/used/detail?postId=" + postId;
+    }
+  }
   function paging(num) {
     $.ajax({
       method:"get",

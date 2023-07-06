@@ -209,7 +209,15 @@ content{
 @media screen and (max-width: 480px) {
 
 }
-
+.hashtags{
+    display: flex;
+    font-size: 12;
+    color: #FF3366;
+}
+.hashtags li {
+    margin-right: 15px;
+    list-style: none;
+}
 #btnChat {
     background-color: #FF3366;
     border-radius: 12px;

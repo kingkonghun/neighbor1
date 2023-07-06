@@ -357,8 +357,6 @@ public class UsedServiceImpl implements UsedService{
             if (post == null) {
                 continue;
             }
-            if (post.getPostType().equals("used")) {
-
                 Used used = Used.builder()
                         .postId(postId)
                         .title(post.getTitle())
@@ -368,7 +366,6 @@ public class UsedServiceImpl implements UsedService{
                         .likesCount(usedRepository.findLikesCount(postId))
                         .build();
                 usedList.add(used);
-            }
             /*제목, 내용, 조회수,좋아요 수*/
 
         }
@@ -474,17 +471,8 @@ public class UsedServiceImpl implements UsedService{
 
     @Override
     public int countMyUsedLikePost(long memberId) {
-        List<Post> postList = clubRepository.findPostId(memberId);
-        List<String> postTypeList = new ArrayList<>();
-        for (Post post : postList) {
-            long postId = post.getPostId();
-            String postType = clubRepository.findMyClubLikePostType(postId);
-            if (postType.equals("used")) {
-                postTypeList.add(postType);
-            }
-        }
-        int total = postTypeList.size();
-        return total;
+
+        return usedRepository.countMyLikePost(memberId);
     }
 }
 

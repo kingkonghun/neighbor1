@@ -328,30 +328,7 @@ public class ClubServiceImpl implements ClubService {
         return result;
     }
 
-    @Override
-    public List<ClubResponse> likePost(long memberId, Criteria criteria) {
-        List<ClubResponse> clubList = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
-        map.put("memberId", memberId);
-        map.put("criteria", criteria);
-        List<Likes> likesList = usedRepository.findLikePosts(map);//좋아요 누른 게시글 긁기
 
-        for (Likes likes : likesList) {
-            long postId = likes.getPostId();//좋아요 누른 게시글 ID
-            Post post = clubRepository.selectPost(postId);
-            if (post.getPostType().equals("club")) {
-                ClubResponse clubResponse = ClubResponse.builder()
-                        .postId(postId)
-                        .title(post.getTitle())
-                        .content(post.getContent())
-                        .postView(post.getPostView())
-                        .likesCount(usedRepository.findLikesCount(postId))
-                        .build();
-                clubList.add(clubResponse);
-            }
-        }
-        return clubList;
-    }
 
     @Override
     public int countMyClubLikePost(long memberId) {
