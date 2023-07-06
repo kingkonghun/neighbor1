@@ -122,6 +122,10 @@
 }
 .section2 .text {
     width: 320px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    word-break:break-all;
 }
 .section2 .list_img {
     flex-shrink: 0;

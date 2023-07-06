@@ -45,6 +45,7 @@ function showMessage(roomId, sender, senderName, content, messageDate, messageTy
         type: "post",
         url: "/chatNotificationRemove",
         data: {"roomId":roomId, "memberId": myId},
+        async: false
     });
     if(messageType == "SEND") {
         if(sender == myId) {
@@ -107,6 +108,7 @@ function showNavNotification() {
     $.ajax({
         type: "get",
         url: "/chatNotification",
+        async: false,
         success: function(result){
             if(result) {
                 $("#navNotification").show();

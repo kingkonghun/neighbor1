@@ -191,4 +191,6 @@ public interface UsedRepository {
     int countMyLikePost(long memberId);
 
     Post findReplyPost(long postId);
+
+    void reportOk(long reportId);
 }
