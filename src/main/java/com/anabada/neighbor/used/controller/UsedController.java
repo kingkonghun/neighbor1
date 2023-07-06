@@ -139,7 +139,7 @@ public class UsedController {
     }
 
     @GetMapping("/purchase")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String purchase(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,Criteria criteria) {
         List<Used> purchase = usedService.purchase(principalDetails,criteria);
         int total = usedService.countPurchase(principalDetails.getMember().getMemberId());
@@ -151,7 +151,7 @@ public class UsedController {
     }
 
     @GetMapping("/sales")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String sales(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,Criteria criteria) {
         int total = usedService.countSales(principalDetails.getMember().getMemberId());
         model.addAttribute("sales", usedService.sales(principalDetails,criteria));
@@ -160,7 +160,7 @@ public class UsedController {
     }
 
     @GetMapping("/trade")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String trade() {
         return "used/trade";
     }

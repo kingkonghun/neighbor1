@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>usedList</title>
+<title>아나바다</title>
     <th:block th:insert="/common/common :: fragment-header"></th:block>
 <link rel="stylesheet" th:href="@{/css/list.css}">
 <style>
@@ -45,7 +45,7 @@
                 return;
             }
             if (!titleTest.test(title.val())) {
-                alert("30글자 이내로 입력하세요(공백 포함)");
+                alert("제목은 30글자 이내로 입력하세요(공백 포함)");
                 title.focus();
                 return;
             }

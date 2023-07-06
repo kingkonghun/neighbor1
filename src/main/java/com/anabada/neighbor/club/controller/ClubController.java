@@ -15,6 +15,7 @@ import com.anabada.neighbor.file.service.FileService;
 import com.anabada.neighbor.file.service.FileUtils;
 import com.anabada.neighbor.used.domain.Post;
 import com.anabada.neighbor.used.service.UsedService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,6 +49,7 @@ public class ClubController {
     }
 
     @PostMapping("/clubSave")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String clubSave(ClubRequest clubRequest, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         // 게시글 객체에 담기
         Post post = clubService.clubRequestToPost(clubRequest, principalDetails);
@@ -161,6 +163,7 @@ public class ClubController {
 //    }
 
     @PostMapping("/club/update")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String update(ClubRequest clubRequest, Model model
             , @AuthenticationPrincipal PrincipalDetails principalDetails) {
         //  로그인 안했을때
@@ -206,6 +209,7 @@ public class ClubController {
     }
 
     @PostMapping("/clubRemove")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String clubRemove(@RequestParam(value = "postId") Long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         if (principalDetails == null) {
             return "redirect:clubDetail?postId=" + postId;

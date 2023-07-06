@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>club Details Page</title>
+    <title>아나바다</title>
     <th:block th:insert="/common/common :: fragment-header"></th:block>
 
     <link rel="stylesheet" href="/css/clubDetail.css">
@@ -301,20 +301,30 @@
         }
         $(function () {
             $("#btnSubmit").click(function(){
-                let category = $("#category");
-                let price = $("#inputPrice");
+                let title = $("#inputTitle");
+                let category = $("#inputHobby");
                 let content = $("#inputContent");
                 let files = $("#files");
-                if(category.val() == 0) {
-                    alert("카테고리를 선택하세요");
+                let maxMan = $("#inputPrice");
+
+                const titleTest = /^[\s\S]{1,30}$/;
+                if (title.val() == '') {
+                    alert("제목을 입력하세요");
+                    title.focus();
+                    return;
+                }
+                if (!titleTest.test(title.val())) {
+                    alert("제목은 30글자 이내로 입력하세요(공백 포함)");
+                    title.focus();
+                    return;
+                }
+
+                if(category.val() == "모임종류") {
+                    alert("모임종류를 선택하세요");
                     category.focus();
                     return;
                 }
-                if(price.val() == ''){
-                    alert("가격을 입력하세요");
-                    price.focus();
-                    return;
-                }
+
                 if (content.val() == "") {
                     alert("내용을 입력하세요");
                     content.focus();
@@ -323,6 +333,12 @@
                 if (files.val() == "") {
                     alert("사진을 올려주세요");
                     files.focus();
+                    return;
+                }
+
+                if (maxMan.val() == "") {
+                    alert("최대인원수를 입력하세요");
+                    maxMan.focus();
                     return;
                 }
                 document.writeForm.submit();
