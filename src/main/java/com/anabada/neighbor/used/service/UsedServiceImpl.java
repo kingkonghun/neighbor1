@@ -396,6 +396,7 @@ public class UsedServiceImpl implements UsedService{
         usedRepository.UpdateReportStatus(reportOk.getReportId()); // 신고접수완료 처리
         usedRepository.deleteProduct(report.getPostId()); // product 삭제처리(productStatus 를 'del' 로 update)
         usedRepository.deletePost(report.getPostId()); // post 삭제처리(postType 을 'del' 로 update)
+        usedRepository.reportOk(report.getReportId());
     }
 
 

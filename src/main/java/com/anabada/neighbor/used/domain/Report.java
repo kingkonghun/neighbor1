@@ -15,4 +15,5 @@ public class Report {
     private long reporterId; // 고자질쟁이
     private String content; // 신고내용
     private long reportTypeId; //신고타입번호
+    private String reportStatus;
 }

@@ -128,7 +128,7 @@ public interface MbUsedRepository extends UsedRepository {
     void report(Report report);
 
     @Override
-    @Select("SELECT * FROM report ORDER BY reportId desc LIMIT #{criteria.amount} OFFSET #{criteria.offset} ")
+    @Select("SELECT * FROM report WHERE reportStatus = 'y' ORDER BY reportId desc LIMIT #{criteria.amount} OFFSET #{criteria.offset} ")
     List<Report> findAllReport(Map<String, Object> map);
 
     @Override
@@ -190,4 +190,8 @@ public interface MbUsedRepository extends UsedRepository {
     @Override
     @Select("select * from post where postId = #{postId}")
     Post findReplyPost(long postId);
+
+    @Override
+    @Update("update report set reportStatus = 'n' where reportId = #{reportId}")
+    void reportOk(long reportId);
 }
