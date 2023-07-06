@@ -3,98 +3,105 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Title</title>
-    <th:block th:insert="/common/common :: fragment-header"></th:block>
-    <style>
-        #liWrite{color:red;}
 
-        .table{font-family: 'GangwonEduPowerExtraBoldA';}
-
-        .img {width: 50px; height: 50px;}
-        .pagination {margin-top: 3em; margin-bottom: 5em;}
-        .pagination .pageNum{list-style: none; display: flex;}
-    </style>
     <link rel="stylesheet" th:href="@{/css/myPage.css}">
+    <style>
+        body{background-color: #f4f4f4;}
+    </style>
+
 </head>
 <body>
-<!-- Nav바-->
-<div th:replace="nav :: nav"></div>
-<div th:replace="member/myPageNav :: nav"></div>
 
-<div class="myWrite">
-    <table  style="width: 100%;" class="table table-hover">
-        <thead>
+
+    <h2 class="h2">내가 작성한 게시글</h2>
+
+    <div class="table">
+        <article class="select_post">
+            <select id="post_select" name="postType" >
+                <option value="used" th:selected="${postType eq 'used'}">중고거래</option>
+                <option value="club" th:selected="${postType eq 'club'}">동네모임</option>
+            </select>
+        </article>
+        <table  style="width: 100%;" class="table table-hover">
+            <thead>
             <th>글번호</th>
             <th>카테고리</th>
             <th>사진</th>
             <th>제목</th>
             <th>등록일</th>
             <th>조회수</th>
-        </thead>
-        <tbody th:each="list : ${writeList}">
+            </thead>
+            <tbody th:each="list : ${writeList}">
             <tr th:onclick="'detail('+${list.postId}+')'" >
                 <td th:text="${list.postId}"></td>
-                <td th:text="${list.categoryName}"></td>
-                <td> <img class="img"  th:src="@{/used/findImg(postId=${list.postId})}"  alt="실패"></td>
+                <th:block th:if="${categoryName} eq 'used' ">
+                    <td th:text="${list.categoryName}"></td>
+                    <td><img class="img" th:src="@{${list.fileInfo.url}}" alt="fail"></td>
+                </th:block>
+                <th:block th:if="${categoryName} eq 'club' ">
+                    <td th:text="${list.hobbyName}"></td>
+                    <td><img class="img" th:src="@{${list.fileInfo.url}}" alt="fail"></td>
+                </th:block>
+
+
                 <td th:text="${list.title}"></td>
                 <td th:text="${#dates.format(list.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></td>
                 <td th:text="${list.postView}"></td>
             </tr>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
-    <!--페이지네비게이션-->
-    <div class="pagination justify-content-center">
-        <ul class="pageNum">
+        <!--페이지네비게이션-->
+        <div th:replace="pagination/paging :: div" style="text-align: center;"></div>
 
-            <!--맨앞번호-->
-            <li class="page-item" th:if="${pageMaker.startPage > 1}">
-                <a class="page-link" th:href="|?pageNum=${1}|">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-left" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5ZM10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5Z"/>
-                    </svg>
-                </a>
-            </li>
-
-            <li class="page-item" th:classappend="${pageMaker.prev ? '' : 'disabled'}" th:if="${pageMaker.startPage > 1}">
-                <a class="page-link" th:href="|?pageNum=${pageMaker.startPage - 1}|">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                    </svg>
-                </a>
-            </li>
-            <th:block th:each="num : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
-                <li class="page-item" th:classappend="${pageMaker.criteria.pageNum == num ? 'active' : ''}">
-                    <a class="page-link" th:href="|?pageNum=${num}|"><span th:text="${num}"></span></a>
-                </li>
-            </th:block>
-            <li class="page-item" th:classappend="${pageMaker.next ? '' : 'disabled'}" th:if="${pageMaker.endPage < pageMaker.realEnd}">
-                <a class="page-link" th:href="|?pageNum=${pageMaker.endPage + 1}|">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                       <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                    </svg>
-                </a>
-            </li>
-
-            <!--맨끝번호-->
-            <li class="page-item" th:if="${pageMaker.endPage < pageMaker.realEnd}">
-                <a class="page-link" th:href="|?pageNum=${pageMaker.realEnd}|">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
-                    </svg>
-                </a>
-            </li>
-        </ul>
+        <div class="btnList">
+            <button class="btn btn-outline-danger" type="button" id="btnBack" onclick="removeHTML()">뒤로가기</button>
+        </div>
     </div>
-</div>
 
-    <script th:inline="javascript">
+<script th:inline="javascript">
+            $(function () {
+            $("#post_select").change(function (){
+                paging(1);
+                $.ajax({
+                    url:"/member/myWrite",
+                    data:{postType:$("#post_select").val()},
+                    type:"get",
+                    success: function (data) {
+                        $(".memberDetail").html(data);
+                    }
+                });
+            });
+        });
         function detail(postId) {
             if (confirm("작성한 게시글로 가시겠습니까?")) {
-                location.href="/used/detail?postId="+postId;
+                if ($("#post_select").val() == 'used') {
+                    location.href="/used/detail?postId="+postId;
+                }else if ($("#post_select").val() == 'club') {
+                    location.href="/clubDetail?postId="+postId;
+                }
             }
         }
-    </script>
+
+        /**
+         *  비동기 페이징
+         * @param num 페이지 네비게이션의 버튼의 숫자
+         */
+        function paging(num) {
+            $.ajax({
+                method:"get",
+                url: "/member/myWrite",
+                data: {"pageNum": num,
+                        "postType" : $("#post_select").val()
+                },
+                success: function (data) {
+                    $(".memberDetail").html(data);
+                }
+            });
+        }
+
+</script>
 <!-- Footer-->
-<div th:replace="footer :: footer"></div>
+<!--<div th:replace="footer :: footer"></div>-->
 </body>
 </html>

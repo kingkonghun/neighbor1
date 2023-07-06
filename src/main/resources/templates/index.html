@@ -1,123 +1,172 @@
 <!DOCTYPE html>
 <html lang="ko">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="오이마켓" />
-        <meta name="author" content="아나바다" />
-        <title>오이마켓</title>
-        <th:block th:insert="/common/common :: fragment-header"></th:block>
-        <!-- 상단바 아이콘 나중에 괜찮은 이미 찾으면 넣기 -->
-<!--        <link rel="icon" type="image/x-icon" href="../static/img/favicon.ico" />-->
-        <!-- BootStrap 추가설정 -->
-        <link href="/css/style.css" rel="stylesheet" type="text/css">
-        <style>
-            .usedTitle{font-family: 'GangwonEduPowerExtraBoldA'; }
-            .usedTitle{text-align: center;}
-            .section1{background-color: rgb(255, 255, 230);}
-            .container .title ,.subtitle{text-align: right;}
-            .container .title{font-size: xxx-large; margin-bottom: 1em;}
-            .container .subtitle{font-size: x-large;}
-        </style>
-    </head>
-    <body>
-        <!-- Nav바-->
-     <div th:replace="nav :: nav"></div>
-        <!-- 헤더-->
-        <header class="bg-image py-5 mainBackgroundImg">
-            <div class="container px-4 px-lg-5 my-5" style="height: 500px;">
-                <div class="container" >
-                    <h1 class="title">아-나-바-다</h1>
-                    <p class="subtitle">중고거래, 동호회 등 내 주변에서 동네 친구찾자!</p>
-                </div>
-            </div>
-        </header>
-        <!-- 섹션 -->
-        <section class="py-5 section1">
-            <div class="usedTitle" >
-                <h2>아껴쓰고 나눠써요</h2>
-                <p>같은제품 더 저렴하게 중고거래</p>
-            </div>
-            <div class="container px-4 px-lg-5 mt-5" >
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" >
-                    <div class="col mb-5" th:each="list:${starList}">
-                        <div class="card h-100" >
-                            <!-- 인기 제품 뱃지-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
-                            <!-- 중고상품 이미지  450 * 300이 적절-->
-                                <img style="width: 268px; height: 180px;" class="card-img-top"  th:src="@{/used/findImg(postId=${list.postId})}"  alt="실패">
-                            <!-- 중고상품 상세-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- 중고상품 이름-->
-                                    <h5 class="fw-bolder" th:text="${list.title}"></h5>
-                                    <!-- 판매자 이름 -->
-                                    <h6 class="fw" th:text="${list.memberName}"></h6>
-                                    <!-- 판매자 평점-->
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                    </div>                                
-                                    <!-- 중고상품 가격-->
-                                    <p th:text="${list.price}"></p>
-                                </div>
-                            </div>
-                            <!-- 상품 구매하기-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" th:onclick="|location.href='@{/used/detail(postId=${list.postId})}'|">자세히 보기</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <div class="btnUsed" style="text-align: center;"><button class="btn btn-outline-secondary" th:onclick="|location.href='@{/used/list}'|">더 많은 상품 보기</button></div>
-     </section>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="오이마켓" />
+<meta name="author" content="아나바다" />
+<title>아나바다</title>
+<th:block th:insert="/common/common :: fragment-header"></th:block>
 
-        <section class="py-5 section2">
-        <div class="usedTitle">
-            <h3>아껴쓰고 나눠써요</h3>
-            <p>같은제품 더 저렴하게 중고거래</p>
-        </div>
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <!-- 인기 제품 뱃지-->
-                        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">지금 인기있는 중고제품</div>
-                        <!-- 중고상품 이미지  450 * 300이 적절-->
-                        <img class="card-img-top" src="https://file2.nocutnews.co.kr/newsroom/image/2020/02/19/20200219114114556225_8_450_300.jpg" alt="..." />
-                        <!-- 중고상품 상세-->
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <!-- 중고상품 이름-->
-                                <h5 class="fw-bolder">아이폰</h5>
-                                <!-- 판매자 이름 -->
-                                <h6 class="fw">중고만파는사람</h6>
-                                <!-- 판매자 평점-->
-                                <div class="d-flex justify-content-center small text-warning mb-2">
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
-                                 </div>
-                                <!-- 중고상품 가격-->
-                                1,500,000원
-                            </div>
-                        </div>
-                        <!-- 상품 구매하기-->
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">구매하기</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="btnUsed" style="text-align: center;"><button>더 많은 상품 보기</button></div>
+<!--헤더 스타일-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/css/index.css}">
+<link rel="stylesheet" th:href="@{/css/indexList.css}">
+<link rel="preload" th:href="@{/img/hero-banner.png}">
+    <link rel="stylesheet" th:href="@{/css/list.css}">
+<!--사이드바 스타일-->
+<link rel="stylesheet" href="/css/sidenav.css">
+    <style>
+    .usedTitle{font-family: 'GangwonEduPowerExtraBoldA'; }
+    .usedTitle{text-align: center;}
+    .section1{background-image: url('/img/course-bg.png');}
+    .container .title ,.subtitle{text-align: right;}
+    .container .title{font-size: xxx-large; margin-bottom: 1em;}
+    .container .subtitle{font-size: x-large;}
+</style>
+    <script th:inline="javascript">
+    window.onload = function () {
+        const message = [[${msg}]];
+        console.log(message);
+        if(message === 'pwdSuccess'){
+            alert("비밀번호가 변경되었습니다. 다시 로그인 해 주세요.");
+            location.href="/logout";
+        }else if (message === 'infoSuccess') {
+            alert("개인정보가 수정되었습니다. 다시 로그인 해 주세요.");
+            location.href = "/logout";
+        }
+    };
+</script>
+</head>
+<body>
+<!-- Nav바-->
+<div th:replace="nav :: div"></div>
+<!-- 헤더-->
+<header class="bg-image mainBackgroundImg">
+    <section class="section hero" aria-label="home">
+        <div class="container">
+            <div class="hero-content">
+                <p class="hero-subtitle">👋, My name is 아나바다</p>
+                <h1 class="headline-lg">동네 주민들과 소소한 즐거움을 함께 나눠요</h1>
+                <p class="hero-text body-md">
+                    아나바다에 오신 것을 환영합니다
+                </p>
+                <a href="#target-section" class="btn1 btn1-primary" style="padding-bottom: 14px;">시작하기</a>
             </div>
+            <figure class="hero-banner">
+                <img th:src="@{/img/hero-banner.png}" width="680" height="400"
+                     alt="Annie, the blonde, dressed in a green hoodie with a smile on her face" class="w-100">
+            </figure>
         </div>
     </section>
+    <script>
+    document.querySelector(".btn1").addEventListener("click", function(e){
+        e.preventDefault();
+        let target = document.querySelector(this.getAttribute('href'));
+        let headerOffset = 80;
+        let elementPosition = target.offsetTop;
+        let offsetPosition = elementPosition - headerOffset;
+
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
+    });
+    </script>
+</header>
+
+
+<!-- 중고 거래 목록 -->
+<section class="py-5 section1">
+    <div class="usedTitle" id="target-section">
+        <h2 style="color: hsl(173, 60%, 47%);">아껴쓰고 나눠써요</h2>
+        <p>같은제품 더 저렴하게 <span style="color: hsl(357, 100%, 75%);">중고거래</span></p>
+    </div>
+    <div class="container px-4 px-lg-5 mt-5" >
+
+        <div id="list" class="row">
+            <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${starList}">
+                <div class="item p-3" th:onclick="|location.href='@{used/detail(postId=${row.postId})}'|">
+                    <img class="list_img" th:src="@{${row.fileInfo.url}}">
+                    <div class="div_2 mt-3">
+                        <h5 th:text="${row.title}"></h5>
+                        <span th:inline="text">
+                            [[${row.postView}]]
+                            <i class="bi bi-caret-up-fill"></i>
+                        </span>
+
+                    </div>
+                    <div class="div_3">
+                        <span class="price" th:inline="text">
+                            [[${row.price}]] 원
+                        </span>
+                        <span th:inline="text">
+                            [[${row.likesCount}]]
+                            <i class="bi bi-heart-fill" style="color: red"></i>
+                        </span>
+                    </div>
+                    <div class="div_4">
+                        <p th:text="${row.content}"></p>
+                        <span th:inline="text">
+                            [[${row.replyCount}]]
+                            <i class="bi bi-chat-dots-fill"></i>
+                        </span>
+                    </div>
+                    <span th:text="${row.address}"></span>
+                </div>
+            </article>
+        </div>
+        <div class="btnUsed" style="text-align: center;"><button class="btn btn-outline-secondary" th:onclick="|location.href='@{/used/list}'|">더 많은 상품 보기</button></div>
+    </div>
+</section>
+
+
+
+
+<section class="py-5 section2">
+    <div class="usedTitle">
+        <h3 style="color: hsl(173, 60%, 47%);">동네모임 즐겨봐요</h3>
+        <p>주민들과 재미있는 <span style="color: hsl(357, 100%, 75%);">동네모임</span></p>
+    </div>
+    <div class="container px-4 px-lg-5 mt-5">
+        <div id="list2" class="row">
+            <article class="col col-xl-6 col-lg-6 col-md-12 col-sm-12 pb-5" th:each="club : ${clubList}">
+                <div class="item p-3" th:onclick="|location.href='@{clubDetail(postId=${club.postId})}'|">
+                    <img class="list_img" th:src="@{${club.fileInfo.url}}">
+                    <div class="text">
+                        <h5 th:text="${club.title}"></h5>
+                        <span class="content" th:text="${club.content}"></span><!--내용 10자이내로-->
+                        <div class="listdetail"><!--지역 운동 생성일-->
+                            <span class="category" th:text="${club.hobbyName}"></span>
+                            <span class="region" th:inline="text">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                                [[${club.address}]]
+                            </span>
+                        </div>
+                        <div class="members">
+                            <img th:src="@{/member/findProfileImg(memberId=${club.memberId})}" alt="fail">
+                            <th:block th:each="man : ${club.memberIdList}">
+                                <img th:src="@{/member/findProfileImg(memberId=${man})}" alt="fail">
+                            </th:block>
+
+                            <div class="count">
+                                <i class="fa-solid fa-people-group"></i>
+                                <span th:text="${club.nowMan}"></span>
+                                <span>/</span>
+                                <span th:text="${club.maxMan}"></span>
+                            </div><!--인원수 나타내는-->
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <div class="btnUsed" style="text-align: center;">
+                <button class="btn btn-outline-secondary" th:onclick="|location.href='@{/clubList}'|">더 많은 모임 보기</button>
+            </div>
+        </div>
+    </div>
+</section>
 
         <!-- Footer-->
     <div th:replace="footer :: footer"></div>

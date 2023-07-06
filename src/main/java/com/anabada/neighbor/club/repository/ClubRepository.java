@@ -1,8 +1,9 @@
 package com.anabada.neighbor.club.repository;
 
-import com.anabada.neighbor.club.domain.ImageRequest;
-import com.anabada.neighbor.club.domain.ImageResponse;
+import com.anabada.neighbor.file.domain.FileRequest;
+import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
+import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
 import org.springframework.stereotype.Repository;
@@ -22,17 +23,25 @@ public interface ClubRepository {
 
     /**
      * 요청받은 이미지 정보 db에 넣기
-     * @param imageRequest 이미지요청
+     * @param fileRequest 이미지요청
      */
-    public void insertImage(ImageRequest imageRequest);
+    public void insertFile(FileRequest fileRequest);
 
     /**
      * 업데이트 포스트
+     *
      * @param post 업데이트한 포스트
+     * @return 성공여부
      */
-    public void updatePost(Post post);
+    public int updatePost(Post post);
 
-    public void updateClub(Club club);
+    /**
+     * 업데이트 클럽
+     *
+     * @param club 업데이트한 포스트
+     * @return 성공여부
+     */
+    public int updateClub(Club club);
 
     public void deletePost(long postId);
 
@@ -49,14 +58,14 @@ public interface ClubRepository {
      * @param postId 게시글 번호 FK
      * @return 이미지 리스트
      */
-    public List<ImageResponse> selectImagesByPostId(Long postId);
+    public List<FileResponse> selectImagesByPostId(Long postId);
 
     /**
      * 이미지 리스트 조회
      * @param imgId PK
      * @return 이미지 정보
      */
-    public ImageResponse selectImageByImgId(Long imgId);
+    public FileResponse selectImageByImgId(Long imgId);
 
     /**
      * 이미지 삭제
@@ -69,7 +78,7 @@ public interface ClubRepository {
      * @param hobbyName 취미이름
      * @return hobbyId
      */
-    public long selectHobbyId(String hobbyName);
+    public Long selectHobbyId(String hobbyName);
 
     /**
      *
@@ -91,4 +100,42 @@ public interface ClubRepository {
      */
     int count();
 
+    /**
+     * 클럽에 가입해있는지 찾기
+     * @param clubId 클럽아이디
+     * @param memberId 멤버아이디
+     * @return clubJoinId 반환
+     */
+    Long selectClubJoinIdByMemberId(long clubId, long memberId);
+
+    int insertClubJoin(Long clubId, Long memberId, Long postId);
+
+    int deleteClubJoin(Long clubId, Long memberId);
+
+    void updateNowManMinus(Long clubId);
+
+    void updateNowManPlus(Long clubId);
+
+    /**
+     * 셀렉옵션에 넣을 취미 이름 가져오기
+     * @return
+     */
+    List<Hobby> findHobbyName();
+
+    List<Club> selectHobbyClubList(long hobbyId);
+
+    List<Club> selectClubList();
+
+    List<Post> selectHotPostList();
+
+    String findMyClubLikePostType(long postId);
+
+    /**
+     * memberId로 like테이블에서 postId찾기
+     * @param memberId
+     * @return
+     */
+    List<Post> findPostId(long memberId);
+
+    List<Long> findMemberIdInClub(long clubId);
 }

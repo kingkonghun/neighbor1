@@ -1,6 +1,7 @@
 package com.anabada.neighbor.reply.service;
 
 import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.reply.domain.CarryReply;
 import com.anabada.neighbor.reply.domain.Reply;
 import com.anabada.neighbor.reply.repository.ReplyRepository;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +23,9 @@ public class ReplyServiceImpl implements ReplyService {
     private final ReplyRepository replyRepository;
     private final UsedRepository usedRepository;
 
+    /**
+     * postId 로 댓글 리스트 가져오기
+     */
     @Override
     public List<CarryReply> list(long postId) { //댓글 목록
         List<CarryReply> list = new ArrayList<>(); //리턴할 값
@@ -51,6 +57,9 @@ public class ReplyServiceImpl implements ReplyService {
         return list;
     }
 
+    /**
+     * 댓글 작성
+     */
     @Override
     public void write(Reply reply, PrincipalDetails principalDetails) { //댓글 작성
         reply.setMemberId(principalDetails.getMember().getMemberId()); //session에 있는 memberId 가져와서 reply에 넣기
@@ -58,16 +67,25 @@ public class ReplyServiceImpl implements ReplyService {
         replyRepository.updateReGroup(reply); //댓글 작성 후 해당하는 튜플의 reGroup 컬럼 업데이트
     }
 
+    /**
+     * 댓글 삭제(update 로 comment 컬럼 빈값으로 변경)
+     */
     @Override
     public void delete(long replyId) { //댓글 삭제
         replyRepository.delete(replyId); //해당하는 튜플의 comment 컬럼을 ''(공백)으로 변경
     }
 
+    /**
+     * 댓글 수정
+     */
     @Override
     public void update(Reply reply) { //댓글 수정
         replyRepository.update(reply); //댓글 수정
     }
 
+    /**
+     * 대댓글 작성
+     */
     @Override
     public void writeReReply(Reply reply, PrincipalDetails principalDetails) { //대댓글 작성
         Reply parent = replyRepository.findReply(reply.getReplyId()); //reply에 담아온 부모의 replyId로 reply 테이블에서 해당하는 튜플 가져오기
@@ -79,22 +97,45 @@ public class ReplyServiceImpl implements ReplyService {
 
     }
 
+    /**
+     * 내가 쓴 댓글 리스트 조회
+     */
     @Override
-    public List<CarryReply> findMyReply(long memberId) {//내가 쓴 댓글목록
+    public List<CarryReply> findMyReply(long memberId, Criteria criteria) {//내가 쓴 댓글목록
         List<CarryReply> carryReplyList = new ArrayList<>();//리턴그릇
-        List<Reply> replyList=replyRepository.findMyReply(memberId);//댓글목록 긁어오기
+        Map<String, Object> map = new HashMap<>();
+        map.put("memberId", memberId);
+        map.put("criteria",criteria);
+        List<Reply> replyList=replyRepository.findMyReply(map);//댓글목록 긁어오기
         for (Reply reply : replyList) {
             long postId = reply.getPostId();
-            Post post = usedRepository.findPost(postId);
-            CarryReply carryReply = CarryReply.builder()
-                    .postId(postId)
-                    .title(post.getTitle())//게시글 제목
-                    .replyUpdate(reply.getReplyUpdate())//작성,수정 날짜
-                    .comment(reply.getComment())//댓글 내용
-                    .postType(post.getPostType().equals("used")  ? "중고 상품" : "클럽 게시글")//게시글 유형
-                    .build();
-            carryReplyList.add(carryReply);
+            Post post = usedRepository.findReplyPost(postId);
+            if (!post.getPostType().equals("del")) {
+                CarryReply carryReply = CarryReply.builder()
+                        .postId(postId)
+                        .title(post.getTitle())//게시글 제목
+                        .replyUpdate(reply.getReplyUpdate())//작성,수정 날짜
+                        .comment(reply.getComment())//댓글 내용
+                        .postType(post.getPostType().equals("used")  ? "중고거래" : "동네모임")//게시글 유형
+                        .build();
+                carryReplyList.add(carryReply);
+            }else{
+                CarryReply carryReply = CarryReply.builder()
+                        .postId(postId)
+                        .title(post.getTitle())//게시글 제목
+                        .replyUpdate(reply.getReplyUpdate())//작성,수정 날짜
+                        .comment(reply.getComment())//댓글 내용
+                        .postType("삭제된 게시글입니다.")//게시글 유형
+                        .build();
+                carryReplyList.add(carryReply);
+            }
+
         }
         return carryReplyList;
+    }
+
+    @Override
+    public int countMyReply(long memberId) {
+        return replyRepository.countMyReply(memberId);
     }
 }

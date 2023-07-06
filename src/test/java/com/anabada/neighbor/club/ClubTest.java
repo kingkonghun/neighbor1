@@ -1,6 +1,6 @@
 package com.anabada.neighbor.club;
 
-import com.anabada.neighbor.club.domain.ClubResponse;
+import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.club.repository.ClubRepository;
 import com.anabada.neighbor.used.domain.Post;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,10 +10,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Stream;
 
 @SpringBootTest
 public class ClubTest {
+    private final String uploadPath = Paths.get("/Users", "upload_anabada").toString();
+
     @Autowired
     ClubRepository clubRepository;
 
@@ -67,6 +75,24 @@ public class ClubTest {
         System.out.println("삭제 이전의 전체클럽 게시글 수는 : " + clubRepository.selectPostList().size());
         clubRepository.deletePost(1L);
         System.out.println("삭제 이후 전체클럽 게시글 수는 : " + clubRepository.selectPostList().size());
+
+    }
+
+    @Test
+    public Stream<Path> loadAll(FileResponse file) {
+        String uploadedDate = file.getCreatedDate().toLocalDate().format(DateTimeFormatter.ofPattern("yyMMdd"));
+        String filename = file.getSaveName();
+        Path filePath = Paths.get(uploadPath, uploadedDate, filename);
+        System.out.println("update : " + uploadedDate);
+        System.out.println("name : " + filename);
+        System.out.println("path : " + filePath.toString());
+
+        try {
+            return Files.walk(filePath, 1)
+                    .filter(path -> !path.equals(filePath)).map(filePath::relativize);
+        } catch (IOException e) {
+            throw new RuntimeException(e) ;
+        }
 
     }
 }

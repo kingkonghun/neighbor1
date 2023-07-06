@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>Title</title>
+<th:block th:insert="/common/common :: fragment-header"></th:block>
+<link rel="stylesheet" type="text/css" th:href="@{/css/chatDetail.css}">
+<script>
+    $(function(){
+        $(".deal_comp").click(function(){
+            if(confirm("판매완료 처리하시겠습니까?")){
+                postId = $("#postId").val();
+                receiver = $("#receiver").val();
+                $.ajax({
+                    type: "post",
+                    url: "used/success",
+                    data: {"postId": postId, "receiver": receiver},
+                    success: function(data){
+                        tongkn2_pop();
+                        $(".deal_comp").css("display", "none");
+                    }
+                });
+            }
+        });
+        $("#chatOut").click(function(){
+            if(confirm("채팅방을 지우시겠습니까?")){
+                $.ajax({
+                    type: "post",
+                    url: "/chatOut",
+                    data: {"postId": $("#postId").val(), "roomId": $("#roomId").val(), "type": "used"},
+                    success: function(){
+                        window.close();
+                    }
+                });
+            }
+        });
+    });
+
+    function tongkn2_pop(){
+        opener.location.href="/used/detail?postId="+[[${list[0].postId}]];
+    }
+</script>
+</head>
+<body>
+<input type="hidden" id="type" th:value="${list[0].type}">
+<input type="hidden" id="postId" th:value="${list[0].postId}">
+<input type="hidden" id="roomId" th:value="${list[0].roomId}">
+<input type="hidden" id="receiver" th:value="${receiver.receiver}">
+<input type="hidden" id="sender" th:value="${#authentication.principal.member.memberId}">
+<div class="container3">
+  <div class="rightSide">
+    <div class="header"><!--채팅 상대방 창 -->
+      <div class="imgText">
+        <div>
+          <div class="userimg">
+            <img th:src="@{/member/findProfileImg(memberId=${receiver.receiver})}" class="cover"><!--상대방 이미지-->
+          </div>
+          <h4 th:text="${receiver.receiverName}"></h4><!--상대 이름-->
+        </div>
+        <li class="navList nav-item dropdown" style="list-style: none;">
+          <a class="nav-link " id="adminT" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">
+            <i class="bi bi-three-dots-vertical"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#" id="chatOut">채팅방 지우기</a></li>
+          </ul>
+        </li>
+      </div>
+    </div>
+    <div id="block"></div>
+
+    <!--채팅방-->
+
+    <div class="search_chat" onclick="tongkn2_pop();" style="cursor: pointer;">
+      <div class="room_detail">
+        <img th:src="@{${list[0].fileInfo.url}}">
+        <div class="used_detail">
+          <span class="used_name" th:text="${list[0].title}"></span>
+          <span class="used_cost" th:text="${list[0].price} + ' 원'"></span>
+        </div>
+      </div>
+      <button type="button" class="deal_comp py-2 px-4" th:if="${list[0].productStatus == 'y' && list[0].master == #authentication.principal.member.memberId}">판매완료</button>
+    </div>
+
+    <div class="chatBox" id="messages">
+      <th:block th:each="row : ${list}">
+        <div class="message my_message" th:if="${row.messageType == 'SEND' && row.sender == #authentication.principal.member.memberId}"><!--내가 보낸 부분 오른쪽-->
+          <p th:inline="text">
+            [[${row.content}]]<br>
+            <span th:text="${row.messageDate}"></span>
+          </p><!--시간-->
+        </div>
+        <div class="message frnd_message" th:if="${row.messageType == 'SEND' && row.sender != #authentication.principal.member.memberId}"><!--상대가 보낸 부분 왼쪽-->
+          <div class="user_profile"><!--상대 대화 위에 이미지와 이름 생성-->
+            <img th:src="@{/member/findProfileImg(memberId=${row.sender})}" class="room_cover"><!--상대 사진-->
+            <span th:text="${row.receiverName}"></span><!--상대 이름-->
+          </div>
+          <p th:inline="text">
+            [[${row.content}]]<br>
+            <span th:text="${row.messageDate}"></span>
+          </p><!--시간-->
+        </div>
+        <div class="message1 join" th:if="${row.messageType} == 'ENTER'"><!--상대가 보낸 부분 왼쪽-->
+          <p th:text="${row.content}"></p>
+        </div>
+        <div class="message1 join" th:if="${row.messageType} == 'EXIT'"><!--상대가 보낸 부분 왼쪽-->
+          <p th:text="${row.content}"></p>
+        </div>
+      </th:block>
+    </div>
+
+    <!--채팅입력 부분-->
+    <div class="chatbox_input">
+      <input type="text" id="message" placeholder="메세지를 입력하세요.">
+      <i id="send" class="fa-regular fa-paper-plane" style="color: gray;"></i><!--보내기 버튼-->
+    </div>
+  </div>
+</div>
+</body>
+</html>

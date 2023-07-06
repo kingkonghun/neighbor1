@@ -1,8 +1,9 @@
 package com.anabada.neighbor.club.repository;
 
-import com.anabada.neighbor.club.domain.ImageRequest;
-import com.anabada.neighbor.club.domain.ImageResponse;
+import com.anabada.neighbor.file.domain.FileRequest;
+import com.anabada.neighbor.file.domain.FileResponse;
 import com.anabada.neighbor.club.domain.entity.Club;
+import com.anabada.neighbor.club.domain.entity.Hobby;
 import com.anabada.neighbor.member.domain.Member;
 import com.anabada.neighbor.used.domain.Post;
 import org.apache.ibatis.annotations.*;
@@ -28,18 +29,19 @@ public interface MbClubRepository extends ClubRepository {
     @Insert("insert into file(" +
             "imgId, postId, origName, saveName, size, deleteYn, creaDate, deleDate)" +
             "values(#{imgId}, #{postId}, #{origName}, #{saveName}, #{size}, 0, now(), null)")
-    void insertImage(ImageRequest imageRequest);
+    void insertFile(FileRequest fileRequest);
 
     @Override
     @Update("update post" +
             " set title = #{title}, content=#{content}, postUpdate= now()" +
             " where postId = #{postId}")
-    void updatePost(Post post);
+    int updatePost(Post post);
 
     @Override
     @Update("update club" +
-            " set hobbyId = #{hobbyId}, maxMan = #{maxMan}")
-    void updateClub(Club club);
+            " set hobbyId = #{hobbyId}, maxMan = #{maxMan}" +
+            " where postId = #{postId}")
+    int updateClub(Club club);
 
     @Override
     @Delete("update post" +
@@ -50,6 +52,8 @@ public interface MbClubRepository extends ClubRepository {
     @Override
     @Select("select * from post where postId = #{postId}")
     Post selectPost(long postId);
+
+
 
     @Override
     @Select("select * from club where postId = #{postId}")
@@ -64,14 +68,13 @@ public interface MbClubRepository extends ClubRepository {
     List<Post> selectPostList();
 
     @Override
-    @Select("select * from file where deleteYn = 0 and postId = #{postId}" +
-            " order by imgId")
-    List<ImageResponse> selectImagesByPostId(Long postId);
+    @Select("select * from file where deleteYn = 0 and postId = #{postId} order by imgId")
+    List<FileResponse> selectImagesByPostId(Long postId);
 
     @Override
     @Select("select * from file" +
-            " where deleteYn = 0 and imgId IN (#{imgId}) order by imgId")
-    ImageResponse selectImageByImgId(Long imgId);
+            " where deleteYn = 0 and imgId = #{imgId} order by imgId")
+    FileResponse selectImageByImgId(Long imgId);
 
     @Override
     @Delete("update file set deleteYn = 1, deleDate = NOW()" +
@@ -80,7 +83,7 @@ public interface MbClubRepository extends ClubRepository {
 
     @Override
     @Select("select hobbyId from hobby where hobbyName = #{hobbyName}")
-    long selectHobbyId(String hobbyName);
+    Long selectHobbyId(String hobbyName);
 
     @Override
     @Select("select hobbyName from hobby where hobbyId = #{hobbyId}")
@@ -91,5 +94,57 @@ public interface MbClubRepository extends ClubRepository {
     String selectMemberName(long memberId);
 
     @Override
+    @Insert("insert into clubJoin (clubId, memberId, postId) values (#{clubId}, #{memberId}, #{postId})")
+    int insertClubJoin(@Param("clubId") Long clubId, @Param("memberId") Long memberId,@Param("postId") Long postId);
+
+    @Override
+    @Delete("delete from clubJoin where clubId = #{clubId} and memberId = #{memberId}")
+    int deleteClubJoin(@Param("clubId") Long clubId, @Param("memberId") Long memberId);
+
+    @Override
+    @Select("select id from clubJoin where clubId = #{clubId} and memberId = #{memberId} ")
+    Long selectClubJoinIdByMemberId(@Param("clubId") long clubId,@Param("memberId") long memberId);
+
+    @Override
+    @Update("update club set nowMan = nowMan - 1 where clubId = ${clubId}")
+    void updateNowManMinus(Long clubId);
+
+    @Override
+    @Update("update club set nowMan = nowMan + 1 where clubId = ${clubId}")
+    void updateNowManPlus(Long clubId);
+
+    @Override
     int count();
+
+    @Override
+    @Select("select * from hobby")
+    List<Hobby> findHobbyName();
+
+    @Override
+    @Select("select * from club where hobbyId = #{hobbyId}")
+    List<Club> selectHobbyClubList(long hobbyId);
+
+    @Override
+    @Select("select * from club")
+    List<Club> selectClubList();
+
+    @Override
+    @Select("SELECT *" +
+            " FROM post" +
+            " WHERE postUpdate >= DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 week) and postType='club' " +
+            " ORDER BY postView desc" +
+            " LIMIT 6")
+    List<Post> selectHotPostList();
+
+    @Override
+    @Select("SELECT postType FROM post WHERE postId = #{postId}")
+    String findMyClubLikePostType(long postId);
+
+    @Override
+    @Select("SELECT postId FROM likes WHERE memberId = #{memberId}")
+    List<Post> findPostId(long memberId);
+
+    @Override
+    @Select("select memberId from clubJoin where clubId = #{clubId} LIMIT 5")
+    List<Long> findMemberIdInClub(long clubId);
 }

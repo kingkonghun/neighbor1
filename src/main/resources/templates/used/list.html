@@ -7,18 +7,24 @@
 <link rel="stylesheet" th:href="@{/css/list.css}">
 <style>
     body {
-        background-color: #E6E6E6;
+        background-color: #f4f4f4;
     }
 </style>
 <script th:inline="javascript">
+    function reload(){
+        location.href="/used/list";
+    }
+
     $(function (){
+
+        // 게시물 더보기
         let num = 0;
         $("#btnPlus").click(function (){
             num+=9;
             $.ajax({
                 type: "get",
                 url: "/used/list",
-                data: {num:num, categoryId:$("#category_select").val(), search:[[${search}]]},
+                data: {num:num, categoryId:$("#category_select").val(), search:$("#search").val()},
                 success: function(data) {
                     $("#list").append(data);
                 }
@@ -26,12 +32,26 @@
         });
 
         $("#btnSubmit").click(function(){
+            let title = $("#inputTitle");
             let category = $("#category");
             let price = $("#inputPrice");
             let content = $("#inputContent");
             let files = $("#files");
+
+            const titleTest = /^[\s\S]{1,12}$/;
+            if (title.val() == '') {
+                alert("제목을 입력하세요");
+                title.focus();
+                return;
+            }
+            if (!titleTest.test(title.val())) {
+                alert("12글자 이내로 입력하세요(공백 포함)");
+                title.focus();
+                return;
+            }
+
             if(category.val() == 0) {
-                alert("카테고리를 선택하세요");
+                alert("상품종류를 선택하세요");
                 category.focus();
                 return;
             }
@@ -52,20 +72,17 @@
             }
             document.writeForm.submit();
         });
+
         $("#btnWrite").click(function (){
-            let isAuthenticated;
-            $.ajax({
-                type: "get",
-                url: "/member/isAuthenticated",
-                async: false,
-                success: function(result){
-                    isAuthenticated = result;
+            if(checkIsAuthenticated()){
+                if(checkIsAuthorization()){
+                    location.href="/member/editInfo?message=추가 정보를 입력한 뒤에 사용하세요";
+                    return;
+                }else{
+                    $("#writeForm").slideDown();
                 }
-            });
-            if(isAuthenticated){
-                $("#writeForm").slideDown();
             }else{
-                if(confirm("글쓰기는 로그인 후 가능합니다\n로그인 하시겠습니까?")){
+                if(confirm("상품등록은 로그인 후 가능합니다\n로그인 하시겠습니까?")){
                     location.href="/member/loginForm";
                 }
             }
@@ -73,6 +90,9 @@
         $("#returnBtn").click(function (){
             $("#writeForm").slideUp();
         });
+
+
+        // 카테고리 체인지
         $("#category_select").change(function(){
             let categoryId = $("#category_select").val();
             let search = [[${search}]];
@@ -96,16 +116,16 @@
 </script>
 </head>
 <body>
-<div th:replace="nav::nav"></div>
+<div th:replace="nav::div"></div>
 
 <header class="mt-5">
-    <h1>중고거래</h1>
+    <h1><a href="#" onclick="reload()">중고거래</a></h1>
 </header>
 
 <section class="container mt-2">
     <div class="div_1 py-3">
         <article class="write">
-            <button type="button" class="mb-3" id="btnWrite">글쓰기</button>
+            <button type="button" class="mb-3" id="btnWrite">상품등록</button>
         </article>
         <article class="category">
             <select id="category_select" name="categoryId">
@@ -116,13 +136,17 @@
             </select>
         </article>
     </div>
+
     <article th:include="used/post :: section" style="display: none;" id="writeForm"></article>
 
 
-    <div id="list" class="row">
+
+
+    <section id="list" class="row"  >
         <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${list}">
             <div class="item p-3" th:onclick="|location.href='@{detail(postId=${row.postId})}'|">
-                <img class="list_img" th:src="@{/used/findImg(postId=${row.postId})}">
+                <!--사진-->
+                <img class="list_img" th:src="@{${row.fileInfo.url}}">
                 <div class="div_2 mt-3">
                     <h5 th:text="${row.title}"></h5>
                     <span th:inline="text">
@@ -150,7 +174,7 @@
                 <span th:text="${row.address}"></span>
             </div>
         </article>
-    </div>
+    </section>
     <article class="col col-12 mb-5">
         <button type="button" id="btnPlus">더보기</button>
     </article>

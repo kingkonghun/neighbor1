@@ -1,0 +1,210 @@
+header {
+    text-align: center;
+    font-family: GangwonEduPowerExtraBoldA;
+}
+#writeForm{font-family: 'omyu_pretty';}
+.write, .category,#btnPlus{font-family: 'omyu_pretty';}
+.container {
+    height: 100%;
+}
+.col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.item {
+    width: 576px;
+    height: 200px;
+    border-radius: 12px;
+    background-color: #FFFFFF;
+    cursor:pointer;
+    font-family: GangwonEduPowerExtraBoldA;
+    display: flex;
+    gap: 12px;
+}
+.text {
+    width: 320px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    word-break:break-all;
+}
+.list_img {
+    flex-shrink: 0;
+    width: 180px;
+    height: 100%;
+    border-radius: 12px;
+}
+.category {
+    text-align: right;
+}
+#category_select {
+    width: 120px;
+    height: 32px;
+    border-radius: 8px;
+    border-style: none;
+    text-align: center;
+}
+.write {
+    text-align: right;
+}
+#btnWrite {
+    border-radius: 8px;
+    border-style: none;
+    background-color: #FFFFFF;
+    width: 100px;
+    height: 32px;
+}
+.div_1 {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.item h5{
+    line-height: 1.5;
+}
+.item h5, .item p, .content {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    word-break:break-all;
+}
+#btnPlus {
+    border-radius: 8px;
+    border-style: none;
+    background-color: #FFFFFF;
+    width: 80px;
+    height: 32px;
+}
+/*정훈 리스트 디자인*/
+
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+.info > * {
+    flex: 1;
+}
+.text .title{
+    font-weight: 600;
+    font-size: 24px;
+    letter-spacing: -.4px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-bottom: 8px;
+    color: #383535;
+}
+.text .content{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: -.4px;
+    font-weight: 400;
+    margin-bottom: 5px;
+
+    /* 이 세 줄이 '...' 설정을 적용하는 데 필요 */
+width: 100%;
+}
+.text .listdetail{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: -.4px;
+    font-weight: 400;
+    color: #999696;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-family: Pretendard;
+    width: 100%;
+}
+.text .listdetail .category{
+    letter-spacing: -.4px;
+    font-size: 18px;
+    line-height: 18px;
+    padding: 8px 13px;
+    border-radius: 16px;
+    background-color: #f4f4f4;
+    color: #666060;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    list-style: none;
+    margin-right: 6px;
+
+}
+.text .members {
+    display: flex;
+    position: relative;
+    list-style: none;
+    align-items: center;
+    width: 100%;
+}
+.text .members img {
+    width: 36px;
+    height: 36px;
+    color: transparent;
+    object-fit: cover;
+    border-radius: 100%;
+    position: relative;
+    flex-shrink: 0;
+    overflow-clip-margin: content-box;
+    overflow: clip;
+    margin-right: -10px;
+    border: 3.5px solid white;
+}
+ .text .members img:last-child {
+    margin-right: 0; /* 마지막 이미지의 오른쪽 마진을 0으로 설정 */
+}
+ .text .members .count{
+    font-size: 16px;
+    line-height: 19px;
+    font-weight: 400;
+    color: #999696;
+    list-style: none;
+    position: relative;
+    z-index: 5;
+    left: 25px;
+}
+
+@media screen and (max-width: 1200px) {
+    .text{width: 220px;}
+    .members{margin-top: 10px;}
+}
+@media screen and (max-width: 992px) {
+    .text{width: 340px;}
+}
+@media screen and (max-width: 768px) {
+    .text{width: 316px;}
+    .text h5{font-size: 18px; margin-bottom: 0px;}
+    .text .content{font-size: 14px;}
+    .text .listdetail {margin-bottom: 0px;}
+    .text .listdetail span, .text .members .count span {font-size: 14px;}
+    .text .listdetail .category {font-size: 14px;}
+    .text .members img {width: 26px!important; height: 26px!important;}
+    .text .members {margin-top: 0px;}
+    .list_img {width: 120px;}
+    .item{height: 140px;}
+    .content {display: none;}
+}
+
+@media screen and (max-width: 480px) {
+    .text{width: 220px;}
+    .text h5{font-size: 16px;}
+    .text .content{font-size: 12px;}
+    .text .listdetail span, .text .members .count span {font-size: 12px;}
+    .text .listdetail .category {font-size: 12px;}
+    .text .members img {width: 24px!important; height: 24px!important;}
+    .content {display: none;}
+}
+
+
+

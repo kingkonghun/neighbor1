@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>병신아</title>
-    <th:block th:insert="/common/common :: fragment-header"></th:block>
+  <title>더보기</title>
 <link rel="stylesheet" th:href="@{/css/list.css}">
 <style>
     body {
-        background-color: #E6E6E6;
+        background-color: #f4f4f4;
     }
 </style>
 </head>
@@ -14,7 +13,7 @@
 <body>
 <article class="col col-xl-4 col-lg-6 col-md-6 col-sm-12 pb-5" th:each="row : ${list}">
     <div class="item p-3" th:onclick="|location.href='@{detail(postId=${row.postId})}'|">
-        <img class="list_img" th:src="@{/used/findImg(postId=${row.postId})}">
+        <img class="list_img" th:src="@{${row.fileInfo.url}}">
         <div class="div_2 mt-3">
             <h5 th:text="${row.title}"></h5>
             <span th:inline="text">

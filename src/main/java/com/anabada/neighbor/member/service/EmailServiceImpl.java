@@ -18,8 +18,11 @@ public class EmailServiceImpl implements EmailService{
     
     private final JavaMailSender javaMailSender;
 
-    public static final String ePw = createKey();
+    private final String ePw = createKey();
 
+    /**
+     * 이메일 인증 코드 메시지 만들기
+     */
     private MimeMessage createMessage(String to) throws Exception{//메시지만들기
         System.out.println("받는사람:"+to);
         System.out.println("인증번호"+ePw);
@@ -47,7 +50,11 @@ public class EmailServiceImpl implements EmailService{
 
         return message;
     }
-    private static String createKey() {//암호키만들기
+
+    /**
+     * 이메일 인증코드 만드는 로직 랜덤 함수 사용
+     */
+    private String createKey() {//암호키만들기
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
 
@@ -72,6 +79,9 @@ public class EmailServiceImpl implements EmailService{
         return key.toString();
     }
 
+    /**
+     * 이메일 인증 코드 전송 하는 로직
+     */
     @Override
     public String sendSimpleMessage(String to) throws Exception {//메시지보내기
         System.out.println(123);

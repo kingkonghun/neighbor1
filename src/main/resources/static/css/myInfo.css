@@ -1,0 +1,48 @@
+#myInfo_section {
+    font-family: 'GangwonEduPowerExtraBoldA';
+}
+#myInfo_article {
+    border-radius: 12px;
+    background-color: #FFFFFF;
+}
+#myInfo_img_div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#myInfo_img {
+    width: 160px;
+    height: 180px;
+    border-radius: 12px;
+}
+#myInfo_text {
+    font-size: 24px;
+    word-break: break-all;
+}
+#myInfo_button_div ,#admin_btn_div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#myInfo_button, #admin_button {
+    background-color: #FF3366;
+    border-radius: 12px;
+    border-style: none;
+    color: #FFFFFF;
+    font-family: 'omyu_pretty';
+    font-size: 20px;
+    width: 180px;
+}
+#admin_button{margin-top: 1em;}
+.myInfo_link_div {
+    text-align: center;
+}
+.myInfo_link_div > div {
+    border-radius: 12px;
+    font-size: 20px;
+    background-color: #F4F4F4;
+}
+
+.memberDetail .h2{margin-top: 1.5em; margin-bottom: 1.5em; text-align: center;}
+.memberDetail .btnList{margin-bottom: 2em;}

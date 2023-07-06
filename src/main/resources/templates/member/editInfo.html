@@ -4,104 +4,251 @@
     <meta charset="UTF-8"/>
     <title>Title</title>
     <th:block th:insert="/common/common :: fragment-header"></th:block>
-    <style>
-        #liEditInfo{color:red;}
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/editInfo.css">
 
-       .myInfo{font-family: 'GangwonEduPowerExtraBoldA';}
+    <script type="text/javascript">
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const message = urlParams.get('message');
 
-        .myInfo{padding-left: 10em;}
-        .myInfomation{display: flex; justify-content: space-evenly;}
-        .titleBox{width: 200px; height: auto; text-align: left; padding-left: 2em; padding-bottom: 1.5em;}
-        .profileImg{width: 100%;height: 100%;}
-        .info-aria{display: flex;padding-bottom: 1.5em;}
-        .btnSubmit{text-align: center;}
-    </style>
-    <link rel="stylesheet" th:href="@{/css/myPage.css}">
+        if (message) {
+            alert(decodeURIComponent(message));
+        }
+    </script>
+    <script th:inline="javascript">
+        window.onload = function() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const message = urlParams.get('msg');
+
+            if (message === 'fail') {
+                alert("기존 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+                $("#password-tab").click();
+                $("#oldPwd").focus();
+            }else if (message === 'photoSuccess') {
+                alert("프로필 사진이 변경되었습니다.");
+                $("#security-tab").click();
+            }
+        };
+        $(function () {
+
+            // 비밀번호 정규식 패턴
+            const passwordPattern = /^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+
+            // 닉네임 정규식 패턴
+            const nicknamePattern = /^[a-zA-Z가-힣]{2,12}$/;
+
+            const memberName = $("#memberName");
+            const memberPWD = $("#newPWD");
+
+            $("#btnInfo").on('click', function () {
+                if (confirm("개인정보를 수정 하시겠습니까?")) {
+                    if (!nicknamePattern.test(memberName.val())) {
+                        alert("2~12글자 사이로 입력해주세요.");
+                        memberName.focus();
+                        return false;
+                    }
+                    if ($("#address").val() === "") {
+                        alert('주소 입력은 필수 입니다.');
+                        return false;
+                    }else if ($("#addressDetail").val() === "") {
+                        alert('상세 주소 입력은 필수 입니다.');
+                        return false;
+                    }
+                    $("#infoForm").submit();
+                }
+            });
+            $("#btnPwd").on('click', function () {
+                const pwdCk = $("#pwdCheck").val();
+                const pwd = $("#newPWD").val();
+                if (confirm("비밀번호를 변경 하시겠습니까?")) {
+                    if (pwd !== pwdCk) {
+                        alert("비밀번호가 일치하지 않습니다. 다시 입력해주세요");
+                        return false;
+                    }
+                    if (!passwordPattern.test(memberPWD.val())) {
+                        alert("8글자 이상, 영어대소문자와 특수문자(!@#$%^&*)를 사용해야 합니다.");
+                        memberPWD.focus();
+                        return false;
+                    }
+
+                    $("#pwdForm").submit();
+                }
+            });
+
+            $("#btnPhoto").on('click', function () {
+                if (confirm("프로필 사진을 변경 하시겠습니까?")) {
+                    $("#photoForm").submit();
+                }
+            });
+        });
+
+    </script>
 </head>
 <body>
-<div th:replace="nav :: nav"></div>
-<div th:replace="member/myPageNav :: nav"></div>
+<div th:replace="nav :: div"></div>
+<section class="py-5 my-5">
+    <div class="container">
+        <h1 class="mb-5 h1">내 정보 수정</h1>
+        <div class="bg-white shadow rounded-lg d-block d-sm-flex">
+            <div class="profile-tab-nav border-right">
+                <div class="p-4 title">
 
-<div class="myInfomation">
-    <section class="myInfo">
-        <div class="container">
-            <form action="/member/myEdit" class="form1" id="form1" method="post" enctype="multipart/form-data">
-                <div class="info-aria">
-                    <div class="titleBox">
-                        <img class="profileImg" th:src="@{/member/findProfileImg(memberId=${list.memberId})}" src="/static/img/defaultImg.png">
-                    </div>
-                    <div class="name_mail content">
-                        <input type="text" class="name" th:value="${list.memberName}" name="memberName"><br>
-                        <input type="hidden" name="memberId" th:value="${list.memberId}">
-                        <input type="text" class="name" th:value="${list.memberEmail}" readonly name="memberEmail">
-                    </div>
+                    <h4 class="text-center h4">아나바다</h4>
                 </div>
-                <div class="info-aria">
-                    <div class="titleBox">
-                        <p class="title">프로필 사진 변경</p>
+                <div class="nav flex-column nav-pills infoList" id="v-pills-tab" role="tablist" aria-orientation="vertical" >
+                    <a class="nav-link active1" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
+                        <i class="fa fa-home text-center mr-1"></i>
+                        개인정보
+                    </a>
+
+                    <a class="nav-link" id="password-tab" data-toggle="pill" href="#password" role="tab" aria-controls="password" aria-selected="false"
+                       th:unless="${list.providerId.startsWith('google') or list.providerId.startsWith('naver') or list.providerId.startsWith('kakao')}">
+                        <i class="fa fa-key text-center mr-1"></i>
+                        비밀번호
+                    </a>
+                    <a class="nav-link" id="security-tab" data-toggle="pill" href="#security" role="tab" aria-controls="security" aria-selected="false">
+                        <i class="fa fa-user text-center mr-1"></i>
+                        프로필 사진
+                    </a>
+               </div>
+            </div>
+            <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
+
+
+                <!--첫번째 폼 (단순 개인정보 수정)-->
+                <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+                        <form id="infoForm" class="infoForm" method="post" action="/member/editMyInfo">
+                            <h3 class="mb-4 h3">개인 정보 수정</h3>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>닉네임</label>
+                                        <input id="memberName" type="text" name="memberName" class="form-control" th:value="${list.memberName}" required>
+                                        <input type="hidden" name="memberId" class="form-control" th:value="${list.memberId}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="text" class="form-control" th:value="${list.memberEmail}" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-11">
+                                    <div class="form-group">
+                                        <label>주소</label>
+                                        <input type="text" name="address" class="form-control" id="address" th:value="${list.address}" required readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <label>검색</label>
+                                        <input type="button" class="btn btn-sm btn-success" onclick="zipcode()" value="검색">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>상세 주소</label>
+                                        <input type="text" name="addressDetail" class="form-control" id="addressDetail" th:value="${list.addressDetail}" required>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div style="margin-top: 24px;">
+                                <input type="button" class="btn btn-primary" id="btnInfo" value="수정">
+                            </div>
+                        </form>
                     </div>
-                    <div class="inputImg">
-                        <input type="file" name="profileImg" th:value="${list.profileImg}" multiple accept="image/jpeg,image/png" >
+
+
+                    <!--두번째 폼 비밀번호 변경(구글로그인등은 못들어옴)-->
+                    <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab" th:unless="${list.providerId.startsWith('google') or list.providerId.startsWith('naver') or list.providerId.startsWith('kakao')}">
+                        <form action="/member/editPwd" class="pwdForm" method="post" id="pwdForm">
+                            <h3 class="mb-4 h3">비밀번호 변경</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>기존 비밀번호</label>
+                                        <input type="password" class="form-control" name="oldPwd" required id="oldPwd">
+                                        <input type="hidden" class="form-control" name="memberId" th:value="${list.memberId}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>새 비밀번호</label>
+                                        <input type="password" id="newPWD" class="form-control" name="memberPWD" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>비밀번호 확인</label>
+                                        <input type="password" id="pwdCheck" class="form-control" name="pwdCheck" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 24px;">
+                                <input class="btn btn-primary" type="button" id="btnPwd" value="수정">
+                            </div>
+                        </form>
                     </div>
+
+
+
+                    <!--세번째 폼 프로필 사진 변경-->
+                <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
+                    <form method="post" action="/member/editPhoto" id="photoForm"class="photoForm" enctype="multipart/form-data">
+                        <h3 class="mb-4 h3">프로필 사진 변경</h3>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>기존 프로필 사진</label><br>
+                                    <img id="preview" th:src="@{/member/findProfileImg(memberId=${list.memberId})}" alt="프로필 사진" style="width: 300px;height: 200px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>프로필 사진 선택</label>
+                                    <input type="hidden" name="memberId" th:value="${list.memberId}">
+                                    <input type="file" class="form-control" name="profileImg" accept="image/*" onchange="readURL(this);">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 24px;">
+                            <input class="btn btn-primary" id="btnPhoto" type="button" value="수정">
+                        </div>
+                    </form>
                 </div>
+                <script>
+                    function readURL(input) {
+                      if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                          document.getElementById('preview').src = e.target.result;
+                        };
+                        reader.readAsDataURL(input.files[0]);
+                      } else {
+                        document.getElementById('preview').src = "";
+                      }
+                    }
+                </script>
 
-                <div class="info-aria" th:unless="${list.providerId.startsWith('google') or list.providerId.startsWith('naver') or list.providerId.startsWith('kakao')} ">
-                    <div class="titleBox">
-                        <p class="title">비밀번호</p>
-                    </div>
-                    <div class="content">
-                        <input type="password" class="pwd" id="pwd" name="memberPWD">
-                        <br>
-                        <input type="password" class="pwd" id="pwdCheck">
-                    </div>
+
                 </div>
-
-                <div class="info-aria">
-                    <div class="titleBox">
-                        <p class="title">활동 지역</p>
-                    </div>
-
-                    <div class="address content">
-                        <input id="address" class="city" th:value="${list.address}" readonly name="address">
-                        <button type="button" onclick="zipcode()" id="btnSearch">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search-heart-fill" viewBox="0 0 16 16" color="#669900">
-                                <path d="M6.5 13a6.474 6.474 0 0 0 3.845-1.258h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.008 1.008 0 0 0-.115-.1A6.471 6.471 0 0 0 13 6.5 6.502 6.502 0 0 0 6.5 0a6.5 6.5 0 1 0 0 13Zm0-8.518c1.664-1.673 5.825 1.254 0 5.018-5.825-3.764-1.664-6.69 0-5.018Z"/>
-                            </svg>
-                        </button>
-                        <br>
-                        <input id="addressDetail" class="addressDetail" th:value="${list.addressDetail}" name="addressDetail">
-                    </div>
-                </div>
-
-                <div class="info-aria">
-                    <div class="titleBox">
-                        <p class="title">내가 작성한 글</p>
-                    </div>
-                    <div class="write content">
-                        <a href="#" th:onclick="'writeList('+${list.memberId}+')'">
-                            <p class="myWrite" th:text="${list.myWrite}">10</p>
-                        </a>
-                    </div>
-                </div>
-
-
-                <div class="info-aria">
-                    <div class="titleBox">
-                        <p class="title">사용자 점수</p>
-                    </div>
-                    <div class="score content">
-                        <p class="myScore" th:text="${list.score}">50</p>
-                    </div>
-                </div>
-
-                <div class="btnSubmit">
-                    <button>작성 완료</button>
-                </div>
-            </form>
+            </div>
         </div>
-    </section>
-    <section class="myWriteFive slide-in" id="myWriteFive"></section>
-</div>
+    </div>
+</section>
 
 <div th:replace="footer :: footer"></div>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>

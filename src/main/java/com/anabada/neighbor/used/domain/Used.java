@@ -1,5 +1,7 @@
 package com.anabada.neighbor.used.domain;
 
+import com.anabada.neighbor.file.domain.FileInfo;
+import com.anabada.neighbor.file.domain.FileResponse;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,11 +34,15 @@ public class Used {
     private String profileImg;      //프로필 이미지
     private int score;              //사용자평점
     private char memberStatus;      //회원상태(가입,탈퇴,정지등)
-    private List<MultipartFile> files;
-
+    private List<String> imgList;
     private int replyCount;
     private int likesCount;
     private int likesCheck;
+    private List<MultipartFile> files;
+    private List<FileResponse> fileResponseList; //이미지 url List
+    private FileInfo fileInfo;
+    private FileResponse fileResponse;
+
 }
 
 

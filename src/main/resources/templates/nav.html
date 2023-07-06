@@ -1,74 +1,112 @@
-<nav class="top_nav">
-    <div class="container nav_container">
-        <div class="nav_div">
-            <h1 class="nav_title"><a href="/">아나바다</a></h1>
-            <ul class="nav_menu_1">
-                <li><a href="/used/list">중고거래</a></li>
-                <li><a href="/club">동네모임</a></li>
-                <li><a href="#">주변맛집</a></li>
-            </ul>
-        </div>
-        <div class="nav_div">
-            <form id="searchForm_1" class="searchForm" method="get">
-                <select class="searchSelect" name="searchOption">
-                    <option value="used">중고물품</option>
-                    <option value="club">동네모임</option>
-                </select>
-                <div class="search_1">
-                    <input name="search" class="searchInput" type="search" placeholder="검색어 입력" onkeyup="search()">
-                    <input type="hidden">
-                    <img id="btnSearch_1" class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
-                </div>
-            </form>
+<div>
+    <nav class="top_nav">
+        <div class="container nav_container">
+            <div class="nav_div">
+                <h1 class="nav_title"><a href="/"><img th:src="@{/img/logo.png}" style="width: 40px; height: 40px; margin-bottom: 12px;"> 아나바다</a></h1>
+                <ul class="nav_menu_1">
+                    <li><a th:href="${search != null && search != '' ? '/used/list?search=' + search : '/used/list'}">중고거래</a></li>
+                    <li><a th:href="${search != null && search != '' ? '/clubList?search=' + search : '/clubList'}">동네모임</a></li>
+                </ul>
+            </div>
+            <div class="nav_div">
+                <form id="searchForm_1" class="searchForm" method="get" action="/used/list">
+                    <div class="search_1">
+                        <input id="search" name="search" class="searchInput" type="search" placeholder="검색어 입력" th:value="${search}">
+                        <input type="hidden">
+                        <img id="btnSearch_1" class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" onclick="submit();">
+                    </div>
+                </form>
 
-            <form id="searchForm_2" class="searchForm" method="get">
-                <select class="searchSelect" name="searchOption">
-                    <option value="used">중고물품</option>
-                    <option value="club">동네모임</option>
-                </select>
-                <div class="search_1">
-                    <input name="search" class="searchInput" type="search" placeholder="검색어 입력">
-                    <input type="hidden">
-                    <img id="btnSearch_2" class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
-                </div>
-            </form>
+                <form id="searchForm_2" class="searchForm" method="get" action="/used/list">
+                    <div class="search_1">
+                        <input name="search" class="searchInput" type="search" placeholder="검색어 입력" th:value="${search}">
+                        <input type="hidden">
+                        <img id="btnSearch_2" class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" onclick="submit();">
+                    </div>
+                </form>
 
-            <div class="open-search">
-                <div class="border">
-                    <img class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+                <div class="open-search">
+                    <div class="border">
+                        <img class="searchIcon" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+                    </div>
+                </div>
+
+                <input type="checkbox" id="menuicon">
+                <label for="menuicon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span class="notification" id="navNotification"></span>
+                </label>
+
+                <div class="sidebar">
+                    <ul class="navbar-list">
+                        <li class="navbar-item" onclick="location.href='/member/loginForm'" sec:authorize="isAnonymous()">
+                            <a href="#" class="navbar-link title-sm" data-nav-link>
+                                <i class="fa-solid fa-right-from-bracket"></i> 로그인
+                            </a>
+                        </li>
+                        <li class="navbar-item" sec:authorize="isAuthenticated()" onclick="location.href='/member/myInfo'">
+                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-info-square"></i> 내정보</a>
+                        </li>
+                        <li class="navbar-item" sec:authorize="isAuthenticated()" id="open-popup" style="position: relative;">
+                            <a href="#" class="navbar-link title-sm" data-nav-link>
+                                <i class="fa-regular fa-envelope"></i> 채팅
+                                <span class="notification" id="sideNotification">채팅이 도착했습니다
+                                    <span class="notification::after"></span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="navbar-item hideItem" onclick="location.href='/used/list'">
+                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-cart"></i> 중고거래</a>
+                        </li>
+                        <li class="navbar-item hideItem" onclick="location.href='/clubList'">
+                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-house-door"></i> 동네모임</a>
+                        </li>
+
+                        <li class="navbar-item" sec:authorize="isAuthenticated()" onclick="location.href='/used/trade'">
+                            <a href="#" class="navbar-link title-sm" data-nav-link><i class="bi bi-coin"></i> 거래내역</a>
+                        </li>
+
+                        <li class="navbar-item" onclick="location.href='/logout'" sec:authorize="isAuthenticated()">
+                            <a href="#" class="navbar-link title-sm" data-nav-link>
+                                <i class="fa-solid fa-right-from-bracket"></i> 로그아웃
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="bottom2" sec:authorize="isAuthenticated()">
+                        <div class="profile1">
+                            <div class="parent">
+                                <img th:src="@{/member/findProfileImg(memberId=${#authentication.principal.member.memberId})}" alt="Profile Picture1" class="profile-picture">
+                            </div>
+                            <div class="profile-details">
+                                <div class="name2"></div>
+                                <div class="nickname2" th:text="${#authentication.principal.member.memberName}"></div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-
-            <input type="checkbox" id="menuicon">
-            <label for="menuicon">
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
-            <div class="sidebar">
-                <div class="menu">
-                    <div class="login_div">
-                        <button type="button" id="btnLogin" onclick="location.href='/member/loginForm'" sec:authorize="isAnonymous()">로그인</button>
-                        <button type="button" id="btnLogout" onclick="location.href='/logout'" sec:authorize="isAuthenticated()">로그아웃</button>
-                    </div>
-                    <div style="background-color: #FFCCCC;">
-                        <a href="/member/myInfo" sec:authorize="isAuthenticated()">내정보</a>
-                    </div>
-                    <div class="nav_menu_2" style="">
-                        <div style="background-color: #FFFFCC;">
-                            <a href="/used/list">중고거래</a>
-                        </div>
-                        <div style="background-color: #FFCCFF;">
-                            <a href="/club">동네모임</a>
-                        </div>
-                        <div style="background-color: #FFCCCC;">
-                            <a href="#">주변맛집</a>
-                        </div>
-                    </div>
-                </div>
+        </div>
+    </nav>
+    <div id="top"></div>
+    <div class="popupup">
+        <input type="hidden" id="popupRoomId">
+        <input type="hidden" id="popupType">
+        <div class="imgbox">
+            <img class="userImg_">
+        </div>
+        <div class="pop_detail">
+            <div class="usernamecall">
+                <h4 id="popupName"></h4>
+                <p class="calltime"></p><!--이건 빼기-->
+            </div>
+            <div class="message_new">
+                <p id="popup_message"></p>
             </div>
         </div>
     </div>
-</nav>
+</div>
 
 

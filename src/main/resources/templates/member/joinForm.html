@@ -4,63 +4,109 @@
     <meta charset="UTF-8" />
     <title>join</title>
     <th:block th:insert="/common/common :: fragment-header"></th:block>
-    <link th:href="@{/css/login.css}" rel="stylesheet" type="text/css">
-
+    <link th:href="@{/css/join.css}" rel="stylesheet" type="text/css">
+    <style>
+    body{
+            height: 95vh;
+            display: grid;
+            place-content: center;
+        }
+        .save-btn{
+            font-size: 16px;
+            color: #fff;
+            background: #19ca8e;
+            width: 68px;
+            height: 30px;
+            cursor: pointer;
+            border-radius: 3px;
+border: none;
+            display: grid;
+            place-content: center;
+            transition: 10; 원하는 시간 조절
+        }
+        .loader{/*돌아가는거*/
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #fff;
+            animation: anl 1s ease infinite;
+        }
+        @keyframes anl{
+            0%{
+                transform: rotate(0turn);
+            }
+            100%{
+                transform: rotate(1turn);
+            }
+        }
+</style>
 </head>
 <body>
 <section class="login-form">
-    <h1>JOIN</h1>
+    <h1><a href="/">아나바다</a></h1>
     <form action="/member/join" method="post" name="form1" id="form1">
         <div class="int-area">
             <div class="email">
                 <input type="email" name="memberEmail" id="memberEmail" autocomplete="off" required>
-                <label for="memberEmail">MEMBER E-MAIL</label>
-                <button type="button" id="btnAuthentication">
-                    <i class="bi bi-bookmark-check"></i>
+                <label for="memberEmail">이메일</label>
+                <button type="button" class="save-btn btn-sm" id="btnAuthentication">
+                    인증
                 </button>
             </div>
         </div>
+        <script>/*인증용 버튼 정훈*/
+        save_btn = document.querySelector(".save-btn");
+
+        save_btn.onclick = function(){
+
+        }
+    </script>
+
+        <div id="check" class="int-area" style="margin: 0px"></div>
+
         <div class="int-area">
             <input style="display: none;" type="text" name="random" id="random" required placeholder="메일에 전송된 문자 열을 입력 해 주세요.">
             <input type="hidden" name="random" id="authentication" required>
         </div>
         <div class="int-area">
             <input name="memberName" id="memberName" autocomplete="off" required>
-            <label for="memberName">MEMBER NAME</label>
+            <label for="memberName">닉네임</label>
         </div>
 
 
         <div class="int-area">
             <input type="password" name="memberPWD" id="memberPWD" autocomplete="off" required>
-            <label for="memberPWD">PASSWORD</label>
+            <label for="memberPWD">비밀번호</label>
         </div>
         <div class="int-area">
             <input type="password"  id="passCheck" autocomplete="off" required>
-            <label for="memberPWD">PASSCHECK</label>
+            <label for="memberPWD">비밀번호 확인</label>
         </div>
 
         <div class="int-area">
             <div class="address">
                 <input type="text" name="address" id="address" autocomplete="off" required >
-                <label for="address">ZIPCODE</label>
-                <button type="button" onclick="zipcode()" id="btnSearch">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search-heart-fill" viewBox="0 0 16 16" color="#669900">
-                        <path d="M6.5 13a6.474 6.474 0 0 0 3.845-1.258h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.008 1.008 0 0 0-.115-.1A6.471 6.471 0 0 0 13 6.5 6.502 6.502 0 0 0 6.5 0a6.5 6.5 0 1 0 0 13Zm0-8.518c1.664-1.673 5.825 1.254 0 5.018-5.825-3.764-1.664-6.69 0-5.018Z"/>
-                    </svg>
+                <label for="address">우편번호</label>
+                <button type="button" onclick="zipcode()" id="btnSearch" class="btn btn-sm">
+                    검색
                 </button>
             </div>
         </div>
         <div class="int-area">
             <input type="text" name="addressDetail" id="addressDetail" autocomplete="off" required>
-            <label for="addressDetail">ADDRESS</label>
+            <label for="addressDetail">상세주소</label>
         </div>
 
-        <div class="btn-area">
-            <button id="btnJoin" type="button">JOIN</button>
+        <div class="btn-area" style="margin-top:1.5em;">
+            <a id="btnJoin">
+                <img th:src="@{/img/btnJoin.png}" class="mb-2" style="width: 400px;" alt="join" id="joinImg">
+            </a>
         </div>
     </form>
     <div class="caption">
-        <a href="/login">Already have an ID?</a>
+        <a href="/member/loginForm">계정이 이미 있으신가요?</a>
     </div>
 </section>
 
@@ -77,19 +123,51 @@
     let btnAuthentication = $('#btnAuthentication');
     let authentication = $('#authentication');
     let random = $('#random');
-
+    let email_ck = false;
     memberEmail.on("change",function (){
         $('.confirm').removeClass('confirm');
-        alert("이메일 인증 버튼을 눌러 주세요");
-        memberEmail.focus();
+        // alert("이메일 인증 버튼을 눌러 주세요");
     });
 
+    memberEmail.on("keyup", function () {
+        $.ajax({
+            type:"get",
+            data:{"memberEmail":memberEmail.val()},
+            url:"/member/emailCheck",
+            success: function (emailCk) {
+                if (emailCk) {
+                    console.log("사용가능");
+                    const emailCkDiv = $('<div class="emailCk_true"><span>사용 가능한 이메일 입니다.</span></div>');
+                    $("#check").empty().append(emailCkDiv);
+                    email_ck = emailCk;
+                } else {
+                    console.log("사용불가");
+                    const emailCkDiv = $('<div class="emailCk_false"><span>중복된 이메일 입니다.</span></div>');
+                    $("#check").empty().append(emailCkDiv);
+                    email_ck = false;
+                }
+            }
+        });
+    });
     $(btnAuthentication).on('click', function () {
+
+
+
+        console.log(email_ck);
+        if (email_ck == false) {
+            alert("중복된 이메일입니다. 다른 이메일을 사용해주세요.");
+            return false;
+        }
+        this.innerHTML = "<div class = 'loader'></div>";
+        setTimeout(() => {/*로딩완료시*/
+            this.style = "background: #f1f5f4; color: #333; pointer-events=none";
+        }, 10000)
+
         if(memberEmail.val() != '') {
             $.ajax({
                 type: "post",
                 url: "/member/emailConfirm",
-                data: {memberEmail: memberEmail.val()},
+                data: {"memberEmail": memberEmail.val()},
                 success: function (data) {
                     alert('메일이 전송 되었습니다.\n 메일을 확인해 주세요');
                     random.css({
@@ -98,40 +176,57 @@
                     authentication.val(data);
                     random.focus();
                     memberEmail.addClass('confirm');//이메일 인증완료 클래스
+                    $("#btnAuthentication").html("인증");
                 }
             });
         }else alert('이메일을 입력해 주세요');
     });
 
+    /**
+     * 입력검증 및 정규식
+     */
     $(btnJoin).on('click', function (){
+        // 이메일 정규식 패턴
+        const emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+
+        // 비밀번호 정규식 패턴
+        const passwordPattern = /^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+
+        // 닉네임 정규식 패턴
+        const nicknamePattern = /^[a-zA-Z가-힣]{2,12}$/;
+
         if($(memberEmail).val() == ""){
             $(memberEmail).next('label').addClass('warning');
             setTimeout(function (){
                 $('label').removeClass('warning');
             },1500);
-        }else if (!document.getElementsByClassName('confirm')) {
+            return false;
+        }else if (!document.getElementsByClassName('confirm').length) {
             alert('이메일 인증 버튼을 눌러주세요');
             memberEmail.focus();
-            return;
+            return false;
         } else if (random.val() == '' || random.val() !== authentication.val()) {
             alert("이메일 인증 코드를 확인해 주세요.");
             random.focus();
-            return;
+            return false;
         } else if ($(memberName).val() == "") {
             $(memberName).next('label').addClass('warning');
             setTimeout(function () {
                 $('label').removeClass('warning');
             }, 1500);
+            return false;
         } else if ($(memberPWD).val() == "") {
             $(memberPWD).next('label').addClass('warning');
             setTimeout(function () {
                 $('label').removeClass('warning');
             }, 1500);
+            return false;
         } else if ($(passCheck).val() == "") {
             $(passCheck).next('label').addClass('warning');
             setTimeout(function () {
                 $('label').removeClass('warning');
             }, 1500);
+            return false;
         } else if ($(passCheck).val() != $(memberPWD).val()) {
             $(passCheck).next('label').addClass('warning');
             passCheck.val('');
@@ -139,17 +234,47 @@
             setTimeout(function () {
                 $('label').removeClass('warning');
             }, 1500);
+            return false;
         } else if ($(address).val() == "") {
             $(address).next('label').addClass('warning');
             setTimeout(function () {
                 $('label').removeClass('warning');
             }, 1500);
+            return false;
         } else if ($(addressDetail).val() == "") {
             $(addressDetail).next('label').addClass('warning');
             setTimeout(function () {
                 $('label').removeClass('warning');
             }, 1500);
+            return false;
         }
+
+        if(!emailPattern.test(memberEmail.val())){
+            alert("사용 가능한 이메일을 작성해 주세요. ex)abc@gmail.com");
+            $(memberEmail).next('label').addClass('warning');
+            setTimeout(function (){
+                $('label').removeClass('warning');
+            },1500);
+            return false;
+        }
+        if (!passwordPattern.test(memberPWD.val())) {
+            alert("8글자 이상, 영어대소문자와 특수문자(!@#$%^&*)를 사용해야 합니다.");
+            $(memberPWD).next('label').addClass('warning');
+            setTimeout(function () {
+                $('label').removeClass('warning');
+            }, 1500);
+            return false;
+        }
+        if (!nicknamePattern.test(memberName.val())) {
+            alert("2~12글자 사이로 입력해주세요.");
+            $(memberName).next('label').addClass('warning');
+            setTimeout(function () {
+                $('label').removeClass('warning');
+            }, 1500);
+            return false;
+        }
+
+
         $('#form1').submit();
 
     });

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>Title</title>
+<th:block th:insert="/common/common :: fragment-header"></th:block>
+<link rel="stylesheet" type="text/css" th:href="@{/css/chatDetail.css}">
+<script>
+    $(function(){
+        $("#chatOut").click(function(){
+            if(confirm("채팅방을 나가시겠습니까?")){
+                $.ajax({
+                    type: "post",
+                    url: "/chatOut",
+                    data: {"postId": $("#postId").val(), "roomId": $("#roomId").val(), "type": "club"},
+                    success: function(){
+                        window.close();
+                    }
+                });
+            }
+        });
+        $("#chatDelete").click(function(){
+            if(confirm("채팅방을 삭제하면 게시물도 같이 삭제됩니다\n정말로 채팅방을 삭제하시겠습니까?")){
+                $.ajax({
+                    type: "post",
+                    url: "/deleteChatRoom",
+                    data: {"postId": $("#postId").val(), "roomId": $("#roomId").val()},
+                    success: function(){
+                        window.close();
+                    }
+                });
+            }
+        });
+
+    });
+
+    function tongkn2_pop(){
+        opener.location.href="/clubDetail?postId="+[[${list[0].postId}]];
+    }
+    function memberListOpen(){
+        $(".room_sidvar").slideDown();
+        $(".room_sidvar").css("display", "flex");
+    }
+    function memberListClose(){
+        $(".room_sidvar").slideUp();
+    }
+    function chatKick(memberId){
+        if(confirm("정말로 추방하시겠습니까?")){
+            $.ajax({
+                type: "post",
+                url: "/chatKick",
+                data: {"postId": $("#postId").val(), "roomId": $("#roomId").val(), "type": "kick", "memberId": memberId},
+                success: function(data){
+                    alert("추방을 완료했습니다");
+                }
+            });
+        }
+
+    }
+</script>
+</head>
+<body>
+<input type="hidden" id="type" th:value="${list[0].type}">
+<input type="hidden" id="postId" th:value="${list[0].postId}">
+<input type="hidden" id="roomId" th:value="${list[0].roomId}">
+<input type="hidden" id="sender" th:value="${#authentication.principal.member.memberId}">
+<input type="hidden" id="senderName" th:value="${#authentication.principal.member.memberName}">
+<input type="hidden" id="clubId" th:value="${list[0].clubId}">
+<div class="container3">
+
+    <div class="room_sidvar">
+        <h2 class="py-3" onclick="memberListClose()">참여목록</h2>
+        <div class="listBlock">
+        <div class="block44" id="member_" th:attr="id='member_' + ${row.memberId}" th:each="row : ${memberList}" >
+            <div style="display: flex; justify-content: flex-start;">
+                <div class="list_imgbx">
+                    <img th:src="@{/member/findProfileImg(memberId=${row.memberId})}" class="user_self">
+                </div>
+                <div class="list_details">
+                    <div class="listHead">
+                        <h4 th:text="${row.memberName}"></h4>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${list[0].master == #authentication.principal.member.memberId && row.memberId != #authentication.principal.member.memberId}" class="kick">
+                <li class="navList nav-item dropdown" style="list-style: none;">
+                    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#" th:onclick="chatKick([[${row.memberId}]])">추방</a></li>
+                    </ul>
+                </li>
+            </div>
+        </div>
+        </div>
+    </div>
+
+  <div class="rightSide">
+    <div class="header"><!--채팅 상대방 창 -->
+      <div class="imgText">
+        <div>
+          <div class="userimg">
+            <img th:src="@{${list[0].fileInfo.url}}" class="cover"><!--상대방 이미지-->
+          </div>
+          <h4 id="clubMember" th:text="${list[0].receiverName}+'님 외 '+${list[0].memberCount}+'명'" onclick="memberListOpen()" style="cursor: pointer;"></h4><!--상대 이름-->
+        </div>
+        <li class="navList nav-item dropdown" style="list-style: none;">
+          <a class="nav-link " id="adminT" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:0 0 0 0;">
+            <i class="bi bi-three-dots-vertical"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#" id="chatOut" th:if="${list[0].master != #authentication.principal.member.memberId}">채팅방 나가기</a></li>
+            <li><a class="dropdown-item" href="#" id="chatDelete" th:if="${list[0].master == #authentication.principal.member.memberId}">채팅방 삭제</a></li>
+          </ul>
+        </li>
+      </div>
+    </div>
+    <div id="block"></div>
+
+    <!--채팅방-->
+
+    <div class="search_chat" onclick="tongkn2_pop();" style="cursor: pointer;">
+      <div class="room_detail">
+        <img th:src="@{${list[0].fileInfo.url}}">
+        <div class="used_detail">
+          <span class="used_name" th:text="${list[0].title}"></span>
+          <span id="clubMan" class="used_cost" th:text="${list[0].nowMan}+' / '+${list[0].maxMan}"></span>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="chatBox" id="messages">
+      <th:block th:each="row : ${list}">
+        <div class="message my_message" th:if="${row.messageType == 'SEND' && row.sender == #authentication.principal.member.memberId}"><!--내가 보낸 부분 오른쪽-->
+          <p th:inline="text">
+            [[${row.content}]]<br>
+            <span th:text="${row.messageDate}"></span>
+          </p><!--시간-->
+        </div>
+        <div class="message frnd_message" th:if="${row.messageType == 'SEND' && row.sender != #authentication.principal.member.memberId}"><!--상대가 보낸 부분 왼쪽-->
+          <div class="user_profile"><!--상대 대화 위에 이미지와 이름 생성-->
+            <img th:src="@{/member/findProfileImg(memberId=${row.sender})}" class="room_cover"><!--상대 사진-->
+            <span th:text="${row.receiverName}"></span><!--상대 이름-->
+          </div>
+          <p th:inline="text">
+            [[${row.content}]]<br>
+            <span th:text="${row.messageDate}"></span>
+          </p><!--시간-->
+        </div>
+        <div class="message1 join" th:if="${row.messageType} == 'ENTER'"><!--상대가 보낸 부분 왼쪽-->
+          <p th:text="${row.content}"></p>
+        </div>
+        <div class="message1 join" th:if="${row.messageType} == 'EXIT'"><!--상대가 보낸 부분 왼쪽-->
+          <p th:text="${row.content}"></p>
+        </div>
+      </th:block>
+    </div>
+
+    <!--채팅입력 부분-->
+    <div class="chatbox_input">
+      <input type="text" id="message" placeholder="메세지를 입력하세요.">
+      <i id="send" class="fa-regular fa-paper-plane" style="color: gray;"></i><!--보내기 버튼-->
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</body>
+</html>

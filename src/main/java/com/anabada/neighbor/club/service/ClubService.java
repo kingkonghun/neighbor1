@@ -1,12 +1,16 @@
 package com.anabada.neighbor.club.service;
 
-import com.anabada.neighbor.club.domain.ClubResponse;
-import com.anabada.neighbor.club.domain.ClubRequest;
-import com.anabada.neighbor.club.domain.ImageRequest;
-import com.anabada.neighbor.club.domain.ImageResponse;
+import com.anabada.neighbor.club.domain.*;
 import com.anabada.neighbor.club.domain.entity.Club;
+import com.anabada.neighbor.club.domain.entity.Hobby;
+import com.anabada.neighbor.config.auth.PrincipalDetails;
+import com.anabada.neighbor.file.domain.FileRequest;
+import com.anabada.neighbor.file.domain.FileResponse;
+import com.anabada.neighbor.page.Criteria;
 import com.anabada.neighbor.used.domain.Post;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface ClubService {
@@ -26,45 +30,44 @@ public interface ClubService {
     public long savePost(Post post);//생성된 게시글의 postId 반환
 
     /**
-     * 이미지 정보 db저장
-     * @param postId 게시물아이디 pk
-     * @param images 요청받은 이미지리스트
-     * @return 성공하면 1, 실패 or 이미지가없으면 0 리턴
-     */
-    public int saveImages(final Long postId, final List<ImageRequest> images);//이미지저장
-
-    /**
-     * 이미지 리스트 조회
-     * @param postId 게시글 번호 FK
-     * @return 파일 리스트
-     */
-    public List<ImageResponse> findAllImageByPostId(Long postId);
-
-    /**
-     * 이미지 리스트 조회
-     *
-     * @param imgIds PK 리스트
-     * @return 이미지 리스트
-     */
-    public List<ImageResponse> findAllImageByImgIds(List<Long> imgIds);
-
-    /**
-     * 이미지 삭제 (from DateBase)
-     *
-     * @param imgIds PK 리스트
-     */
-    public void deleteAllImageByImgIds(List<Long> imgIds);
-
-    /**
      * 게시글 상세정보 조회
-     * @param postId pk
+     * @param postId PK
+     * @param principalDetails 현재 사용자 정보
      * @return 게시글 상세정보
      */
-    public ClubResponse findClub(long postId);
+    public ClubResponse findClub(long postId, PrincipalDetails principalDetails);
 
-    public long updatePost(Post post);
+    /**
+     * clubRequest -> Post 로 변환
+     * *** PostId 자동으로 들어가지않음 업데이트시 PostId 세팅 따로 해줘야함 ***
+     * @param clubRequest 사용자가 보낸 게시글
+     * @param principalDetails 사용자 정보
+     * @return Post 객체
+     */
+    public Post clubRequestToPost(ClubRequest clubRequest, PrincipalDetails principalDetails);
 
-    public long updateClub(Club club);
+    /**
+     * clubRequest -> Post 로 변환
+     * 게시글 수정이라 postId가 이미 있을때 사용
+     * @param clubRequest clubRequest 사용자가 보낸 게시글
+     * @param postId PK
+     * @param principalDetails 사용자 정보
+     * @return post 객체
+     */
+    public Post clubRequestToPost(ClubRequest clubRequest,Long postId, PrincipalDetails principalDetails);
+
+    /**
+     * clubRequest -> Club 으로 변환
+     * @param clubRequest 사용자가 보낸 게시글
+     * @param principalDetails 사용자 정보
+     * @return Club 객체
+     */
+    public Club clubRequestToClub(ClubRequest clubRequest, PrincipalDetails principalDetails);
+
+
+    public Message updatePost(Post post);
+
+    public Message updateClub(Club clubRequest, ClubResponse clubResponse);
 
     public long deletePost(long postId);
     /**
@@ -72,10 +75,56 @@ public interface ClubService {
      * @param hobbyName 취미이름
      * @return hobbyId 취미아이디
      */
-    public long findHobbyId(String hobbyName);
+    public Long findHobbyId(String hobbyName);
 
-    public List<ClubResponse> findClubList();
+    public List<ClubResponse> findClubList(int num, long hobbyId, String search, String listType, long postId);
 
     public int checkPost(ClubRequest clubRequest);//clubPost객체의 Null값체크
 
+    /**
+     * 모임가입 성공시 1 반환 인원이 꽉차서 실패시 -1반환
+     * @param club 클럽정보
+     * @param principalDetails 로그인한 사용자 정보
+     * @return 성공시 1 인원이꽉차거나 실패시 -1 반환
+     */
+    int joinClubJoin(ClubResponse club, PrincipalDetails principalDetails);
+
+    Long findClubJoinByMemberId(ClubResponse club, Long memberId);
+
+    int deleteClubJoin(ClubResponse club, PrincipalDetails principalDetails);
+
+    /**
+     * 모임 현재인원 업데이트
+     * @param num 1이면 증가 0이면 감소
+     * @param clubId 클럽아이디
+     * @return 성공시 1 실패시 0
+     */
+    void updateNowMan(int num, Long clubId);
+
+    /**
+     * 취미 이름 가져오기
+     * @return
+     */
+    List<Hobby> findHobbyName();
+
+    /**
+     * 조회수 늘리기
+     * @param postId 글ID
+     *
+     */
+    void updatePostView(Long postId);
+
+    /**
+     *
+     * @return 인덱스페이지에 뿌리는 동네모임 글
+     */
+    List<ClubResponse> mainList();
+
+
+    /**
+     *
+     * @param memberId
+     * @return 페이징을 위한 동네모임에서 누른 총 좋아요 수
+     */
+    int countMyClubLikePost(long memberId);
 }
