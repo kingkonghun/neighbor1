@@ -86,16 +86,6 @@
     </style>
     <script>
         $(function(){
-            const imgCount = [[${imgCount}]];
-            console.log(imgCount);
-            if(imgCount === 1 ){
-                $(".slick-dots").css('display','none');
-                $(".slick-prev").css('display','none');
-                $(".slick-next").css('display','none');
-            }
-
-
-
             /**
              * 신고
              * @type {*|jQuery|HTMLElement}
@@ -420,7 +410,7 @@
                 </ul>
                 <span class="views pt-2" th:text="${#dates.format(dto.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></span>
             </div>
-            <pre th:text="${dto.content}" style="height: 60%; overflow: auto; word-break: break-all;"></pre>
+            <pre th:text="${dto.content}" style="height: 60%;"></pre>
             <div style="display: flex; justify-content: space-between;">
                 <span th:text="'가격 : ' + ${dto.price} + ' 원'"></span>
                 <span th:text="'조회수 : ' + ${dto.postView}"></span>
