@@ -74,16 +74,6 @@
     </style>
     <script th:inline="javascript">
         $(function(){
-            const imgCount = [[${imgCount}]];
-            console.log(imgCount);
-            if(imgCount === 1 ){
-                $(".slick-dots").css('display','none');
-                $(".slick-prev").css('display','none');
-                $(".slick-next").css('display','none');
-            }
-
-
-
             /**
              * 신고
              * @type {*|jQuery|HTMLElement}
@@ -407,7 +397,7 @@
                 </ul>
                 <span class="views pt-2" th:text="${#dates.format(club.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></span>
             </div>
-            <pre th:text="${club.content}" style="height: 60%; overflow: auto; word-break: break-all;"></pre><!--내용-->
+            <pre th:text="${club.content}" style="height: 60%;"></pre><!--내용-->
             <div style="display: flex; justify-content: space-between;">
 
                 <div class="count_people">

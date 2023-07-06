@@ -6,7 +6,7 @@
 
 .section{margin-top:8px;}
 .item2 , .item3{font-family: GangwonEduPowerExtraBoldA;}
-.item2 pre {font-family: Humanbumsuk; font-size: 1.5em;}
+.item2 pre {font-family: 'omyu_pretty'; font-size: 1.5em; word-break: break-all; white-space: pre-wrap; overflow: auto;}
 #updatePost{font-family: 'omyu_pretty';}
 /*플랙스 박스*/
 .flex-box {

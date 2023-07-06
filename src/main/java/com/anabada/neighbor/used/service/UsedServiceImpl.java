@@ -237,7 +237,6 @@ public class UsedServiceImpl implements UsedService{
 
         return Used.builder() //게시물의 상세정보 리턴
                 .postId(post.getPostId())
-                .imgList(usedRepository.findAllImgUrl(post.getPostId()))
                 .title(post.getTitle())
                 .content(post.getContent())
                 .postType(post.getPostType())

@@ -70,7 +70,6 @@ public class UsedController {
 
         model.addAttribute("dto", dto);
         model.addAttribute("images", fileInfoList);
-        model.addAttribute("imgCount", dto.getImgList().size());
         model.addAttribute("category",usedService.categoryList());
         model.addAttribute("similarList",similarList);
         model.addAttribute("reportType", usedService.reportType());
