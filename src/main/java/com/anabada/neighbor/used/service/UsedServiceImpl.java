@@ -353,10 +353,12 @@ public class UsedServiceImpl implements UsedService{
 
         for (Likes likes : likesList) {//좋아요누른 게시글만큼 반복
             long postId = likes.getPostId();//좋아요 누른 게시글id
-            Post post = usedRepository.findPost(postId);
+            Post post = clubRepository.selectPost(postId);
             if (post == null) {
                 continue;
             }
+            if (post.getPostType().equals("used")) {
+
                 Used used = Used.builder()
                         .postId(postId)
                         .title(post.getTitle())
@@ -365,8 +367,9 @@ public class UsedServiceImpl implements UsedService{
                         .postType(post.getPostType())
                         .likesCount(usedRepository.findLikesCount(postId))
                         .build();
-                /*제목, 내용, 조회수,좋아요 수*/
                 usedList.add(used);
+            }
+            /*제목, 내용, 조회수,좋아요 수*/
 
         }
         return usedList;
