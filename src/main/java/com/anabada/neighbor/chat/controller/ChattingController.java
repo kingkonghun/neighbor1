@@ -33,16 +33,16 @@ public class ChattingController {
     private final ClubService clubService;
     private final FileUtils fileUtils;
 
-    @PostMapping("/openRoom")
-    @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") // 채팅하기 버튼 클릭 시
+    @PostMapping("/openRoom") // 채팅방생성
+    @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String openRoom(long postId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         long roomId = chattingService.openRoom(postId, principalDetails, "used"); // 채팅방 생성
         return "redirect:/chatDetail?roomId="+roomId+"&type=used"; // 채팅방 입장
     }
 
-    @GetMapping("/chatRoomList")
+    @GetMapping("/chatRoomList") // 채팅방목록보기
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String chatRoomList(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) { // 채팅방 목록 보기
+    public String chatRoomList(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         List<Chat> chatList = chattingService.chattingRoomList(principalDetails);
 
         if (chatList != null) {
@@ -59,9 +59,9 @@ public class ChattingController {
         return "chat/chatRoomListPopup";
     }
 
-    @GetMapping("/chatDetail")
+    @GetMapping("/chatDetail") // 채팅방입장
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String chatDetail(long roomId, String type, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) { //채팅방 입장
+    public String chatDetail(long roomId, String type, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         boolean check = chattingService.check(roomId, principalDetails); // 입장 권한 체크
         if (check) {
             List<Chat> chatList = chattingService.chattingMessageList(roomId, principalDetails, type);
@@ -82,14 +82,14 @@ public class ChattingController {
         return type.equals("used") ? "chat/chatDetailPopupUsed" : "chat/chatDetailPopupClub";
     }
 
-    @MessageMapping("/message")
-    public void messageRoom(Chat chat, Principal principal) throws InterruptedException { // 메시지 전송
+    @MessageMapping("/message") // 메시지전송
+    public void messageRoom(Chat chat, Principal principal) throws InterruptedException {
         Thread.sleep(500);
         chattingService.sendMessage(chat, Long.parseLong(principal.getName()));
     }
 
-    @PostMapping("/chatOut")
-    public ResponseEntity<Void> chatOut(Chat chat, @AuthenticationPrincipal PrincipalDetails principalDetails) { // 채팅방 나가기
+    @PostMapping("/chatOut") // 채팅방나가기(중고, 모임 구분)
+    public ResponseEntity<Void> chatOut(Chat chat, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         if (chat.getType().equals("club")) { // 동네모임 채팅이면 모임 탈퇴까지 같이 함
             ClubResponse club = clubService.findClub(chat.getPostId(),principalDetails);
@@ -101,8 +101,8 @@ public class ChattingController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/deleteChatRoom")
-    public ResponseEntity<Void> deleteChatRoom(Chat chat) { // 채팅방 삭제(동네모임 채팅방만 가능)
+    @PostMapping("/deleteChatRoom") // 채팅방삭제(모임만 가능)
+    public ResponseEntity<Void> deleteChatRoom(Chat chat) {
         long roomId = chat.getRoomId();
         long postId = chat.getPostId();
 
@@ -121,7 +121,7 @@ public class ChattingController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/chatKick")
+    @PostMapping("/chatKick") // 채팅추방(모임만 가능)
     public ResponseEntity<Void> chatKick(Chat chat, long memberId) {
         chattingService.chatOut(chat, memberId);
 
@@ -135,7 +135,7 @@ public class ChattingController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/chatNotification")
+    @GetMapping("/chatNotification") // 네비바알림
     @ResponseBody
     public boolean chatNotification(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         boolean result = false;
@@ -146,7 +146,7 @@ public class ChattingController {
         return result;
     }
 
-    @PostMapping("/chatNotificationRemove")
+    @PostMapping("/chatNotificationRemove") // 알림삭제
     public ResponseEntity<Void> chatNotificationRemove(long roomId, long memberId) {
         chattingService.chatNotificationRemove(roomId, memberId);
         return new ResponseEntity<>(HttpStatus.OK);

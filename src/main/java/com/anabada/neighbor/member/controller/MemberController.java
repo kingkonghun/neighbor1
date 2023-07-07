@@ -37,13 +37,13 @@ public class MemberController {
     private final FileUtils fileUtils;
     private final ClubService clubService;
 
-    @GetMapping("/joinForm")
-    public String joinForm() { // 회원가입 폼으로 이동
+    @GetMapping("/joinForm") // 회원가입 폼으로 이동
+    public String joinForm() {
         return "member/joinForm";
     }
 
-    @GetMapping("/loginForm")
-    public String loginForm(Model model, String errorMessage, HttpServletRequest request) { // 로그인 폼으로 이동
+    @GetMapping("/loginForm") // 로그인 폼으로 이동
+    public String loginForm(Model model, String errorMessage, HttpServletRequest request) {
         String uri = request.getHeader("Referer");
         if (uri != null && !uri.contains("/login")) {
             request.getSession().setAttribute("prevPage", uri);
@@ -52,24 +52,24 @@ public class MemberController {
         return "/member/loginForm";
     }
 
-    @PostMapping("/join")
-    public String join(Member member) { // 회원가입
+    @PostMapping("/join") // 회원가입
+    public String join(Member member) {
         memberService.save(member);
         return "redirect:/member/loginForm";
     }
 
-    @GetMapping("admin")
+    @GetMapping("admin") // 관리자 페이지로 이동
     @Secured("ROLE_ADMIN")
-    public String admin(){//단순 페이지 이동
+    public String admin(){
         return "admin/admin";
     }
 
     @ResponseBody
-    @GetMapping("/memberList")
+    @GetMapping("/memberList") // 회원목록
     @Secured("ROLE_ADMIN")
     public ModelAndView memberList(ModelAndView mav,Criteria criteria) {
-        int total = memberService.countMember();//멤버의 총 수
-        List<Member> member = memberService.findAllMember(criteria);//멤버리스트
+        int total = memberService.countMember(); // 멤버의 총 수
+        List<Member> member = memberService.findAllMember(criteria); // 멤버리스트
         System.out.println("member = " + member);
         System.out.println(total);
         mav.addObject("member",member);
@@ -79,21 +79,19 @@ public class MemberController {
     }
 
     @ResponseBody
-    @PostMapping("/emailConfirm")//이메일인증
+    @PostMapping("/emailConfirm") // 이메일인증
     public String emailConfirm(String memberEmail) throws Exception {
         String confirm = emailService.sendSimpleMessage(memberEmail);
         return confirm;
     }
     @ResponseBody
-    @GetMapping("/emailCheck")//이메일 중복체크
-    public boolean emailCheck(String memberEmail){
+    @GetMapping("/emailCheck")
+    public boolean emailCheck(String memberEmail){ // 이메일 중복체크
         boolean emailCk = memberService.emailCk(memberEmail);
         return emailCk;
     }
 
-
-
-    @GetMapping("/myWrite")//내가 작성한 글
+    @GetMapping("/myWrite") // 내가 작성한 글
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String myWrite(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, Criteria criteria,
                           @RequestParam(defaultValue = "used" ,value = "postType") String postType) {
@@ -129,7 +127,7 @@ public class MemberController {
         return "member/myWrite";
     }
 
-    @GetMapping("/myInfo")//내 개인정보
+    @GetMapping("/myInfo") // 마이페이지
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String myInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         Member member = memberService.myInfo(principalDetails.getMember().getMemberId());
@@ -138,33 +136,33 @@ public class MemberController {
     }
 
     @ResponseBody
-    @GetMapping("/isAuthenticated")//로그인인증
+    @GetMapping("/isAuthenticated") // 로그인인증
     public boolean isAuthenticated(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         return principalDetails != null;
     }
 
     @ResponseBody
-    @GetMapping("/isAuthorization")//권한인증
+    @GetMapping("/isAuthorization") // 게스트인지 확인(소셜로그인 할 시 게스트 권한)
     public boolean isAuthorization(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         return principalDetails.getMember().getRole().equals("ROLE_GUEST");
     }
 
-    @GetMapping("/findProfileImg")//프사다운
+    @GetMapping("/findProfileImg") // 프로필사진 보기
     public void findProfileImg(long memberId, HttpServletResponse response) throws Exception {
         String profileImg = memberService.findProfileImg(memberId);//사진이름가져오기
         memberService.downProfileImg(response, profileImg);//사진다운
     }
 
-    @GetMapping("/editInfo")//수정페이지로 이동
-    @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @GetMapping("/editInfo")
+    @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") // 수정페이지로 이동
     public String editInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model,String message) {
         Member member = memberService.myInfo(principalDetails.getMember().getMemberId());
         model.addAttribute("list", member);
         model.addAttribute("message",message);
         return "member/editInfo";
     }
-    @GetMapping("/likePost") // 좋아요 누른 게시글
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @GetMapping("/likePost")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") // 좋아요 누른 게시물
     public String likePost(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails, Criteria criteria) {
         List<Used> usedList=usedService.likePost(principalDetails.getMember().getMemberId(),criteria);
         int total = usedService.countMyUsedLikePost(principalDetails.getMember().getMemberId());
@@ -175,7 +173,7 @@ public class MemberController {
 
         return "member/myLikes";
     }
-    @PostMapping("/editMyInfo")//정보수정
+    @PostMapping("/editMyInfo") // 개인정보수정
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String editInfo( Member member,Model model){
         memberService.editInfo(member);
@@ -184,7 +182,7 @@ public class MemberController {
         return  "index";
     }
 
-    @PostMapping("/editPwd")//비밀번호 수정
+    @PostMapping("/editPwd") // 비밀번호 수정
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String editPwd(@RequestParam String oldPwd, @RequestParam String memberPWD, long memberId, Model model, RedirectAttributes redirectAttributes){
         String msg= memberService.editPwd(oldPwd,memberPWD,memberId);
@@ -199,7 +197,7 @@ public class MemberController {
         }
     }
 
-    @PostMapping("/editPhoto")
+    @PostMapping("/editPhoto") // 프로필사진 수정
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String editPhoto(Member member,RedirectAttributes redirectAttributes) {
         memberService.editPhoto(member);
@@ -207,15 +205,15 @@ public class MemberController {
         return  "redirect:/member/editInfo";
     }
 
-    @GetMapping("/slideBar")
-    @ResponseBody
-    public Member slideBar(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Member member = memberService.myInfo(principalDetails.getMember().getMemberId());
-        return member;
-    }
+//    @GetMapping("/slideBar")
+//    @ResponseBody
+//    public Member slideBar(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+//        Member member = memberService.myInfo(principalDetails.getMember().getMemberId());
+//        return member;
+//    }
 
     @ResponseBody
-    @GetMapping("/noAdmin")
+    @GetMapping("/noAdmin") // 일반회원이 관리자페이지 입장시
     public String noAdmin() {
         return "<h1>권한이 없습니다</h1>";
     }
