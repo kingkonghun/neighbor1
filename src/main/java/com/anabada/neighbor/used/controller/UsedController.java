@@ -36,7 +36,7 @@ public class UsedController {
     private final FileService fileService;
     private final FileUtils fileUtils;
 
-    @GetMapping("/list") //게시물 리스트
+    @GetMapping("/list") // 게시물목록
     public String list(@RequestParam(value = "categoryId", defaultValue = "0") long categoryId, Model model, @RequestParam(value = "num", defaultValue = "0") int num, @RequestParam(value = "search", defaultValue = "") String search) {
         List<Used> list = usedService.list(categoryId, "list", num, search, 0);
         if (list != null) {
@@ -54,7 +54,7 @@ public class UsedController {
         return num <= 0 ? "used/list" : "used/listPlus";
     }
 
-    @GetMapping("/detail") //게시물 상세보기
+    @GetMapping("/detail") // 게시물상세보기
     public String detail(long postId, Model model, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Used dto = usedService.detail(postId, request, response, principalDetails);
         List<Used> similarList = usedService.list(dto.getCategoryId(), "similarList", 0, "", postId);
@@ -77,7 +77,7 @@ public class UsedController {
         return dto.getPostType().equals("del") ? "redirect:/used/postDel" : "/used/usedDetail";
     }
 
-    @PostMapping("/post") //게시물 작성
+    @PostMapping("/post") // 게시물작성
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String post(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception {
         usedService.write(used, principalDetails);
@@ -87,7 +87,7 @@ public class UsedController {
 
 
 
-    @PostMapping("/postEdit") //게시물 수정
+    @PostMapping("/postEdit") // 게시물수정
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String postEdit(Used used, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception {
         System.out.println("used = " + used);
@@ -95,26 +95,26 @@ public class UsedController {
         return "redirect:/used/list";
     }
 
-    @PostMapping("/postDelete") //게시물 삭제
+    @PostMapping("/postDelete") // 게시물삭제
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String postDelete(long postId) {
         usedService.delete(postId);
         return "redirect:/used/list";
     }
 
-    @PostMapping("/likes") //게시물 좋아요
+    @PostMapping("/likes") // 게시물좋아요
     @ResponseBody
     public Used likes(long postId, int likesCheck, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return usedService.likes(postId, principalDetails, likesCheck);
     }
 
-    @PostMapping("/report") //게시물 신고
+    @PostMapping("/report") // 게시물신고
     public ResponseEntity<Void> report(Report report, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         usedService.report(report, principalDetails);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/reportList") //신고게시물 리스트
+    @GetMapping("/reportList") // 신고게시물목록
     @Secured("ROLE_ADMIN")
     public String report(Model model, Criteria criteria) {
         List<PostReport> reportList = usedService.findAllReport(criteria);
@@ -126,19 +126,19 @@ public class UsedController {
 
 
 
-    @PostMapping("/reportOk") // 신고 접수
+    @PostMapping("/reportOk") // 신고접수
     public ResponseEntity<Void> reportOk(ReportOk reportOk) {
         usedService.reportOk(reportOk);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/success")
+    @PostMapping("/success") // 판매완료
     public ResponseEntity<Void> soldOut(long postId, long receiver, @AuthenticationPrincipal PrincipalDetails principalDetails){
         usedService.soldOut(postId, receiver, principalDetails);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/purchase")
+    @GetMapping("/purchase") // 구매내역
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String purchase(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,Criteria criteria) {
         List<Used> purchase = usedService.purchase(principalDetails,criteria);
@@ -150,7 +150,7 @@ public class UsedController {
         return "used/purchaseList";
     }
 
-    @GetMapping("/sales")
+    @GetMapping("/sales") // 판매내역
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String sales(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails,Criteria criteria) {
         int total = usedService.countSales(principalDetails.getMember().getMemberId());
@@ -159,13 +159,13 @@ public class UsedController {
         return "used/salesList";
     }
 
-    @GetMapping("/trade")
+    @GetMapping("/trade") // 거래내역
     @PreAuthorize("hasRole('ROLE_GUEST') or hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String trade() {
         return "used/trade";
     }
 
-    @GetMapping("/postDel")
+    @GetMapping("/postDel") // 삭제된 게시물
     @ResponseBody
     public String postDel() {
         return "<h1>삭제된 게시물입니다.</h1>";
