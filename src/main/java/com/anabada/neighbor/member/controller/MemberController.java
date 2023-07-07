@@ -81,8 +81,8 @@ public class MemberController {
     @ResponseBody
     @PostMapping("/emailConfirm")//이메일인증
     public String emailConfirm(String memberEmail) throws Exception {
-//        String confirm = emailService.sendSimpleMessage(memberEmail);
-        return "confirm";
+        String confirm = emailService.sendSimpleMessage(memberEmail);
+        return confirm;
     }
     @ResponseBody
     @GetMapping("/emailCheck")//이메일 중복체크
@@ -217,6 +217,6 @@ public class MemberController {
     @ResponseBody
     @GetMapping("/noAdmin")
     public String noAdmin() {
-        return "권한이 없습니다";
+        return "<h1>권한이 없습니다</h1>";
     }
 }

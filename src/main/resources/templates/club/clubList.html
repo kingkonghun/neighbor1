@@ -3,7 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta charset="UTF-8">
-<title>clubList</title>
+<title>아나바다</title>
 <th:block th:insert="/common/common :: fragment-header"></th:block>
 <link rel="stylesheet" th:href="@{/css/clubList.css}">
 <style>
@@ -40,14 +40,14 @@
                 let files = $("#formFileMultiple");
                 let maxMan = $("#inputMaxMan");
 
-                const titleTest = /^[\s\S]{1,12}$/;
+                const titleTest = /^[\s\S]{1,30}$/;
                 if (title.val() == '') {
                     alert("제목을 입력하세요");
                     title.focus();
                     return;
                 }
                 if (!titleTest.test(title.val())) {
-                    alert("제목은 12글자 이내로 입력하세요(공백 포함)");
+                    alert("제목은 30글자 이내로 입력하세요(공백 포함)");
                     title.focus();
                     return;
                 }
