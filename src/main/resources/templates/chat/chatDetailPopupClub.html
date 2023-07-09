@@ -13,6 +13,7 @@
                     type: "post",
                     url: "/chatOut",
                     data: {"postId": $("#postId").val(), "roomId": $("#roomId").val(), "type": "club"},
+                    async: false,
                     success: function(){
                         window.close();
                     }
@@ -25,6 +26,7 @@
                     type: "post",
                     url: "/deleteChatRoom",
                     data: {"postId": $("#postId").val(), "roomId": $("#roomId").val()},
+                    async: false,
                     success: function(){
                         window.close();
                     }
@@ -50,6 +52,7 @@
                 type: "post",
                 url: "/chatKick",
                 data: {"postId": $("#postId").val(), "roomId": $("#roomId").val(), "type": "kick", "memberId": memberId},
+                async: false,
                 success: function(data){
                     alert("추방을 완료했습니다");
                 }
