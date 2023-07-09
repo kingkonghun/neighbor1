@@ -55,7 +55,7 @@ function showMessage(roomId, sender, senderName, content, messageDate, messageTy
         }
     }else if(messageType == "ENTER") {
         $("#messages").prepend("<div class='message1 join'><p>" + content + "</p></div>");
-        $("#clubMember").text(myName + "님 외 " + (memberCount - 1) + "명");
+        $("#clubMember").text(myName + "님 외 " + (memberCount + 1) + "명");
         $("#clubMan").text(nowMan + " / " + maxMan);
         $(".listBlock").load(location.href+' .listBlock');
     }else if(messageType == "EXIT") {
