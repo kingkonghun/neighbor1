@@ -38,6 +38,13 @@
             location.href = "/logout";
         }
     };
+    function f(){
+        for (var i = 0; i < 3; i++) {
+            setTimeout(function () {
+                alert(i);
+            },1000);
+        }
+    }
 </script>
 </head>
 <body>
@@ -48,12 +55,12 @@
     <section class="section hero" aria-label="home">
         <div class="container">
             <div class="hero-content">
-                <p class="hero-subtitle">👋, My name is 아나바다</p>
+                <p class="hero-subtitle" onclick="f()">👋, My name is 아나바다</p>
                 <h1 class="headline-lg">동네 주민들과 소소한 즐거움을 함께 나눠요</h1>
                 <p class="hero-text body-md">
                     아나바다에 오신 것을 환영합니다
                 </p>
-                <a href="#target-section" class="btn1 btn1-primary" style="padding-bottom: 14px;">시작하기</a>
+                <a href="#target-section" class="btn1 btn1-primary" style="padding-bottom: 14px;" >시작하기</a>
             </div>
             <figure class="hero-banner">
                 <img th:src="@{/img/hero-banner.png}" width="680" height="400"
@@ -140,7 +147,7 @@
                         <span class="content" th:text="${club.content}"></span><!--내용 10자이내로-->
                         <div class="listdetail"><!--지역 운동 생성일-->
                             <span class="category" th:text="${club.hobbyName}"></span>
-                            <span class="region" th:inline="text">
+                            <span class="region" th:inline="text" style="font-family: 'omyu_pretty';">
                                 <i class="fa-solid fa-map-location-dot"></i>
                                 [[${club.address}]]
                             </span>
@@ -157,6 +164,20 @@
                                 <span>/</span>
                                 <span th:text="${club.maxMan}"></span>
                             </div><!--인원수 나타내는-->
+                        </div>
+                        <div style="justify-content: flex-end; display: flex; gap: 20px;">
+                        <span th:inline="text">
+                            [[${club.postView}]]
+                            <i class="bi bi-caret-up-fill"></i>
+                        </span>
+                            <span th:inline="text">
+                            [[${club.likesCount}]]
+                            <i class="bi bi-heart-fill" style="color: red"></i>
+                        </span>
+                            <span th:inline="text">
+                            [[${club.replyCount}]]
+                            <i class="bi bi-chat-dots-fill"></i>
+                        </span>
                         </div>
                     </div>
                 </div>
