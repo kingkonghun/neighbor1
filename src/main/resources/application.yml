@@ -9,16 +9,17 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/neighbor?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://neighbor.coeobk21kpu9.ap-northeast-2.rds.amazonaws.com/neighbor?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: neighbor
-    password: 1234
-
+    username: admin
+    password: dnqudrjf
   devtools:
     livereload:
       enabled: true
   thymeleaf:
     cache: false
+    prefix: classpath:/templates/
+    enabled : true
   servlet:
     multipart:
       max-file-size: 10MB
