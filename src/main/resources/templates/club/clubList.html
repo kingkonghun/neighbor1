@@ -4,8 +4,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta charset="UTF-8">
 <title>아나바다</title>
-<th:block th:insert="/common/common :: fragment-header"></th:block>
-<link rel="stylesheet" th:href="@{/css/clubList.css}">
+<th:block th:insert="common/common :: fragment-header"></th:block>
+<link rel="stylesheet" th:href="@{css/clubList.css}">
 <style>
     body {
         background-color: #f4f4f4;
@@ -158,9 +158,9 @@
                         </span>
                     </div>
                     <div class="members">
-                        <img th:src="@{/member/findProfileImg(memberId=${club.memberId})}" alt="fail">
+                        <img th:src="@{member/findProfileImg(memberId=${club.memberId})}" alt="fail">
                         <th:block th:each="man : ${club.memberIdList}">
-                            <img th:src="@{/member/findProfileImg(memberId=${man})}" alt="fail">
+                            <img th:src="@{member/findProfileImg(memberId=${man})}" alt="fail">
                         </th:block>
 
 

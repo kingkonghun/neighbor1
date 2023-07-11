@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8"/>
 <title>아나바다</title>
@@ -11,7 +11,7 @@
     .pagination {margin-top: 3em; margin-bottom: 5em;}
     .pagination .pageNum{list-style: none; display: flex;}
 </style>
-<link rel="stylesheet" th:href="@{/css/myPage.css}">
+<link rel="stylesheet" th:href="@{css/myPage.css}">
 </head>
 <body>
 
@@ -30,7 +30,7 @@
             </thead>
             <tbody th:each="list : ${member}">
                 <tr>
-                    <td><img class="img"  th:src="@{/member/findProfileImg(memberId=${list.memberId})}"  alt="실패"></td>
+                    <td><img class="img"  th:src="@{member/findProfileImg(memberId=${list.memberId})}"  alt="실패"></td>
                     <td th:text="${list.memberName}"></td>
                     <td th:text="${list.memberEmail}"></td>
                     <td th:text="${list.score}"></td>

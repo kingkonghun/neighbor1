@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>아나바다</title>
-    <th:block th:insert="/common/common :: fragment-header"></th:block>
-    <link th:href="@{/css/join.css}" rel="stylesheet" type="text/css">
+    <th:block th:insert="common/common :: fragment-header"></th:block>
+    <link th:href="@{css/join.css}" rel="stylesheet" type="text/css">
     <style>
     body{
             height: 95vh;
@@ -101,7 +101,7 @@ border: none;
 
         <div class="btn-area" style="margin-top:1.5em;">
             <a id="btnJoin">
-                <img th:src="@{/img/btnJoin.png}" class="mb-2" style="width: 400px;" alt="join" id="joinImg">
+                <img th:src="@{img/btnJoin.png}" class="mb-2" style="width: 400px;" alt="join" id="joinImg">
             </a>
         </div>
     </form>
@@ -282,7 +282,7 @@ border: none;
 
 </script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script th:src="@{/js/address.js}" type="text/javascript"></script>
+<script th:src="@{js/address.js}" type="text/javascript"></script>
 
 </body>
 </html>
