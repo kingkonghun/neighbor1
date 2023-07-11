@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>아나바다</title>
-  <link rel="stylesheet" th:href="@{css/clubList.css}">
+  <link rel="stylesheet" th:href="@{/css/clubList.css}">
   <style>
     body {
         background-color: #f4f4f4;
@@ -25,9 +25,9 @@
                 </span>
             </div>
             <div class="members">
-                <img th:src="@{member/findProfileImg(memberId=${club.memberId})}" alt="fail">
+                <img th:src="@{/member/findProfileImg(memberId=${club.memberId})}" alt="fail">
                 <th:block th:each="man : ${club.memberIdList}">
-                    <img th:src="@{member/findProfileImg(memberId=${man})}" alt="fail">
+                    <img th:src="@{/member/findProfileImg(memberId=${man})}" alt="fail">
                 </th:block>
 
                 <div class="count">

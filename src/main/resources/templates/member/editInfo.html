@@ -7,7 +7,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="css/editInfo.css">
+    <link rel="stylesheet" th:href="@{/css/editInfo.css}">
 
     <script type="text/javascript">
         const queryString = window.location.search;
@@ -211,7 +211,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>기존 프로필 사진</label><br>
-                                    <img id="preview" th:src="@{member/findProfileImg(memberId=${list.memberId})}" alt="프로필 사진" style="width: 300px;height: 200px;"/>
+                                    <img id="preview" th:src="@{/member/findProfileImg(memberId=${list.memberId})}" alt="프로필 사진" style="width: 300px;height: 200px;"/>
                                 </div>
                             </div>
                         </div>
@@ -252,7 +252,7 @@
 
 <div th:replace="footer :: footer"></div>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script th:src="@{js/address.js}" type="text/javascript"></script>
+<script th:src="@{/js/address.js}" type="text/javascript"></script>
 
 </body>
 </html>

@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>아나바다</title>
     <th:block th:insert="common/common :: fragment-header"></th:block>
-    <link rel="stylesheet" th:href="@{css/usedDetail.css}">
-    <link rel="stylesheet" th:href="@{css/list.css}">
+    <link rel="stylesheet" th:href="@{/css/usedDetail.css}">
+    <link rel="stylesheet" th:href="@{/css/list.css}">
     <style>
         body{background-color: #f4f4f4; font-family: GangwonEduPowerExtraBoldA;}
         .soldout{
@@ -419,7 +419,7 @@
             </div>
             <div class="mb-2" style="display: flex; justify-content: space-between;">
                 <ul class="username">
-                    <li><img th:src="@{member/findProfileImg(memberId=${dto.memberId})}" alt="프로필 사진"/></li>
+                    <li><img th:src="@{/member/findProfileImg(memberId=${dto.memberId})}" alt="프로필 사진"/></li>
                     <li th:text="${dto.memberName}"></li>
                 </ul>
                 <span class="views pt-2" th:text="${#dates.format(dto.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></span>

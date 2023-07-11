@@ -158,9 +158,9 @@
                         </span>
                     </div>
                     <div class="members">
-                        <img th:src="@{member/findProfileImg(memberId=${club.memberId})}" alt="fail">
+                        <img th:src="@{/member/findProfileImg(memberId=${club.memberId})}" alt="fail">
                         <th:block th:each="man : ${club.memberIdList}">
-                            <img th:src="@{member/findProfileImg(memberId=${man})}" alt="fail">
+                            <img th:src="@{/member/findProfileImg(memberId=${man})}" alt="fail">
                         </th:block>
 
 

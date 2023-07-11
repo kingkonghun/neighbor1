@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <title>아나바다</title>
 <th:block th:insert="common/common :: fragment-header"></th:block>
-<link rel="stylesheet" type="text/css" th:href="@{css/chatDetail.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/chatDetail.css}">
 <script>
     $(function(){
         $("#chatOut").click(function(){
@@ -77,7 +77,7 @@
         <div class="block44" id="member_" th:attr="id='member_' + ${row.memberId}" th:each="row : ${memberList}" >
             <div style="display: flex; justify-content: flex-start;">
                 <div class="list_imgbx">
-                    <img th:src="@{member/findProfileImg(memberId=${row.memberId})}" class="user_self">
+                    <img th:src="@{/member/findProfileImg(memberId=${row.memberId})}" class="user_self">
                 </div>
                 <div class="list_details">
                     <div class="listHead">
@@ -146,7 +146,7 @@
         </div>
         <div class="message frnd_message" th:if="${row.messageType == 'SEND' && row.sender != #authentication.principal.member.memberId}"><!--상대가 보낸 부분 왼쪽-->
           <div class="user_profile"><!--상대 대화 위에 이미지와 이름 생성-->
-            <img th:src="@{member/findProfileImg(memberId=${row.sender})}" class="room_cover"><!--상대 사진-->
+            <img th:src="@{/member/findProfileImg(memberId=${row.sender})}" class="room_cover"><!--상대 사진-->
             <span th:text="${row.senderName}"></span><!--상대 이름-->
           </div>
           <p th:inline="text">

@@ -74,7 +74,7 @@ public class UsedController {
         model.addAttribute("similarList",similarList);
         model.addAttribute("reportType", usedService.reportType());
 
-        return dto.getPostType().equals("del") ? "redirect:/used/postDel" : "/used/usedDetail";
+        return dto.getPostType().equals("del") ? "redirect:/used/postDel" : "used/usedDetail";
     }
 
     @PostMapping("/post") // 게시물작성

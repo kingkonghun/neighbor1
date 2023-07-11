@@ -30,7 +30,7 @@
             </thead>
             <tbody th:each="list : ${member}">
                 <tr>
-                    <td><img class="img"  th:src="@{member/findProfileImg(memberId=${list.memberId})}"  alt="실패"></td>
+                    <td><img class="img"  th:src="@{/member/findProfileImg(memberId=${list.memberId})}"  alt="실패"></td>
                     <td th:text="${list.memberName}"></td>
                     <td th:text="${list.memberEmail}"></td>
                     <td th:text="${list.score}"></td>
