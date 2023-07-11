@@ -77,7 +77,7 @@
                     <div class="bottom2" sec:authorize="isAuthenticated()">
                         <div class="profile1">
                             <div class="parent">
-                                <img th:src="@{/member/findProfileImg(memberId=${#authentication.principal.member.memberId})}" alt="Profile Picture1" class="profile-picture">
+                                <img th:src="@{member/findProfileImg(memberId=${#authentication.principal.member.memberId})}" alt="Profile Picture1" class="profile-picture">
                             </div>
                             <div class="profile-details">
                                 <div class="name2"></div>
