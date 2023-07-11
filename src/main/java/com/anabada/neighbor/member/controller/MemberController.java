@@ -49,7 +49,7 @@ public class MemberController {
             request.getSession().setAttribute("prevPage", uri);
         }
         model.addAttribute("errorMessage", errorMessage); // 로그인 실패 시 에러메시지
-        return "/member/loginForm";
+        return "member/loginForm";
     }
 
     @PostMapping("/join") // 회원가입
@@ -132,7 +132,7 @@ public class MemberController {
     public String myInfo(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         Member member = memberService.myInfo(principalDetails.getMember().getMemberId());
         model.addAttribute("list", member);
-        return "/member/myInfoEx";
+        return "member/myInfoEx";
     }
 
     @ResponseBody
