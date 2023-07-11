@@ -5,10 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>아나바다</title>
-    <th:block th:insert="/common/common :: fragment-header"></th:block>
+    <th:block th:insert="common/common :: fragment-header"></th:block>
 
-    <link rel="stylesheet" href="/css/clubDetail.css">
-    <link rel="stylesheet" th:href="@{/css/clubList.css}">
+    <link rel="stylesheet" href="css/clubDetail.css">
+    <link rel="stylesheet" th:href="@{css/clubList.css}">
 
     <style>
         body{background-color: #f4f4f4; font-family: GangwonEduPowerExtraBoldA;}
@@ -408,7 +408,7 @@
             </div>
             <div class="mb-2" style="display: flex; justify-content: space-between;">
                 <ul class="username"><!--유저 사진 이름 가져오기-->
-                    <li><img th:src="@{/member/findProfileImg(memberId=${club.memberId})}" alt="프로필 사진"/></li>
+                    <li><img th:src="@{member/findProfileImg(memberId=${club.memberId})}" alt="프로필 사진"/></li>
                     <li th:text="${club.memberName}"></li>
                 </ul>
                 <span class="views pt-2" th:text="${#dates.format(club.postUpdate,'yyyy년 MM월 dd일 HH시 mm분')}"></span>
@@ -517,9 +517,9 @@
                         </span>
                     </div>
                     <div class="members">
-                        <img th:src="@{/member/findProfileImg(memberId=${club.memberId})}" alt="fail">
+                        <img th:src="@{member/findProfileImg(memberId=${club.memberId})}" alt="fail">
                         <th:block th:each="man : ${club.memberIdList}">
-                            <img th:src="@{/member/findProfileImg(memberId=${man})}" alt="fail">
+                            <img th:src="@{member/findProfileImg(memberId=${man})}" alt="fail">
                         </th:block>
 
                         <div class="count">
