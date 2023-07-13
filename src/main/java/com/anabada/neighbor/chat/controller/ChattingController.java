@@ -135,7 +135,7 @@ public class ChattingController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/chatNotification") // 네비바알림
+    @GetMapping("/chatNotification") // 네비바알림d
     @ResponseBody
     public boolean chatNotification(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         boolean result = false;

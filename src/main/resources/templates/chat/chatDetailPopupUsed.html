@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <title>아나바다</title>
 <th:block th:insert="common/common :: fragment-header"></th:block>
-<link rel="stylesheet" type="text/css" th:href="@{css/chatDetail.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/chatDetail.css}">
 <script>
     $(function(){
         $(".deal_comp").click(function(){
@@ -53,7 +53,7 @@
       <div class="imgText">
         <div>
           <div class="userimg">
-            <img th:src="@{member/findProfileImg(memberId=${receiver.receiver})}" class="cover"><!--상대방 이미지-->
+            <img th:src="@{/member/findProfileImg(memberId=${receiver.receiver})}" class="cover"><!--상대방 이미지-->
           </div>
           <h4 th:text="${receiver.receiverName}"></h4><!--상대 이름-->
         </div>
@@ -92,7 +92,7 @@
         </div>
         <div class="message frnd_message" th:if="${row.messageType == 'SEND' && row.sender != #authentication.principal.member.memberId}"><!--상대가 보낸 부분 왼쪽-->
           <div class="user_profile"><!--상대 대화 위에 이미지와 이름 생성-->
-            <img th:src="@{member/findProfileImg(memberId=${row.sender})}" class="room_cover"><!--상대 사진-->
+            <img th:src="@{/member/findProfileImg(memberId=${row.sender})}" class="room_cover"><!--상대 사진-->
             <span th:text="${row.senderName}"></span><!--상대 이름-->
           </div>
           <p th:inline="text">

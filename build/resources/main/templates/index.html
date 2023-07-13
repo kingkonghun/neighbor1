@@ -12,12 +12,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" th:href="@{css/index.css}">
-<link rel="stylesheet" th:href="@{css/indexList.css}">
-<link rel="preload" th:href="@{img/hero-banner.png}">
-    <link rel="stylesheet" th:href="@{css/list.css}">
+<link rel="stylesheet" th:href="@{/css/index.css}">
+<link rel="stylesheet" th:href="@{/css/indexList.css}">
+<link rel="preload" th:href="@{/img/hero-banner.png}">
+    <link rel="stylesheet" th:href="@{/css/list.css}">
 <!--사이드바 스타일-->
-<link rel="stylesheet" th:href="@{css/sidenav.css}">
+<link rel="stylesheet" th:href="@{/css/sidenav.css}">
     <style>
     .usedTitle{font-family: 'GangwonEduPowerExtraBoldA'; }
     .usedTitle{text-align: center;}
@@ -56,7 +56,7 @@
                 <a href="#target-section" class="btn1 btn1-primary" style="padding-bottom: 14px;">시작하기</a>
             </div>
             <figure class="hero-banner">
-                <img th:src="@{img/hero-banner.png}" width="680" height="400"
+                <img th:src="@{/img/hero-banner.png}" width="680" height="400"
                      alt="Annie, the blonde, dressed in a green hoodie with a smile on her face" class="w-100">
             </figure>
         </div>
@@ -146,9 +146,9 @@
                             </span>
                         </div>
                         <div class="members">
-                            <img th:src="@{member/findProfileImg(memberId=${club.memberId})}" alt="fail">
+                            <img th:src="@{/member/findProfileImg(memberId=${club.memberId})}" alt="fail">
                             <th:block th:each="man : ${club.memberIdList}">
-                                <img th:src="@{member/findProfileImg(memberId=${man})}" alt="fail">
+                                <img th:src="@{/member/findProfileImg(memberId=${man})}" alt="fail">
                             </th:block>
 
                             <div class="count">

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>아나바다</title>
     <th:block th:insert="common/common :: fragment-header"></th:block>
-    <link th:href="@{css/join.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/css/join.css}" rel="stylesheet" type="text/css">
     <style>
     body{
             height: 95vh;
@@ -87,7 +87,7 @@ border: none;
 
         <div class="int-area">
             <div class="address">
-                <input type="text" name="address" id="address" autocomplete="off" required >
+                <input type="text" name="address" id="address" autocomplete="off" required onkeyup="readonly()" >
                 <label for="address">우편번호</label>
                 <button type="button" onclick="zipcode()" id="btnSearch" class="btn btn-sm">
                     검색
@@ -101,7 +101,7 @@ border: none;
 
         <div class="btn-area" style="margin-top:1.5em;">
             <a id="btnJoin">
-                <img th:src="@{img/btnJoin.png}" class="mb-2" style="width: 400px;" alt="join" id="joinImg">
+                <img th:src="@{/img/btnJoin.png}" class="mb-2" style="width: 400px;" alt="join" id="joinImg">
             </a>
         </div>
     </form>
@@ -128,6 +128,11 @@ border: none;
         $('.confirm').removeClass('confirm');
         // alert("이메일 인증 버튼을 눌러 주세요");
     });
+
+    function readonly(){
+        alert("주소 검색을 이용해 주세요.");
+        address.val('');
+    }
 
     memberEmail.on("keyup", function () {
         $.ajax({
@@ -282,7 +287,7 @@ border: none;
 
 </script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script th:src="@{js/address.js}" type="text/javascript"></script>
+<script th:src="@{/js/address.js}" type="text/javascript"></script>
 
 </body>
 </html>

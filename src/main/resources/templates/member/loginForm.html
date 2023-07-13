@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>아나바다</title>
   <th:block th:insert="common/common :: fragment-header"></th:block>
-<link th:href="@{css/login.css}" rel="stylesheet" type="text/css">
+<link th:href="@{/css/login.css}" rel="stylesheet" type="text/css">
 
 </head>
 <body>
@@ -24,10 +24,10 @@
       <span th:text="${errorMessage}" style="color: red;"></span>
     </div>
     <div>
-      <button class="my-2" id="btn" style="border: 0; background-color: transparent; cursor:pointer;"><img th:src="@{img/nomal.png}" style="width: 400px;"></button> <br>
-      <a href="/oauth2/authorization/google"><img class="mb-2" th:src="@{img/google.png}" style="width: 400px;"></a> <br>
-      <a href="/oauth2/authorization/kakao"><img class="mb-2" th:src="@{img/kakao.png}" style="width: 400px;"></a> <br>
-      <a href="/oauth2/authorization/naver"><img class="mb-2" th:src="@{img/naver.png}" style="width: 400px;"></a> <br>
+      <button class="my-2" id="btn" style="border: 0; background-color: transparent; cursor:pointer;"><img th:src="@{/img/nomal.png}" style="width: 400px;"></button> <br>
+      <a href="/oauth2/authorization/google"><img class="mb-2" th:src="@{/img/google.png}" style="width: 400px;"></a> <br>
+      <a href="/oauth2/authorization/kakao"><img class="mb-2" th:src="@{/img/kakao.png}" style="width: 400px;"></a> <br>
+      <a href="/oauth2/authorization/naver"><img class="mb-2" th:src="@{/img/naver.png}" style="width: 400px;"></a> <br>
     </div>
   </form>
   <div class="caption">
