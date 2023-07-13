@@ -32,7 +32,7 @@ spring:
           kakao:
             client-id: 78e3fae08d989de99faacea2ae77658d
             client-secret: fhnAEGm1x16W9FweaeHYbNIqP1pQeLH2
-            redirect-uri: http://localhost:9090/login/oauth2/code/kakao
+            redirect-uri: http://13.125.86.71:9090/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
             client-authentication-method: POST
             client-name: Kakao
@@ -54,7 +54,7 @@ spring:
               - email
             client-name: Naver
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:9090/login/oauth2/code/naver
+            redirect-uri: http://13.125.86.71:9090/login/oauth2/code/naver
 
         provider:
           kakao:
