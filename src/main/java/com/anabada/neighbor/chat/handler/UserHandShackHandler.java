@@ -18,15 +18,6 @@ public class UserHandShackHandler extends DefaultHandshakeHandler {
 
     @Override
     protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
-//        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        String memberId;
-//        if (principalDetails != null) {
-//            memberId = String.valueOf(principalDetails.getMember().getMemberId());
-//        }else {
-//            memberId = UUID.randomUUID().toString();
-//        }
-//        System.out.println("memberId = " + memberId);
-//        return new UserPrincipal(memberId);
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String memberId;
         if (principal instanceof PrincipalDetails) {

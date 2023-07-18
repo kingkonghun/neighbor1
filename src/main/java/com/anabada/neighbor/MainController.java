@@ -45,7 +45,6 @@ public class MainController {
             }
         }
 
-
         model.addAttribute("starList", usedList);
         model.addAttribute("clubList", clubResponses);
         return "index";

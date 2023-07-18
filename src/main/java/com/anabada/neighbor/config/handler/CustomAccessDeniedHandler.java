@@ -29,6 +29,5 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         } else if (principalDetails.getMember().getRole().equals("ROLE_USER")) {
             response.sendRedirect("/noAdmin");
         }
-
     }
 }
