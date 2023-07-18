@@ -9,16 +9,17 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/neighbor?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://neighbor.coeobk21kpu9.ap-northeast-2.rds.amazonaws.com/neighbor?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: neighbor
-    password: 1234
-
+    username: admin
+    password: dnqudrjf
   devtools:
     livereload:
       enabled: true
   thymeleaf:
     cache: false
+    prefix: classpath:/templates/
+    enabled : true
   servlet:
     multipart:
       max-file-size: 10MB
@@ -31,7 +32,7 @@ spring:
           kakao:
             client-id: 78e3fae08d989de99faacea2ae77658d
             client-secret: fhnAEGm1x16W9FweaeHYbNIqP1pQeLH2
-            redirect-uri: http://localhost:9090/login/oauth2/code/kakao
+            redirect-uri: http://13.125.86.71:9090/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
             client-authentication-method: POST
             client-name: Kakao
@@ -53,7 +54,7 @@ spring:
               - email
             client-name: Naver
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:9090/login/oauth2/code/naver
+            redirect-uri: http://13.125.86.71:9090/login/oauth2/code/naver
 
         provider:
           kakao:

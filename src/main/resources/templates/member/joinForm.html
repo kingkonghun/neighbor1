@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>아나바다</title>
-    <th:block th:insert="/common/common :: fragment-header"></th:block>
+    <th:block th:insert="common/common :: fragment-header"></th:block>
     <link th:href="@{/css/join.css}" rel="stylesheet" type="text/css">
     <style>
     body{
@@ -22,7 +22,7 @@
 border: none;
             display: grid;
             place-content: center;
-            transition: 10; 원하는 시간 조절
+            transition: 10; /*원하는 시간 조절*/
         }
         .loader{/*돌아가는거*/
             pointer-events: none;
@@ -87,7 +87,7 @@ border: none;
 
         <div class="int-area">
             <div class="address">
-                <input type="text" name="address" id="address" autocomplete="off" required >
+                <input type="text" name="address" id="address" autocomplete="off" required onkeyup="readonly()" >
                 <label for="address">우편번호</label>
                 <button type="button" onclick="zipcode()" id="btnSearch" class="btn btn-sm">
                     검색
@@ -128,6 +128,11 @@ border: none;
         $('.confirm').removeClass('confirm');
         // alert("이메일 인증 버튼을 눌러 주세요");
     });
+
+    function readonly(){
+        alert("주소 검색을 이용해 주세요.");
+        address.val('');
+    }
 
     memberEmail.on("keyup", function () {
         $.ajax({

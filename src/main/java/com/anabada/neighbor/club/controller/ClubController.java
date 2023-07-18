@@ -142,25 +142,6 @@ public class ClubController {
         return clubResponse.getPostType().equals("del") ? "redirect:club/delPost" : "club/clubDetail";
     }
 
-//    @GetMapping("/club/update")
-//    @ResponseBody
-//    public ClubResponse update(@RequestParam(value = "postId") Long postId, Model model
-//            , @AuthenticationPrincipal PrincipalDetails principalDetails) {
-//        //  로그인 안했을때
-//        if (principalDetails == null) {
-////            return "redirect:clubDetail?postId=" + postId;
-//            return null;
-//        }
-//        ClubResponse clubResponse = clubService.findClub(postId, principalDetails);
-//        //  게시글 작성자가 아닐때
-//        if (principalDetails.getMember().getMemberId() != clubResponse.getMemberId()) {
-////            return "redirect:clubDetail?postId=" + postId;
-//            return null;
-//        }
-//        model.addAttribute("club", clubResponse);
-//        System.out.println(clubResponse.getFileResponseList());
-//        return clubResponse;
-//    }
 
     @PostMapping("/club/update")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")

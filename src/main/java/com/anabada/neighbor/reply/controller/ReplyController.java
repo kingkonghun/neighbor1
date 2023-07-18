@@ -30,7 +30,7 @@ public class ReplyController {
     public String reply(long postId, Model model) {
         model.addAttribute("list", replyService.list(postId));
         System.out.println("replyList : "+replyService.list(postId));
-        return "/reply/list";
+        return "reply/list";
     }
 
     @PostMapping("/write") // 댓글작성

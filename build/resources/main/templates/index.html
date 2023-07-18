@@ -6,7 +6,7 @@
 <meta name="description" content="오이마켓" />
 <meta name="author" content="아나바다" />
 <title>아나바다</title>
-<th:block th:insert="/common/common :: fragment-header"></th:block>
+<th:block th:insert="common/common :: fragment-header"></th:block>
 
 <!--헤더 스타일-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,7 @@
 <link rel="preload" th:href="@{/img/hero-banner.png}">
     <link rel="stylesheet" th:href="@{/css/list.css}">
 <!--사이드바 스타일-->
-<link rel="stylesheet" href="/css/sidenav.css">
+<link rel="stylesheet" th:href="@{/css/sidenav.css}">
     <style>
     .usedTitle{font-family: 'GangwonEduPowerExtraBoldA'; }
     .usedTitle{text-align: center;}
@@ -118,7 +118,7 @@
                 </div>
             </article>
         </div>
-        <div class="btnUsed" style="text-align: center;"><button class="btn btn-outline-secondary" th:onclick="|location.href='@{/used/list}'|">더 많은 상품 보기</button></div>
+        <div class="btnUsed" style="text-align: center;"><button class="btn btn-outline-secondary" th:onclick="|location.href='@{used/list}'|">더 많은 상품 보기</button></div>
     </div>
 </section>
 
@@ -140,7 +140,7 @@
                         <span class="content" th:text="${club.content}"></span><!--내용 10자이내로-->
                         <div class="listdetail"><!--지역 운동 생성일-->
                             <span class="category" th:text="${club.hobbyName}"></span>
-                            <span class="region" th:inline="text">
+                            <span class="region" th:inline="text" style="font-family: 'omyu_pretty';">
                                 <i class="fa-solid fa-map-location-dot"></i>
                                 [[${club.address}]]
                             </span>
@@ -158,11 +158,25 @@
                                 <span th:text="${club.maxMan}"></span>
                             </div><!--인원수 나타내는-->
                         </div>
+                        <div style="justify-content: flex-end; display: flex; gap: 20px;">
+                        <span th:inline="text">
+                            [[${club.postView}]]
+                            <i class="bi bi-caret-up-fill"></i>
+                        </span>
+                            <span th:inline="text">
+                            [[${club.likesCount}]]
+                            <i class="bi bi-heart-fill" style="color: red"></i>
+                        </span>
+                            <span th:inline="text">
+                            [[${club.replyCount}]]
+                            <i class="bi bi-chat-dots-fill"></i>
+                        </span>
+                        </div>
                     </div>
                 </div>
             </article>
             <div class="btnUsed" style="text-align: center;">
-                <button class="btn btn-outline-secondary" th:onclick="|location.href='@{/clubList}'|">더 많은 모임 보기</button>
+                <button class="btn btn-outline-secondary" th:onclick="|location.href='@{clubList}'|">더 많은 모임 보기</button>
             </div>
         </div>
     </div>

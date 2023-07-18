@@ -6,7 +6,7 @@
 <meta name="description" content="오이마켓" />
 <meta name="author" content="아나바다" />
 <title>아나바다</title>
-<th:block th:insert="/common/common :: fragment-header"></th:block>
+<th:block th:insert="common/common :: fragment-header"></th:block>
 
 <!--헤더 스타일-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,7 @@
 <link rel="preload" th:href="@{/img/hero-banner.png}">
     <link rel="stylesheet" th:href="@{/css/list.css}">
 <!--사이드바 스타일-->
-<link rel="stylesheet" href="/css/sidenav.css">
+<link rel="stylesheet" th:href="@{/css/sidenav.css}">
     <style>
     .usedTitle{font-family: 'GangwonEduPowerExtraBoldA'; }
     .usedTitle{text-align: center;}
@@ -118,7 +118,7 @@
                 </div>
             </article>
         </div>
-        <div class="btnUsed" style="text-align: center;"><button class="btn btn-outline-secondary" th:onclick="|location.href='@{/used/list}'|">더 많은 상품 보기</button></div>
+        <div class="btnUsed" style="text-align: center;"><button class="btn btn-outline-secondary" th:onclick="|location.href='@{used/list}'|">더 많은 상품 보기</button></div>
     </div>
 </section>
 
@@ -176,7 +176,7 @@
                 </div>
             </article>
             <div class="btnUsed" style="text-align: center;">
-                <button class="btn btn-outline-secondary" th:onclick="|location.href='@{/clubList}'|">더 많은 모임 보기</button>
+                <button class="btn btn-outline-secondary" th:onclick="|location.href='@{clubList}'|">더 많은 모임 보기</button>
             </div>
         </div>
     </div>
